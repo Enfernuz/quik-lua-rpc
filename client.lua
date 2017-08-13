@@ -1,4 +1,4 @@
-local qlua_rpc = require("qlua_protobuf/qlua_rpc_pb")
+local qlua_rpc = require("qlua/qlua_rpc_pb")
 
 local zmq = require("lzmq.ffi")
 
