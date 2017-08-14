@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+enum ProcedureType {
+
+  UNKNOWN_PROCEDURE_TYPE = 0;
+	IS_CONNECTED = 1;
+	GET_SCRIPT_PATH = 2;
+	GET_INFO_PARAM = 3;
+  MESSAGE = 4;
+}
+
+message Qlua_Request {
+
+	ProcedureType type = 1;
+	bytes args = 2;
+}
+
+message Qlua_Response {
+
+	ProcedureType type = 1;
+  
+  // Если это внутренняя ошибка RPC-сервиса, то установлен is_error,
+  // в противном случае -- установлен result (даже если он содержит в себе
+  // ошибку от библиотеки qlua). Таким образом, ошибки, возвращаемые библиотекой 
+  // qlua (например, nil в определённых случаях), в рамках RPC-сервиса 
+  // являются обычным результатом выполнения запроса.
+  oneof qlua_response_oneof {
+    bool is_error = 2;
+    bytes result = 3;
+  }
+}
+
+message IsConnected_Result {
+	int32 is_connected = 1;
+}
+
+message GetScriptPath_Result {
+	string script_path = 1;
+}
+
+message GetInfoParam_Request {
+
+  // Хотел сделать enum-ом, чтобы меньше слать по wire, но в используемой Lua-реализации
+  // protobuf'a нет адекватного способа вернуть строковое имя enum'а, поэтому говнокод, который
+  // надо будет для этого написать, скорее всего нивелирует какой-либо перфомансный 
+  // профит от enum'ов в данном случае. К тому же, при добавлении новых видов paramName 
+  // при использовании строк ничего не надо будет перекомпилировать.
+  string param_name = 1;  
+}
+
+message GetInfoParam_Result {
+  string info_param = 1;
+}
+
+message Message_Request {
+  
+  string message = 1;
+  int32 icon_type = 2;
+}
+
+message Message_Result {
+  int32 result = 1;
+}
