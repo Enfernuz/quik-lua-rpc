@@ -1,4 +1,7 @@
-local worker = require("./worker")
+local scriptPath = getScriptPath()
+package.path = scriptPath.."/?.lua;" .. package.path
+
+local worker = require("worker")
 assert(worker ~= nil)
 
 function OnStop()
