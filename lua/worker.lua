@@ -1,16 +1,20 @@
 local qlua_rpc = require("qlua/qlua_rpc_pb")
+assert(qlua_rpc ~= nil, "qlua/qlua_rpc_pb lib is missing")
 
 local zmq = require("lzmq")
-local ctx = zmq.context()
+assert(zmq ~= nil, "lzmq lib is missing.")
 
 local Worker = {
   
-  socket = ctx:socket(zmq.REP)
+  ctx = zmq.context(),
+  socket = nil,
+  is_running = false
 }
 
 function Worker:init(socket_addr)
   
-  self.socket:connect(socket_addr)
+  self.socket = self.ctx:socket(zmq.REP)
+  self.socket:bind(socket_addr)
 end
 
 function Worker:start()
@@ -19,8 +23,10 @@ function Worker:start()
 	local result, ser_result;
 	local request;
 	local response, ser_response;
+	
+	self.is_running = true
 
-	while true do
+	while self.is_running do
 
 		data, more = self.socket:recv()
 		if data == nil then
@@ -33,7 +39,7 @@ function Worker:start()
 
 			if request.type == qlua_rpc.IS_CONNECTED then
 				result = qlua_rpc.IsConnected_Result()
-				result.isConnected = 42
+				result.isConnected = isConnected()
 			elseif request.type == qlua_rpc.GET_SCRIPT_PATH then
 				result = qlua_rpc.GetScriptPath_Result()
 				result.scriptPath = getScriptPath()
@@ -49,12 +55,13 @@ function Worker:start()
 		end
 	end
 
-	self.socket:close()
-	ctx:term()
 end
 
-function main()
-	local instance = Worker;
-	instance:init("tcp://127.0.0.1:5560")
-	instance:start()
+function Worker:terminate()
+
+	self.is_running = false
+	if self.socket ~= nil then self.socket:close() end
+	self.ctx:term()
 end
+
+return Worker

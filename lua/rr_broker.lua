@@ -1,27 +1,22 @@
-local zmq = require("lzmq.ffi")
-local zmq_poller = require("lzmq.ffi.poller")
+local zmq = require("lzmq")
 
 local ctx = zmq.context()
 
 local RequestReplyBroker = {
   
   frontend = ctx:socket(zmq.ROUTER), 
-  backend = ctx:socket(zmq.DEALER), 
-  
-  poller = zmq_poller.new(2), 
+  backend = ctx:socket(zmq.DEALER)
 }
 
 function RequestReplyBroker:init(frontend_addr, backend_addr)
   
   self.frontend:bind(frontend_addr)
   self.backend:bind(backend_addr)
-  
-  zmq.device(zmq.QUEUE, self.frontend, self.backend)
 end
 
 function RequestReplyBroker:start()
-  
-  self.poller:start()
+
+  zmq.device(zmq.QUEUE, self.frontend, self.backend)
 end
 
 function RequestReplyBroker:close()
@@ -32,7 +27,11 @@ function RequestReplyBroker:close()
   ctx:term()
 end
 
+return RequestReplyBroker
+
+--[[
 local instance = RequestReplyBroker;
 instance:init("tcp://127.0.0.1:5559", "tcp://127.0.0.1:5560")
 instance:start()
 instance:close()
+--]]
