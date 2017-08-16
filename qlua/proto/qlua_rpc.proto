@@ -7,7 +7,20 @@ enum ProcedureType {
     GET_SCRIPT_PATH = 2;
     GET_INFO_PARAM = 3;
     MESSAGE = 4;
+    SLEEP = 5;
+    GET_WORKING_FOLDER = 6;
+    PRINT_DBG_STR = 7;
+    GET_ITEM = 8;
+    GET_ORDER_BY_NUMBER = 9; // TO-DO: check if working
+    GET_NUMBER_OF = 10;
 }
+
+message TableEntry {
+
+    string k = 1;
+    string v = 2;
+}
+
 
 message Qlua_Request {
 
@@ -24,7 +37,7 @@ message Qlua_Response {
     // ошибку от библиотеки qlua). Таким образом, ошибки, возвращаемые библиотекой 
     // qlua (например, nil в определённых случаях), в рамках RPC-сервиса 
     // являются обычным результатом выполнения запроса.
-    oneof qlua_response_oneof {
+    oneof qlua_response_data {
         bool is_error = 2;
         bytes result = 3;
     }
@@ -59,5 +72,48 @@ message Message_Request {
 }
 
 message Message_Result {
+    int32 result = 1;
+}
+
+message Sleep_Request {
+    int32 time = 1;
+}
+
+message Sleep_Result {
+    int32 result = 1;
+}
+
+message GetWorkingFolder_Result {
+    string working_folder = 1;
+}
+
+message PrintDbgStr_Request {
+    string s = 1;
+}
+
+message GetItem_Request {
+    string table_name = 1;
+    double index = 2;
+}
+
+message GetItem_Result {
+    repeated TableEntry table_row = 1;
+}
+
+message GetOrderByNumber_Request {
+    string class_code = 1;
+    uint32 order_id = 2;
+}
+
+message GetOrderByNumber_Result {
+    repeated TableEntry order = 1;
+    int32 indx = 2;
+}
+
+message GetNumberOf_Request {
+    string table_name = 1;
+}
+
+message GetNumberOf_Result {
     int32 result = 1;
 }

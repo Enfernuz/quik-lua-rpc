@@ -10,6 +10,16 @@ assert(txt ~= nil, "text_format lib is missing.")
 local inspect = require("inspect")
 assert(inspect ~= nil, "inspect lib is missing.")
 
+local function insert_table(src, dst)
+  
+  for k,v in pairs(src) do
+      local table_entry = qlua_rpc.TableEntry() 
+      table_entry.k = tostring(k)
+      table_entry.v = tostring(v)
+      table.insert(dst, table_entry)
+  end
+end
+
 local Worker = {
   
   ctx = zmq.context(),
@@ -29,6 +39,7 @@ function Worker:start()
 	local result, ser_result;
 	local request;
 	local response, ser_response;
+  local args;
 	
 	self.is_running = true
 
@@ -45,28 +56,61 @@ function Worker:start()
 
 			if request.type == qlua_rpc.IS_CONNECTED then
 				result = qlua_rpc.IsConnected_Result()
-				result.is_connected = isConnected()
+				result.is_connected = isConnected() -- TO-DO: pcall
 			elseif request.type == qlua_rpc.GET_SCRIPT_PATH then
 				result = qlua_rpc.GetScriptPath_Result()
-				result.scripth_path = getScriptPath()
+				result.script_path = getScriptPath() -- TO-DO: pcall
       elseif request.type == qlua_rpc.GET_INFO_PARAM then
+        args = qlua_rpc.GetInfoParam_Request()
+        args:ParseFromString(request.args)
         result = qlua_rpc.GetInfoParam_Result()
-        local args = qlua_rpc.GetInfoParam_Request()
-        args:ParseFromString(request.args)
-        result.info_param = getInfoParam(args.param_name)
+        result.info_param = getInfoParam(args.param_name) -- TO-DO: pcall
       elseif request.type == qlua_rpc.MESSAGE then
-        result = qlua_rpc.Message_Result()
-        local args = qlua_rpc.Message_Request()
+        args = qlua_rpc.Message_Request()
         args:ParseFromString(request.args)
-        result.result = (args.icon_type == nil and message(args.message) or message(args.message, args.icon_type))
+        result = qlua_rpc.Message_Result()
+        result.result = (args.icon_type == nil and message(args.message) or message(args.message, args.icon_type)) -- TO-DO: pcall
+      elseif request.type == qlua_rpc.SLEEP then
+        args = qlua_rpc.Sleep_Request()
+        args:ParseFromString(request.args)
+        result = qlua_rpc.Sleep_Result()
+        result.result = sleep(args.time) -- TO-DO: pcall
+      elseif request.type == qlua_rpc.GET_WORKING_FOLDER then
+        result = qlua_rpc.GetWorkingFolder_Result()
+        result.working_folder = getWorkingFolder() -- TO-DO: pcall
+      elseif request.type == qlua_rpc.PRINT_DBG_STR then
+        args = qlua_rpc.PrintDbgStr_Request()
+        args:ParseFromString(request.args)
+        result = nil
+        PrintDbgStr(args.s)
+      elseif request.type == qlua_rpc.GET_ITEM then
+        args = qlua_rpc.GetItem_Request()
+        args:ParseFromString(request.args)
+        result = qlua_rpc.GetItem_Result()
+        local t = getItem(args.table_name, args.index) -- TO-DO: pcall
+        insert_table(t, result.table_row)
+      elseif request.type == qlua_rpc.GET_ORDER_BY_NUMBER then
+        args = qlua_rpc.GetOrderByNumber_Request()
+        args:ParseFromString(request.args)
+        result = qlua_rpc.GetOrderByNumber_Result()
+        local t, i = getOrderByNumber(args.class_code, args.order_id)
+        insert_table(t, result.order)
+        result.indx = i
+      elseif request.type == qlua_rpc.GET_NUMBER_OF then
+        args = qlua_rpc.GetNumberOf_Request()
+        args:ParseFromString(request.args)
+        result = qlua_rpc.GetNumberOf_Result()
+        result.result = getNumberOf(args.table_name) -- TO-DO: pcall
 			else
 				assert(false, "Unknown request\n") -- TO-DO
 			end
 	  
-			ser_result = result:SerializeToString()
-			response.type = request.type
-      --response.isError = false
-			response.result = ser_result
+      response.type = request.type
+      if result ~= nil then
+        ser_result = result:SerializeToString()
+        --response.isError = false
+        response.result = ser_result
+      end
 			ser_response = response:SerializeToString()
 			self.socket:send(ser_response)
 		end

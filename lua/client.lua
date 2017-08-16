@@ -2,6 +2,9 @@ local qlua_rpc = require("qlua/proto/qlua_rpc_pb")
 
 local zmq = require("lzmq.ffi")
 
+local inspect = require("inspect")
+assert(inspect ~= nil, "inspect lib is missing.")
+
 local ctx = zmq.context()
 
 local Client = {
@@ -17,10 +20,11 @@ end
 function Client:start()
     
   local request = qlua_rpc.Qlua_Request()
-  request.type = qlua_rpc.MESSAGE
+  request.type = qlua_rpc.GET_ITEM
   
-  local args = qlua_rpc.Message_Request()
-  args.message = "HELLO"
+  local args = qlua_rpc.GetItem_Request()
+  args.table_name = "money_limits"
+  args.index = 0
   
   local ser_args = args:SerializeToString()
   
@@ -51,6 +55,20 @@ function Client:start()
     local result = qlua_rpc.Message_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [result: %s]\n", result.result) )
+  elseif response.type == qlua_rpc.SLEEP then
+    local result = qlua_rpc.Sleep_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [result: %s]\n", result.result) )
+  elseif response.type == qlua_rpc.GET_WORKING_FOLDER then
+    local result = qlua_rpc.GetWorkingFolder_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [working_folder: %s]\n", result.working_folder) )
+  elseif response.type == qlua_rpc.GET_ITEM then
+    local result = qlua_rpc.GetItem_Result()
+    result:ParseFromString(response.result)
+    for i, e in ipairs(result.table_row) do
+        print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.k, e.v) )
+    end
   end
 
   print ("closing...\n")
