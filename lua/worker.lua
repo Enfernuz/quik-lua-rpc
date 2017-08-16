@@ -101,6 +101,20 @@ function Worker:start()
         args:ParseFromString(request.args)
         result = qlua_rpc.GetNumberOf_Result()
         result.result = getNumberOf(args.table_name) -- TO-DO: pcall
+      elseif request.type == qlua_rpc.GET_CLASSES_LIST then
+        result = qlua_rpc.GetClassesList_Result()
+				result.classes_list = getClassesList() -- TO-DO: pcall
+      elseif request.type == qlua_rpc.GET_CLASS_INFO then
+        args = qlua_rpc.GetClassInfo_Request()
+        args:ParseFromString(request.args)
+        result = qlua_rpc.GetClassInfo_Result()
+        local t = getClassInfo(args.class_code)
+        insert_table(t, result.class_info)
+      elseif request.type == qlua_rpc.GET_CLASS_SECURITIES then
+        args = qlua_rpc.GetClassSecurities_Request()
+        args:ParseFromString(request.args)
+        result = qlua_rpc.GetClassSecurities_Result()
+        result.class_securities = getClassSecurities(args.class_code) -- TO-DO: pcall
 			else
 				assert(false, "Unknown request\n") -- TO-DO
 			end

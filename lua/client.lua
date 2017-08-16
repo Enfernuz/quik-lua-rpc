@@ -20,15 +20,14 @@ end
 function Client:start()
     
   local request = qlua_rpc.Qlua_Request()
-  request.type = qlua_rpc.GET_ITEM
-  
-  local args = qlua_rpc.GetItem_Request()
-  args.table_name = "money_limits"
-  args.index = 0
+  request.type = qlua_rpc.GET_CLASS_SECURITIES
+
+  local args = qlua_rpc.GetClassInfo_Request()
+  args.class_code = "SPBFUT"
   
   local ser_args = args:SerializeToString()
-  
   request.args = ser_args
+  
   local ser_request = request:SerializeToString()
 
   --print("Raw request data: "..ser_request.."\n")
@@ -69,6 +68,20 @@ function Client:start()
     for i, e in ipairs(result.table_row) do
         print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.k, e.v) )
     end
+  elseif response.type == qlua_rpc.GET_CLASSES_LIST then
+    local result = qlua_rpc.GetClassesList_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [classes_list: %s]\n", result.classes_list) )
+  elseif response.type == qlua_rpc.GET_CLASS_INFO then
+    local result = qlua_rpc.GetClassInfo_Result()
+    result:ParseFromString(response.result)
+    for i, e in ipairs(result.class_info) do
+        print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.k, e.v) )
+    end
+  elseif response.type == qlua_rpc.GET_CLASS_SECURITIES then
+    local result = qlua_rpc.GetClassSecurities_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [class_securities: %s]\n", result.class_securities) )
   end
 
   print ("closing...\n")

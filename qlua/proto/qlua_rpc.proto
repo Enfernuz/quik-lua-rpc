@@ -13,6 +13,10 @@ enum ProcedureType {
     GET_ITEM = 8;
     GET_ORDER_BY_NUMBER = 9; // TO-DO: check if working
     GET_NUMBER_OF = 10;
+    SEARCH_ITEMS = 11; // NOT IMPLEMENTED YET
+    GET_CLASSES_LIST = 12;
+    GET_CLASS_INFO = 13;
+    GET_CLASS_SECURITIES = 14;
 }
 
 message TableEntry {
@@ -116,4 +120,24 @@ message GetNumberOf_Request {
 
 message GetNumberOf_Result {
     int32 result = 1;
+}
+
+message GetClassesList_Result {
+    string classes_list = 1;
+}
+
+message GetClassInfo_Request {
+    string class_code = 1;
+}
+
+message GetClassInfo_Result {
+    repeated TableEntry class_info = 1;
+}
+
+message GetClassSecurities_Request {
+    string class_code = 1;
+}
+
+message GetClassSecurities_Result {
+    string class_securities = 1;
 }
