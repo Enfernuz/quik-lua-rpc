@@ -21,6 +21,11 @@ enum ProcedureType {
     GET_MONEY_EX = 16;
     GET_DEPO = 17;
     GET_DEPO_EX = 18;
+    GET_FUTURES_LIMIT = 19; // NOT IMPLEMENTED YET
+    GET_FUTURES_HOLDING = 20; // NOT IMPLEMENTED YET
+    GET_SECURITY_INFO = 21; // NOT IMPLEMENTED YET
+    GET_TRADE_DATE = 22; // NOT IMPLEMENTED YET
+    GET_QUOTE_LEVEL2 = 23;
 }
 
 message TableEntry {
@@ -197,4 +202,24 @@ message GetDepoEx_Request {
 
 message GetDepoEx_Result {
     repeated TableEntry depo_ex = 1;
+}
+
+message GetQuoteLevel2_Request {
+
+    string class_code = 1;
+    string sec_code = 2;
+}
+
+message GetQuoteLevel2_Result {
+
+    message QuoteEntry {
+    
+        string price = 1;
+        string quantity = 2;
+    }
+
+    string bid_count = 1;
+    string offer_count = 2;
+    repeated QuoteEntry bid = 3;
+    repeated QuoteEntry offer = 4;
 }

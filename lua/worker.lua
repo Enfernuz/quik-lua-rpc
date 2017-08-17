@@ -20,6 +20,16 @@ local function insert_table(src, dst)
   end
 end
 
+local function insert_quote_table(src, dst)
+  
+  for i,v in ipairs(src) do
+      local quote_entry = qlua_rpc.GetQuoteLevel2_Result.QuoteEntry() 
+      quote_entry.price = tostring(v.price)
+      quote_entry.quantity = tostring(v.quantity)
+      table.insert(dst, quote_entry)
+  end
+end
+
 local Worker = {
   
   ctx = zmq.context(),
@@ -139,6 +149,15 @@ function Worker:start()
         result = qlua_rpc.GetDepoEx_Result()
         local t = getDepoEx(args.firmid, args.client_code, args.sec_code, args.trdaccid, args.limit_kind) -- TO-DO: pcall
         insert_table(t, result.depo_ex)
+      elseif request.type == qlua_rpc.GET_QUOTE_LEVEL2 then
+        args = qlua_rpc.GetQuoteLevel2_Request()
+        args:ParseFromString(request.args)
+        result = qlua_rpc.GetQuoteLevel2_Result()
+        local t = getQuoteLevel2(args.class_code, args.sec_code) -- TO-DO: pcall
+        result.bid_count = t.bid_count
+        result.offer_count = t.offer_count
+        if t.bid ~= nil then insert_quote_table(t.bid, result.bid) end
+        if t.offer ~= nil then insert_quote_table(t.offer, result.offer) end
 			else
 				assert(false, "Unknown request\n") -- TO-DO
 			end

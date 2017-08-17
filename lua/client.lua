@@ -20,16 +20,17 @@ end
 function Client:start()
     
   local request = qlua_rpc.Qlua_Request()
-  request.type = qlua_rpc.GET_DEPO_EX
+  request.type = qlua_rpc.GET_QUOTE_LEVEL2
 
-  local args = qlua_rpc.GetDepoEx_Request()
-  args.client_code = "55654"
-  args.firmid = "MC0094600000"
-  args.sec_code = "AFKS"
-  args.trdaccid = "L01-00000F00"
+  local args = qlua_rpc.GetQuoteLevel2_Request()
+  --args.client_code = "55654"
+  --args.firmid = "MC0094600000"
+  args.class_code = "SPBFUT"
+  args.sec_code = "RIU7"
+  --args.trdaccid = "L01-00000F00"
   --args.tag = "EQTV"
   --args.currcode = "SUR"
-  args.limit_kind = 1
+  --args.limit_kind = 1
   
   local ser_args = args:SerializeToString()
   request.args = ser_args
@@ -111,6 +112,16 @@ function Client:start()
     result:ParseFromString(response.result)
     for i, e in ipairs(result.depo_ex) do
         print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.k, e.v) )
+    end
+  elseif response.type == qlua_rpc.GET_QUOTE_LEVEL2 then
+    local result = qlua_rpc.GetQuoteLevel2_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [bid_count: %s, offer_count: %s]\n", result.bid_count, result.offer_count) )
+    for i, e in ipairs(result.bid) do
+        print( string.format("Received a reply on bid [bid: price=%s, quantity=%s]\n", e.price, e.quantity) )
+    end
+    for i, e in ipairs(result.offer) do
+        print( string.format("Received a reply on offer [offer: price=%s, quantity=%s]\n", e.price, e.quantity) )
     end
   end
 
