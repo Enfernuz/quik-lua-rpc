@@ -20,10 +20,16 @@ end
 function Client:start()
     
   local request = qlua_rpc.Qlua_Request()
-  request.type = qlua_rpc.GET_CLASS_SECURITIES
+  request.type = qlua_rpc.GET_DEPO_EX
 
-  local args = qlua_rpc.GetClassInfo_Request()
-  args.class_code = "SPBFUT"
+  local args = qlua_rpc.GetDepoEx_Request()
+  args.client_code = "55654"
+  args.firmid = "MC0094600000"
+  args.sec_code = "AFKS"
+  args.trdaccid = "L01-00000F00"
+  --args.tag = "EQTV"
+  --args.currcode = "SUR"
+  args.limit_kind = 1
   
   local ser_args = args:SerializeToString()
   request.args = ser_args
@@ -82,6 +88,30 @@ function Client:start()
     local result = qlua_rpc.GetClassSecurities_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [class_securities: %s]\n", result.class_securities) )
+  elseif response.type == qlua_rpc.GET_MONEY then
+    local result = qlua_rpc.GetMoney_Result()
+    result:ParseFromString(response.result)
+    for i, e in ipairs(result.money) do
+        print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.k, e.v) )
+    end
+  elseif response.type == qlua_rpc.GET_MONEY_EX then
+    local result = qlua_rpc.GetMoneyEx_Result()
+    result:ParseFromString(response.result)
+    for i, e in ipairs(result.money_ex) do
+        print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.k, e.v) )
+    end
+  elseif response.type == qlua_rpc.GET_DEPO then
+    local result = qlua_rpc.GetDepo_Result()
+    result:ParseFromString(response.result)
+    for i, e in ipairs(result.depo) do
+        print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.k, e.v) )
+    end
+  elseif response.type == qlua_rpc.GET_DEPO_EX then
+    local result = qlua_rpc.GetDepoEx_Result()
+    result:ParseFromString(response.result)
+    for i, e in ipairs(result.depo_ex) do
+        print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.k, e.v) )
+    end
   end
 
   print ("closing...\n")

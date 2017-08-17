@@ -17,6 +17,10 @@ enum ProcedureType {
     GET_CLASSES_LIST = 12;
     GET_CLASS_INFO = 13;
     GET_CLASS_SECURITIES = 14;
+    GET_MONEY = 15;
+    GET_MONEY_EX = 16;
+    GET_DEPO = 17;
+    GET_DEPO_EX = 18;
 }
 
 message TableEntry {
@@ -96,6 +100,7 @@ message PrintDbgStr_Request {
 }
 
 message GetItem_Request {
+
     string table_name = 1;
     double index = 2;
 }
@@ -105,11 +110,13 @@ message GetItem_Result {
 }
 
 message GetOrderByNumber_Request {
+
     string class_code = 1;
     uint32 order_id = 2;
 }
 
 message GetOrderByNumber_Result {
+
     repeated TableEntry order = 1;
     int32 indx = 2;
 }
@@ -140,4 +147,54 @@ message GetClassSecurities_Request {
 
 message GetClassSecurities_Result {
     string class_securities = 1;
+}
+
+message GetMoney_Request {
+
+    string client_code = 1; // Код клиента
+    string firmid = 2; // Фирма
+    string tag = 3; // Группа
+    string currcode = 4; // Валюта
+}
+
+message GetMoney_Result {
+    repeated TableEntry money = 1;
+}
+
+message GetMoneyEx_Request {
+
+    string firmid = 1; // Фирма
+    string client_code = 2; // Код клиента
+    string tag = 3; // Группа
+    string currcode = 4; // Валюта
+    int32 limit_kind = 5; // Вид лимита (Как задать лимит "Tx"? Ответ: видимо, никак -- это недоработка в API qlua)
+}
+
+message GetMoneyEx_Result {
+    repeated TableEntry money_ex = 1;
+}
+
+message GetDepo_Request {
+
+    string client_code = 1; // Код клиента
+    string firmid = 2; // Фирма
+    string sec_code = 3; // Код бумаги
+    string trdaccid = 4; // Счет депо
+}
+
+message GetDepo_Result {
+    repeated TableEntry depo = 1;
+}
+
+message GetDepoEx_Request {
+
+    string firmid = 1; // Фирма
+    string client_code = 2; // Код клиента
+    string sec_code = 3; // Код бумаги
+    string trdaccid = 4; // Счет депо
+    int32 limit_kind = 5; // Вид лимита (Как задать лимит "Tx"? Ответ: видимо, никак -- это недоработка в API qlua)
+}
+
+message GetDepoEx_Result {
+    repeated TableEntry depo_ex = 1;
 }

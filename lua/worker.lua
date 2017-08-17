@@ -108,13 +108,37 @@ function Worker:start()
         args = qlua_rpc.GetClassInfo_Request()
         args:ParseFromString(request.args)
         result = qlua_rpc.GetClassInfo_Result()
-        local t = getClassInfo(args.class_code)
+        local t = getClassInfo(args.class_code) -- TO-DO: pcall
         insert_table(t, result.class_info)
       elseif request.type == qlua_rpc.GET_CLASS_SECURITIES then
         args = qlua_rpc.GetClassSecurities_Request()
         args:ParseFromString(request.args)
         result = qlua_rpc.GetClassSecurities_Result()
         result.class_securities = getClassSecurities(args.class_code) -- TO-DO: pcall
+      elseif request.type == qlua_rpc.GET_MONEY then
+        args = qlua_rpc.GetMoney_Request()
+        args:ParseFromString(request.args)
+        result = qlua_rpc.GetMoney_Result()
+        local t = getMoney(args.client_code, args.firmid, args.tag, args.currcode) -- TO-DO: pcall
+        insert_table(t, result.money)
+      elseif request.type == qlua_rpc.GET_MONEY_EX then
+        args = qlua_rpc.GetMoneyEx_Request()
+        args:ParseFromString(request.args)
+        result = qlua_rpc.GetMoneyEx_Result()
+        local t = getMoneyEx(args.firmid, args.client_code, args.tag, args.currcode, args.limit_kind) -- TO-DO: pcall
+        insert_table(t, result.money_ex)
+      elseif request.type == qlua_rpc.GET_DEPO then
+        args = qlua_rpc.GetDepo_Request()
+        args:ParseFromString(request.args)
+        result = qlua_rpc.GetDepo_Result()
+        local t = getDepo(args.client_code, args.firmid, args.sec_code, args.trdaccid) -- TO-DO: pcall
+        insert_table(t, result.depo)
+      elseif request.type == qlua_rpc.GET_DEPO_EX then
+        args = qlua_rpc.GetDepoEx_Request()
+        args:ParseFromString(request.args)
+        result = qlua_rpc.GetDepoEx_Result()
+        local t = getDepoEx(args.firmid, args.client_code, args.sec_code, args.trdaccid, args.limit_kind) -- TO-DO: pcall
+        insert_table(t, result.depo_ex)
 			else
 				assert(false, "Unknown request\n") -- TO-DO
 			end
