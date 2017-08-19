@@ -1,4 +1,4 @@
-local qlua_rpc = require("qlua/proto/qlua_rpc_pb")
+local qlua_msg = require("qlua/proto/qlua_msg_pb")
 
 local zmq = require("lzmq.ffi")
 
@@ -19,10 +19,12 @@ end
 
 function Client:start()
     
-  local request = qlua_rpc.Qlua_Request()
-  request.type = qlua_rpc.GET_QUOTE_LEVEL2
+  local request = qlua_msg.Qlua_Request()
+  
+  request.token = 12345;
+  request.type = qlua_msg.GET_SECURITY_INFO
 
-  local args = qlua_rpc.GetQuoteLevel2_Request()
+  local args = qlua_msg.GetSecurityInfo_Request()
   --args.client_code = "55654"
   --args.firmid = "MC0094600000"
   args.class_code = "SPBFUT"
@@ -43,78 +45,103 @@ function Client:start()
 
   local msg = self.socket:recv()
 
-  local response = qlua_rpc.Qlua_Response()
+  local response = qlua_msg.Qlua_Response()
   response:ParseFromString(msg)
-  if response.type == qlua_rpc.IS_CONNECTED then
-    local result = qlua_rpc.IsConnected_Result()
+  print( string.format("response token: %d", response.token) )
+  if response.type == qlua_msg.IS_CONNECTED then
+    local result = qlua_msg.IsConnected_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [isConnected: %s]\n", result.is_connected) )
-  elseif response.type == qlua_rpc.GET_SCRIPT_PATH then
-    local result = qlua_rpc.GetScriptPath_Result()
+  elseif response.type == qlua_msg.GET_SCRIPT_PATH then
+    local result = qlua_msg.GetScriptPath_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [scriptPath: %s]\n", result.script_path) )
-  elseif response.type == qlua_rpc.GET_INFO_PARAM then
-    local result = qlua_rpc.GetInfoParam_Result()
+  elseif response.type == qlua_msg.GET_INFO_PARAM then
+    local result = qlua_msg.GetInfoParam_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [infoParam: %s]\n", result.info_param) )
-  elseif response.type == qlua_rpc.MESSAGE then
-    local result = qlua_rpc.Message_Result()
+  elseif response.type == qlua_msg.MESSAGE then
+    local result = qlua_msg.Message_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [result: %s]\n", result.result) )
-  elseif response.type == qlua_rpc.SLEEP then
-    local result = qlua_rpc.Sleep_Result()
+  elseif response.type == qlua_msg.SLEEP then
+    local result = qlua_msg.Sleep_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [result: %s]\n", result.result) )
-  elseif response.type == qlua_rpc.GET_WORKING_FOLDER then
-    local result = qlua_rpc.GetWorkingFolder_Result()
+  elseif response.type == qlua_msg.GET_WORKING_FOLDER then
+    local result = qlua_msg.GetWorkingFolder_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [working_folder: %s]\n", result.working_folder) )
-  elseif response.type == qlua_rpc.GET_ITEM then
-    local result = qlua_rpc.GetItem_Result()
+  elseif response.type == qlua_msg.GET_ITEM then
+    local result = qlua_msg.GetItem_Result()
     result:ParseFromString(response.result)
     for i, e in ipairs(result.table_row) do
         print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.k, e.v) )
     end
-  elseif response.type == qlua_rpc.GET_CLASSES_LIST then
-    local result = qlua_rpc.GetClassesList_Result()
+  elseif response.type == qlua_msg.GET_CLASSES_LIST then
+    local result = qlua_msg.GetClassesList_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [classes_list: %s]\n", result.classes_list) )
-  elseif response.type == qlua_rpc.GET_CLASS_INFO then
-    local result = qlua_rpc.GetClassInfo_Result()
+  elseif response.type == qlua_msg.GET_CLASS_INFO then
+    local result = qlua_msg.GetClassInfo_Result()
     result:ParseFromString(response.result)
     for i, e in ipairs(result.class_info) do
         print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.k, e.v) )
     end
-  elseif response.type == qlua_rpc.GET_CLASS_SECURITIES then
-    local result = qlua_rpc.GetClassSecurities_Result()
+  elseif response.type == qlua_msg.GET_CLASS_SECURITIES then
+    local result = qlua_msg.GetClassSecurities_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [class_securities: %s]\n", result.class_securities) )
-  elseif response.type == qlua_rpc.GET_MONEY then
-    local result = qlua_rpc.GetMoney_Result()
+  elseif response.type == qlua_msg.GET_MONEY then
+    local result = qlua_msg.GetMoney_Result()
     result:ParseFromString(response.result)
     for i, e in ipairs(result.money) do
         print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.k, e.v) )
     end
-  elseif response.type == qlua_rpc.GET_MONEY_EX then
-    local result = qlua_rpc.GetMoneyEx_Result()
+  elseif response.type == qlua_msg.GET_MONEY_EX then
+    local result = qlua_msg.GetMoneyEx_Result()
     result:ParseFromString(response.result)
     for i, e in ipairs(result.money_ex) do
         print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.k, e.v) )
     end
-  elseif response.type == qlua_rpc.GET_DEPO then
-    local result = qlua_rpc.GetDepo_Result()
+  elseif response.type == qlua_msg.GET_DEPO then
+    local result = qlua_msg.GetDepo_Result()
     result:ParseFromString(response.result)
     for i, e in ipairs(result.depo) do
         print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.k, e.v) )
     end
-  elseif response.type == qlua_rpc.GET_DEPO_EX then
-    local result = qlua_rpc.GetDepoEx_Result()
+  elseif response.type == qlua_msg.GET_DEPO_EX then
+    local result = qlua_msg.GetDepoEx_Result()
     result:ParseFromString(response.result)
     for i, e in ipairs(result.depo_ex) do
         print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.k, e.v) )
     end
-  elseif response.type == qlua_rpc.GET_QUOTE_LEVEL2 then
-    local result = qlua_rpc.GetQuoteLevel2_Result()
+  elseif response.type == qlua_msg.GET_FUTURES_LIMIT then
+    local result = qlua_msg.GetFuturesLimit_Result()
+    result:ParseFromString(response.result)
+    for i, e in ipairs(result.futures_limit) do
+        print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.k, e.v) )
+    end
+  elseif response.type == qlua_msg.GET_FUTURES_HOLDING then
+    local result = qlua_msg.GetFuturesHolding_Result()
+    result:ParseFromString(response.result)
+    for i, e in ipairs(result.futures_holding) do
+        print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.k, e.v) )
+    end
+  elseif response.type == qlua_msg.GET_SECURITY_INFO then
+    local result = qlua_msg.GetSecurityInfo_Result()
+    result:ParseFromString(response.result)
+    for i, e in ipairs(result.security_info) do
+        print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.k, e.v) )
+    end
+  elseif response.type == qlua_msg.GET_TRADE_DATE then
+    local result = qlua_msg.GetTradeDate_Result()
+    result:ParseFromString(response.result)
+    for i, e in ipairs(result.trade_date) do
+        print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.k, e.v) )
+    end
+  elseif response.type == qlua_msg.GET_QUOTE_LEVEL2 then
+    local result = qlua_msg.GetQuoteLevel2_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [bid_count: %s, offer_count: %s]\n", result.bid_count, result.offer_count) )
     for i, e in ipairs(result.bid) do

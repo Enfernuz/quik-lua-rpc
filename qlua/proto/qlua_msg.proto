@@ -11,7 +11,7 @@ enum ProcedureType {
     GET_WORKING_FOLDER = 6;
     PRINT_DBG_STR = 7;
     GET_ITEM = 8;
-    GET_ORDER_BY_NUMBER = 9; // TO-DO: check if working
+    GET_ORDER_BY_NUMBER = 9; // NOT TESTED
     GET_NUMBER_OF = 10;
     SEARCH_ITEMS = 11; // NOT IMPLEMENTED YET
     GET_CLASSES_LIST = 12;
@@ -21,10 +21,10 @@ enum ProcedureType {
     GET_MONEY_EX = 16;
     GET_DEPO = 17;
     GET_DEPO_EX = 18;
-    GET_FUTURES_LIMIT = 19; // NOT IMPLEMENTED YET
-    GET_FUTURES_HOLDING = 20; // NOT IMPLEMENTED YET
-    GET_SECURITY_INFO = 21; // NOT IMPLEMENTED YET
-    GET_TRADE_DATE = 22; // NOT IMPLEMENTED YET
+    GET_FUTURES_LIMIT = 19; // NOT TESTED
+    GET_FUTURES_HOLDING = 20; // NOT TESTED
+    GET_SECURITY_INFO = 21;
+    GET_TRADE_DATE = 22;
     GET_QUOTE_LEVEL2 = 23;
 }
 
@@ -37,13 +37,15 @@ message TableEntry {
 
 message Qlua_Request {
 
-    ProcedureType type = 1;
-    bytes args = 2;
+    int64 token = 1;
+    ProcedureType type = 2;
+    bytes args = 3;
 }
 
 message Qlua_Response {
 
-    ProcedureType type = 1;
+    int64 token = 1;
+    ProcedureType type = 2;
   
     // Если это внутренняя ошибка RPC-сервиса, то установлен is_error,
     // в противном случае -- установлен result (даже если он содержит в себе
@@ -51,8 +53,8 @@ message Qlua_Response {
     // qlua (например, nil в определённых случаях), в рамках RPC-сервиса 
     // являются обычным результатом выполнения запроса.
     oneof qlua_response_data {
-        bool is_error = 2;
-        bytes result = 3;
+        bool is_error = 3;
+        bytes result = 4;
     }
 }
 
@@ -202,6 +204,44 @@ message GetDepoEx_Request {
 
 message GetDepoEx_Result {
     repeated TableEntry depo_ex = 1;
+}
+
+message GetFuturesLimit_Request {
+
+    string firmid = 1;
+    string trdaccid = 2;
+    int32 limit_type = 3;
+    string currcode = 4;
+}
+
+message GetFuturesLimit_Result {
+    repeated TableEntry futures_limit = 1;
+}
+
+message GetFuturesHolding_Request {
+
+    string firmid = 1;
+    string trdaccid = 2;
+    string sec_code = 3;
+    int32 type = 4;
+}
+
+message GetFuturesHolding_Result {
+    repeated TableEntry futures_holding = 1;
+}
+
+message GetSecurityInfo_Request {
+
+    string class_code = 1;
+    string sec_code = 2;
+}
+
+message GetSecurityInfo_Result {
+    repeated TableEntry security_info = 1;
+}
+
+message GetTradeDate_Result {
+    repeated TableEntry trade_date = 1;
 }
 
 message GetQuoteLevel2_Request {
