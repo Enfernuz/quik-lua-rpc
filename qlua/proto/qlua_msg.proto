@@ -30,6 +30,8 @@ enum ProcedureType {
     GET_LINES_COUNT = 24;
     GET_NUM_CANDLES = 25;
     GET_CANDLES_BY_INDEX = 26;
+    
+    SEND_TRANSACTION = 27;
 }
 
 message TableEntry {
@@ -320,4 +322,12 @@ message GetCandlesByIndex_Result {
     repeated CandleEntry t = 1;
     int32 n = 2;
     string l = 3;
+}
+
+message SendTransaction_Request {
+    map<string, string> transaction = 1;
+}
+
+message SendTransaction_Result {
+    string result = 1;
 }

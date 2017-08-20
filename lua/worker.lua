@@ -43,6 +43,16 @@ local function copy_datetime(dst, src)
   dst.year = src.year
 end
 
+local function create_table(pb_map)
+  
+  local t = {}
+  for i,e in ipairs(pb_map) do
+    t[e.key] = e.value
+  end
+  
+  return t
+end
+
 local function insert_candles_table(src, dst)
   
   for i,v in ipairs(src) do
@@ -226,6 +236,12 @@ function Worker:start()
         result.n = n
         result.l = l
         insert_candles_table(t, result.t)
+      elseif request.type == qlua_msg.SEND_TRANSACTION then
+        args = qlua_msg.SendTransaction_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.SendTransaction_Result()
+        local t = create_table(args.transaction)
+        result.result = sendTransaction(t) -- TO-DO: pcall
 			else
 				assert(false, "Unknown request\n") -- TO-DO
 			end

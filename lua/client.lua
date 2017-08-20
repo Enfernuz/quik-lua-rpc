@@ -22,9 +22,9 @@ function Client:start()
   local request = qlua_msg.Qlua_Request()
   
   request.token = 12345;
-  request.type = qlua_msg.GET_CANDLES_BY_INDEX
+  request.type = qlua_msg.SEND_TRANSACTION
 
-  local args = qlua_msg.GetCandlesByIndex_Request()
+  local args = qlua_msg.SendTransaction_Request()
   --args.client_code = "55654"
   --args.firmid = "MC0094600000"
   --args.class_code = "SPBFUT"
@@ -33,10 +33,20 @@ function Client:start()
   --args.tag = "EQTV"
   --args.currcode = "SUR"
   --args.limit_kind = 1
-  args.tag = "envel"
-  args.line = 0
-  args.first_candle = 100
-  args.count = 5
+  --args.tag = "envel"
+  --args.line = 0
+  --args.first_candle = 100
+  --args.count = 5
+  
+  local t = {}
+  t.account = "test"
+  
+  for k,v in pairs(t) do
+      local trans = qlua_msg.SendTransaction_Request.TransactionEntry()
+      trans.key = tostring(k)
+      trans.value = tostring(v)
+      table.insert(args.transaction, trans)
+  end
   
   local ser_args = args:SerializeToString()
   request.args = ser_args
@@ -171,6 +181,10 @@ function Client:start()
         print( string.format("datetime: [mcs=%s, ms=%s, sec=%d, min=%d, hour=%d, day=%d, week_day=%d, month=%d, year=%d]\n", e.datetime.mcs, e.datetime.ms, e.datetime.sec, e.datetime.min, e.datetime.hour, e.datetime.day, e.datetime.week_day, e.datetime.month, e.datetime.year) )
         print("-----")
     end
+  elseif response.type == qlua_msg.SEND_TRANSACTION then
+    local result = qlua_msg.SendTransaction_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [transaction_result: %s]\n", result.result) )
   end
 
   print ("closing...\n")
