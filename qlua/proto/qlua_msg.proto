@@ -26,6 +26,10 @@ enum ProcedureType {
     GET_SECURITY_INFO = 21;
     GET_TRADE_DATE = 22;
     GET_QUOTE_LEVEL2 = 23;
+    
+    GET_LINES_COUNT = 24;
+    GET_NUM_CANDLES = 25;
+    GET_CANDLES_BY_INDEX = 26;
 }
 
 message TableEntry {
@@ -34,6 +38,29 @@ message TableEntry {
     string v = 2;
 }
 
+message CandleEntry {
+
+    string open = 1;
+    string close = 2;
+    string high = 3;
+    string low = 4;
+    string volume = 5;
+    int32 does_exist = 6;
+    DateTimeEntry datetime = 7;
+}
+
+message DateTimeEntry {
+
+    string mcs = 1; // not sure if it's integral, so leave it be string until figured out
+    string ms = 2; // not sure if it's integral, so leave it be string until figured out
+    int32 sec = 3;
+    int32 min = 4;
+    int32 hour = 5;
+    int32 day = 6;
+    int32 week_day = 7;
+    int32 month = 8;
+    int32 year = 9;
+}
 
 message Qlua_Request {
 
@@ -262,4 +289,35 @@ message GetQuoteLevel2_Result {
     string offer_count = 2;
     repeated QuoteEntry bid = 3;
     repeated QuoteEntry offer = 4;
+}
+
+message GetLinesCount_Request {
+    string tag = 1;
+}
+
+message GetLinesCount_Result {
+    int32 lines_count = 1;
+}
+
+message GetNumCandles_Request {
+    string tag = 1;
+}
+
+message GetNumCandles_Result {
+    int32 num_candles = 1;
+}
+
+message GetCandlesByIndex_Request {
+
+    string tag = 1;
+    int32 line = 2;
+    int32 first_candle = 3;
+    int32 count = 4;
+}
+
+message GetCandlesByIndex_Result {
+
+    repeated CandleEntry t = 1;
+    int32 n = 2;
+    string l = 3;
 }

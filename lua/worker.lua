@@ -23,10 +23,38 @@ end
 local function insert_quote_table(src, dst)
   
   for i,v in ipairs(src) do
-      local quote_entry = qlua_msg.GetQuoteLevel2_Result.QuoteEntry() 
-      quote_entry.price = tostring(v.price)
-      quote_entry.quantity = tostring(v.quantity)
-      table.insert(dst, quote_entry)
+      local quote = qlua_msg.GetQuoteLevel2_Result.QuoteEntry() 
+      quote.price = tostring(v.price)
+      quote.quantity = tostring(v.quantity)
+      table.insert(dst, quote)
+  end
+end
+
+local function copy_datetime(dst, src)
+  
+  dst.mcs = tostring(src.mcs)
+  dst.ms = tostring(src.ms)
+  dst.sec = src.sec
+  dst.min = src.min
+  dst.hour = src.hour
+  dst.day = src.day
+  dst.week_day = src.week_day
+  dst.month = src.month
+  dst.year = src.year
+end
+
+local function insert_candles_table(src, dst)
+  
+  for i,v in ipairs(src) do
+      local candle = qlua_msg.CandleEntry() 
+      candle.open = tostring(v.open)
+      candle.close = tostring(v.close)
+      candle.high = tostring(v.high)
+      candle.low = tostring(v.low)
+      candle.volume = tostring(v.volume)
+      candle.does_exist = v.doesExist
+      copy_datetime(candle.datetime, v.datetime)
+      table.insert(dst, candle)
   end
 end
 
@@ -180,6 +208,24 @@ function Worker:start()
         result.offer_count = t.offer_count
         if t.bid ~= nil then insert_quote_table(t.bid, result.bid) end
         if t.offer ~= nil then insert_quote_table(t.offer, result.offer) end
+      elseif request.type == qlua_msg.GET_LINES_COUNT then
+        args = qlua_msg.GetLinesCount_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.GetLinesCount_Result()
+        result.lines_count = getLinesCount(args.tag) -- TO-DO: pcall
+      elseif request.type == qlua_msg.GET_NUM_CANDLES then
+        args = qlua_msg.GetNumCandles_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.GetNumCandles_Result()
+        result.num_candles = getNumCandles(args.tag) -- TO-DO: pcall
+      elseif request.type == qlua_msg.GET_CANDLES_BY_INDEX then
+        args = qlua_msg.GetCandlesByIndex_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.GetCandlesByIndex_Result()
+        local t, n, l = getCandlesByIndex(args.tag, args.line, args.first_candle, args.count) -- TO-DO: pcall
+        result.n = n
+        result.l = l
+        insert_candles_table(t, result.t)
 			else
 				assert(false, "Unknown request\n") -- TO-DO
 			end
@@ -187,6 +233,7 @@ function Worker:start()
       response.token = request.token
       response.type = request.type
       if result ~= nil then
+        
         ser_result = result:SerializeToString()
         --response.isError = false
         response.result = ser_result

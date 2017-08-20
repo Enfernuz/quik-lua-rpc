@@ -22,17 +22,21 @@ function Client:start()
   local request = qlua_msg.Qlua_Request()
   
   request.token = 12345;
-  request.type = qlua_msg.GET_SECURITY_INFO
+  request.type = qlua_msg.GET_CANDLES_BY_INDEX
 
-  local args = qlua_msg.GetSecurityInfo_Request()
+  local args = qlua_msg.GetCandlesByIndex_Request()
   --args.client_code = "55654"
   --args.firmid = "MC0094600000"
-  args.class_code = "SPBFUT"
-  args.sec_code = "RIU7"
+  --args.class_code = "SPBFUT"
+  --args.sec_code = "RIU7"
   --args.trdaccid = "L01-00000F00"
   --args.tag = "EQTV"
   --args.currcode = "SUR"
   --args.limit_kind = 1
+  args.tag = "envel"
+  args.line = 0
+  args.first_candle = 100
+  args.count = 5
   
   local ser_args = args:SerializeToString()
   request.args = ser_args
@@ -149,6 +153,23 @@ function Client:start()
     end
     for i, e in ipairs(result.offer) do
         print( string.format("Received a reply on offer [offer: price=%s, quantity=%s]\n", e.price, e.quantity) )
+    end
+  elseif response.type == qlua_msg.GET_LINES_COUNT then
+    local result = qlua_msg.GetLinesCount_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [lines_count: %s]\n", result.lines_count) )
+  elseif response.type == qlua_msg.GET_NUM_CANDLES then
+    local result = qlua_msg.GetNumCandles_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [num_candles: %s]\n", result.num_candles) )
+  elseif response.type == qlua_msg.GET_CANDLES_BY_INDEX then
+    local result = qlua_msg.GetCandlesByIndex_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [n: %s, l: %s]\n", result.n, result.l) )
+    for i, e in ipairs(result.t) do
+        print( string.format("Received a reply on candle #%d [open=%s, close=%s, high=%s, low=%s, volume=%s, does_exist=%d]\n", i, e.open, e.close, e.high, e.low, e.volume, e.does_exist) )
+        print( string.format("datetime: [mcs=%s, ms=%s, sec=%d, min=%d, hour=%d, day=%d, week_day=%d, month=%d, year=%d]\n", e.datetime.mcs, e.datetime.ms, e.datetime.sec, e.datetime.min, e.datetime.hour, e.datetime.day, e.datetime.week_day, e.datetime.month, e.datetime.year) )
+        print("-----")
     end
   end
 
