@@ -53,6 +53,16 @@ local function create_table(pb_map)
   return t
 end
 
+local function put_to_string_string_pb_map(t, pb_map, pb_map_entry_ctr)
+  
+  for k,v in pairs(t) do
+    local entry = pb_map_entry_ctr()
+    entry.key = tostring(k)
+    entry.value = tostring(v)
+    table.insert(pb_map, entry)
+  end
+end
+
 local function insert_candles_table(src, dst)
   
   for i,v in ipairs(src) do
@@ -102,114 +112,114 @@ function Worker:start()
 	  
 			response = qlua_msg.Qlua_Response()
 
-			if request.type == qlua_msg.IS_CONNECTED then
+			if request.type == qlua_msg.ProcedureType.IS_CONNECTED then
 				result = qlua_msg.IsConnected_Result()
 				result.is_connected = isConnected() -- TO-DO: pcall
-			elseif request.type == qlua_msg.GET_SCRIPT_PATH then
+			elseif request.type == qlua_msg.ProcedureType.GET_SCRIPT_PATH then
 				result = qlua_msg.GetScriptPath_Result()
 				result.script_path = getScriptPath() -- TO-DO: pcall
-      elseif request.type == qlua_msg.GET_INFO_PARAM then
+      elseif request.type == qlua_msg.ProcedureType.GET_INFO_PARAM then
         args = qlua_msg.GetInfoParam_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.GetInfoParam_Result()
         result.info_param = getInfoParam(args.param_name) -- TO-DO: pcall
-      elseif request.type == qlua_msg.MESSAGE then
+      elseif request.type == qlua_msg.ProcedureType.MESSAGE then
         args = qlua_msg.Message_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.Message_Result()
         result.result = (args.icon_type == nil and message(args.message) or message(args.message, args.icon_type)) -- TO-DO: pcall
-      elseif request.type == qlua_msg.SLEEP then
+      elseif request.type == qlua_msg.ProcedureType.SLEEP then
         args = qlua_msg.Sleep_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.Sleep_Result()
         result.result = sleep(args.time) -- TO-DO: pcall
-      elseif request.type == qlua_msg.GET_WORKING_FOLDER then
+      elseif request.type == qlua_msg.ProcedureType.GET_WORKING_FOLDER then
         result = qlua_msg.GetWorkingFolder_Result()
         result.working_folder = getWorkingFolder() -- TO-DO: pcall
-      elseif request.type == qlua_msg.PRINT_DBG_STR then
+      elseif request.type == qlua_msg.ProcedureType.PRINT_DBG_STR then
         args = qlua_msg.PrintDbgStr_Request()
         args:ParseFromString(request.args)
         result = nil
         PrintDbgStr(args.s)
-      elseif request.type == qlua_msg.GET_ITEM then
+      elseif request.type == qlua_msg.ProcedureType.GET_ITEM then
         args = qlua_msg.GetItem_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.GetItem_Result()
         local t = getItem(args.table_name, args.index) -- TO-DO: pcall
-        insert_table(t, result.table_row)
-      elseif request.type == qlua_msg.GET_ORDER_BY_NUMBER then
+        put_to_string_string_pb_map(t, result.table_row, qlua_msg.GetItem_Result.TableRowEntry)
+      elseif request.type == qlua_msg.ProcedureType.GET_ORDER_BY_NUMBER then
         args = qlua_msg.GetOrderByNumber_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.GetOrderByNumber_Result()
         local t, i = getOrderByNumber(args.class_code, args.order_id)
         insert_table(t, result.order)
         result.indx = i
-      elseif request.type == qlua_msg.GET_NUMBER_OF then
+      elseif request.type == qlua_msg.ProcedureType.GET_NUMBER_OF then
         args = qlua_msg.GetNumberOf_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.GetNumberOf_Result()
         result.result = getNumberOf(args.table_name) -- TO-DO: pcall
-      elseif request.type == qlua_msg.GET_CLASSES_LIST then
+      elseif request.type == qlua_msg.ProcedureType.GET_CLASSES_LIST then
         result = qlua_msg.GetClassesList_Result()
 				result.classes_list = getClassesList() -- TO-DO: pcall
-      elseif request.type == qlua_msg.GET_CLASS_INFO then
+      elseif request.type == qlua_msg.ProcedureType.GET_CLASS_INFO then
         args = qlua_msg.GetClassInfo_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.GetClassInfo_Result()
         local t = getClassInfo(args.class_code) -- TO-DO: pcall
-        insert_table(t, result.class_info)
-      elseif request.type == qlua_msg.GET_CLASS_SECURITIES then
+        put_to_string_string_pb_map(t, result.class_info, qlua_msg.GetClassInfo_Result.ClassInfoEntry)
+      elseif request.type == qlua_msg.ProcedureType.GET_CLASS_SECURITIES then
         args = qlua_msg.GetClassSecurities_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.GetClassSecurities_Result()
         result.class_securities = getClassSecurities(args.class_code) -- TO-DO: pcall
-      elseif request.type == qlua_msg.GET_MONEY then
+      elseif request.type == qlua_msg.ProcedureType.GET_MONEY then
         args = qlua_msg.GetMoney_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.GetMoney_Result()
         local t = getMoney(args.client_code, args.firmid, args.tag, args.currcode) -- TO-DO: pcall
-        insert_table(t, result.money)
-      elseif request.type == qlua_msg.GET_MONEY_EX then
+        put_to_string_string_pb_map(t, result.money, qlua_msg.GetMoney_Result.MoneyEntry)
+      elseif request.type == qlua_msg.ProcedureType.GET_MONEY_EX then
         args = qlua_msg.GetMoneyEx_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.GetMoneyEx_Result()
         local t = getMoneyEx(args.firmid, args.client_code, args.tag, args.currcode, args.limit_kind) -- TO-DO: pcall
-        insert_table(t, result.money_ex)
-      elseif request.type == qlua_msg.GET_DEPO then
+        put_to_string_string_pb_map(t, result.money_ex, qlua_msg.GetMoneyEx_Result.MoneyExEntry)
+      elseif request.type == qlua_msg.ProcedureType.GET_DEPO then
         args = qlua_msg.GetDepo_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.GetDepo_Result()
         local t = getDepo(args.client_code, args.firmid, args.sec_code, args.trdaccid) -- TO-DO: pcall
-        insert_table(t, result.depo)
-      elseif request.type == qlua_msg.GET_DEPO_EX then
+        put_to_string_string_pb_map(t, result.depo, qlua_msg.GetDepo_Result.DepoEntry)
+      elseif request.type == qlua_msg.ProcedureType.GET_DEPO_EX then
         args = qlua_msg.GetDepoEx_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.GetDepoEx_Result()
         local t = getDepoEx(args.firmid, args.client_code, args.sec_code, args.trdaccid, args.limit_kind) -- TO-DO: pcall
-        insert_table(t, result.depo_ex)
-      elseif request.type == qlua_msg.GET_FUTURES_LIMIT then
+        put_to_string_string_pb_map(t, result.depo_ex, qlua_msg.GetDepoEx_Result.DepoExEntry)
+      elseif request.type == qlua_msg.ProcedureType.GET_FUTURES_LIMIT then
         args = qlua_msg.GetFuturesLimit_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.GetFuturesLimit_Result()
         local t = getFuturesLimit(args.firmid, args.trdaccid, args.limit_type, args.currcode) -- TO-DO: pcall
-        insert_table(t, result.futures_limit)
-      elseif request.type == qlua_msg.GET_FUTURES_HOLDING then
+        put_to_string_string_pb_map(t, result.futures_limit, qlua_msg.GetFuturesLimit_Result.FuturesLimitEntry)
+      elseif request.type == qlua_msg.ProcedureType.GET_FUTURES_HOLDING then
         args = qlua_msg.GetFuturesHolding_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.GetFuturesHolding_Result()
         local t = getFuturesLHolding(args.firmid, args.trdaccid, args.sec_code, args.type) -- TO-DO: pcall
-        insert_table(t, result.futures_holding)
-      elseif request.type == qlua_msg.GET_SECURITY_INFO then
+        put_to_string_string_pb_map(t, result.futures_holding, qlua_msg.GetFuturesHolding_Result.FuturesHoldingEntry)
+      elseif request.type == qlua_msg.ProcedureType.GET_SECURITY_INFO then
         args = qlua_msg.GetSecurityInfo_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.GetSecurityInfo_Result()
         local t = getSecurityInfo(args.class_code, args.sec_code) -- TO-DO: pcall
-        insert_table(t, result.security_info)
-      elseif request.type == qlua_msg.GET_TRADE_DATE then
+        put_to_string_string_pb_map(t, result.security_info, qlua_msg.GetSecurityInfo_Result.SecurityInfoEntry)
+      elseif request.type == qlua_msg.ProcedureType.GET_TRADE_DATE then
         result = qlua_msg.GetTradeDate_Result()
         local t = getTradeDate() -- TO-DO: pcall
-        insert_table(t, result.trade_date)
-      elseif request.type == qlua_msg.GET_QUOTE_LEVEL2 then
+        put_to_string_string_pb_map(t, result.trade_date, qlua_msg.GetTradeDate_Result.TradeDateEntry)
+      elseif request.type == qlua_msg.ProcedureType.GET_QUOTE_LEVEL2 then
         args = qlua_msg.GetQuoteLevel2_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.GetQuoteLevel2_Result()
@@ -218,17 +228,17 @@ function Worker:start()
         result.offer_count = t.offer_count
         if t.bid ~= nil then insert_quote_table(t.bid, result.bid) end
         if t.offer ~= nil then insert_quote_table(t.offer, result.offer) end
-      elseif request.type == qlua_msg.GET_LINES_COUNT then
+      elseif request.type == qlua_msg.ProcedureType.GET_LINES_COUNT then
         args = qlua_msg.GetLinesCount_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.GetLinesCount_Result()
         result.lines_count = getLinesCount(args.tag) -- TO-DO: pcall
-      elseif request.type == qlua_msg.GET_NUM_CANDLES then
+      elseif request.type == qlua_msg.ProcedureType.GET_NUM_CANDLES then
         args = qlua_msg.GetNumCandles_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.GetNumCandles_Result()
         result.num_candles = getNumCandles(args.tag) -- TO-DO: pcall
-      elseif request.type == qlua_msg.GET_CANDLES_BY_INDEX then
+      elseif request.type == qlua_msg.ProcedureType.GET_CANDLES_BY_INDEX then
         args = qlua_msg.GetCandlesByIndex_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.GetCandlesByIndex_Result()
@@ -236,7 +246,7 @@ function Worker:start()
         result.n = n
         result.l = l
         insert_candles_table(t, result.t)
-      elseif request.type == qlua_msg.SEND_TRANSACTION then
+      elseif request.type == qlua_msg.ProcedureType.SEND_TRANSACTION then
         args = qlua_msg.SendTransaction_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.SendTransaction_Result()

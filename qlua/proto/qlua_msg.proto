@@ -21,8 +21,8 @@ enum ProcedureType {
     GET_MONEY_EX = 16;
     GET_DEPO = 17;
     GET_DEPO_EX = 18;
-    GET_FUTURES_LIMIT = 19; // NOT TESTED
-    GET_FUTURES_HOLDING = 20; // NOT TESTED
+    GET_FUTURES_LIMIT = 19;
+    GET_FUTURES_HOLDING = 20;
     GET_SECURITY_INFO = 21;
     GET_TRADE_DATE = 22;
     GET_QUOTE_LEVEL2 = 23;
@@ -142,7 +142,7 @@ message GetItem_Request {
 }
 
 message GetItem_Result {
-    repeated TableEntry table_row = 1;
+    map<string, string> table_row = 1;
 }
 
 message GetOrderByNumber_Request {
@@ -174,7 +174,7 @@ message GetClassInfo_Request {
 }
 
 message GetClassInfo_Result {
-    repeated TableEntry class_info = 1;
+    map<string, string> class_info = 1;
 }
 
 message GetClassSecurities_Request {
@@ -194,7 +194,7 @@ message GetMoney_Request {
 }
 
 message GetMoney_Result {
-    repeated TableEntry money = 1;
+    map<string, string> money = 1;
 }
 
 message GetMoneyEx_Request {
@@ -207,7 +207,7 @@ message GetMoneyEx_Request {
 }
 
 message GetMoneyEx_Result {
-    repeated TableEntry money_ex = 1;
+    map<string, string> money_ex = 1;
 }
 
 message GetDepo_Request {
@@ -219,7 +219,7 @@ message GetDepo_Request {
 }
 
 message GetDepo_Result {
-    repeated TableEntry depo = 1;
+    map<string, string> depo = 1;
 }
 
 message GetDepoEx_Request {
@@ -232,7 +232,7 @@ message GetDepoEx_Request {
 }
 
 message GetDepoEx_Result {
-    repeated TableEntry depo_ex = 1;
+    map<string, string> depo_ex = 1;
 }
 
 message GetFuturesLimit_Request {
@@ -244,7 +244,7 @@ message GetFuturesLimit_Request {
 }
 
 message GetFuturesLimit_Result {
-    repeated TableEntry futures_limit = 1;
+    map<string, string> futures_limit = 1;
 }
 
 message GetFuturesHolding_Request {
@@ -256,7 +256,7 @@ message GetFuturesHolding_Request {
 }
 
 message GetFuturesHolding_Result {
-    repeated TableEntry futures_holding = 1;
+    map<string, string> futures_holding = 1;
 }
 
 message GetSecurityInfo_Request {
@@ -266,11 +266,11 @@ message GetSecurityInfo_Request {
 }
 
 message GetSecurityInfo_Result {
-    repeated TableEntry security_info = 1;
+    map<string, string> security_info = 1;
 }
 
 message GetTradeDate_Result {
-    repeated TableEntry trade_date = 1;
+    map<string, string> trade_date = 1;
 }
 
 message GetQuoteLevel2_Request {
