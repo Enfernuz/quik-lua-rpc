@@ -54,6 +54,28 @@ enum ProcedureType {
     
     GET_BUY_SELL_INFO = 44;
     GET_BUY_SELL_INFO_EX = 45; // использовать структуры запроса и ответа от GET_BUY_SELL_INFO
+    
+    ADD_COLUMN = 46;
+    ALLOC_TABLE = 47;
+    CLEAR = 48; // NOT IMPLEMENTED YET
+    CREATE_WINDOW = 49;
+    DELETE_ROW = 50; // NOT IMPLEMENTED YET
+    DESTROY_TABLE = 51;
+    INSERT_ROW = 52; // NOT IMPLEMENTED YET
+
+}
+
+// Не получилось внедрить это определение в AddColumn_Request, т.к. не смог потом залукапить значения енама
+enum ColumnParameterType {
+
+    QTABLE_UNKNOWN_TYPE = 0;
+    QTABLE_INT_TYPE = 1;
+    QTABLE_DOUBLE_TYPE = 2;
+    QTABLE_INT64_TYPE = 3;
+    QTABLE_CACHED_STRING_TYPE = 4;
+    QTABLE_TIME_TYPE = 5;
+    QTABLE_DATE_TYPE = 6;
+    QTABLE_STRING_TYPE = 7;
 }
 
 message TableEntry {
@@ -414,4 +436,43 @@ message GetBuySellInfo_Request {
 
 message GetBuySellInfo_Result {
     map<string, string> buy_sell_info = 1;
+}
+
+// Важно! Это не указано в документации к Quik:
+// добавлять столбцы нужно перед вызовом CreateWindow для указанной таблице. Иначе потом
+// вызовы AddColumn будут возвращать ответ, что столбец добавлен, но визуально ничего не изменится.
+// Я даже пробовал скрывать таблицу и создавать новое окно для неё, но всё равно добавленные 
+// между делом столбцы не отобразились.
+message AddColumn_Request {
+
+    int32 t_id = 1;
+    int32 icode = 2;
+    string name = 3;
+    bool is_default = 4;
+    ColumnParameterType par_type = 5;
+    int32 width = 6;
+}
+
+message AddColumn_Result {
+    int32 result = 1;
+}
+
+message AllocTable_Result {
+    int32 t_id = 1;
+}
+
+message CreateWindow_Request {
+    int32 t_id = 1;
+}
+
+message CreateWindow_Result {
+    int32 result = 1;
+}
+
+message DestroyTable_Request {
+    int32 t_id = 1;
+}
+
+message DestroyTable_Result {
+    bool result = 1;
 }

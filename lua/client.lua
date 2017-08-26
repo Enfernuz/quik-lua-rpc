@@ -22,15 +22,21 @@ function Client:start()
   local request = qlua_msg.Qlua_Request()
   
   request.token = 12345;
-  request.type = qlua_msg.ProcedureType.GET_BUY_SELL_INFO_EX
+  request.type = qlua_msg.ProcedureType.DESTROY_TABLE
 
-  local args = qlua_msg.GetBuySellInfo_Request()
+  local args = qlua_msg.DestroyTable_Request()
   
-  args.firm_id = "MC0094600000"
-  args.client_code = "55654"
-  args.class_code = "SPBXM"
-  args.sec_code = "AMZN"
-  args.price = 930
+  args.t_id = 7
+  --args.icode = 0
+  --args.name = "koka"
+  --args.is_default = false
+  --args.par_type = qlua_msg.ColumnParameterType.QTABLE_STRING_TYPE
+  --args.width = 15
+  --args.firm_id = "MC0094600000"
+  --args.client_code = "55654"
+  --args.class_code = "SPBXM"
+  --args.sec_code = "AMZN"
+  --args.price = 930
   --args.param_name = "PREVPRICE"
   --args.table_name = "securities"
   --args.index = 1
@@ -235,6 +241,22 @@ function Client:start()
     for i, e in ipairs(result.buy_sell_info) do
         print( string.format("Received a reply [buy_sell_info: key=%s, value=%s]\n", e.key, e.value) )
     end
+  elseif response.type == qlua_msg.ProcedureType.ADD_COLUMN then
+    local result = qlua_msg.AddColumn_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [add_column: result=%d]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.ALLOC_TABLE then
+    local result = qlua_msg.AllocTable_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [alloc_table: t_id=%d]\n", result.t_id) )
+  elseif response.type == qlua_msg.ProcedureType.CREATE_WINDOW then
+    local result = qlua_msg.CreateWindow_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [create_window: result=%d]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.DESTROY_TABLE then
+    local result = qlua_msg.DestroyTable_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [destroy_table: result=%s]\n", result.result) )
   end
 
   print ("closing...\n")

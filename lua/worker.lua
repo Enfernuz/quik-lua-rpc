@@ -78,6 +78,44 @@ local function insert_candles_table(src, dst)
   end
 end
 
+local qtable_parameter_types = {}
+qtable_parameter_types[qlua_msg.ColumnParameterType.QTABLE_INT_TYPE] = QTABLE_INT_TYPE
+qtable_parameter_types[qlua_msg.ColumnParameterType.QTABLE_DOUBLE_TYPE] = QTABLE_DOUBLE_TYPE
+qtable_parameter_types[qlua_msg.ColumnParameterType.QTABLE_INT64_TYPE] = QTABLE_INT64_TYPE
+qtable_parameter_types[qlua_msg.ColumnParameterType.QTABLE_CACHED_STRING_TYPE] = QTABLE_CACHED_STRING_TYPE
+qtable_parameter_types[qlua_msg.ColumnParameterType.QTABLE_TIME_TYPE] = QTABLE_TIME_TYPE
+qtable_parameter_types[qlua_msg.ColumnParameterType.QTABLE_DATE_TYPE] = QTABLE_DATE_TYPE
+qtable_parameter_types[qlua_msg.ColumnParameterType.QTABLE_STRING_TYPE] = QTABLE_STRING_TYPE
+
+
+local function to_qtable_parameter_type(pb_qtable_parameter_type)
+  
+  local par_type = qtable_parameter_types[pb_qtable_parameter_type]
+  --[[
+  if pb_qtable_parameter_type = qlua_msg.AddColumn_Request.QTABLE_INT_TYPE then
+    par_type = QTABLE_INT_TYPE
+  elseif pb_qtable_parameter_type = qlua_msg.AddColumn_Request.QTABLE_DOUBLE_TYPE then
+    par_type = QTABLE_DOUBLE_TYPE
+  elseif pb_qtable_parameter_type = qlua_msg.AddColumn_Request.QTABLE_INT64_TYPE then
+    par_type = QTABLE_INT64_TYPE
+  elseif pb_qtable_parameter_type = qlua_msg.AddColumn_Request.QTABLE_CACHED_STRING_TYPE then
+    par_type = QTABLE_CACHED_STRING_TYPE
+  elseif pb_qtable_parameter_type = qlua_msg.AddColumn_Request.QTABLE_TIME_TYPE then
+    par_type = QTABLE_TIME_TYPE
+  elseif pb_qtable_parameter_type = qlua_msg.AddColumn_Request.QTABLE_DATE_TYPE then
+    par_type = QTABLE_DATE_TYPE
+  elseif pb_qtable_parameter_type = qlua_msg.AddColumn_Request.QTABLE_STRING_TYPE then
+    par_type = QTABLE_STRING_TYPE
+  else
+    error("Unknown parameter type.")
+  end
+  --]]
+  
+  if par_type == nil then error("Unknown parameter type.") end
+  
+  return par_type
+end
+
 local Worker = {
   
   ctx = zmq.context(),
@@ -299,6 +337,26 @@ function Worker:start()
         result = qlua_msg.GetBuySellInfo_Result()
         local t = getBuySellInfoEx(args.firm_id, args.client_code, args.class_code, args.sec_code, args.price) -- TO-DO: pcall
         put_to_string_string_pb_map(t, result.buy_sell_info, qlua_msg.GetBuySellInfo_Result.BuySellInfoEntry)
+      elseif request.type == qlua_msg.ProcedureType.ADD_COLUMN then
+        args = qlua_msg.AddColumn_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.AddColumn_Result()
+        --AddColumn(7, 0, "жожа", true, QTABLE_INT_TYPE, 15)
+        result.result = AddColumn(args.t_id, args.icode, args.name, args.is_default, to_qtable_parameter_type(args.par_type), args.width) -- TO-DO: pcall
+      elseif request.type == qlua_msg.ProcedureType.ALLOC_TABLE then
+        result = qlua_msg.AllocTable_Result()
+        result.t_id = AllocTable() -- TO-DO: pcall
+        message("t_id = "..result.t_id)
+      elseif request.type == qlua_msg.ProcedureType.CREATE_WINDOW then
+        args = qlua_msg.CreateWindow_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.CreateWindow_Result()
+        result.result = CreateWindow(args.t_id) -- TO-DO: pcall
+      elseif request.type == qlua_msg.ProcedureType.DESTROY_TABLE then
+        args = qlua_msg.DestroyTable_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.DestroyTable_Result()
+        result.result = DestroyTable(args.t_id) -- TO-DO: pcall
 			else
 				assert(false, "Unknown request\n") -- TO-DO
 			end
