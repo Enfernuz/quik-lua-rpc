@@ -51,6 +51,9 @@ enum ProcedureType {
     
     GET_PORTFOLIO_INFO = 42;
     GET_PORTFOLIO_INFO_EX = 43;
+    
+    GET_BUY_SELL_INFO = 44;
+    GET_BUY_SELL_INFO_EX = 45; // использовать структуры запроса и ответа от GET_BUY_SELL_INFO
 }
 
 message TableEntry {
@@ -398,4 +401,17 @@ message GetPortfolioInfoEx_Request {
 
 message GetPortfolioInfoEx_Result {
     map<string, string> portfolio_info_ex = 1;
+}
+
+message GetBuySellInfo_Request {
+
+    string firm_id = 1;
+    string client_code = 2;
+    string class_code = 3;
+    string sec_code = 4;
+    double price = 5;
+}
+
+message GetBuySellInfo_Result {
+    map<string, string> buy_sell_info = 1;
 }

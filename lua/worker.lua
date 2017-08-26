@@ -281,6 +281,24 @@ function Worker:start()
         result = qlua_msg.GetPortfolioInfoEx_Result()
         local t = getPortfolioInfoEx(args.firm_id, args.client_code, args.limit_kind) -- TO-DO: pcall
         put_to_string_string_pb_map(t, result.portfolio_info_ex, qlua_msg.GetPortfolioInfoEx_Result.PortfolioInfoExEntry)
+      elseif request.type == qlua_msg.ProcedureType.GET_BUY_SELL_INFO then
+        args = qlua_msg.GetBuySellInfo_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.GetBuySellInfo_Result()
+        local t = getBuySellInfo(args.firm_id, args.client_code, args.class_code, args.sec_code, args.price) -- TO-DO: pcall
+        put_to_string_string_pb_map(t, result.buy_sell_info, qlua_msg.GetBuySellInfo_Result.BuySellInfoEntry)
+      elseif request.type == qlua_msg.ProcedureType.GET_BUY_SELL_INFO then
+        args = qlua_msg.GetBuySellInfo_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.GetBuySellInfo_Result()
+        local t = getBuySellInfo(args.firm_id, args.client_code, args.class_code, args.sec_code, args.price) -- TO-DO: pcall
+        put_to_string_string_pb_map(t, result.buy_sell_info, qlua_msg.GetBuySellInfo_Result.BuySellInfoEntry)
+      elseif request.type == qlua_msg.ProcedureType.GET_BUY_SELL_INFO_EX then
+        args = qlua_msg.GetBuySellInfo_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.GetBuySellInfo_Result()
+        local t = getBuySellInfoEx(args.firm_id, args.client_code, args.class_code, args.sec_code, args.price) -- TO-DO: pcall
+        put_to_string_string_pb_map(t, result.buy_sell_info, qlua_msg.GetBuySellInfo_Result.BuySellInfoEntry)
 			else
 				assert(false, "Unknown request\n") -- TO-DO
 			end

@@ -22,18 +22,20 @@ function Client:start()
   local request = qlua_msg.Qlua_Request()
   
   request.token = 12345;
-  request.type = qlua_msg.ProcedureType.GET_PORTFOLIO_INFO_EX
+  request.type = qlua_msg.ProcedureType.GET_BUY_SELL_INFO_EX
 
-  local args = qlua_msg.GetPortfolioInfoEx_Request()
+  local args = qlua_msg.GetBuySellInfo_Request()
   
-  --args.class_code = "SPBXM"
-  --args.sec_code = "AMZN"
+  args.firm_id = "MC0094600000"
+  args.client_code = "55654"
+  args.class_code = "SPBXM"
+  args.sec_code = "AMZN"
+  args.price = 930
   --args.param_name = "PREVPRICE"
   --args.table_name = "securities"
   --args.index = 1
   --args.client_code = "55654"
-  args.firm_id = "MC0094600000"
-  args.client_code = "55654"
+
   --args.firmid = "SPBFUT"
   --args.tag = "1"
   --args.class_code = "SPBFUT"
@@ -43,7 +45,7 @@ function Client:start()
   --args.tag = "EQTV"
   --args.currcode = "SUR"
   --args.currcode = ""
-  args.limit_kind = 1
+  --args.limit_kind = 1
   --args.limit_type = 0
   --args.tag = "envel"
   --args.line = 0
@@ -226,6 +228,12 @@ function Client:start()
     result:ParseFromString(response.result)
     for i, e in ipairs(result.portfolio_info_ex) do
         print( string.format("Received a reply [portfolio_info_ex: key=%s, value=%s]\n", e.key, e.value) )
+    end
+  elseif response.type == qlua_msg.ProcedureType.GET_BUY_SELL_INFO or response.type == qlua_msg.ProcedureType.GET_BUY_SELL_INFO_EX then
+    local result = qlua_msg.GetBuySellInfo_Result()
+    result:ParseFromString(response.result)
+    for i, e in ipairs(result.buy_sell_info) do
+        print( string.format("Received a reply [buy_sell_info: key=%s, value=%s]\n", e.key, e.value) )
     end
   end
 
