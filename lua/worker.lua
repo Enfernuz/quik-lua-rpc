@@ -16,7 +16,7 @@ local function insert_table(src, dst)
       local table_entry = qlua_msg.TableEntry() 
       table_entry.k = tostring(k)
       table_entry.v = tostring(v)
-      table.insert(dst, table_entry)
+      table.sinsert(dst, table_entry)
   end
 end
 
@@ -26,7 +26,7 @@ local function insert_quote_table(src, dst)
       local quote = qlua_msg.GetQuoteLevel2_Result.QuoteEntry() 
       quote.price = tostring(v.price)
       quote.quantity = tostring(v.quantity)
-      table.insert(dst, quote)
+      table.sinsert(dst, quote)
   end
 end
 
@@ -59,7 +59,7 @@ local function put_to_string_string_pb_map(t, pb_map, pb_map_entry_ctr)
     local entry = pb_map_entry_ctr()
     entry.key = tostring(k)
     entry.value = tostring(v)
-    table.insert(pb_map, entry)
+    table.sinsert(pb_map, entry)
   end
 end
 
@@ -74,7 +74,7 @@ local function insert_candles_table(src, dst)
       candle.volume = tostring(v.volume)
       candle.does_exist = v.doesExist
       copy_datetime(candle.datetime, v.datetime)
-      table.insert(dst, candle)
+      table.sinsert(dst, candle)
   end
 end
 
@@ -252,6 +252,35 @@ function Worker:start()
         result = qlua_msg.SendTransaction_Result()
         local t = create_table(args.transaction)
         result.result = sendTransaction(t) -- TO-DO: pcall
+      elseif request.type == qlua_msg.ProcedureType.CALC_BUY_SELL then
+        args = qlua_msg.CalcBuySell_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.CalcBuySell_Result()
+        result.qty, result.comission = CalcBuySell(args.class_code, args.sec_code, args.client_code, args.account, args.price, args.is_buy, args.is_market)
+      elseif request.type == qlua_msg.ProcedureType.GET_PARAM_EX then
+        args = qlua_msg.GetParamEx_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.GetParamEx_Result()
+        local t = getParamEx(args.class_code, args.sec_code, args.param_name) -- TO-DO: pcall
+        put_to_string_string_pb_map(t, result.param_ex, qlua_msg.GetParamEx_Result.ParamExEntry)
+      elseif request.type == qlua_msg.ProcedureType.GET_PARAM_EX_2 then
+        args = qlua_msg.GetParamEx_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.GetParamEx_Result()
+        local t = getParamEx2(args.class_code, args.sec_code, args.param_name) -- TO-DO: pcall
+        put_to_string_string_pb_map(t, result.param_ex, qlua_msg.GetParamEx_Result.ParamExEntry)
+      elseif request.type == qlua_msg.ProcedureType.GET_PORTFOLIO_INFO then
+        args = qlua_msg.GetPortfolioInfo_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.GetPortfolioInfo_Result()
+        local t = getPortfolioInfo(args.firm_id, args.client_code) -- TO-DO: pcall
+        put_to_string_string_pb_map(t, result.portfolio_info, qlua_msg.GetPortfolioInfo_Result.PortfolioInfoEntry)
+      elseif request.type == qlua_msg.ProcedureType.GET_PORTFOLIO_INFO_EX then
+        args = qlua_msg.GetPortfolioInfoEx_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.GetPortfolioInfoEx_Result()
+        local t = getPortfolioInfoEx(args.firm_id, args.client_code, args.limit_kind) -- TO-DO: pcall
+        put_to_string_string_pb_map(t, result.portfolio_info_ex, qlua_msg.GetPortfolioInfoEx_Result.PortfolioInfoExEntry)
 			else
 				assert(false, "Unknown request\n") -- TO-DO
 			end

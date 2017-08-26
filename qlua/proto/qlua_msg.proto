@@ -11,9 +11,9 @@ enum ProcedureType {
     GET_WORKING_FOLDER = 6;
     PRINT_DBG_STR = 7;
     GET_ITEM = 8;
-    GET_ORDER_BY_NUMBER = 9; // NOT TESTED
+    GET_ORDER_BY_NUMBER = 9; // NOT TESTED YET
     GET_NUMBER_OF = 10;
-    SEARCH_ITEMS = 11; // NOT IMPLEMENTED YET
+    //SEARCH_ITEMS = 11; // NOT IMPLEMENTED YET
     GET_CLASSES_LIST = 12;
     GET_CLASS_INFO = 13;
     GET_CLASS_SECURITIES = 14;
@@ -31,7 +31,26 @@ enum ProcedureType {
     GET_NUM_CANDLES = 25;
     GET_CANDLES_BY_INDEX = 26;
     
-    SEND_TRANSACTION = 27;
+    //CREATE_DATA_SOURCE = 27;
+    //DS_SET_UPDATE_CALLBACK = 28;
+    //DS_O = 29;
+    //DS_H = 30;
+    //DS_L = 31;
+    //DS_C = 32;
+    //DS_V = 33;
+    //DS_T = 34;
+    //DS_SIZE = 35;
+    //DS_CLOSE = 36;
+    //DS_SET_EMPTY_CALLBACK = 37;
+    
+    SEND_TRANSACTION = 38;
+    CALC_BUY_SELL = 39; // NOT TESTED YET
+    
+    GET_PARAM_EX = 40;
+    GET_PARAM_EX_2 = 41; // использовать структуры запроса и ответа от GET_PARAM_EX
+    
+    GET_PORTFOLIO_INFO = 42;
+    GET_PORTFOLIO_INFO_EX = 43;
 }
 
 message TableEntry {
@@ -68,7 +87,7 @@ message Qlua_Request {
 
     int64 token = 1;
     ProcedureType type = 2;
-    bytes args = 3;
+    bytes args = 3; // the protoc-lua-plugin gives out a corrupted .lua file if we use google.protobuf.Any
 }
 
 message Qlua_Response {
@@ -330,4 +349,53 @@ message SendTransaction_Request {
 
 message SendTransaction_Result {
     string result = 1;
+}
+
+message CalcBuySell_Request {
+
+    string class_code = 1;
+    string sec_code = 2;
+    string client_code = 3;
+    string account = 4;
+    double price = 5;
+    bool is_buy = 6;
+    bool is_market = 7;
+}
+
+message CalcBuySell_Result {
+
+    int32 qty = 1;
+    double comission = 2; // use of double for money?
+}
+
+message GetParamEx_Request {
+
+    string class_code = 1;
+    string sec_code = 2;
+    string param_name = 3; // возможные значения для этого параметра можно найти тут: https://quikluacsharp.ru/quik-qlua/poluchenie-dannyh-iz-tablits-quik-v-qlua-lua/
+}
+
+message GetParamEx_Result {
+    map<string, string> param_ex = 1;
+}
+
+message GetPortfolioInfo_Request {
+
+    string firm_id = 1;
+    string client_code = 2;
+}
+
+message GetPortfolioInfo_Result {
+    map<string, string> portfolio_info = 1;
+}
+
+message GetPortfolioInfoEx_Request {
+
+    string firm_id = 1;
+    string client_code = 2;
+    int32 limit_kind = 3;
+}
+
+message GetPortfolioInfoEx_Result {
+    map<string, string> portfolio_info_ex = 1;
 }
