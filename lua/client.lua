@@ -22,14 +22,15 @@ function Client:start()
   local request = qlua_msg.Qlua_Request()
   
   request.token = 12345;
-  request.type = qlua_msg.ProcedureType.DESTROY_TABLE
+  request.type = qlua_msg.ProcedureType.IS_WINDOW_CLOSED
 
-  local args = qlua_msg.DestroyTable_Request()
+  local args = qlua_msg.IsWindowClosed_Request()
   
-  args.t_id = 7
+  args.t_id = 1
+  --args.key = 1
   --args.icode = 0
   --args.name = "koka"
-  --args.is_default = false
+  --args.is_default = true
   --args.par_type = qlua_msg.ColumnParameterType.QTABLE_STRING_TYPE
   --args.width = 15
   --args.firm_id = "MC0094600000"
@@ -249,14 +250,30 @@ function Client:start()
     local result = qlua_msg.AllocTable_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [alloc_table: t_id=%d]\n", result.t_id) )
+  elseif response.type == qlua_msg.ProcedureType.CLEAR then
+    local result = qlua_msg.Clear_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [clear: result=%s]\n", result.result) )
   elseif response.type == qlua_msg.ProcedureType.CREATE_WINDOW then
     local result = qlua_msg.CreateWindow_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [create_window: result=%d]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.DELETE_ROW then
+    local result = qlua_msg.DeleteRow_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [delete_row: result=%s]\n", result.result) )
   elseif response.type == qlua_msg.ProcedureType.DESTROY_TABLE then
     local result = qlua_msg.DestroyTable_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [destroy_table: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.INSERT_ROW then
+    local result = qlua_msg.InsertRow_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [insert_row: result=%d]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.IS_WINDOW_CLOSED then
+    local result = qlua_msg.IsWindowClosed_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [is_window_closed: result=%s]\n", result.result) )
   end
 
   print ("closing...\n")

@@ -341,22 +341,40 @@ function Worker:start()
         args = qlua_msg.AddColumn_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.AddColumn_Result()
-        --AddColumn(7, 0, "жожа", true, QTABLE_INT_TYPE, 15)
         result.result = AddColumn(args.t_id, args.icode, args.name, args.is_default, to_qtable_parameter_type(args.par_type), args.width) -- TO-DO: pcall
       elseif request.type == qlua_msg.ProcedureType.ALLOC_TABLE then
         result = qlua_msg.AllocTable_Result()
         result.t_id = AllocTable() -- TO-DO: pcall
-        message("t_id = "..result.t_id)
+      elseif request.type == qlua_msg.ProcedureType.CLEAR then
+        args = qlua_msg.Clear_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.Clear_Result()
+        result.result = Clear(args.t_id) -- TO-DO: pcall
       elseif request.type == qlua_msg.ProcedureType.CREATE_WINDOW then
         args = qlua_msg.CreateWindow_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.CreateWindow_Result()
         result.result = CreateWindow(args.t_id) -- TO-DO: pcall
+      elseif request.type == qlua_msg.ProcedureType.DELETE_ROW then
+        args = qlua_msg.DeleteRow_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.DeleteRow_Result()
+        result.result = DeleteRow(args.t_id, args.key) -- TO-DO: pcall
       elseif request.type == qlua_msg.ProcedureType.DESTROY_TABLE then
         args = qlua_msg.DestroyTable_Request()
         args:ParseFromString(request.args)
         result = qlua_msg.DestroyTable_Result()
         result.result = DestroyTable(args.t_id) -- TO-DO: pcall
+      elseif request.type == qlua_msg.ProcedureType.INSERT_ROW then
+        args = qlua_msg.InsertRow_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.InsertRow_Result()
+        result.result = InsertRow(args.t_id, args.key) -- TO-DO: pcall
+      elseif request.type == qlua_msg.ProcedureType.IS_WINDOW_CLOSED then
+        args = qlua_msg.IsWindowClosed_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.IsWindowClosed_Result()
+        result.result = IsWindowClosed(args.t_id) -- TO-DO: pcall
 			else
 				assert(false, "Unknown request\n") -- TO-DO
 			end

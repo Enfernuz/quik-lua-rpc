@@ -47,21 +47,34 @@ enum ProcedureType {
     CALC_BUY_SELL = 39; // NOT TESTED YET
     
     GET_PARAM_EX = 40;
-    GET_PARAM_EX_2 = 41; // использовать структуры запроса и ответа от GET_PARAM_EX
+    GET_PARAM_EX_2 = 41; // NB: использовать структуры запроса и ответа от GET_PARAM_EX
     
     GET_PORTFOLIO_INFO = 42;
     GET_PORTFOLIO_INFO_EX = 43;
     
     GET_BUY_SELL_INFO = 44;
-    GET_BUY_SELL_INFO_EX = 45; // использовать структуры запроса и ответа от GET_BUY_SELL_INFO
+    GET_BUY_SELL_INFO_EX = 45; // NB: использовать структуры запроса и ответа от GET_BUY_SELL_INFO
     
     ADD_COLUMN = 46;
     ALLOC_TABLE = 47;
-    CLEAR = 48; // NOT IMPLEMENTED YET
+    CLEAR = 48;
     CREATE_WINDOW = 49;
-    DELETE_ROW = 50; // NOT IMPLEMENTED YET
+    DELETE_ROW = 50;
     DESTROY_TABLE = 51;
-    INSERT_ROW = 52; // NOT IMPLEMENTED YET
+    INSERT_ROW = 52; // NB: использовать после создания окна для таблицы (процедура CREATE_WINDOW)
+    IS_WINDOW_CLOSED = 53;
+    GET_CELL = 54; // NOT IMPLEMENTED YET
+    GET_TABLE_SIZE = 55; // NOT IMPLEMENTED YET
+    GET_WINDOW_CAPTION = 56; // NOT IMPLEMENTED YET
+    GET_WINDOW_RECT = 57; // NOT IMPLEMENTED YET
+    SET_SELL = 58; // NOT IMPLEMENTED YET
+    SET_WINDOW_CAPTION = 59; // NOT IMPLEMENTED YET
+    SET_WINDOW_POS = 60; // NOT IMPLEMENTED YET
+    SET_TABLE_NOTIFICATION_CALLBACK = 61; // NOT IMPLEMENTED YET
+    RGB = 62; // NOT IMPLEMENTED YET
+    SET_COLOR = 63; // NOT IMPLEMENTED YET
+    HIGHLIGHT = 64; // NOT IMPLEMENTED YET
+    SET_SELECTED_ROW = 65; // NOT IMPLEMENTED YET
 
 }
 
@@ -461,6 +474,14 @@ message AllocTable_Result {
     int32 t_id = 1;
 }
 
+message Clear_Request {
+    int32 t_id = 1;
+}
+
+message Clear_Result {
+    bool result = 1;
+}
+
 message CreateWindow_Request {
     int32 t_id = 1;
 }
@@ -469,10 +490,38 @@ message CreateWindow_Result {
     int32 result = 1;
 }
 
+message DeleteRow_Request {
+
+    int32 t_id = 1;
+    int32 key = 2;
+}
+
+message DeleteRow_Result {
+    bool result = 1;
+}
+
 message DestroyTable_Request {
     int32 t_id = 1;
 }
 
 message DestroyTable_Result {
+    bool result = 1;
+}
+
+message InsertRow_Request {
+
+    int32 t_id = 1;
+    sint32 key = 2;
+}
+
+message InsertRow_Result {
+    sint32 result = 1;
+}
+
+message IsWindowClosed_Request {
+    int32 t_id = 1;
+}
+
+message IsWindowClosed_Result {
     bool result = 1;
 }
