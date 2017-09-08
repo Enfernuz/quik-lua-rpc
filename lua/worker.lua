@@ -87,31 +87,10 @@ qtable_parameter_types[qlua_msg.ColumnParameterType.QTABLE_TIME_TYPE] = QTABLE_T
 qtable_parameter_types[qlua_msg.ColumnParameterType.QTABLE_DATE_TYPE] = QTABLE_DATE_TYPE
 qtable_parameter_types[qlua_msg.ColumnParameterType.QTABLE_STRING_TYPE] = QTABLE_STRING_TYPE
 
-
-local function to_qtable_parameter_type(pb_qtable_parameter_type)
+local function to_qtable_parameter_type(pb_column_parameter_type)
   
-  local par_type = qtable_parameter_types[pb_qtable_parameter_type]
-  --[[
-  if pb_qtable_parameter_type = qlua_msg.AddColumn_Request.QTABLE_INT_TYPE then
-    par_type = QTABLE_INT_TYPE
-  elseif pb_qtable_parameter_type = qlua_msg.AddColumn_Request.QTABLE_DOUBLE_TYPE then
-    par_type = QTABLE_DOUBLE_TYPE
-  elseif pb_qtable_parameter_type = qlua_msg.AddColumn_Request.QTABLE_INT64_TYPE then
-    par_type = QTABLE_INT64_TYPE
-  elseif pb_qtable_parameter_type = qlua_msg.AddColumn_Request.QTABLE_CACHED_STRING_TYPE then
-    par_type = QTABLE_CACHED_STRING_TYPE
-  elseif pb_qtable_parameter_type = qlua_msg.AddColumn_Request.QTABLE_TIME_TYPE then
-    par_type = QTABLE_TIME_TYPE
-  elseif pb_qtable_parameter_type = qlua_msg.AddColumn_Request.QTABLE_DATE_TYPE then
-    par_type = QTABLE_DATE_TYPE
-  elseif pb_qtable_parameter_type = qlua_msg.AddColumn_Request.QTABLE_STRING_TYPE then
-    par_type = QTABLE_STRING_TYPE
-  else
-    error("Unknown parameter type.")
-  end
-  --]]
-  
-  if par_type == nil then error("Unknown parameter type.") end
+  local par_type = qtable_parameter_types[pb_column_parameter_type]
+  if par_type == nil then error("Unknown column parameter type.") end
   
   return par_type
 end
@@ -375,6 +354,60 @@ function Worker:start()
         args:ParseFromString(request.args)
         result = qlua_msg.IsWindowClosed_Result()
         result.result = IsWindowClosed(args.t_id) -- TO-DO: pcall
+      elseif request.type == qlua_msg.ProcedureType.GET_CELL then
+        args = qlua_msg.GetCell_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.GetCell_Result()
+        local t_cell = GetCell(args.t_id, args.key, args.code) -- TO-DO: pcall
+        result.image = t_cell.image
+        if t_cell.value ~= nil then result.value = tostring(t_cell.value) end
+      elseif request.type == qlua_msg.ProcedureType.SET_CELL then
+        args = qlua_msg.SetCell_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.SetCell_Result()
+        if args.value == "" or args.value == nil then
+          result.result = SetCell(args.t_id, args.key, args.code, args.text)
+        else
+          local value = tonumber(args.value) -- TO-DO: error check
+          result.result = SetCell(args.t_id, args.key, args.code, args.text, value) -- TO-DO: pcall
+        end
+      elseif request.type == qlua_msg.ProcedureType.SET_WINDOW_CAPTION then
+        args = qlua_msg.SetWindowCaption_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.SetWindowCaption_Result()
+        result.result = SetWindowCaption(args.t_id, args.str) -- TO-DO: pcall
+      elseif request.type == qlua_msg.ProcedureType.GET_TABLE_SIZE then
+        args = qlua_msg.GetTableSize_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.GetTableSize_Result()
+        result.rows, result.col = GetTableSize(args.t_id) -- TO-DO: pcall
+      elseif request.type == qlua_msg.ProcedureType.GET_WINDOW_CAPTION then
+        args = qlua_msg.GetWindowCaption_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.GetWindowCaption_Result()
+        local caption = GetWindowCaption(args.t_id) -- TO-DO: pcall
+        if caption ~= nil then result.caption = caption end
+      elseif request.type == qlua_msg.ProcedureType.RGB then
+        args = qlua_msg.RGB_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.RGB_Result()
+        -- NB: на самом деле, библиотечная функция RGB должна называться BGR, ибо она выдаёт числа именно в этом формате. В SetColor, однако, тоже ожидается цвет в формате BGR, так что это не баг, а фича.
+        result.result = RGB(args.red, args.green, args.blue) -- TO-DO: pcall
+      elseif request.type == qlua_msg.ProcedureType.SET_COLOR then
+        args = qlua_msg.SetColor_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.SetColor_Result()
+        result.result = SetColor(args.t_id, args.row, args.col, args.b_color, args.f_color, args.sel_b_color, args.sel_f_color) -- TO-DO: pcall
+      elseif request.type == qlua_msg.ProcedureType.HIGHLIGHT then
+        args = qlua_msg.Highlight_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.Highlight_Result()
+        result.result = Highlight(args.t_id, args.row, args.col, args.b_color, args.f_color, args.timeout) -- TO-DO: pcall
+      elseif request.type == qlua_msg.ProcedureType.SET_SELECTED_ROW then
+        args = qlua_msg.SetSelectedRow_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.SetSelectedRow_Result()
+        result.result = SetSelectedRow(args.table_id, args.row) -- TO-DO: pcall
 			else
 				assert(false, "Unknown request\n") -- TO-DO
 			end

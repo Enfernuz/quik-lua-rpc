@@ -22,15 +22,29 @@ function Client:start()
   local request = qlua_msg.Qlua_Request()
   
   request.token = 12345;
-  request.type = qlua_msg.ProcedureType.IS_WINDOW_CLOSED
+  request.type = qlua_msg.ProcedureType.SET_SELECTED_ROW
 
-  local args = qlua_msg.IsWindowClosed_Request()
-  
-  args.t_id = 1
+  local args = qlua_msg.SetSelectedRow_Request()
+  --args.red = 0
+  --args.green = 255
+  --args.blue = 255
+  --args.t_id = 2
+  args.table_id = 2
+  args.row = 2
+  --args.col = -1
+  --args.b_color = 0x00ffff
+  --args.f_color = 0x000000 -- BGR
+  --args.sel_b_color = 0xffffff
+  --args.sel_f_color = 0x000000
+  --args.timeout = 5000
+  --args.str = "test caption"
   --args.key = 1
+  --args.code = 1
+  --args.text = "77"
+  --args.value = "88"
   --args.icode = 0
-  --args.name = "koka"
-  --args.is_default = true
+  --args.name = "qoka"
+  --args.is_default = false
   --args.par_type = qlua_msg.ColumnParameterType.QTABLE_STRING_TYPE
   --args.width = 15
   --args.firm_id = "MC0094600000"
@@ -274,6 +288,42 @@ function Client:start()
     local result = qlua_msg.IsWindowClosed_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [is_window_closed: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.GET_CELL then
+    local result = qlua_msg.GetCell_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [get_cell: image=%s, value=%s]\n", result.image, result.value == "" and "nil" or result.value) )
+  elseif response.type == qlua_msg.ProcedureType.SET_CELL then
+    local result = qlua_msg.SetCell_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [set_cell: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.SET_WINDOW_CAPTION then
+    local result = qlua_msg.SetWindowCaption_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [set_window_caption: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.GET_TABLE_SIZE then
+    local result = qlua_msg.GetTableSize_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [get_table_size: rows=%d, col=%d]\n", result.rows, result.col) )
+  elseif response.type == qlua_msg.ProcedureType.GET_WINDOW_CAPTION then
+    local result = qlua_msg.GetWindowCaption_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [get_window_caption: caption=%s]\n", result.caption) )
+  elseif response.type == qlua_msg.ProcedureType.SET_COLOR then
+    local result = qlua_msg.SetColor_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [set_color: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.RGB then
+    local result = qlua_msg.RGB_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [rgb: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.HIGHLIGHT then
+    local result = qlua_msg.Highlight_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [highlight: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.SET_SELECTED_ROW then
+    local result = qlua_msg.SetSelectedRow_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [set_selected_row: result=%s]\n", result.result) )
   end
 
   print ("closing...\n")

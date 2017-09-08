@@ -2,7 +2,7 @@ syntax = "proto3";
 
 enum ProcedureType {
 
-    UNKNOWN_PROCEDURE_TYPE = 0;
+    PROCEDURE_TYPE_UNKNOWN = 0;
     IS_CONNECTED = 1;
     GET_SCRIPT_PATH = 2;
     GET_INFO_PARAM = 3;
@@ -55,7 +55,7 @@ enum ProcedureType {
     GET_BUY_SELL_INFO = 44;
     GET_BUY_SELL_INFO_EX = 45; // NB: использовать структуры запроса и ответа от GET_BUY_SELL_INFO
     
-    ADD_COLUMN = 46;
+    ADD_COLUMN = 46; // нужно бы ещё потестить, т.к. после добавления одного столбца другие добавляются, но визуально не отображаются
     ALLOC_TABLE = 47;
     CLEAR = 48;
     CREATE_WINDOW = 49;
@@ -63,25 +63,25 @@ enum ProcedureType {
     DESTROY_TABLE = 51;
     INSERT_ROW = 52; // NB: использовать после создания окна для таблицы (процедура CREATE_WINDOW)
     IS_WINDOW_CLOSED = 53;
-    GET_CELL = 54; // NOT IMPLEMENTED YET
-    GET_TABLE_SIZE = 55; // NOT IMPLEMENTED YET
-    GET_WINDOW_CAPTION = 56; // NOT IMPLEMENTED YET
+    GET_CELL = 54;
+    GET_TABLE_SIZE = 55;
+    GET_WINDOW_CAPTION = 56;
     GET_WINDOW_RECT = 57; // NOT IMPLEMENTED YET
-    SET_SELL = 58; // NOT IMPLEMENTED YET
-    SET_WINDOW_CAPTION = 59; // NOT IMPLEMENTED YET
+    SET_CELL = 58;
+    SET_WINDOW_CAPTION = 59;
     SET_WINDOW_POS = 60; // NOT IMPLEMENTED YET
     SET_TABLE_NOTIFICATION_CALLBACK = 61; // NOT IMPLEMENTED YET
-    RGB = 62; // NOT IMPLEMENTED YET
-    SET_COLOR = 63; // NOT IMPLEMENTED YET
-    HIGHLIGHT = 64; // NOT IMPLEMENTED YET
-    SET_SELECTED_ROW = 65; // NOT IMPLEMENTED YET
+    RGB = 62; // NB: на самом деле, библиотечная функция RGB должна называться BGR, ибо она выдаёт числа именно в этом формате. В SetColor, однако, тоже ожидается цвет в формате BGR, так что это не баг, а фича.
+    SET_COLOR = 63;
+    HIGHLIGHT = 64;
+    SET_SELECTED_ROW = 65;
 
 }
 
 // Не получилось внедрить это определение в AddColumn_Request, т.к. не смог потом залукапить значения енама
 enum ColumnParameterType {
 
-    QTABLE_UNKNOWN_TYPE = 0;
+    COLUMN_PARAMETER_TYPE_UNKNOWN = 0;
     QTABLE_INT_TYPE = 1;
     QTABLE_DOUBLE_TYPE = 2;
     QTABLE_INT64_TYPE = 3;
@@ -524,4 +524,109 @@ message IsWindowClosed_Request {
 
 message IsWindowClosed_Result {
     bool result = 1;
+}
+
+message GetCell_Request {
+
+    int32 t_id = 1;
+    int32 key = 2;
+    int32 code = 3;
+}
+
+message GetCell_Result {
+
+    string image = 1;
+    string value = 2; // the parsing is left to be done on the client side, the library returns it as 0 if the cell's number is not set, so "0" goes on the wire in that case
+}
+
+message SetCell_Request {
+
+    int32 t_id = 1;
+    int32 key = 2;
+    int32 code = 3;
+    string text = 4;
+    string value = 5;
+}
+
+message SetCell_Result {
+    bool result = 1;
+}
+
+message SetWindowCaption_Request {
+
+    int32 t_id = 1;
+    string str = 2;
+}
+
+message SetWindowCaption_Result {
+    bool result = 1;
+}
+
+message GetTableSize_Request {
+    int32 t_id = 1;
+}
+
+message GetTableSize_Result {
+
+    int32 rows = 1;
+    int32 col = 2;
+}
+
+message GetWindowCaption_Request {
+    int32 t_id = 1;
+}
+
+message GetWindowCaption_Result {
+    string caption = 1;
+}
+
+// NB: на самом деле, библиотечная функция RGB должна называться BGR, ибо она выдаёт числа именно в этом формате. В SetColor, однако, тоже ожидается цвет в формате BGR, так что это не баг, а фича.
+message RGB_Request {
+
+    int32 red = 1;
+    int32 green = 2;
+    int32 blue = 3;
+}
+
+message RGB_Result {
+    int32 result = 1;
+}
+
+message SetColor_Request {
+
+    int32 t_id = 1;
+    sint32 row = 2;
+    sint32 col = 3;
+    int32 b_color = 4;
+    int32 f_color = 5;
+    int32 sel_b_color = 6;
+    int32 sel_f_color = 7;
+}
+
+message SetColor_Result {
+    bool result = 1;
+}
+
+message Highlight_Request {
+
+    int32 t_id = 1;
+    sint32 row = 2;
+    sint32 col = 3;
+    int32 b_color = 4;
+    int32 f_color = 5;
+    int64 timeout = 6;
+}
+
+message Highlight_Result {
+    bool result = 1;
+}
+
+message SetSelectedRow_Request {
+
+    int32 table_id = 1;
+    sint32 row = 2;
+}
+
+message SetSelectedRow_Result {
+    sint32 result = 1;
 }
