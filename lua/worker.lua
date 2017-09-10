@@ -376,6 +376,22 @@ function Worker:start()
         args:ParseFromString(request.args)
         result = qlua_msg.SetWindowCaption_Result()
         result.result = SetWindowCaption(args.t_id, args.str) -- TO-DO: pcall
+      elseif request.type == qlua_msg.ProcedureType.SET_WINDOW_POS then
+        args = qlua_msg.SetWindowPos_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.SetWindowPos_Result()
+        result.result = SetWindowPos(args.t_id, args.x, args.y, args.dx, args.dy) -- TO-DO: pcall
+      elseif request.type == qlua_msg.ProcedureType.SET_TABLE_NOTIFICATION_CALLBACK then -- TO-DO: revise the error handling
+        args = qlua_msg.SetTableNotificationCallback_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.SetTableNotificationCallback_Result()
+        local f_cb_ctr, error_msg = loadstring("return "..args.f_cb_def)
+        if f_cb_ctr == nil then 
+          response.is_error = true
+          response.result = string.format("Could not parse a function definition from the given string. Error message: \n%s", error_msg)
+        else
+          result.result = SetTableNotificationCallback(args.t_id, f_cb_ctr()) -- TO-DO: pcall
+        end
       elseif request.type == qlua_msg.ProcedureType.GET_TABLE_SIZE then
         args = qlua_msg.GetTableSize_Request()
         args:ParseFromString(request.args)
@@ -387,6 +403,13 @@ function Worker:start()
         result = qlua_msg.GetWindowCaption_Result()
         local caption = GetWindowCaption(args.t_id) -- TO-DO: pcall
         if caption ~= nil then result.caption = caption end
+      elseif request.type == qlua_msg.ProcedureType.GET_WINDOW_RECT then
+        args = qlua_msg.GetWindowRect_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.GetWindowRect_Result()
+        result.top, result.left, result.bottom, result.right = GetWindowRect(args.t_id) -- TO-DO: pcall
+        local top, left, bottom, right = GetWindowRect(args.t_id)
+        message(top.."; "..left.."; "..bottom.."; "..right)
       elseif request.type == qlua_msg.ProcedureType.RGB then
         args = qlua_msg.RGB_Request()
         args:ParseFromString(request.args)
@@ -414,7 +437,7 @@ function Worker:start()
 	  
       response.token = request.token
       response.type = request.type
-      if result ~= nil then
+      if result ~= nil and not response.is_error then
         
         ser_result = result:SerializeToString()
         --response.isError = false

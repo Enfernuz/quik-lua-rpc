@@ -22,15 +22,16 @@ function Client:start()
   local request = qlua_msg.Qlua_Request()
   
   request.token = 12345;
-  request.type = qlua_msg.ProcedureType.SET_SELECTED_ROW
+  request.type = qlua_msg.ProcedureType.SET_TABLE_NOTIFICATION_CALLBACK
 
-  local args = qlua_msg.SetSelectedRow_Request()
+  local args = qlua_msg.SetTableNotificationCallback_Request()
   --args.red = 0
   --args.green = 255
   --args.blue = 255
-  --args.t_id = 2
-  args.table_id = 2
-  args.row = 2
+  args.t_id = 1
+  args.f_cb_def = "function (t_id, msg, par1, par2) message('client_callback: '..t_id..'; '..msg..'; '..par1..'; '..par2) end"
+  --args.table_id = 2
+  --args.row = 2
   --args.col = -1
   --args.b_color = 0x00ffff
   --args.f_color = 0x000000 -- BGR
@@ -99,6 +100,9 @@ function Client:start()
   local response = qlua_msg.Qlua_Response()
   response:ParseFromString(msg)
   print( string.format("response token: %d", response.token) )
+  
+  if response.is_error then print("Error: "..tostring(response.result)) end
+  
   if response.type == qlua_msg.ProcedureType.IS_CONNECTED then
     local result = qlua_msg.IsConnected_Result()
     result:ParseFromString(response.result)
@@ -300,6 +304,14 @@ function Client:start()
     local result = qlua_msg.SetWindowCaption_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [set_window_caption: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.SET_WINDOW_POS then
+    local result = qlua_msg.SetWindowPos_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [set_window_pos: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.SET_TABLE_NOTIFICATION_CALLBACK then
+    local result = qlua_msg.SetTableNotificationCallback_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [set_table_notification_callback: result=%s]\n", result.result) )
   elseif response.type == qlua_msg.ProcedureType.GET_TABLE_SIZE then
     local result = qlua_msg.GetTableSize_Result()
     result:ParseFromString(response.result)
@@ -312,6 +324,10 @@ function Client:start()
     local result = qlua_msg.SetColor_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [set_color: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.GET_WINDOW_RECT then
+    local result = qlua_msg.GetWindowRect_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [get_window_rect: top=%d, left=%d, bottom=%d, right=%d]\n", result.top, result.left, result.bottom, result.right) )
   elseif response.type == qlua_msg.ProcedureType.RGB then
     local result = qlua_msg.RGB_Result()
     result:ParseFromString(response.result)

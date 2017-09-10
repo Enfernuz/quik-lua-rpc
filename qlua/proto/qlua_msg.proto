@@ -66,11 +66,11 @@ enum ProcedureType {
     GET_CELL = 54;
     GET_TABLE_SIZE = 55;
     GET_WINDOW_CAPTION = 56;
-    GET_WINDOW_RECT = 57; // NOT IMPLEMENTED YET
+    GET_WINDOW_RECT = 57;
     SET_CELL = 58;
     SET_WINDOW_CAPTION = 59;
-    SET_WINDOW_POS = 60; // NOT IMPLEMENTED YET
-    SET_TABLE_NOTIFICATION_CALLBACK = 61; // NOT IMPLEMENTED YET
+    SET_WINDOW_POS = 60;
+    SET_TABLE_NOTIFICATION_CALLBACK = 61;
     RGB = 62; // NB: на самом деле, библиотечная функция RGB должна называться BGR, ибо она выдаёт числа именно в этом формате. В SetColor, однако, тоже ожидается цвет в формате BGR, так что это не баг, а фича.
     SET_COLOR = 63;
     HIGHLIGHT = 64;
@@ -132,16 +132,14 @@ message Qlua_Response {
 
     int64 token = 1;
     ProcedureType type = 2;
+    bool is_error = 3;
+    bytes result = 4;
   
     // Если это внутренняя ошибка RPC-сервиса, то установлен is_error,
     // в противном случае -- установлен result (даже если он содержит в себе
     // ошибку от библиотеки qlua). Таким образом, ошибки, возвращаемые библиотекой 
     // qlua (например, nil в определённых случаях), в рамках RPC-сервиса 
     // являются обычным результатом выполнения запроса.
-    oneof qlua_response_data {
-        bool is_error = 3;
-        bytes result = 4;
-    }
 }
 
 message IsConnected_Result {
@@ -562,6 +560,29 @@ message SetWindowCaption_Result {
     bool result = 1;
 }
 
+message SetWindowPos_Request {
+
+    int32 t_id = 1;
+    sint32 x = 2;
+    sint32 y = 3;
+    sint32 dx = 4;
+    sint32 dy = 5;
+}
+
+message SetWindowPos_Result {
+    bool result = 1;
+}
+
+message SetTableNotificationCallback_Request {
+
+    int32 t_id = 1;
+    string f_cb_def = 2;
+}
+
+message SetTableNotificationCallback_Result {
+    int32 result = 1;
+}
+
 message GetTableSize_Request {
     int32 t_id = 1;
 }
@@ -578,6 +599,18 @@ message GetWindowCaption_Request {
 
 message GetWindowCaption_Result {
     string caption = 1;
+}
+
+message GetWindowRect_Request {
+    int32 t_id = 1;
+}
+
+message GetWindowRect_Result {
+
+    sint32 top = 1;
+    sint32 left = 2;
+    sint32 bottom = 3;
+    sint32 right = 4;
 }
 
 // NB: на самом деле, библиотечная функция RGB должна называться BGR, ибо она выдаёт числа именно в этом формате. В SetColor, однако, тоже ожидается цвет в формате BGR, так что это не баг, а фича.
