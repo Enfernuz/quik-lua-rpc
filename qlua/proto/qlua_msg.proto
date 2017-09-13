@@ -31,9 +31,9 @@ enum ProcedureType {
     GET_NUM_CANDLES = 25;
     GET_CANDLES_BY_INDEX = 26;
     
-    //CREATE_DATA_SOURCE = 27;
+    CREATE_DATA_SOURCE = 27;
     //DS_SET_UPDATE_CALLBACK = 28;
-    //DS_O = 29;
+    DS_O = 29;
     //DS_H = 30;
     //DS_L = 31;
     //DS_C = 32;
@@ -89,6 +89,28 @@ enum ColumnParameterType {
     QTABLE_TIME_TYPE = 5;
     QTABLE_DATE_TYPE = 6;
     QTABLE_STRING_TYPE = 7;
+}
+
+enum Interval {
+
+    INTERVAL_UNKNOWN = 0;
+    INTERVAL_TICK = 1;
+    INTERVAL_M1 = 2;
+    INTERVAL_M2 = 3;
+    INTERVAL_M3 = 4;
+    INTERVAL_M4 = 5;
+    INTERVAL_M5 = 6;
+    INTERVAL_M6 = 7;
+    INTERVAL_M10 = 8;
+    INTERVAL_M15 = 9;
+    INTERVAL_M20 = 10;
+    INTERVAL_M30 = 11;
+    INTERVAL_H1 = 12;
+    INTERVAL_H2 = 13;
+    INTERVAL_H4 = 14;
+    INTERVAL_D1 = 15;
+    INTERVAL_W1 = 16;
+    INTERVAL_MN1 = 17;
 }
 
 message TableEntry {
@@ -377,6 +399,31 @@ message GetCandlesByIndex_Result {
     repeated CandleEntry t = 1;
     int32 n = 2;
     string l = 3;
+}
+
+message CreateDataSource_Request {
+
+    string class_code = 1;
+    string sec_code = 2;
+    Interval interval = 3;
+    string param = 4;
+}
+
+message CreateDataSource_Result {
+
+    string datasource_uuid = 1; 
+    bool is_error = 2;
+    string error_desc = 3;
+}
+
+message DataSourceO_Request {
+
+    string datasource_uuid = 1;
+    int32 candle_index = 2;
+}
+
+message DataSourceO_Result {
+    double value = 1; // use of double for money representation!
 }
 
 message SendTransaction_Request {

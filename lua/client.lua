@@ -18,18 +18,24 @@ function Client:init(socket_addr)
 end
 
 function Client:start()
+  
+  local uuid = require("uuid")
+  assert(uuid ~= nil, "uuid lib is missing.")
     
   local request = qlua_msg.Qlua_Request()
   
   request.token = 12345;
-  request.type = qlua_msg.ProcedureType.SET_TABLE_NOTIFICATION_CALLBACK
+  request.type = qlua_msg.ProcedureType.CREATE_DATA_SOURCE
 
-  local args = qlua_msg.SetTableNotificationCallback_Request()
+  local args = qlua_msg.CreateDataSource_Request()
+  args.class_code = "SPBFUT"
+  args.sec_code = "RIU7"
+  args.interval = qlua_msg.Interval.INTERVAL_M30
   --args.red = 0
   --args.green = 255
   --args.blue = 255
-  args.t_id = 1
-  args.f_cb_def = "function (t_id, msg, par1, par2) message('client_callback: '..t_id..'; '..msg..'; '..par1..'; '..par2) end"
+  --args.t_id = 1
+  --args.f_cb_def = "function (t_id, msg, par1, par2) message('client_callback: '..t_id..'; '..msg..'; '..par1..'; '..par2) end"
   --args.table_id = 2
   --args.row = 2
   --args.col = -1
@@ -222,6 +228,14 @@ function Client:start()
         print( string.format("datetime: [mcs=%s, ms=%s, sec=%d, min=%d, hour=%d, day=%d, week_day=%d, month=%d, year=%d]\n", e.datetime.mcs, e.datetime.ms, e.datetime.sec, e.datetime.min, e.datetime.hour, e.datetime.day, e.datetime.week_day, e.datetime.month, e.datetime.year) )
         print("-----")
     end
+  elseif response.type == qlua_msg.ProcedureType.CREATE_DATA_SOURCE then
+    local result = qlua_msg.CreateDataSource_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [create_datasource: datasource_uuid=%s, is_error=%s, error_desc=%s]\n", result.datasource_uuid, result.is_error, result.error_desc) )
+  elseif response.type == qlua_msg.ProcedureType.DS_O then
+    local result = qlua_msg.DataSourceO_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [datasource_o: value=%d]\n", result.value) )
   elseif response.type == qlua_msg.ProcedureType.SEND_TRANSACTION then
     local result = qlua_msg.SendTransaction_Result()
     result:ParseFromString(response.result)

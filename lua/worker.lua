@@ -4,6 +4,9 @@ assert(qlua_msg ~= nil, "qlua/proto/qlua_msg_pb lib is missing")
 local zmq = require("lzmq")
 assert(zmq ~= nil, "lzmq lib is missing.")
 
+local uuid = require("uuid")
+assert(uuid ~= nil, "uuid lib is missing.")
+
 local txt = require("text_format")
 assert(txt ~= nil, "text_format lib is missing.")
 
@@ -87,6 +90,25 @@ qtable_parameter_types[qlua_msg.ColumnParameterType.QTABLE_TIME_TYPE] = QTABLE_T
 qtable_parameter_types[qlua_msg.ColumnParameterType.QTABLE_DATE_TYPE] = QTABLE_DATE_TYPE
 qtable_parameter_types[qlua_msg.ColumnParameterType.QTABLE_STRING_TYPE] = QTABLE_STRING_TYPE
 
+local interval_types = {}
+interval_types[qlua_msg.Interval.INTERVAL_TICK] = INTERVAL_TICK
+interval_types[qlua_msg.Interval.INTERVAL_M1] = INTERVAL_M1
+interval_types[qlua_msg.Interval.INTERVAL_M2] = INTERVAL_M2
+interval_types[qlua_msg.Interval.INTERVAL_M3] = INTERVAL_M3
+interval_types[qlua_msg.Interval.INTERVAL_M4] = INTERVAL_M4
+interval_types[qlua_msg.Interval.INTERVAL_M5] = INTERVAL_M5
+interval_types[qlua_msg.Interval.INTERVAL_M6] = INTERVAL_M6
+interval_types[qlua_msg.Interval.INTERVAL_M10] = INTERVAL_M10
+interval_types[qlua_msg.Interval.INTERVAL_M15] = INTERVAL_M15
+interval_types[qlua_msg.Interval.INTERVAL_M20] = INTERVAL_M20
+interval_types[qlua_msg.Interval.INTERVAL_M30] = INTERVAL_M30
+interval_types[qlua_msg.Interval.INTERVAL_H1] = INTERVAL_H1
+interval_types[qlua_msg.Interval.INTERVAL_H2] = INTERVAL_H2
+interval_types[qlua_msg.Interval.INTERVAL_H4] = INTERVAL_H4
+interval_types[qlua_msg.Interval.INTERVAL_D1] = INTERVAL_D1
+interval_types[qlua_msg.Interval.INTERVAL_W1] = INTERVAL_W1
+interval_types[qlua_msg.Interval.INTERVAL_MN1] = INTERVAL_MN1
+
 local function to_qtable_parameter_type(pb_column_parameter_type)
   
   local par_type = qtable_parameter_types[pb_column_parameter_type]
@@ -95,17 +117,27 @@ local function to_qtable_parameter_type(pb_column_parameter_type)
   return par_type
 end
 
+local function to_interval(pb_interval)
+
+  local interval = interval_types[pb_interval]
+  if interval == nil then error("Unknown interval type.") end
+
+  return interval
+end
+
 local Worker = {
   
   ctx = zmq.context(),
   socket = nil,
-  is_running = false
+  is_running = false,
+  datasources = {}
 }
 
 function Worker:init(socket_addr)
   
   self.socket = self.ctx:socket(zmq.REP)
   self.socket:bind(socket_addr)
+  uuid.seed()
 end
 
 function Worker:start()
@@ -263,6 +295,31 @@ function Worker:start()
         result.n = n
         result.l = l
         insert_candles_table(t, result.t)
+      elseif request.type == qlua_msg.ProcedureType.CREATE_DATA_SOURCE then
+        args = qlua_msg.CreateDataSource_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.CreateDataSource_Result()
+        local interval = to_interval(args.interval) -- TO-DO: pcall
+        local ds, error_desc
+        if args.param == nil or args.param == "" then
+          ds, error_desc = CreateDataSource(args.class_code, args.sec_code, interval)
+        else 
+          ds, error_desc = CreateDataSource(args.class_code, args.sec_code, interval, args.param)
+        end
+        if ds == nil then
+          result.is_error = true
+          result.error_desc = error_desc or ""
+        else
+          result.datasource_uuid = uuid()
+          self.datasources[result.datasource_uuid] = ds
+        end
+      elseif request.type == qlua_msg.ProcedureType.DS_O then
+        args = qlua_msg.DataSourceO_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.DataSourceO_Result()
+        local ds = self.datasources[args.datasource_uuid]
+        if ds == nil then error("There is no datasource with the given uuid") end
+        result.value = ds:O(args.candle_index)
       elseif request.type == qlua_msg.ProcedureType.SEND_TRANSACTION then
         args = qlua_msg.SendTransaction_Request()
         args:ParseFromString(request.args)
@@ -453,8 +510,13 @@ end
 function Worker:terminate()
 
 	self.is_running = false
+  
 	if self.socket ~= nil then self.socket:close() end
 	self.ctx:term()
+  
+  for uuid, ds in pairs(self.datasources) do
+    ds:Close()
+  end
 end
 
 return Worker
