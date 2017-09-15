@@ -32,16 +32,16 @@ enum ProcedureType {
     GET_CANDLES_BY_INDEX = 26;
     
     CREATE_DATA_SOURCE = 27;
-    //DS_SET_UPDATE_CALLBACK = 28;
+    DS_SET_UPDATE_CALLBACK = 28;
     DS_O = 29;
-    //DS_H = 30;
-    //DS_L = 31;
-    //DS_C = 32;
-    //DS_V = 33;
-    //DS_T = 34;
-    //DS_SIZE = 35;
-    //DS_CLOSE = 36;
-    //DS_SET_EMPTY_CALLBACK = 37;
+    DS_H = 30;
+    DS_L = 31;
+    DS_C = 32;
+    DS_V = 33;
+    DS_T = 34;
+    DS_SIZE = 35;
+    DS_CLOSE = 36;
+    DS_SET_EMPTY_CALLBACK = 37;
     
     SEND_TRANSACTION = 38;
     CALC_BUY_SELL = 39; // NOT TESTED YET
@@ -416,6 +416,16 @@ message CreateDataSource_Result {
     string error_desc = 3;
 }
 
+message DataSourceSetUpdateCallback_Request {
+
+    string datasource_uuid = 1; 
+    string f_cb_def = 2; // NB: формат функции: "function (NUMBER index, TABLE datasource) function_body end"
+}
+
+message DataSourceSetUpdateCallback_Result {
+    bool result = 1;
+}
+
 message DataSourceO_Request {
 
     string datasource_uuid = 1;
@@ -424,6 +434,89 @@ message DataSourceO_Request {
 
 message DataSourceO_Result {
     double value = 1; // use of double for money representation!
+}
+
+message DataSourceH_Request {
+
+    string datasource_uuid = 1;
+    int32 candle_index = 2;
+}
+
+message DataSourceH_Result {
+    double value = 1; // use of double for money representation!
+}
+
+message DataSourceL_Request {
+
+    string datasource_uuid = 1;
+    int32 candle_index = 2;
+}
+
+message DataSourceL_Result {
+    double value = 1; // use of double for money representation!
+}
+
+message DataSourceC_Request {
+
+    string datasource_uuid = 1;
+    int32 candle_index = 2;
+}
+
+message DataSourceC_Result {
+    double value = 1; // use of double for money representation!
+}
+
+message DataSourceV_Request {
+
+    string datasource_uuid = 1;
+    int32 candle_index = 2;
+}
+
+message DataSourceV_Result {
+    double value = 1; // use of double for money representation!
+}
+
+message DataSourceT_Request {
+
+    string datasource_uuid = 1;
+    int32 candle_index = 2;
+}
+
+message DataSourceT_Result {
+
+    int32 year = 1;
+    int32 month = 2;
+    int32 day = 3;
+    int32 week_day = 4;
+    int32 hour = 5;
+    int32 min = 6;
+    int32 sec = 7;
+    int32 ms = 8;
+    int32 count = 9;
+}
+
+message DataSourceSize_Request {
+    string datasource_uuid = 1;
+}
+
+message DataSourceSize_Result {
+    int32 value = 1;
+}
+
+message DataSourceClose_Request {
+    string datasource_uuid = 1;
+}
+
+message DataSourceClose_Result {
+    bool result = 1;
+}
+
+message DataSourceSetEmptyCallback_Request {
+    string datasource_uuid = 1;
+}
+
+message DataSourceSetEmptyCallback_Result {
+    bool result = 1;
 }
 
 message SendTransaction_Request {

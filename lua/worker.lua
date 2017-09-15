@@ -313,6 +313,21 @@ function Worker:start()
           result.datasource_uuid = uuid()
           self.datasources[result.datasource_uuid] = ds
         end
+      elseif request.type == qlua_msg.ProcedureType.DS_SET_UPDATE_CALLBACK then -- TO-DO: revise the error handling
+        args = qlua_msg.DataSourceSetUpdateCallback_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.DataSourceSetUpdateCallback_Result()
+        local ds = self.datasources[args.datasource_uuid]
+        if ds == nil then error("There is no datasource with the given uuid") end
+        local f_cb_ctr, error_msg = loadstring("return "..args.f_cb_def)
+        if f_cb_ctr == nil then 
+          response.is_error = true
+          response.result = string.format("Could not parse a function definition from the given string. Error message: \n%s", error_msg)
+        else
+          local f_cb = f_cb_ctr()
+          local callback = function (index) f_cb(index, ds) end
+          result.result = ds:SetUpdateCallback(callback) -- TO-DO: pcall
+        end
       elseif request.type == qlua_msg.ProcedureType.DS_O then
         args = qlua_msg.DataSourceO_Request()
         args:ParseFromString(request.args)
@@ -320,6 +335,71 @@ function Worker:start()
         local ds = self.datasources[args.datasource_uuid]
         if ds == nil then error("There is no datasource with the given uuid") end
         result.value = ds:O(args.candle_index)
+      elseif request.type == qlua_msg.ProcedureType.DS_H then
+        args = qlua_msg.DataSourceH_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.DataSourceH_Result()
+        local ds = self.datasources[args.datasource_uuid]
+        if ds == nil then error("There is no datasource with the given uuid") end
+        result.value = ds:H(args.candle_index)
+      elseif request.type == qlua_msg.ProcedureType.DS_L then
+        args = qlua_msg.DataSourceL_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.DataSourceL_Result()
+        local ds = self.datasources[args.datasource_uuid]
+        if ds == nil then error("There is no datasource with the given uuid") end
+        result.value = ds:L(args.candle_index)
+      elseif request.type == qlua_msg.ProcedureType.DS_C then
+        args = qlua_msg.DataSourceC_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.DataSourceC_Result()
+        local ds = self.datasources[args.datasource_uuid]
+        if ds == nil then error("There is no datasource with the given uuid") end
+        result.value = ds:C(args.candle_index)
+      elseif request.type == qlua_msg.ProcedureType.DS_V then
+        args = qlua_msg.DataSourceV_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.DataSourceV_Result()
+        local ds = self.datasources[args.datasource_uuid]
+        if ds == nil then error("There is no datasource with the given uuid") end
+        result.value = ds:V(args.candle_index)
+      elseif request.type == qlua_msg.ProcedureType.DS_T then
+        args = qlua_msg.DataSourceT_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.DataSourceT_Result()
+        local ds = self.datasources[args.datasource_uuid]
+        if ds == nil then error("There is no datasource with the given uuid") end
+        local t = ds:T(args.candle_index)
+        result.year = t.year
+        result.month = t.month
+        result.day = t.day
+        result.week_day = t.week_day
+        result.hour = t.hour
+        result.min = t.min
+        result.sec = t.sec
+        result.ms = t.ms
+        result.count = t.count
+      elseif request.type == qlua_msg.ProcedureType.DS_SIZE then
+        args = qlua_msg.DataSourceSize_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.DataSourceSize_Result()
+        local ds = self.datasources[args.datasource_uuid]
+        if ds == nil then error("There is no datasource with the given uuid") end
+        result.value = ds:Size(args.candle_index)
+      elseif request.type == qlua_msg.ProcedureType.DS_CLOSE then
+        args = qlua_msg.DataSourceClose_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.DataSourceClose_Result()
+        local ds = self.datasources[args.datasource_uuid]
+        if ds == nil then error("There is no datasource with the given uuid") end
+        result.result = ds:Close()
+      elseif request.type == qlua_msg.ProcedureType.DS_SET_EMPTY_CALLBACK then
+        args = qlua_msg.DataSourceSetEmptyCallback_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.DataSourceSetEmptyCallback_Result()
+        local ds = self.datasources[args.datasource_uuid]
+        if ds == nil then error("There is no datasource with the given uuid") end
+        result.result = ds:SetEmptyCallback()
       elseif request.type == qlua_msg.ProcedureType.SEND_TRANSACTION then
         args = qlua_msg.SendTransaction_Request()
         args:ParseFromString(request.args)

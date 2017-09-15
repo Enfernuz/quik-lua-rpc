@@ -25,12 +25,15 @@ function Client:start()
   local request = qlua_msg.Qlua_Request()
   
   request.token = 12345;
-  request.type = qlua_msg.ProcedureType.CREATE_DATA_SOURCE
+  request.type = qlua_msg.ProcedureType.DS_SET_UPDATE_CALLBACK
 
-  local args = qlua_msg.CreateDataSource_Request()
-  args.class_code = "SPBFUT"
-  args.sec_code = "RIU7"
-  args.interval = qlua_msg.Interval.INTERVAL_M30
+  local args = qlua_msg.DataSourceSetUpdateCallback_Request()
+  args.datasource_uuid = "af923482-4498-4e19-cef6-9448a8204699"
+  args.f_cb_def = "function (index, datasource) message('datasource_callback: index = '..index..'; OPEN = '..datasource:O(index))  end"
+  --args.candle_index = 10
+  --args.class_code = "SPBFUT"
+  --args.sec_code = "RIU7"
+  --args.interval = qlua_msg.Interval.INTERVAL_M30
   --args.red = 0
   --args.green = 255
   --args.blue = 255
@@ -232,10 +235,46 @@ function Client:start()
     local result = qlua_msg.CreateDataSource_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [create_datasource: datasource_uuid=%s, is_error=%s, error_desc=%s]\n", result.datasource_uuid, result.is_error, result.error_desc) )
+  elseif response.type == qlua_msg.ProcedureType.DS_SET_UPDATE_CALLBACK then
+    local result = qlua_msg.DataSourceSetUpdateCallback_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [datasource_set_update_callback: result=%s]\n", result.result) )
   elseif response.type == qlua_msg.ProcedureType.DS_O then
     local result = qlua_msg.DataSourceO_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [datasource_o: value=%d]\n", result.value) )
+  elseif response.type == qlua_msg.ProcedureType.DS_H then
+    local result = qlua_msg.DataSourceH_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [datasource_h: value=%d]\n", result.value) )
+  elseif response.type == qlua_msg.ProcedureType.DS_L then
+    local result = qlua_msg.DataSourceL_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [datasource_l: value=%d]\n", result.value) )
+  elseif response.type == qlua_msg.ProcedureType.DS_C then
+    local result = qlua_msg.DataSourceC_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [datasource_c: value=%d]\n", result.value) )
+  elseif response.type == qlua_msg.ProcedureType.DS_V then
+    local result = qlua_msg.DataSourceV_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [datasource_v: value=%d]\n", result.value) )
+  elseif response.type == qlua_msg.ProcedureType.DS_SIZE then
+    local result = qlua_msg.DataSourceSize_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [datasource_size: value=%d]\n", result.value) )
+  elseif response.type == qlua_msg.ProcedureType.DS_T then
+    local result = qlua_msg.DataSourceT_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [datasource_t: year=%d, month=%d, day=%d, week_day=%d, hour=%d, min=%d, sec=%d, ms=%d, count=%d]\n", result.year, result.month, result.day, result.week_day, result.hour, result.min, result.sec, result.ms, result.count) )
+  elseif response.type == qlua_msg.ProcedureType.DS_SET_EMPTY_CALLBACK then
+    local result = qlua_msg.DataSourceSetEmptyCallback_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [datasource_set_empty_callback: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.DS_CLOSE then
+    local result = qlua_msg.DataSourceClose_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [datasource_close: result=%s]\n", result.result) )
   elseif response.type == qlua_msg.ProcedureType.SEND_TRANSACTION then
     local result = qlua_msg.SendTransaction_Result()
     result:ParseFromString(response.result)
