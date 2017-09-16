@@ -25,11 +25,15 @@ function Client:start()
   local request = qlua_msg.Qlua_Request()
   
   request.token = 12345;
-  request.type = qlua_msg.ProcedureType.DS_SET_UPDATE_CALLBACK
+  request.type = qlua_msg.ProcedureType.SEARCH_ITEMS
 
-  local args = qlua_msg.DataSourceSetUpdateCallback_Request()
-  args.datasource_uuid = "af923482-4498-4e19-cef6-9448a8204699"
-  args.f_cb_def = "function (index, datasource) message('datasource_callback: index = '..index..'; OPEN = '..datasource:O(index))  end"
+  local args = qlua_msg.SearchItems_Request()
+  args.table_name = "depo_limits"
+  args.start_index = 0
+  args.fn_def = "function (p1) if p1 == 11.4 then return nil else return false end end"
+  args.params = "awg_position_price"
+  --args.datasource_uuid = "af923482-4498-4e19-cef6-9448a8204699"
+  --args.f_cb_def = "function (index, datasource) message('datasource_callback: index = '..index..'; OPEN = '..datasource:O(index))  end"
   --args.candle_index = 10
   --args.class_code = "SPBFUT"
   --args.sec_code = "RIU7"
@@ -141,6 +145,23 @@ function Client:start()
     result:ParseFromString(response.result)
     for i, e in ipairs(result.table_row) do
         print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.key, e.value) )
+    end
+  elseif response.type == qlua_msg.ProcedureType.GET_ORDER_BY_NUMBER then
+    local result = qlua_msg.GetOrderByNumber_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Order indx: %d", result.indx) )
+    for i, e in ipairs(result.order) do
+        print( string.format("Received a reply [order: key=%s, value=%s]\n", e.key, e.value) )
+    end
+  elseif response.type == qlua_msg.ProcedureType.GET_NUMBER_OF then
+    local result = qlua_msg.GetNumberOf_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [get_number_of: result=%d]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.SEARCH_ITEMS then
+    local result = qlua_msg.SearchItems_Result()
+    result:ParseFromString(response.result)
+    for i, item_index in ipairs(result.items_indices) do
+      print( string.format("Received a reply [item index = %d]\n", item_index) )
     end
   elseif response.type == qlua_msg.ProcedureType.GET_CLASSES_LIST then
     local result = qlua_msg.GetClassesList_Result()

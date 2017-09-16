@@ -208,6 +208,27 @@ function Worker:start()
         args:ParseFromString(request.args)
         result = qlua_msg.GetNumberOf_Result()
         result.result = getNumberOf(args.table_name) -- TO-DO: pcall
+      elseif request.type == qlua_msg.ProcedureType.SEARCH_ITEMS then
+        args = qlua_msg.SearchItems_Request()
+        args:ParseFromString(request.args)
+        result = qlua_msg.SearchItems_Result()
+        local fn_ctr, error_msg = loadstring("return "..args.fn_def)
+        local items
+        if fn_ctr == nil then 
+          response.is_error = true
+          response.result = string.format("Could not parse a function definition from the given string. Error message: \n%s", error_msg)
+        else
+          if args.params == nil or args.params == "" then
+            items = SearchItems(args.table_name, args.start_index, args.end_index == 0 and (getNumberOf(args.table_name) - 1) or args.end_index, fn_ctr()) -- TO-DO: pcall
+          else 
+            items = SearchItems(args.table_name, args.start_index, args.end_index == 0 and (getNumberOf(args.table_name) - 1) or args.end_index, fn_ctr(), args.params) -- TO-DO: pcall
+          end
+        end
+        if items ~= nil then 
+          for i, item_index in ipairs(items) do
+            table.sinsert(result.items_indices, item_index)
+          end
+        end
       elseif request.type == qlua_msg.ProcedureType.GET_CLASSES_LIST then
         result = qlua_msg.GetClassesList_Result()
 				result.classes_list = getClassesList() -- TO-DO: pcall

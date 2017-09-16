@@ -13,7 +13,7 @@ enum ProcedureType {
     GET_ITEM = 8;
     GET_ORDER_BY_NUMBER = 9; // NOT TESTED YET
     GET_NUMBER_OF = 10;
-    //SEARCH_ITEMS = 11; // NOT IMPLEMENTED YET
+    SEARCH_ITEMS = 11;
     GET_CLASSES_LIST = 12;
     GET_CLASS_INFO = 13;
     GET_CLASS_SECURITIES = 14;
@@ -240,6 +240,32 @@ message GetNumberOf_Request {
 
 message GetNumberOf_Result {
     int32 result = 1;
+}
+
+message SearchItems_Request {
+
+    string table_name = 1;
+    int32 start_index = 2;
+    
+    // Для удобства 0 интерпретируется как getNumberOf(table_name) - 1
+    int32 end_index = 3; 
+    
+    // Формат функции без использования params: "function (TABLE t) ... end", возвращаемые значения: BOOLEAN, nil; 
+    // где t -- строка таблицы table_name со всеми параметрами.
+    // Формат функции при использовании params: "function (p1, p2, ...) ... end", возвращаемые значения: BOOLEAN, nil; 
+    // где p1, p2, ... -- значения параметров, заказанных в params
+    
+    // Внимание! По результам тестирования возврат nil из fn не приводит к ожидаемому результату (возврат списка уже пройденных индексов, удовлетворяющих условию + индекс, на котором возвратили nil + остановка процесса проверки условия) -- вместо этого процесс проверки условия прерывается и функция SearchItems возвращает nil. Подозреваю, что это баг в QLUA или ошибка в документации.
+    string fn_def = 4; 
+    
+    string params = 5;
+}
+
+message SearchItems_Result {
+    repeated int32 items_indices = 1; 
+    //NB: Недоработка QLUA: пустой список индексов возвращается в виде nil, и ошибка при работе фукнции проверки элемента (fn)
+    //тоже приводит к возврату nil, так что непонятно, не нашли ли мы удовлетворяющих условию элементов или написали ошибочную
+    //функцию проверки условия. Для определённости, в обоих случаях будем возвращать пустой список.--]]
 }
 
 message GetClassesList_Result {
