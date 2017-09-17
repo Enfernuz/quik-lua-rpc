@@ -24,14 +24,13 @@ function Client:start()
     
   local request = qlua_msg.Qlua_Request()
   
-  request.token = 12345;
   request.type = qlua_msg.ProcedureType.SEARCH_ITEMS
 
   local args = qlua_msg.SearchItems_Request()
   args.table_name = "depo_limits"
   args.start_index = 0
-  args.fn_def = "function (p1) if p1 == 11.4 then return nil else return false end end"
-  args.params = "awg_position_price"
+  args.fn_def = "function (t) return true end"
+  --args.params = "awg_position_price"
   --args.datasource_uuid = "af923482-4498-4e19-cef6-9448a8204699"
   --args.f_cb_def = "function (index, datasource) message('datasource_callback: index = '..index..'; OPEN = '..datasource:O(index))  end"
   --args.candle_index = 10
@@ -103,17 +102,21 @@ function Client:start()
   request.args = ser_args
 
   local ser_request = request:SerializeToString()
+  local msg_request = zmq.msg_init_data(ser_request)
 
   --print("Raw request data: "..ser_request.."\n")
 
-  self.socket:send(ser_request)
+  msg_request:send(self.socket)
 
-  local msg = self.socket:recv()
+  local msg_response = zmq.msg_init()
+  msg_response:recv(self.socket)
+  
+  
 
   local response = qlua_msg.Qlua_Response()
-  response:ParseFromString(msg)
-  print( string.format("response token: %d", response.token) )
+  response:ParseFromString( msg_response:data() )
   
+  print("Message received. Response type is "..tostring(response.type))
   if response.is_error then print("Error: "..tostring(response.result)) end
   
   if response.type == qlua_msg.ProcedureType.IS_CONNECTED then
@@ -220,7 +223,7 @@ function Client:start()
         print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.key, e.value) )
     end
   elseif response.type == qlua_msg.ProcedureType.GET_TRADE_DATE then
-    local result = qlua_msg.GetTradeDate_Result()
+    local result = msg_requestqlua_msg.GetTradeDate_Result()
     result:ParseFromString(response.result)
     for i, e in ipairs(result.trade_date) do
         print( string.format("Received a reply [table_row: key=%s, value=%s]\n", e.key, e.value) )
@@ -422,5 +425,5 @@ function Client:start()
 end
 
 local instance = Client;
-instance:init("tcp://127.0.0.1:5559")
+instance:init("tcp://127.0.0.1:5560")
 instance:start()

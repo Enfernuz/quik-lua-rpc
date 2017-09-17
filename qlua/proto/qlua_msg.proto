@@ -76,6 +76,48 @@ enum ProcedureType {
     HIGHLIGHT = 64;
     SET_SELECTED_ROW = 65;
 
+    ADD_LABEL = 66; // NOT IMPLEMENTED YET
+    DEL_LABEL = 67; // NOT IMPLEMENTED YET
+    DEL_ALL_LABELS = 68; // NOT IMPLEMENTED YET
+    GET_LABEL_PARAMS = 69; // NOT IMPLEMENTED YET
+    SET_LABEL_PARAMS = 70; // NOT IMPLEMENTED YET
+    
+    SUBSCRIBE_LEVEL_II_QUOTES = 71; // NOT IMPLEMENTED YET
+    UNSUBSCRIBE_LEVEL_II_QUOTES = 72; // NOT IMPLEMENTED YET
+    IS_SUBSCRIBED_LEVEL_II_QUOTES = 73; // NOT IMPLEMENTED YET
+    
+    PARAM_REQUEST = 74; // NOT IMPLEMENTED YET
+    CANCEL_PARAM_REQUEST = 75; // NOT IMPLEMENTED YET
+}
+
+enum EventType {
+
+    EVENT_TYPE_UNKNOWN = 0;
+    PUBLISHER_ONLINE = 1; // no data attached
+    PUBLISHER_OFFLINE = 2; // no data attached
+    ON_CLOSE = 3; // no data attached
+    ON_CONNECTED = 4; // no data attached
+    ON_DISCONNECTED = 5; // no data attached
+    ON_FIRM = 6; // data attached as StringStringTable
+    ON_ALL_TRADE = 7; // data attached as StringStringTable
+    ON_TRADE = 8; // data attached as StringStringTable
+    ON_ORDER = 9; // data attached as StringStringTable
+    ON_ACCOUNT_BALANCE = 10; // data attached as StringStringTable
+    ON_FUTURES_LIMIT_CHANGE = 11; // data attached as StringStringTable
+    ON_FUTURES_LIMIT_DELETE = 12; // data attached as StringStringTable
+    ON_FUTURES_CLIENT_HOLDING = 13; // data attached as StringStringTable
+    ON_MONEY_LIMIT = 14; // data attached as StringStringTable
+    ON_MONEY_LIMIT_DELETE = 15; // data attached as StringStringTable
+    ON_DEPO_LIMIT = 16; // data attached as StringStringTable
+    ON_DEPO_LIMIT_DELETE = 17; // data attached as StringStringTable
+    ON_ACCOUNT_POSITION = 18; // data attached as StringStringTable
+    ON_NEG_DEAL = 19; // data attached as StringStringTable
+    ON_NEG_TRADE = 20; // data attached as StringStringTable
+    ON_STOP_ORDER = 21; // data attached as StringStringTable
+    ON_TRANS_REPLY = 22; // data attached as StringStringTable
+    ON_PARAM = 23; // data attached as StringStringTable
+    ON_QUOTE = 24; // data attached as StringStringTable
+    ON_CLEAN_UP = 25; // no data attached
 }
 
 // Не получилось внедрить это определение в AddColumn_Request, т.к. не смог потом залукапить значения енама
@@ -143,25 +185,33 @@ message DateTimeEntry {
     int32 year = 9;
 }
 
+message StringStringTable {
+    map<string, string> kv = 1;
+}
+
 message Qlua_Request {
 
-    int64 token = 1;
     ProcedureType type = 2;
     bytes args = 3; // the protoc-lua-plugin gives out a corrupted .lua file if we use google.protobuf.Any
 }
 
 message Qlua_Response {
 
-    int64 token = 1;
-    ProcedureType type = 2;
-    bool is_error = 3;
-    bytes result = 4;
+    ProcedureType type = 1;
+    bool is_error = 2;
+    bytes result = 3;
   
     // Если это внутренняя ошибка RPC-сервиса, то установлен is_error,
     // в противном случае -- установлен result (даже если он содержит в себе
     // ошибку от библиотеки qlua). Таким образом, ошибки, возвращаемые библиотекой 
     // qlua (например, nil в определённых случаях), в рамках RPC-сервиса 
     // являются обычным результатом выполнения запроса.
+}
+
+message Qlua_Event {
+
+    EventType type = 1;
+    bytes data = 2;
 }
 
 message IsConnected_Result {
