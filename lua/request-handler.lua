@@ -120,7 +120,7 @@ request_handlers[qlua_msg.ProcedureType.GET_ORDER_BY_NUMBER] = function(request_
   args:ParseFromString(request_args)
   local result = qlua_msg.GetOrderByNumber_Result()
   local t, i = getOrderByNumber(args.class_code, args.order_id)
-  utils.insert_table(t, result.order)
+  utils.insert_table(result.order, t)
   result.indx = i
   return result
 end
@@ -271,8 +271,8 @@ request_handlers[qlua_msg.ProcedureType.GET_QUOTE_LEVEL2] = function(request_arg
   local t = getQuoteLevel2(args.class_code, args.sec_code) -- TO-DO: pcall
   result.bid_count = t.bid_count
   result.offer_count = t.offer_count
-  if t.bid ~= nil then utils.insert_quote_table(t.bid, result.bid) end
-  if t.offer ~= nil then utils.insert_quote_table(t.offer, result.offer) end
+  if t.bid ~= nil then utils.insert_quote_table(result.bid, t.bid) end
+  if t.offer ~= nil then utils.insert_quote_table(result.offer, t.offer) end
   return result
 end
 
@@ -302,7 +302,7 @@ request_handlers[qlua_msg.ProcedureType.GET_CANDLES_BY_INDEX] = function(request
   local t, n, l = getCandlesByIndex(args.tag, args.line, args.first_candle, args.count) -- TO-DO: pcall
   result.n = n
   result.l = l
-  utils.insert_candles_table(t, result.t)
+  utils.insert_candles_table(result.t, t)
   return result
 end
 

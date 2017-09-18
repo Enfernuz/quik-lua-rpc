@@ -3,7 +3,7 @@ assert(qlua_msg ~= nil, "qlua/proto/qlua_msg_pb lib is missing")
 
 local utils = {}
 
-function utils.insert_table(src, dst)
+function utils.insert_table(dst, src)
   
   for k,v in pairs(src) do
       local table_entry = qlua_msg.TableEntry() 
@@ -13,7 +13,7 @@ function utils.insert_table(src, dst)
   end
 end
 
-function utils.insert_quote_table(src, dst)
+function utils.insert_quote_table(dst, src)
   
   for i,v in ipairs(src) do
       local quote = qlua_msg.GetQuoteLevel2_Result.QuoteEntry() 
@@ -56,7 +56,7 @@ function utils.put_to_string_string_pb_map(t, pb_map, pb_map_entry_ctr)
   end
 end
 
-function utils.insert_candles_table(src, dst)
+function utils.insert_candles_table(dst, src)
   
   for i,v in ipairs(src) do
       local candle = qlua_msg.CandleEntry() 
