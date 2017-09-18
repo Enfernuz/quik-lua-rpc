@@ -222,7 +222,9 @@ request_handlers[qlua_msg.ProcedureType.GET_DEPO_EX] = function(request_args)
   args:ParseFromString(request_args)
   local result = qlua_msg.GetDepoEx_Result()
   local t = getDepoEx(args.firmid, args.client_code, args.sec_code, args.trdaccid, args.limit_kind) -- TO-DO: pcall
-  utils.put_to_string_string_pb_map(t, result.depo_ex, qlua_msg.GetDepoEx_Result.DepoExEntry)
+  if t ~= nil then
+    utils.put_to_string_string_pb_map(t, result.depo_ex, qlua_msg.GetDepoEx_Result.DepoExEntry)
+  end
   return result
 end
 
