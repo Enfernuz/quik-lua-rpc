@@ -1,4 +1,7 @@
-local qlua_msg = require("qlua/proto/qlua_msg_pb")
+local qlua_msg = require("quik-lua-rpc.messages.qlua_msg_pb")
+
+local uuid = require("quik-lua-rpc.utils.uuid")
+assert(uuid ~= nil, "quik-lua-rpc.utils.uuid lib is missing.")
 
 local zmq = require("lzmq.ffi")
 
@@ -19,17 +22,74 @@ end
 
 function Client:start()
   
-  local uuid = require("uuid")
-  assert(uuid ~= nil, "uuid lib is missing.")
+  
     
   local request = qlua_msg.Qlua_Request()
   
-  request.type = qlua_msg.ProcedureType.SEARCH_ITEMS
+  request.type = qlua_msg.ProcedureType.MESSAGE
 
-  local args = qlua_msg.SearchItems_Request()
-  args.table_name = "depo_limits"
-  args.start_index = 0
-  args.fn_def = "function (t) return true end"
+  local args = qlua_msg.Message_Request()
+  args.message = "TEST"
+  --[[
+  local action = qlua_msg.SendTransaction_Request.TransactionEntry()
+  action.key = "ACTION"
+  action.value = "NEW_STOP_ORDER"
+  table.insert(args.transaction, action)
+  
+  local account = qlua_msg.SendTransaction_Request.TransactionEntry()
+  account.key = "ACCOUNT"
+  account.value = "L01-00000F00"
+  table.insert(args.transaction, account)
+  
+  local trans_id = qlua_msg.SendTransaction_Request.TransactionEntry()
+  trans_id.key = "TRANS_ID"
+  trans_id.value = "55"
+  table.insert(args.transaction, trans_id)
+  
+  local class_code = qlua_msg.SendTransaction_Request.TransactionEntry()
+  class_code.key = "CLASSCODE"
+  class_code.value = "TQBR"
+  table.insert(args.transaction, class_code)
+  
+  local sec_code = qlua_msg.SendTransaction_Request.TransactionEntry()
+  sec_code.key = "SECCODE"
+  sec_code.value = "AFKS"
+  table.insert(args.transaction, sec_code)
+  
+  local operation = qlua_msg.SendTransaction_Request.TransactionEntry()
+  operation.key = "OPERATION"
+  operation.value = "S"
+  table.insert(args.transaction, operation)
+  
+  local qty = qlua_msg.SendTransaction_Request.TransactionEntry()
+  qty.key = "GOGA"
+  qty.value = "1"
+  table.insert(args.transaction, qty)
+  
+  local client_code = qlua_msg.SendTransaction_Request.TransactionEntry()
+  client_code.key = "CLIENT_CODE"
+  client_code.value = "55654"
+  table.insert(args.transaction, client_code)
+  
+  local stop_price = qlua_msg.SendTransaction_Request.TransactionEntry()
+  stop_price.key = "STOPPRICE"
+  stop_price.value = "25"
+  table.insert(args.transaction, stop_price)
+  
+  local price = qlua_msg.SendTransaction_Request.TransactionEntry()
+  price.key = "PRICE"
+  price.value = "25.7"
+  table.insert(args.transaction, price)
+  
+  local exp_date = qlua_msg.SendTransaction_Request.TransactionEntry()
+  exp_date.key = "EXPIRY_DATE"
+  exp_date.value = "20170925"
+  table.insert(args.transaction, exp_date)
+  --]]
+  
+  --args.table_name = "depo_limits"
+  --args.start_index = 0
+  --args.fn_def = "function (t) return true end"
   --args.params = "awg_position_price"
   --args.datasource_uuid = "af923482-4498-4e19-cef6-9448a8204699"
   --args.f_cb_def = "function (index, datasource) message('datasource_callback: index = '..index..'; OPEN = '..datasource:O(index))  end"
@@ -62,6 +122,9 @@ function Client:start()
   --args.width = 15
   --args.firm_id = "MC0094600000"
   --args.client_code = "55654"
+  --args.sec_code = "AMZN"
+  --args.trdaccid = "L01-00000F00"
+  --args.limit_kind = 1
   --args.class_code = "SPBXM"
   --args.sec_code = "AMZN"
   --args.price = 930
@@ -117,7 +180,7 @@ function Client:start()
   response:ParseFromString( msg_response:data() )
   
   print("Message received. Response type is "..tostring(response.type))
-  if response.is_error then print("Error: "..tostring(response.result)) end
+  if response.is_error then print("Error: "..tostring(response.result)) return end
   
   if response.type == qlua_msg.ProcedureType.IS_CONNECTED then
     local result = qlua_msg.IsConnected_Result()
@@ -302,7 +365,7 @@ function Client:start()
   elseif response.type == qlua_msg.ProcedureType.SEND_TRANSACTION then
     local result = qlua_msg.SendTransaction_Result()
     result:ParseFromString(response.result)
-    print( string.format("Received a reply [transaction_result: %s]\n", result.result) )
+    print( string.format("Received a reply [transaction_result: '%s']\n", result.result) )
   elseif response.type == qlua_msg.ProcedureType.CALC_BUY_SELL then
     local result = qlua_msg.CalcBuySell_Result()
     result:ParseFromString(response.result)

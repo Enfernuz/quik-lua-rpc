@@ -1,5 +1,5 @@
-local qlua_msg = require("qlua/proto/qlua_msg_pb")
-assert(qlua_msg ~= nil, "qlua/proto/qlua_msg_pb lib is missing")
+local qlua_msg = require("quik-lua-rpc.messages.qlua_msg_pb")
+assert(qlua_msg ~= nil, "quik-lua-rpc.messages.qlua_msg_pb lib is missing")
 
 local zmq = require("lzmq")
 assert(zmq ~= nil, "lzmq lib is missing.")
@@ -10,14 +10,14 @@ assert(zmq_poller ~= nil, "lzmq.poller lib is missing.")
 local inspect = require("inspect")
 assert(inspect ~= nil, "inspect lib is missing.")
 
-local utils = require("qlua_msg_utils")
-assert(utils ~= nil, "utils lib is missing.")
+local utils = require("quik-lua-rpc.utils.utils")
+assert(utils ~= nil, "quik-lua-rpc.utils.utils lib is missing.")
 
-local uuid = require("uuid")
-assert(uuid ~= nil, "uuid lib is missing.")
+local uuid = require("quik-lua-rpc.utils.uuid")
+assert(uuid ~= nil, "quik-lua-rpc.utils.uuid lib is missing.")
 
-local request_handler = require("request-handler")
-assert(request_handler ~= nil, "request-handler lib is missing.")
+local request_handler = require("quik-lua-rpc.impl.request-handler")
+assert(request_handler ~= nil, "quik-lua-rpc.impl.request-handler lib is missing.")
 
 
 local QluaService = {

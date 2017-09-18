@@ -1,5 +1,5 @@
-local qlua_msg = require("qlua/proto/qlua_msg_pb")
-assert(qlua_msg ~= nil, "qlua/proto/qlua_msg_pb lib is missing")
+local qlua_msg = require("quik-lua-rpc.messages.qlua_msg_pb")
+assert(qlua_msg ~= nil, "quik-lua-rpc.messages.qlua_msg_pb lib is missing")
 
 local utils = {}
 

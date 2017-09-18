@@ -1,8 +1,8 @@
-local qlua_msg = require("qlua/proto/qlua_msg_pb")
-assert(qlua_msg ~= nil, "qlua/proto/qlua_msg_pb lib is missing")
+local qlua_msg = require("quik-lua-rpc.messages.qlua_msg_pb")
+assert(qlua_msg ~= nil, "quik-lua-rpc.messages.qlua_msg_pb lib is missing")
 
-local utils = require("qlua_msg_utils")
-assert(utils ~= nil, "utils lib is missing.")
+local utils = require("quik-lua-rpc.utils.utils")
+assert(utils ~= nil, "quik-lua-rpc.utils.utils lib is missing.")
 
 local inspect = require("inspect")
 assert(inspect ~= nil, "inspect lib is missing.")
@@ -793,7 +793,8 @@ request_handlers[qlua_msg.ProcedureType.GET_TABLE_SIZE] = function(request_args)
     error(string.format("Процедура GetTableSize(%s) вернула nil.", args.t_id), 0)
   else
     local result = qlua_msg.GetTableSize_Result()
-    result.rows, result.col = 
+    result.rows = rows
+    result.col = col
     return result
   end
 end

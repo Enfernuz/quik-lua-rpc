@@ -88,6 +88,13 @@ enum ProcedureType {
     
     PARAM_REQUEST = 74; // NOT IMPLEMENTED YET
     CANCEL_PARAM_REQUEST = 75; // NOT IMPLEMENTED YET
+    
+    BIT_TOHEX = 76; // NOT IMPLEMENTED YET
+    BIT_BNOT = 77; // NOT IMPLEMENTED YET
+    BIT_BAND = 78; // NOT IMPLEMENTED YET
+    BIT_BOR = 79; // NOT IMPLEMENTED YET
+    BIT_BXOR = 80; // NOT IMPLEMENTED YET
+    BIT_TEST = 81; // NOT IMPLEMENTED YET
 }
 
 enum EventType {
@@ -208,12 +215,6 @@ message Qlua_Response {
     ProcedureType type = 1;
     bool is_error = 2;
     bytes result = 3;
-  
-    // Если это внутренняя ошибка RPC-сервиса, то установлен is_error,
-    // в противном случае -- установлен result (даже если он содержит в себе
-    // ошибку от библиотеки qlua). Таким образом, ошибки, возвращаемые библиотекой 
-    // qlua (например, nil в определённых случаях), в рамках RPC-сервиса 
-    // являются обычным результатом выполнения запроса.
 }
 
 message Qlua_Event {
