@@ -869,4 +869,64 @@ request_handlers[qlua_msg.ProcedureType.SET_SELECTED_ROW] = function(request_arg
   return result
 end
 
+request_handlers[qlua_msg.ProcedureType.ADD_LABEL] = function(request_args) 
+  require_request_args_not_nil(request_args)
+  local args = qlua_msg.AddLabel_Request()
+  args:ParseFromString(request_args)
+  
+  local label_params = utils.create_table(args.label_params)
+  local ret = AddLabel(args.chart_tag, label_params) -- returns nil in case of error
+  if ret == nil then
+    error(string.format("Процедура AddLabel(%s, %s) возвратила nil.", args.chart_tag, utils.table.tostring(label_params)), 0)
+  else
+    local result = qlua_msg.AddLabel_Result()
+    result.label_id = ret
+    return result
+  end
+end
+
+request_handlers[qlua_msg.ProcedureType.DEL_LABEL] = function(request_args) 
+  require_request_args_not_nil(request_args)
+  local args = qlua_msg.DelLabel_Request()
+  args:ParseFromString(request_args)
+  local result = qlua_msg.DelLabel_Result()
+  result.result = DelLabel(args.chart_tag, args.label_id) -- returns true or false
+  return result
+end
+
+request_handlers[qlua_msg.ProcedureType.DEL_ALL_LABELS] = function(request_args) 
+  require_request_args_not_nil(request_args)
+  local args = qlua_msg.DelAllLabels_Request()
+  args:ParseFromString(request_args)
+  local result = qlua_msg.DelAllLabels_Result()
+  result.result = DelAllLabels(args.chart_tag) -- returns true or false
+  return result
+end
+
+request_handlers[qlua_msg.ProcedureType.GET_LABEL_PARAMS] = function(request_args) 
+  require_request_args_not_nil(request_args)
+  local args = qlua_msg.GetLabelParams_Request()
+  args:ParseFromString(request_args)
+  
+  local t = GetLabelParams(args.chart_tag, args.label_id) -- returns nil in case of error
+  if t == nil then
+    error(string.format("Процедура GetLabelParams(%s, %d) возвратила nil.", args.chart_tag, args.label_id), 0)
+  else
+    local result = qlua_msg.GetLabelParams_Result()
+    utils.put_to_string_string_pb_map(t, result.label_params, qlua_msg.GetLabelParams_Result.LabelParamsEntry)
+    return result
+  end
+end
+
+request_handlers[qlua_msg.ProcedureType.SET_LABEL_PARAMS] = function(request_args) 
+  require_request_args_not_nil(request_args)
+  local args = qlua_msg.SetLabelParams_Request()
+  args:ParseFromString(request_args)
+  
+  local label_params = utils.create_table(args.label_params)
+  local result = qlua_msg.SetLabelParams_Result()
+  result.result = SetLabelParams(args.chart_tag, args.label_id, label_params) -- returns true or false
+  return result
+end
+
 return RequestHandler

@@ -120,4 +120,45 @@ function utils.to_interval(pb_interval)
   return interval
 end
 
+utils.table = {}
+
+-- copy-pasted & adapted from http://lua-users.org/wiki/TableUtils
+function utils.table.val_to_str ( v )
+  if "string" == type( v ) then
+    v = string.gsub( v, "\n", "\\n" )
+    if string.match( string.gsub(v,"[^'\"]",""), '^"+$' ) then
+      return "'" .. v .. "'"
+    end
+    return '"' .. string.gsub(v,'"', '\\"' ) .. '"'
+  else
+    return "table" == type( v ) and utils.table.tostring( v ) or
+      tostring( v )
+  end
+end
+
+-- copy-pasted & adapted from http://lua-users.org/wiki/TableUtils
+function utils.table.key_to_str ( k )
+  if "string" == type( k ) and string.match( k, "^[_%a][_%a%d]*$" ) then
+    return k
+  else
+    return "[" .. utils.table.val_to_str( k ) .. "]"
+  end
+end
+
+-- copy-pasted & adapted from http://lua-users.org/wiki/TableUtils
+function utils.table.tostring( tbl )
+  local result, done = {}, {}
+  for k, v in ipairs( tbl ) do
+    table.sinsert( result, utils.table.val_to_str( v ) )
+    done[ k ] = true
+  end
+  for k, v in pairs( tbl ) do
+    if not done[ k ] then
+      table.sinsert( result,
+        utils.table.key_to_str( k ) .. "=" .. utils.table.val_to_str( v ) )
+    end
+  end
+  return "{" .. table.sconcat( result, "," ) .. "}"
+end
+
 return utils

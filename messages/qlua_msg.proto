@@ -888,3 +888,52 @@ message SetSelectedRow_Request {
 message SetSelectedRow_Result {
     sint32 result = 1;
 }
+
+message AddLabel_Request {
+
+    string chart_tag = 1;
+    map<string, string> label_params = 2;
+}
+
+message AddLabel_Result {
+    int32 label_id = 1;
+}
+
+message DelLabel_Request {
+
+    string chart_tag = 1;
+    int32 label_id = 2;
+}
+
+message DelLabel_Result {
+    bool result = 1;
+}
+
+message DelAllLabels_Request {
+    string chart_tag = 1;
+}
+
+message DelAllLabels_Result {
+    bool result = 1;
+}
+
+message GetLabelParams_Request {
+
+    string chart_tag = 1;
+    int32 label_id = 2;
+}
+
+message GetLabelParams_Result {
+    map<string, string> label_params = 1;
+}
+
+message SetLabelParams_Request {
+
+    string chart_tag = 1;
+    int32 label_id = 2;
+    map<string, string> label_params = 3;
+}
+
+message SetLabelParams_Result {
+    bool result = 1;
+}

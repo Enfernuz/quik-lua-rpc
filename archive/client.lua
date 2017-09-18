@@ -26,10 +26,84 @@ function Client:start()
     
   local request = qlua_msg.Qlua_Request()
   
-  request.type = qlua_msg.ProcedureType.MESSAGE
+  request.type = qlua_msg.ProcedureType.GET_LABEL_PARAMS
 
-  local args = qlua_msg.Message_Request()
-  args.message = "TEST"
+  local args = qlua_msg.GetLabelParams_Request()
+  
+  
+  args.chart_tag = "TEST"
+  args.label_id = 4
+  --[[
+  local p1 = qlua_msg.AddLabel_Request.LabelParamsEntry()
+  p1.key = "TEXT"
+  p1.value = "sample_text"
+  
+  local p2 = qlua_msg.AddLabel_Request.LabelParamsEntry()
+  p2.key = "IMAGE_PATH"
+  p2.value = ""
+  
+  local p3 = qlua_msg.AddLabel_Request.LabelParamsEntry()
+  p3.key = "ALIGNMENT"
+  p3.value = "TOP"
+  
+  local p4 = qlua_msg.AddLabel_Request.LabelParamsEntry()
+  p4.key = "YVALUE"
+  p4.value = "1000"
+  
+  local p5 = qlua_msg.AddLabel_Request.LabelParamsEntry()
+  p5.key = "DATE"
+  p5.value = "20160701"
+  
+  local p6 = qlua_msg.AddLabel_Request.LabelParamsEntry()
+  p6.key = "TIME"
+  p6.value = "113000"
+  
+  local p7 = qlua_msg.AddLabel_Request.LabelParamsEntry()
+  p7.key = "R"
+  p7.value = "0"
+  
+  local p8 = qlua_msg.AddLabel_Request.LabelParamsEntry()
+  p8.key = "G"
+  p8.value = "255"
+  
+  local p9 = qlua_msg.AddLabel_Request.LabelParamsEntry()
+  p9.key = "B"
+  p9.value = "0"
+  
+  local p10 = qlua_msg.AddLabel_Request.LabelParamsEntry()
+  p10.key = "TRANSPARENCY"
+  p10.value = "0"
+  
+  local p11 = qlua_msg.AddLabel_Request.LabelParamsEntry()
+  p11.key = "TRANSPARENCY_BACKGROUND"
+  p11.value = "0"
+  
+  local p12 = qlua_msg.AddLabel_Request.LabelParamsEntry()
+  p12.key = "FONT_FACE_NAME"
+  p12.value = "Verdana"
+  
+  local p13 = qlua_msg.AddLabel_Request.LabelParamsEntry()
+  p13.key = "FONT_HEIGHT"
+  p13.value = "20"
+  
+  local p14 = qlua_msg.AddLabel_Request.LabelParamsEntry()
+  p14.key = "HINT"
+  p14.value = "hint_text"
+  
+  table.insert(args.label_params, p1)
+  table.insert(args.label_params, p2)
+  table.insert(args.label_params, p3)
+  table.insert(args.label_params, p4)
+  table.insert(args.label_params, p5)
+  table.insert(args.label_params, p6)
+  table.insert(args.label_params, p7)
+  table.insert(args.label_params, p8)
+  table.insert(args.label_params, p9)
+  table.insert(args.label_params, p10)
+  table.insert(args.label_params, p11)
+  table.insert(args.label_params, p12)
+  table.insert(args.label_params, p13)
+  table.insert(args.label_params, p14)--]]
   --[[
   local action = qlua_msg.SendTransaction_Request.TransactionEntry()
   action.key = "ACTION"
@@ -480,6 +554,28 @@ function Client:start()
     local result = qlua_msg.SetSelectedRow_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [set_selected_row: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.ADD_LABEL then
+    local result = qlua_msg.AddLabel_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [add_label: label_id=%d]\n", result.label_id) )
+  elseif response.type == qlua_msg.ProcedureType.DEL_LABEL then
+    local result = qlua_msg.DelLabel_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [del_label: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.DEL_ALL_LABELS then
+    local result = qlua_msg.DelAllLabels_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [del_all_labels: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.GET_LABEL_PARAMS then
+    local result = qlua_msg.GetLabelParams_Result()
+    result:ParseFromString(response.result)
+    for i, e in ipairs(result.label_params) do
+        print( string.format("Received a reply [get_label_params: key=%s, value=%s]\n", e.key, e.value) )
+    end
+  elseif response.type == qlua_msg.ProcedureType.SET_LABEL_PARAMS then
+    local result = qlua_msg.SetLabelParams_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [set_label_params: result=%s]\n", result.result) )
   end
 
   print ("closing...\n")
