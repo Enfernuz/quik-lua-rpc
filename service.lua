@@ -22,7 +22,7 @@ assert(request_handler ~= nil, "quik-lua-rpc.impl.request-handler lib is missing
 
 local QluaService = {
   
-  ctx = zmq.context(),
+  ctx = nil, 
   rep_socket = nil, 
   pub_socket = nil,
   poller = nil, 
@@ -163,7 +163,7 @@ end
 function QluaService:start(rep_socket_addr, pub_socket_addr)
   
   assert(self.is_running == false, "The QluaService is already running.")
-  
+
   if rep_socket_addr == nil and pub_socket_addr == nil then
     error("The service cannot be started: nor REP neither PUB socket address is specified.")
   elseif pub_socket_addr == rep_socket_addr then 
@@ -173,6 +173,8 @@ function QluaService:start(rep_socket_addr, pub_socket_addr)
   else 
     self.poller = zmq_poller.new(1)
   end
+  
+  self.ctx = zmq.context()
   
   if rep_socket_addr ~= nil then
     self.rep_socket = self.ctx:socket(zmq.REP)

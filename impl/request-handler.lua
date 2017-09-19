@@ -7,6 +7,9 @@ assert(utils ~= nil, "quik-lua-rpc.utils.utils lib is missing.")
 local inspect = require("inspect")
 assert(inspect ~= nil, "inspect lib is missing.")
 
+local bit = bit
+assert(bit ~= nil, "bit lib is missing.")
+
 local function require_request_args_not_nil(request_args) 
   if request_args == nil then error("Запрос не содержит аргументов.", 0) end
 end
@@ -292,7 +295,7 @@ request_handlers[qlua_msg.ProcedureType.GET_FUTURES_HOLDING] = function(request_
   local args = qlua_msg.GetFuturesHolding_Request()
   args:ParseFromString(request_args)
   
-  local t = getFuturesLHolding(args.firmid, args.trdaccid, args.sec_code, args.type) -- returns nil if no info found or in case of an error
+  local t = getFuturesHolding(args.firmid, args.trdaccid, args.sec_code, args.type) -- returns nil if no info found or in case of an error
   if t == nil then
     error(string.format("Процедура getFuturesLHolding(%s, %s, %d, %d) возвратила nil.", args.firmid, args.trdaccid, args.sec_code, args.type), 0)
   else
@@ -926,6 +929,75 @@ request_handlers[qlua_msg.ProcedureType.SET_LABEL_PARAMS] = function(request_arg
   local label_params = utils.create_table(args.label_params)
   local result = qlua_msg.SetLabelParams_Result()
   result.result = SetLabelParams(args.chart_tag, args.label_id, label_params) -- returns true or false
+  return result
+end
+
+request_handlers[qlua_msg.ProcedureType.BIT_TOHEX] = function(request_args) 
+  require_request_args_not_nil(request_args)
+  local args = qlua_msg.BitToHex_Request()
+  args:ParseFromString(request_args)
+  
+  local result = qlua_msg.BitToHex_Result()
+  if args.n == 0 then
+    result.result = bit.tohex(args.x)
+  else
+    result.result = bit.tohex(args.x, args.n)
+  end
+  return result
+end
+
+request_handlers[qlua_msg.ProcedureType.BIT_BNOT] = function(request_args) 
+  require_request_args_not_nil(request_args)
+  local args = qlua_msg.BitBNot_Request()
+  args:ParseFromString(request_args)
+  
+  local result = qlua_msg.BitBNot_Result()
+  result.result = bit.bnot(args.x)
+  return result
+end
+
+request_handlers[qlua_msg.ProcedureType.BIT_BAND] = function(request_args) 
+  require_request_args_not_nil(request_args)
+  local args = qlua_msg.BitBAnd_Request()
+  args:ParseFromString(request_args)
+  
+  local result = qlua_msg.BitBAnd_Result()
+  local xs = {args.x1, args.x2}
+  for i, e in ipairs(args.xi) do
+    table.sinsert(xs, e)
+  end
+
+  result.result = bit.band( unpack(xs) )
+  return result
+end
+
+request_handlers[qlua_msg.ProcedureType.BIT_BOR] = function(request_args) 
+  require_request_args_not_nil(request_args)
+  local args = qlua_msg.BitBOr_Request()
+  args:ParseFromString(request_args)
+  
+  local result = qlua_msg.BitBOr_Result()
+  local xs = {args.x1, args.x2}
+  for i, e in ipairs(args.xi) do
+    table.sinsert(xs, e)
+  end
+
+  result.result = bit.bor( unpack(xs) )
+  return result
+end
+
+request_handlers[qlua_msg.ProcedureType.BIT_BXOR] = function(request_args) 
+  require_request_args_not_nil(request_args)
+  local args = qlua_msg.BitBXor_Request()
+  args:ParseFromString(request_args)
+  
+  local result = qlua_msg.BitBXor_Result()
+  local xs = {args.x1, args.x2}
+  for i, e in ipairs(args.xi) do
+    table.sinsert(xs, e)
+  end
+
+  result.result = bit.bxor( unpack(xs) )
   return result
 end
 

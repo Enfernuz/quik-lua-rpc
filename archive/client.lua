@@ -2,7 +2,6 @@ local qlua_msg = require("quik-lua-rpc.messages.qlua_msg_pb")
 
 local uuid = require("quik-lua-rpc.utils.uuid")
 assert(uuid ~= nil, "quik-lua-rpc.utils.uuid lib is missing.")
-
 local zmq = require("lzmq.ffi")
 
 local inspect = require("inspect")
@@ -26,13 +25,14 @@ function Client:start()
     
   local request = qlua_msg.Qlua_Request()
   
-  request.type = qlua_msg.ProcedureType.GET_LABEL_PARAMS
+  request.type = qlua_msg.ProcedureType.BIT_BAND
 
-  local args = qlua_msg.GetLabelParams_Request()
-  
-  
-  args.chart_tag = "TEST"
-  args.label_id = 4
+  local args = qlua_msg.BitBAnd_Request()
+
+  args.x1 = 3
+  args.x2 = 3
+  --args.chart_tag = "TEST"
+  --args.label_id = 4
   --[[
   local p1 = qlua_msg.AddLabel_Request.LabelParamsEntry()
   p1.key = "TEXT"
@@ -576,6 +576,26 @@ function Client:start()
     local result = qlua_msg.SetLabelParams_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [set_label_params: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.BIT_TOHEX then
+    local result = qlua_msg.BitToHex_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [bit_to_hex: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.BIT_BNOT then
+    local result = qlua_msg.BitBNot_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [bit_bnot: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.BIT_BAND then
+    local result = qlua_msg.BitBAnd_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [bit_band: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.BIT_BOR then
+    local result = qlua_msg.BitBOr_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [bit_bor: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.BIT_BXOR then
+    local result = qlua_msg.BitBXor_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [bit_bxor: result=%s]\n", result.result) )
   end
 
   print ("closing...\n")

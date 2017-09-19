@@ -76,11 +76,11 @@ enum ProcedureType {
     HIGHLIGHT = 64;
     SET_SELECTED_ROW = 65;
 
-    ADD_LABEL = 66; // NOT IMPLEMENTED YET
-    DEL_LABEL = 67; // NOT IMPLEMENTED YET
-    DEL_ALL_LABELS = 68; // NOT IMPLEMENTED YET
-    GET_LABEL_PARAMS = 69; // NOT IMPLEMENTED YET
-    SET_LABEL_PARAMS = 70; // NOT IMPLEMENTED YET
+    ADD_LABEL = 66;
+    DEL_LABEL = 67;
+    DEL_ALL_LABELS = 68;
+    GET_LABEL_PARAMS = 69;
+    SET_LABEL_PARAMS = 70;
     
     SUBSCRIBE_LEVEL_II_QUOTES = 71; // NOT IMPLEMENTED YET
     UNSUBSCRIBE_LEVEL_II_QUOTES = 72; // NOT IMPLEMENTED YET
@@ -89,12 +89,11 @@ enum ProcedureType {
     PARAM_REQUEST = 74; // NOT IMPLEMENTED YET
     CANCEL_PARAM_REQUEST = 75; // NOT IMPLEMENTED YET
     
-    BIT_TOHEX = 76; // NOT IMPLEMENTED YET
-    BIT_BNOT = 77; // NOT IMPLEMENTED YET
-    BIT_BAND = 78; // NOT IMPLEMENTED YET
-    BIT_BOR = 79; // NOT IMPLEMENTED YET
-    BIT_BXOR = 80; // NOT IMPLEMENTED YET
-    BIT_TEST = 81; // NOT IMPLEMENTED YET
+    BIT_TOHEX = 76;
+    BIT_BNOT = 77;
+    BIT_BAND = 78;
+    BIT_BOR = 79;
+    BIT_BXOR = 80;
 }
 
 enum EventType {
@@ -936,4 +935,55 @@ message SetLabelParams_Request {
 
 message SetLabelParams_Result {
     bool result = 1;
+}
+
+message BitToHex_Request {
+
+    int32 x = 1;
+    int32 n = 2; // 0 counts as "parameter not set"
+}
+
+message BitToHex_Result {
+    string result = 1;
+}
+
+message BitBNot_Request {
+    int32 x = 1;
+}
+
+message BitBNot_Result {
+    int32 result = 1;
+}
+
+message BitBAnd_Request {
+
+    int32 x1 = 1;
+    int32 x2 = 2;
+    repeated int32 xi = 3;
+}
+
+message BitBAnd_Result {
+    int32 result = 1;
+}
+
+message BitBOr_Request {
+
+    int32 x1 = 1;
+    int32 x2 = 2;
+    repeated int32 xi = 3;
+}
+
+message BitBOr_Result {
+    int32 result = 1;
+}
+
+message BitBXor_Request {
+
+    int32 x1 = 1;
+    int32 x2 = 2;
+    repeated int32 xi = 3;
+}
+
+message BitBXor_Result {
+    int32 result = 1;
 }
