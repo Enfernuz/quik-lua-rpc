@@ -13,6 +13,18 @@ assert(bit ~= nil, "bit lib is missing.")
 local unpack = unpack
 assert(unpack ~= nil, "unpack function is missing.")
 
+local error = error
+assert(error ~= nil, "error function is missing.")
+
+local type = type
+assert(type ~= nil, "type function is missing.")
+
+local pcall = pcall
+assert(pcall ~= nil, "pcall function is missing.")
+
+local ipairs = ipairs
+assert(ipairs ~= nil, "ipairs function is missing.")
+
 local function require_request_args_not_nil(request_args) 
   if request_args == nil then error("Запрос не содержит аргументов.", 0) end
 end
