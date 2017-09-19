@@ -1,14 +1,8 @@
 local qlua_msg = require("quik-lua-rpc.messages.qlua_msg_pb")
-assert(qlua_msg ~= nil, "quik-lua-rpc.messages.qlua_msg_pb lib is missing")
-
 local utils = require("quik-lua-rpc.utils.utils")
-assert(utils ~= nil, "quik-lua-rpc.utils.utils lib is missing.")
-
 local inspect = require("inspect")
-assert(inspect ~= nil, "inspect lib is missing.")
-
-local bit = bit
-assert(bit ~= nil, "bit lib is missing.")
+local table = require('table')
+local bit = require('bit')
 
 local unpack = unpack
 assert(unpack ~= nil, "unpack function is missing.")

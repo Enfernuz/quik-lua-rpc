@@ -19,6 +19,11 @@ assert(uuid ~= nil, "quik-lua-rpc.utils.uuid lib is missing.")
 local request_handler = require("quik-lua-rpc.impl.request-handler")
 assert(request_handler ~= nil, "quik-lua-rpc.impl.request-handler lib is missing.")
 
+local pcall = pcall
+assert(pcall ~= nil, "pcall function is missing.")
+
+local tostring = tostring
+assert(tostring ~= nil, "tostring function is missing.")
 
 local QluaService = {
   
@@ -218,17 +223,13 @@ function QluaService:terminate()
     return
   end
   
-  message("TERMINATION REQUEST")
-  
   self.poller:stop()
     
   -- Set non-negative linger to prevent termination hanging in case if there's a message pending for a disconnected subscriber
   
   if self.rep_socket ~= nil then self.rep_socket:close(1) end
   if self.pub_socket ~= nil then self.pub_socket:close(1) end
-  message("SOCKETS CLOSED")
   self.ctx:term(1)
-  message("CONTEXT TERMINATED")
 end
 
 function main()

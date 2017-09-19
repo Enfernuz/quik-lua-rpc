@@ -1,5 +1,19 @@
 local qlua_msg = require("quik-lua-rpc.messages.qlua_msg_pb")
-assert(qlua_msg ~= nil, "quik-lua-rpc.messages.qlua_msg_pb lib is missing")
+local table = require('table')
+local os = require('os')
+local string = require('string')
+
+local pairs = pairs
+assert(pairs ~= nil, "pairs function is missing")
+
+local ipairs = ipairs
+assert(ipairs ~= nil, "ipairs function is missing")
+
+local tostring = tostring
+assert(tostring ~= nil, "tostring function is missing")
+
+local error = error
+assert(error ~= nil, "error function is missing")
 
 local utils = {}
 
