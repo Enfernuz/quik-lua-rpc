@@ -10,6 +10,9 @@ assert(inspect ~= nil, "inspect lib is missing.")
 local bit = bit
 assert(bit ~= nil, "bit lib is missing.")
 
+local unpack = unpack
+assert(unpack ~= nil, "unpack function is missing.")
+
 local function require_request_args_not_nil(request_args) 
   if request_args == nil then error("Запрос не содержит аргументов.", 0) end
 end
