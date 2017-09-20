@@ -937,6 +937,36 @@ message SetLabelParams_Result {
     bool result = 1;
 }
 
+message SubscribeLevel2Quotes_Request {
+
+    string class_code = 1;
+    string sec_code = 2;
+}
+
+message SubscribeLevel2Quotes_Result {
+    bool result = 1;
+}
+
+message UnsubscribeLevel2Quotes_Request {
+
+    string class_code = 1;
+    string sec_code = 2;
+}
+
+message UnsubscribeLevel2Quotes_Result {
+    bool result = 1;
+}
+
+message IsSubscribedLevel2Quotes_Request {
+
+    string class_code = 1;
+    string sec_code = 2;
+}
+
+message IsSubscribedLevel2Quotes_Result {
+    bool result = 1;
+}
+
 message ParamRequest_Request {
 
     string class_code = 1;

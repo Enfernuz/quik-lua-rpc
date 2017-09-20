@@ -815,6 +815,27 @@ request_handlers[qlua_msg.ProcedureType.SET_LABEL_PARAMS] = function(request_arg
   return result
 end
 
+request_handlers[qlua_msg.ProcedureType.SUBSCRIBE_LEVEL_II_QUOTES] = function(request_args) 
+  local args = parse_request_args(request_args, qlua_msg.SubscribeLevel2Quotes_Request)
+  local result = qlua_msg.SubscribeLevel2Quotes_Result()
+  result.result = Subscribe_Level_II_Quotes(args.class_code, args.sec_code) -- returns true or false
+  return result
+end
+
+request_handlers[qlua_msg.ProcedureType.UNSUBSCRIBE_LEVEL_II_QUOTES] = function(request_args) 
+  local args = parse_request_args(request_args, qlua_msg.UnsubscribeLevel2Quotes_Request)
+  local result = qlua_msg.UnsubscribeLevel2Quotes_Result()
+  result.result = Unsubscribe_Level_II_Quotes(args.class_code, args.sec_code) -- returns true or false
+  return result
+end
+
+request_handlers[qlua_msg.ProcedureType.IS_SUBSCRIBED_LEVEL_II_QUOTES] = function(request_args) 
+  local args = parse_request_args(request_args, qlua_msg.IsSubscribedLevel2Quotes_Request)
+  local result = qlua_msg.IsSubscribedLevel2Quotes_Result()
+  result.result = IsSubscribed_Level_II_Quotes(args.class_code, args.sec_code) -- returns true or false
+  return result
+end
+
 request_handlers[qlua_msg.ProcedureType.PARAM_REQUEST] = function(request_args) 
   local args = parse_request_args(request_args, qlua_msg.ParamRequest_Request)
   local result = qlua_msg.ParamRequest_Result()

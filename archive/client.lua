@@ -25,13 +25,12 @@ function Client:start()
     
   local request = qlua_msg.Qlua_Request()
   
-  request.type = qlua_msg.ProcedureType.CANCEL_PARAM_REQUEST
+  request.type = qlua_msg.ProcedureType.UNSUBSCRIBE_LEVEL_II_QUOTES
 
-  local args = qlua_msg.CancelParamRequest_Request()
+  local args = qlua_msg.UnsubscribeLevel2Quotes_Request()
 
   args.class_code = "SPBFUT"
   args.sec_code = "SRU7"
-  args.db_name = "bid"
   --args.chart_tag = "TEST"
   --args.label_id = 4
   --[[
@@ -577,6 +576,18 @@ function Client:start()
     local result = qlua_msg.SetLabelParams_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [set_label_params: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.SUBSCRIBE_LEVEL_II_QUOTES then
+    local result = qlua_msg.SubscribeLevel2Quotes_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [subscribe_level2_quotes: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.UNSUBSCRIBE_LEVEL_II_QUOTES then
+    local result = qlua_msg.UnsubscribeLevel2Quotes_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [unsubscribe_level2_quotes: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.IS_SUBSCRIBED_LEVEL_II_QUOTES then
+    local result = qlua_msg.IsSubscribedLevel2Quotes_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [is_subscribed_level2_quotes: result=%s]\n", result.result) )
   elseif response.type == qlua_msg.ProcedureType.PARAM_REQUEST then
     local result = qlua_msg.ParamRequest_Result()
     result:ParseFromString(response.result)
