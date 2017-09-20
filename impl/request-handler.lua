@@ -22,6 +22,12 @@ assert(ipairs ~= nil, "ipairs function is missing.")
 local loadstring = loadstring
 assert(loadstring ~= nil, "loadstring function is missing.")
 
+local tostring = tostring
+assert(tostring ~= nil, "tostring function is missing.")
+
+local tonumber = tonumber
+assert(tonumber ~= nil, "tonumber function is missing.")
+
 local function parse_request_args(request_args, request_ctr)
   
   if request_args == nil then error("Запрос не содержит аргументов.", 0) end
@@ -388,7 +394,7 @@ request_handlers[qlua_msg.ProcedureType.DS_O] = function(request_args)
   local ds = RequestHandler:get_datasource(args.datasource_uuid)
   
   local result = qlua_msg.DataSourceO_Result()
-  result.value = ds:O(args.candle_index)
+  result.value = tostring( ds:O(args.candle_index) )
   return result
 end
 
@@ -398,7 +404,7 @@ request_handlers[qlua_msg.ProcedureType.DS_H] = function(request_args)
   local ds = RequestHandler:get_datasource(args.datasource_uuid)
   
   local result = qlua_msg.DataSourceH_Result()
-  result.value = ds:H(args.candle_index)
+  result.value = tostring( ds:H(args.candle_index) )
   return result
 end
 
@@ -408,7 +414,7 @@ request_handlers[qlua_msg.ProcedureType.DS_L] = function(request_args)
   local ds = RequestHandler:get_datasource(args.datasource_uuid)
   
   local result = qlua_msg.DataSourceL_Result()
-  result.value = ds:L(args.candle_index)
+  result.value = tostring( ds:L(args.candle_index) )
   return result
 end
 
@@ -418,7 +424,7 @@ request_handlers[qlua_msg.ProcedureType.DS_C] = function(request_args)
   local ds = RequestHandler:get_datasource(args.datasource_uuid)
   
   local result = qlua_msg.DataSourceC_Result()
-  result.value = ds:C(args.candle_index)
+  result.value = tostring( ds:C(args.candle_index) )
   return result
 end
 
@@ -428,7 +434,7 @@ request_handlers[qlua_msg.ProcedureType.DS_V] = function(request_args)
   local ds = RequestHandler:get_datasource(args.datasource_uuid)
   
   local result = qlua_msg.DataSourceV_Result()
-  result.value = ds:V(args.candle_index)
+  result.value = tostring( ds:V(args.candle_index) )
   return result
 end
 
@@ -492,7 +498,13 @@ end
 request_handlers[qlua_msg.ProcedureType.CALC_BUY_SELL] = function(request_args) 
   local args = parse_request_args(request_args, qlua_msg.CalcBuySell_Request)
   local result = qlua_msg.CalcBuySell_Result()
-  result.qty, result.comission = CalcBuySell(args.class_code, args.sec_code, args.client_code, args.account, args.price, args.is_buy, args.is_market) -- returns (0; 0) in case of error
+  local price = tonumber(args.price)
+  if price == nil then
+    error(string.format("Не удалось преобразовать в число значение '%s' параметра price", args.price), 0) 
+  end
+  local comission
+  result.qty, comission = CalcBuySell(args.class_code, args.sec_code, args.client_code, args.account, price, args.is_buy, args.is_market) -- returns (0; 0) in case of error
+  result.comission = tostring(comission)
   return result
 end
 
@@ -546,9 +558,13 @@ end
 
 request_handlers[qlua_msg.ProcedureType.GET_BUY_SELL_INFO] = function(request_args) 
   local args = parse_request_args(request_args, qlua_msg.GetBuySellInfo_Request)
-  local t = getBuySellInfo(args.firm_id, args.client_code, args.class_code, args.sec_code, args.price) -- returns {} in case of error
+  local price = tonumber(args.price)
+  if price == nil then 
+    error(string.format("Не удалось преобразовать в число значение '%s' параметра price", args.price), 0)
+  end
+  local t = getBuySellInfo(args.firm_id, args.client_code, args.class_code, args.sec_code, price) -- returns {} in case of error
   if t == nil then
-    error(string.format("Процедура getBuySellInfo(%s, %s, %s, %s, %d) возвратила nil.", args.firm_id, args.client_code, args.class_code, args.sec_code, args.price), 0)
+    error(string.format("Процедура getBuySellInfo(%s, %s, %s, %s, %s) возвратила nil.", args.firm_id, args.client_code, args.class_code, args.sec_code, price), 0)
   else
     local result = qlua_msg.GetBuySellInfo_Result()
     utils.put_to_string_string_pb_map(t, result.buy_sell_info, qlua_msg.GetBuySellInfo_Result.BuySellInfoEntry)

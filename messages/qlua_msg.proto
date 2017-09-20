@@ -273,7 +273,7 @@ message PrintDbgStr_Request {
 message GetItem_Request {
 
     string table_name = 1;
-    double index = 2;
+    int32 index = 2;
 }
 
 message GetItem_Result {
@@ -517,7 +517,7 @@ message DataSourceO_Request {
 }
 
 message DataSourceO_Result {
-    double value = 1; // use of double for money representation!
+    string value = 1; // use of string instead of double for a safe money representation
 }
 
 message DataSourceH_Request {
@@ -527,7 +527,7 @@ message DataSourceH_Request {
 }
 
 message DataSourceH_Result {
-    double value = 1; // use of double for money representation!
+    string value = 1; // use of string instead of double for a safe money representation
 }
 
 message DataSourceL_Request {
@@ -537,7 +537,7 @@ message DataSourceL_Request {
 }
 
 message DataSourceL_Result {
-    double value = 1; // use of double for money representation!
+    string value = 1; // use of string instead of double for a safe money representation
 }
 
 message DataSourceC_Request {
@@ -547,7 +547,7 @@ message DataSourceC_Request {
 }
 
 message DataSourceC_Result {
-    double value = 1; // use of double for money representation!
+    string value = 1; // use of string instead of double for a safe money representation
 }
 
 message DataSourceV_Request {
@@ -557,7 +557,7 @@ message DataSourceV_Request {
 }
 
 message DataSourceV_Result {
-    double value = 1; // use of double for money representation!
+    string value = 1; // use of string instead of double for a safe quantity representation
 }
 
 message DataSourceT_Request {
@@ -617,7 +617,7 @@ message CalcBuySell_Request {
     string sec_code = 2;
     string client_code = 3;
     string account = 4;
-    double price = 5;
+    string price = 5;
     bool is_buy = 6;
     bool is_market = 7;
 }
@@ -625,7 +625,7 @@ message CalcBuySell_Request {
 message CalcBuySell_Result {
 
     int32 qty = 1;
-    double comission = 2; // use of double for money?
+    string comission = 2;
 }
 
 message GetParamEx_Request {
@@ -666,7 +666,7 @@ message GetBuySellInfo_Request {
     string client_code = 2;
     string class_code = 3;
     string sec_code = 4;
-    double price = 5;
+    string price = 5;
 }
 
 message GetBuySellInfo_Result {
