@@ -25,12 +25,13 @@ function Client:start()
     
   local request = qlua_msg.Qlua_Request()
   
-  request.type = qlua_msg.ProcedureType.BIT_BAND
+  request.type = qlua_msg.ProcedureType.CANCEL_PARAM_REQUEST
 
-  local args = qlua_msg.BitBAnd_Request()
+  local args = qlua_msg.CancelParamRequest_Request()
 
-  args.x1 = 3
-  args.x2 = 3
+  args.class_code = "SPBFUT"
+  args.sec_code = "SRU7"
+  args.db_name = "bid"
   --args.chart_tag = "TEST"
   --args.label_id = 4
   --[[
@@ -576,6 +577,14 @@ function Client:start()
     local result = qlua_msg.SetLabelParams_Result()
     result:ParseFromString(response.result)
     print( string.format("Received a reply [set_label_params: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.PARAM_REQUEST then
+    local result = qlua_msg.ParamRequest_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [param_request: result=%s]\n", result.result) )
+  elseif response.type == qlua_msg.ProcedureType.CANCEL_PARAM_REQUEST then
+    local result = qlua_msg.CancelParamRequest_Result()
+    result:ParseFromString(response.result)
+    print( string.format("Received a reply [cancel_param_request: result=%s]\n", result.result) )
   elseif response.type == qlua_msg.ProcedureType.BIT_TOHEX then
     local result = qlua_msg.BitToHex_Result()
     result:ParseFromString(response.result)

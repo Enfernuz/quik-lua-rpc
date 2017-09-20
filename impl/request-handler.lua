@@ -815,6 +815,20 @@ request_handlers[qlua_msg.ProcedureType.SET_LABEL_PARAMS] = function(request_arg
   return result
 end
 
+request_handlers[qlua_msg.ProcedureType.PARAM_REQUEST] = function(request_args) 
+  local args = parse_request_args(request_args, qlua_msg.ParamRequest_Request)
+  local result = qlua_msg.ParamRequest_Result()
+  result.result = ParamRequest(args.class_code, args.sec_code, args.db_name) -- returns true or false
+  return result
+end
+
+request_handlers[qlua_msg.ProcedureType.CANCEL_PARAM_REQUEST] = function(request_args) 
+  local args = parse_request_args(request_args, qlua_msg.CancelParamRequest_Request)
+  local result = qlua_msg.CancelParamRequest_Result()
+  result.result = CancelParamRequest(args.class_code, args.sec_code, args.db_name) -- returns true or false
+  return result
+end
+
 request_handlers[qlua_msg.ProcedureType.BIT_TOHEX] = function(request_args) 
   local args = parse_request_args(request_args, qlua_msg.BitToHex_Request)
   local result = qlua_msg.BitToHex_Result()

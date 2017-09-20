@@ -86,8 +86,8 @@ enum ProcedureType {
     UNSUBSCRIBE_LEVEL_II_QUOTES = 72; // NOT IMPLEMENTED YET
     IS_SUBSCRIBED_LEVEL_II_QUOTES = 73; // NOT IMPLEMENTED YET
     
-    PARAM_REQUEST = 74; // NOT IMPLEMENTED YET
-    CANCEL_PARAM_REQUEST = 75; // NOT IMPLEMENTED YET
+    PARAM_REQUEST = 74;
+    CANCEL_PARAM_REQUEST = 75;
     
     BIT_TOHEX = 76;
     BIT_BNOT = 77;
@@ -934,6 +934,28 @@ message SetLabelParams_Request {
 }
 
 message SetLabelParams_Result {
+    bool result = 1;
+}
+
+message ParamRequest_Request {
+
+    string class_code = 1;
+    string sec_code = 2;
+    string db_name = 3;
+}
+
+message ParamRequest_Result {
+    bool result = 1;
+}
+
+message CancelParamRequest_Request {
+
+    string class_code = 1;
+    string sec_code = 2;
+    string db_name = 3;
+}
+
+message CancelParamRequest_Result {
     bool result = 1;
 }
 
