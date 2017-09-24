@@ -1,23 +1,12 @@
 local qlua_msg = require("quik-lua-rpc.messages.qlua_msg_pb")
-assert(qlua_msg ~= nil, "quik-lua-rpc.messages.qlua_msg_pb lib is missing")
-
+local qlua_events = require("quik-lua-rpc.messages.qlua_event_data_pb")
 local zmq = require("lzmq")
-assert(zmq ~= nil, "lzmq lib is missing.")
-
 local zmq_poller = require("lzmq.poller")
-assert(zmq_poller ~= nil, "lzmq.poller lib is missing.")
-
 local inspect = require("inspect")
-assert(inspect ~= nil, "inspect lib is missing.")
-
 local utils = require("quik-lua-rpc.utils.utils")
-assert(utils ~= nil, "quik-lua-rpc.utils.utils lib is missing.")
-
 local uuid = require("quik-lua-rpc.utils.uuid")
-assert(uuid ~= nil, "quik-lua-rpc.utils.uuid lib is missing.")
-
 local request_handler = require("quik-lua-rpc.impl.request-handler")
-assert(request_handler ~= nil, "quik-lua-rpc.impl.request-handler lib is missing.")
+local event_handler = require("quik-lua-rpc.impl.event-handler")
 
 local pcall = pcall
 assert(pcall ~= nil, "pcall function is missing.")
@@ -35,132 +24,134 @@ local QluaService = {
 }
 
 function OnClose()
-  QluaService:publish(qlua_msg.EventType.ON_CLOSE)
+  QluaService:publish(qlua_events.EventType.ON_CLOSE)
   QluaService:terminate()
 end
 
 function OnStop(signal)
-  QluaService:publish(qlua_msg.EventType.PUBLISHER_OFFLINE)
+  QluaService:publish(qlua_events.EventType.PUBLISHER_OFFLINE)
   QluaService:terminate()
 end
 
 function OnInit()
   QluaService:start("tcp://127.0.0.1:5560", "tcp://127.0.0.1:5561")
-  QluaService:publish(qlua_msg.EventType.PUBLISHER_ONLINE)
+  QluaService:publish(qlua_events.EventType.PUBLISHER_ONLINE)
 end
 
 function OnFirm(firm)
-  QluaService:publish(qlua_msg.EventType.ON_FIRM, firm)
+  QluaService:publish(qlua_events.EventType.ON_FIRM, firm)
 end
 
 function OnAllTrade(alltrade)
-  QluaService:publish(qlua_msg.EventType.ON_ALL_TRADE, alltrade)
+  QluaService:publish(qlua_events.EventType.ON_ALL_TRADE, alltrade)
 end
 
 function OnTrade(trade)
-  QluaService:publish(qlua_msg.EventType.ON_TRADE, trade)
+  QluaService:publish(qlua_events.EventType.ON_TRADE, trade)
 end
 
 function OnOrder(order)
-  QluaService:publish(qlua_msg.EventType.ON_ORDER, order)
+  QluaService:publish(qlua_events.EventType.ON_ORDER, order)
 end
 
 function OnAccountBalance(acc_bal)
-  QluaService:publish(qlua_msg.EventType.ON_ACCOUNT_BALANCE, acc_bal)
+  QluaService:publish(qlua_events.EventType.ON_ACCOUNT_BALANCE, acc_bal)
 end
 
 function OnFuturesLimitChange(fut_limit)
-  QluaService:publish(qlua_msg.EventType.ON_FUTURES_LIMIT_CHANGE, fut_limit)
+  QluaService:publish(qlua_events.EventType.ON_FUTURES_LIMIT_CHANGE, fut_limit)
 end
 
 function OnFuturesLimitDelete(lim_del)
-  QluaService:publish(qlua_msg.EventType.ON_FUTURES_LIMIT_DELETE, lim_del)
+  QluaService:publish(qlua_events.EventType.ON_FUTURES_LIMIT_DELETE, lim_del)
 end
 
 function OnFuturesClientHolding(fut_pos)
-  QluaService:publish(qlua_msg.EventType.ON_FUTURES_CLIENT_HOLDING, fut_pos)
+  QluaService:publish(qlua_events.EventType.ON_FUTURES_CLIENT_HOLDING, fut_pos)
 end
 
 function OnMoneyLimit(mlimit)
-  QluaService:publish(qlua_msg.EventType.ON_MONEY_LIMIT, mlimit)
+  QluaService:publish(qlua_events.EventType.ON_MONEY_LIMIT, mlimit)
 end
 
 function OnMoneyLimitDelete(mlimit_del)
-  QluaService:publish(qlua_msg.EventType.ON_MONEY_LIMIT_DELETE, mlimit_del)
+  QluaService:publish(qlua_events.EventType.ON_MONEY_LIMIT_DELETE, mlimit_del)
 end
 
 function OnDepoLimit(dlimit)
-  QluaService:publish(qlua_msg.EventType.ON_DEPO_LIMIT, dlimit)
+  QluaService:publish(qlua_events.EventType.ON_DEPO_LIMIT, dlimit)
 end
 
 function OnDepoLimitDelete(dlimit_del)
-  QluaService:publish(qlua_msg.EventType.ON_DEPO_LIMIT_DELETE, dlimit_del)
+  QluaService:publish(qlua_events.EventType.ON_DEPO_LIMIT_DELETE, dlimit_del)
 end
 
 function OnAccountPosition(acc_pos)
-  QluaService:publish(qlua_msg.EventType.ON_ACCOUNT_POSITION, acc_pos)
+  QluaService:publish(qlua_events.EventType.ON_ACCOUNT_POSITION, acc_pos)
 end
 
-function OnNegDeal(neg_deals)
-  QluaService:publish(qlua_msg.EventType.ON_NEG_DEAL, neg_deals)
+function OnNegDeal(neg_deal)
+  QluaService:publish(qlua_events.EventType.ON_NEG_DEAL, neg_deal)
 end
 
 function OnNegTrade(neg_trade)
-  QluaService:publish(qlua_msg.EventType.ON_NEG_TRADE, neg_trade)
+  QluaService:publish(qlua_events.EventType.ON_NEG_TRADE, neg_trade)
 end
 
 function OnStopOrder(stop_order)
-  QluaService:publish(qlua_msg.EventType.ON_STOP_ORDER, stop_order)
+  QluaService:publish(qlua_events.EventType.ON_STOP_ORDER, stop_order)
 end
 
 function OnTransReply(trans_reply)
-  QluaService:publish(qlua_msg.EventType.ON_TRANS_REPLY, trans_reply)
+  QluaService:publish(qlua_events.EventType.ON_TRANS_REPLY, trans_reply)
 end
 
 function OnParam(class_code, sec_code)
   local t = {}
-  t["class_code"] = class_code
-  t["sec_code"] = sec_code
-  QluaService:publish(qlua_msg.EventType.ON_PARAM, t)
+  t.class_code = class_code
+  t.sec_code = sec_code
+  QluaService:publish(qlua_events.EventType.ON_PARAM, t)
 end
 
 function OnQuote(class_code, sec_code)
   local t = {}
-  t["class_code"] = class_code
-  t["sec_code"] = sec_code
-  QluaService:publish(qlua_msg.EventType.ON_QUOTE, t)
+  t.class_code = class_code
+  t.sec_code = sec_code
+  QluaService:publish(qlua_events.EventType.ON_QUOTE, t)
 end
 
 function OnDisconnected()
-  QluaService:publish(qlua_msg.EventType.ON_DISCONNECTED)
+  QluaService:publish(qlua_events.EventType.ON_DISCONNECTED)
 end
 
 function OnConnected()
-  QluaService:publish(qlua_msg.EventType.ON_CONNECTED)
+  QluaService:publish(qlua_events.EventType.ON_CONNECTED)
 end
 
 function OnCleanUp()
-  QluaService:publish(qlua_msg.EventType.ON_CLEAN_UP)
+  QluaService:publish(qlua_events.EventType.ON_CLEAN_UP)
 end
 
 function QluaService:publish(event_type, event_data) 
   
   if self.pub_socket ~= nil and self.is_running then 
     
-    local response = qlua_msg.Qlua_Event()
-    response.type = event_type
-    
-    if event_data ~= nil then
-      local data_wrapper = qlua_msg.StringStringTable()
-      utils.put_to_string_string_pb_map(event_data, data_wrapper.kv, qlua_msg.StringStringTable.KvEntry)
-      response.data = data_wrapper:SerializeToString()
-    end
+    local pub_data = event_handler:handle(event_type, event_data)
 
-    local ser_response = response:SerializeToString()
-    local ok, err = pcall(function() self.pub_socket:send_more( tostring(event_type) ) end) -- send the subscription key
-    if ok then
-      local msg = zmq.msg_init_data(ser_response)
-      ok, err = pcall(function() msg:send(self.pub_socket) end)
+    local ok, err
+    if pub_data == nil then
+      ok, err = pcall(function() self.pub_socket:send(event_type) end) -- send the subscription key
+      -- if not ok then (log error somehow...) end
+    else
+      ok, err = pcall(function() self.pub_socket:send_more(event_type) end) -- send the subscription key
+      
+      if ok then
+        local msg = zmq.msg_init_data( pub_data:SerializeToString() )
+        ok, err = pcall(function() msg:send(self.pub_socket) end)
+        -- if not ok then (log error somehow...) end
+      else
+        -- (log error somehow...)
+      end
     end
   end
 end
@@ -191,7 +182,7 @@ function QluaService:start(rep_socket_addr, pub_socket_addr)
       local msg_request = zmq.msg_init()
 
       local ok, ret = pcall( function() return msg_request:recv(self.rep_socket) end)
-      if ok and ret ~= nil and ret ~= -1 then
+      if ok and not (ret == nil or ret == -1) then
         local request = qlua_msg.Qlua_Request()
         request:ParseFromString( ret:data() )
         
@@ -199,6 +190,7 @@ function QluaService:start(rep_socket_addr, pub_socket_addr)
         
         local msg_response = zmq.msg_init_data( response:SerializeToString() )
         ok = pcall(function() msg_response:send(QluaService.rep_socket) end)
+        -- if not ok then (log error somehow...) end
       end
     end)
   end

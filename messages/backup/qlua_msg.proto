@@ -1,8 +1,13 @@
 syntax = "proto3";
 
-import "quik-lua-rpc/messages/qlua_types.proto";
-
 package qlua.procs;
+
+//
+// At the moment of writing (23 September 2017), the protoc-gen-lua plugin from https://github.com/urbanairship/protobuf-lua
+// cannot generate valid Lua code in the case when multiple .proto files involved and 
+// there are imports in them.
+// Thus the definitions have to be in a single large pile for a while.
+//
 
 enum ProcedureType {
 
@@ -143,10 +148,533 @@ enum MessageIconType {
     MESSAGE_ICON_TYPE_ERROR = 3;
 }
 
+message DateTimeEntry {
+
+    string mcs = 1; // not sure if it's integral, so leave it be string until figured out
+    string ms = 2; // not sure if it's integral, so leave it be string until figured out
+    int32 sec = 3;
+    int32 min = 4;
+    int32 hour = 5;
+    int32 day = 6;
+    int32 week_day = 7;
+    int32 month = 8;
+    int32 year = 9;
+}
+
+message CandleEntry {
+
+    string open = 1;
+    string close = 2;
+    string high = 3;
+    string low = 4;
+    string volume = 5;
+    int32 does_exist = 6;
+    DateTimeEntry datetime = 7;
+}
+
+message TableEntry {
+
+    string k = 1;
+    string v = 2;
+}
+
+enum EventType {
+
+    EVENT_TYPE_UNKNOWN = 0;
+    PUBLISHER_ONLINE = 1; // no data attached
+    PUBLISHER_OFFLINE = 2; // no data attached
+    ON_CLOSE = 3; // no data attached
+    ON_CONNECTED = 4; // no data attached
+    ON_DISCONNECTED = 5; // no data attached
+    ON_FIRM = 6; 
+    ON_ALL_TRADE = 7; 
+    ON_TRADE = 8; 
+    ON_ORDER = 9;
+    ON_ACCOUNT_BALANCE = 10;
+    ON_FUTURES_LIMIT_CHANGE = 11;
+    ON_FUTURES_LIMIT_DELETE = 12;
+    ON_FUTURES_CLIENT_HOLDING = 13;
+    ON_MONEY_LIMIT = 14;
+    ON_MONEY_LIMIT_DELETE = 15;
+    ON_DEPO_LIMIT = 16;
+    ON_DEPO_LIMIT_DELETE = 17;
+    ON_ACCOUNT_POSITION = 18;
+    ON_NEG_DEAL = 19;
+    ON_NEG_TRADE = 20;
+    ON_STOP_ORDER = 21;
+    ON_TRANS_REPLY = 22;
+    ON_PARAM = 23;
+    ON_QUOTE = 24;
+    ON_CLEAN_UP = 25; // no data attached
+}
+
+message Firm {
+
+    string firmid = 1;
+    string firm_name = 2;
+    int32 status = 3; // NUMBER in QLUA
+    string exchange = 4;
+}
+
+message AllTrade {
+
+    int64 trade_num = 1; // NUMBER in QLUA
+    uint32 flags = 2; // NUMBER in QLUA
+    string price = 3; // NUMBER in QLUA
+    uint32 qty = 4; // NUMBER in QLUA
+    string value = 5; // NUMBER in QLUA
+    string accruedint = 6; // NUMBER in QLUA
+    string yield = 7; // NUMBER in QLUA
+    string settlecode = 8;
+    string reporate = 9; // NUMBER in QLUA
+    string repovalue = 10; // NUMBER in QLUA
+    string repo2value = 11; // NUMBER in QLUA
+    string repoterm = 12; // NUMBER in QLUA
+    string sec_code = 13;
+    string class_code = 14;
+    DateTimeEntry datetime = 15; // TABLE in QLUA
+    int32 period = 16; // NUMBER in QLUA
+    string open_interest = 17; // NUMBER in QLUA
+    string exchange_code = 18;
+}
+
+message Trade {
+
+    int64 trade_num = 1; // NUMBER in QLUA
+    int64 order_num = 2; // NUMBER in QLUA
+    string brokerref = 3;
+    string userid = 4;
+    string firmid = 5;
+    string canceled_uid = 6; // NUMBER in QLUA
+    string account = 7;
+    string price = 8; // NUMBER in QLUA
+    uint32 qty = 9; // NUMBER in QLUA
+    string value = 10; // NUMBER in QLUA
+    string accruedint = 11; // NUMBER in QLUA
+    string yield = 12; // NUMBER in QLUA
+    string settlecode = 13;
+    string cpfirmid = 14;
+    uint32 flags = 15; // NUMBER in QLUA
+    string price2 = 16; // NUMBER in QLUA
+    string reporate = 17; // NUMBER in QLUA
+    string client_code = 18;
+    string accrued2 = 19; // NUMBER in QLUA
+    string repoterm = 20; // NUMBER in QLUA
+    string repovalue = 21; // NUMBER in QLUA
+    string repo2value = 22; // NUMBER in QLUA
+    string start_discount = 23; // NUMBER in QLUA
+    string lower_discount = 24; // NUMBER in QLUA
+    string upper_discount = 25; // NUMBER in QLUA
+    string block_securities = 26; // NUMBER in QLUA
+    string clearing_comission = 27; // NUMBER in QLUA
+    string exchange_comission = 28; // NUMBER in QLUA
+    string tech_center_comission = 29; // NUMBER in QLUA
+    string settle_date = 30; // NUMBER in QLUA
+    string settle_currency = 31;
+    string trade_currency = 32;
+    string exchange_code = 33;
+    string station_id = 34;
+    string sec_code = 35;
+    string class_code = 36;
+    DateTimeEntry datetime = 37; // TABLE in QLUA
+    string bank_acc_id = 38;
+    string broker_comission = 39; // NUMBER in QLUA
+    string linked_trade = 40; // NUMBER in QLUA
+    int32 period = 41; // NUMBER in QLUA
+    string trans_id = 42; // NUMBER in QLUA; if not nullable then it should be of type long
+    int32 kind = 43; // NUMBER in QLUA
+    string clearing_bank_accid = 44;
+    DateTimeEntry canceled_datetime = 45; // TABLE in QLUA
+    string clearing_firmid = 46;
+    string system_ref = 47;
+    string uid = 48; // NUMBER in QLUA
+}
+
+message Order {
+
+    int64 order_num = 1; // NUMBER in QLUA
+    uint32 flags = 2; // NUMBER in QLUA
+    string brokerref = 3;
+    string userid = 4;
+    string firmid = 5;
+    string account = 6;
+    string price = 7; // NUMBER in QLUA
+    uint32 qty = 8; // NUMBER in QLUA
+    string balance = 9; // NUMBER in QLUA
+    string value = 10; // NUMBER in QLUA
+    string accruedint = 11; // NUMBER in QLUA
+    string yield = 12; // NUMBER in QLUA
+    string trans_id = 13; // NUMBER in QLUA; if not nullable then it should be of type long
+    string client_code = 14;
+    string price2 = 15; // NUMBER in QLUA
+    string settlecode = 16;
+    string uid = 17; // NUMBER in QLUA
+    string canceled_uid = 18; // NUMBER in QLUA
+    string exchange_code = 19;
+    string activation_time = 20; // NUMBER in QLUA
+    string linkedorder = 21; // NUMBER in QLUA
+    string expiry = 22; // NUMBER in QLUA
+    string sec_code = 23;
+    string class_code = 24;
+    DateTimeEntry datetime = 25; // TABLE in QLUA
+    DateTimeEntry withdraw_datetime = 26; // TABLE in QLUA
+    string bank_acc_id = 27;
+    int32 value_entry_type = 28; // NUMBER in QLUA
+    string repoterm = 29; // NUMBER in QLUA
+    string repovalue = 30; // NUMBER in QLUA
+    string repo2value = 31; // NUMBER in QLUA
+    string repo_value_balance = 32; // NUMBER in QLUA
+    string start_discount = 33; // NUMBER in QLUA
+    string reject_reason = 34;
+    string ext_order_flags = 35; // NUMBER in QLUA; not documented as non-nilable, so it should be string
+    uint32 min_qty = 36; // NUMBER in QLUA
+    int32 exec_type = 37; // NUMBER in QLUA
+    int32 side_qualifier = 38; // NUMBER in QLUA
+    int32 acnt_type = 39; // NUMBER in QLUA
+    int32 capacity = 40; // NUMBER in QLUA
+    int32 passive_only_order = 41; // NUMBER in QLUA
+    int32 visible = 42; // NUMBER in QLUA
+}
+
+message AccountBalance {
+
+    string firmid = 1;
+    string sec_code = 2;
+    string trdaccid = 3;
+    string depaccid = 4;
+    string openbal = 5; // NUMBER in QLUA
+    string currentpos = 6; // NUMBER in QLUA
+    string plannedpossell = 7; // NUMBER in QLUA
+    string plannedposbuy = 8; // NUMBER in QLUA
+    string planbal = 9; // NUMBER in QLUA
+    string usqtyb = 10; // NUMBER in QLUA
+    string usqtys = 11; // NUMBER in QLUA
+    string planned = 12; // NUMBER in QLUA
+    string settlebal = 13; // NUMBER in QLUA
+    string bank_acc_id = 14;
+    int32 firmuse = 15; // NUMBER in QLUA
+}
+
+message FuturesLimit {
+
+    string firmid = 1;
+    string trdaccid = 2;
+    int32 limit_type = 3; // NUMBER in QLUA
+    string liquidity_coef = 4; // NUMBER in QLUA
+    string cbp_prev_limit = 5; // NUMBER in QLUA
+    string cbplimit = 6; // NUMBER in QLUA
+    string cbplused = 7; // NUMBER in QLUA
+    string cbplplanned = 8; // NUMBER in QLUA
+    string varmargin = 9; // NUMBER in QLUA
+    string accruedint = 10; // NUMBER in QLUA
+    string cbplused_for_orders = 11; // NUMBER in QLUA
+    string cbplused_for_positions = 12; // NUMBER in QLUA
+    string options_premium = 13; // NUMBER in QLUA
+    string ts_comission = 14; // NUMBER in QLUA
+    string kgo = 15; // NUMBER in QLUA
+    string currcode = 16;
+    string real_varmargin = 17; // NUMBER in QLUA
+}
+
+message FuturesLimitDelete {
+
+    string firmid = 1;
+    int32 limit_type = 2; // NUMBER in QLUA
+}
+
+message FuturesClientHolding {
+
+    string firmid = 1;
+    string trdaccid = 2;
+    string sec_code = 3;
+    int32 type = 4; // NUMBER in QLUA
+    string startbuy = 5; // NUMBER in QLUA
+    string startsell = 6; // NUMBER in QLUA
+    string todaybuy = 7; // NUMBER in QLUA
+    string todaysell = 8; // NUMBER in QLUA
+    string totalnet = 9; // NUMBER in QLUA
+    uint32 openbuys = 10; // NUMBER in QLUA
+    uint32 opensells = 11; // NUMBER in QLUA
+    string cbplused = 12; // NUMBER in QLUA
+    string cbplplanned = 13; // NUMBER in QLUA
+    string varmargin = 14; // NUMBER in QLUA
+    string avrposnprice = 15; // NUMBER in QLUA
+    string positionvalue = 16; // NUMBER in QLUA
+    string real_varmargin = 17; // NUMBER in QLUA
+    string total_varmargin = 18; // NUMBER in QLUA
+    int32 session_status = 19; // NUMBER in QLUA
+}
+
+message MoneyLimit {
+
+    string currcode = 1;
+    string tag = 2;
+    string firmid = 3;
+    string client_code = 4;
+    string openbal = 5; // NUMBER in QLUA
+    string openlimit = 6; // NUMBER in QLUA
+    string currentbal = 7; // NUMBER in QLUA
+    string currentlimit = 8; // NUMBER in QLUA
+    string locked = 9; // NUMBER in QLUA
+    string locked_value_coef = 10; // NUMBER in QLUA
+    string locked_margin_value = 11; // NUMBER in QLUA
+    string leverage = 12; // NUMBER in QLUA
+    sint32 limit_kind = 13; // NUMBER in QLUA
+}
+
+message MoneyLimitDelete {
+
+    string currcode = 1;
+    string tag = 2;
+    string client_code = 3;
+    string firmid = 4;
+    sint32 limit_kind = 5;
+}
+
+message DepoLimit {
+
+    string sec_code = 1;
+    string trdaccid = 2;
+    string firmid = 3;
+    string client_code = 4;
+    sint32 openbal = 5; // NUMBER in QLUA
+    uint32 openlimit = 6; // NUMBER in QLUA
+    sint32 currentbal = 7; // NUMBER in QLUA
+    uint32 currentlimit = 8; // NUMBER in QLUA
+    uint32 locked_sell = 9; // NUMBER in QLUA
+    uint32 locked_buy = 10; // NUMBER in QLUA
+    string locked_buy_value = 11; // NUMBER in QLUA
+    string locked_sell_value = 12; // NUMBER in QLUA
+    string awg_position_price = 13; // NUMBER in QLUA
+    sint32 limit_kind = 14; // NUMBER in QLUA
+}
+
+message DepoLimitDelete {
+
+    string sec_code = 1;
+    string trdaccid = 2;
+    string firmid = 3;
+    string client_code = 4;
+    sint32 limit_kind = 5;
+}
+
+message AccountPosition {
+
+    string firmid = 1;
+    string currcode = 2;
+    string tag = 3;
+    string description = 4;
+    string openbal = 5; // NUMBER in QLUA
+    string currentpos = 6; // NUMBER in QLUA
+    string plannedpos = 7; // NUMBER in QLUA
+    string limit1 = 8; // NUMBER in QLUA
+    string limit2 = 9; // NUMBER in QLUA
+    string orderbuy = 10; // NUMBER in QLUA
+    string ordersell = 11; // NUMBER in QLUA
+    string netto = 12; // NUMBER in QLUA
+    string plannedbal = 13; // NUMBER in QLUA
+    string debit = 14; // NUMBER in QLUA
+    string credit = 15; // NUMBER in QLUA
+    string bank_acc_id = 16;
+    string margincall = 17; // NUMBER in QLUA
+    string settlebal = 18; // NUMBER in QLUA
+}
+
+message NegDeal {
+
+    int64 neg_deal_num = 1; // NUMBER in QLUA
+    string neg_deal_time = 2; // NUMBER in QLUA
+    int32 flags = 3; // NUMBER in QLUA
+    string brokerref = 4;
+    string userid = 5;
+    string firmid = 6;
+    string cpuserid = 7;
+    string cpfirmid = 8;
+    string account = 9;
+    string price = 10; // NUMBER in QLUA
+    int32 qty = 11; // NUMBER in QLUA
+    string matchref = 12;
+    string settlecode = 13;
+    string yield = 14; // NUMBER in QLUA
+    string accruedint = 15; // NUMBER in QLUA
+    string value = 16; // NUMBER in QLUA
+    string price2 = 17; // NUMBER in QLUA
+    string reporate = 18; // NUMBER in QLUA
+    string refundrate = 19; // NUMBER in QLUA
+    string trans_id = 20; // NUMBER in QLUA
+    string client_code = 21;
+    int32 repoentry = 22;
+    string repovalue = 23; // NUMBER in QLUA
+    string repo2value = 24; // NUMBER in QLUA
+    string repoterm = 25; // NUMBER in QLUA
+    string start_discount = 26; // NUMBER in QLUA
+    string lower_discount = 27; // NUMBER in QLUA
+    string upper_discount = 28; // NUMBER in QLUA
+    string block_securities = 29; // NUMBER in QLUA
+    string uid = 30; // NUMBER in QLUA
+    string withdraw_time = 31; // NUMBER in QLUA
+    string neg_deal_date = 32; // NUMBER in QLUA
+    string balance = 33; // NUMBER in QLUA
+    string origin_repovalue = 34; // NUMBER in QLUA
+    string origin_qty = 35; // NUMBER in QLUA
+    string origin_discount = 36; // NUMBER in QLUA
+    string neg_deal_activation_date = 37; // NUMBER in QLUA
+    string neg_deal_activation_time = 38; // NUMBER in QLUA
+    string quoteno = 39; // NUMBER in QLUA
+    string settle_currency = 40;
+    string sec_code = 41;
+    string class_code = 42;
+    string bank_acc_id = 43;
+    string withdraw_date = 44; // NUMBER in QLUA
+    string linkedorder = 45; // NUMBER in QLUA
+    DateTimeEntry activation_date_time = 46; // TABLE in QLUA
+    DateTimeEntry withdraw_date_time = 47; // TABLE in QLUA
+    DateTimeEntry date_time = 48; // TABLE in QLUA
+}
+
+message NegTrade {
+
+    int64 trade_num = 1; // NUMBER in QLUA
+    string trade_date = 2; // NUMBER in QLUA
+    string settle_date = 3; // NUMBER in QLUA
+    int32 flags = 4; // NUMBER in QLUA
+    string brokerref = 5;
+    string firmid = 6;
+    string account = 7;
+    string cpfirmid = 8;
+    string cpaccount = 9;
+    string price = 10; // NUMBER in QLUA
+    uint32 qty = 11; // NUMBER in QLUA
+    string value = 12; // NUMBER in QLUA
+    string settlecode = 13;
+    string report_num = 14; // NUMBER in QLUA
+    string cpreport_num = 15; // NUMBER in QLUA
+    string accruedint = 16; // NUMBER in QLUA
+    string repotradeno = 17; // NUMBER in QLUA
+    string price1 = 18; // NUMBER in QLUA
+    string reporate = 19; // NUMBER in QLUA
+    string price2 = 20; // NUMBER in QLUA
+    string client_code = 21;
+    string ts_comission = 22; // NUMBER in QLUA
+    string balance = 23; // NUMBER in QLUA
+    string settle_time = 24; // NUMBER in QLUA
+    string amount = 25; // NUMBER in QLUA
+    string repovalue = 26; // NUMBER in QLUA
+    string repoterm = 27; // NUMBER in QLUA
+    string repo2value = 28; // NUMBER in QLUA
+    string return_value = 29; // NUMBER in QLUA
+    string discount = 30; // NUMBER in QLUA
+    string lower_discount = 31; // NUMBER in QLUA
+    string upper_discount = 32; // NUMBER in QLUA
+    string block_securities = 33; // NUMBER in QLUA
+    string urgency_flag = 34; // NUMBER in QLUA
+    int32 type = 35; // NUMBER in QLUA
+    int32 operation_type = 36; // NUMBER in QLUA
+    string expected_discount = 37; // NUMBER in QLUA
+    string expected_quantity = 38; // NUMBER in QLUA
+    string expected_repovalue = 39; // NUMBER in QLUA
+    string expected_repo2value = 40; // NUMBER in QLUA
+    string expected_return_value = 41; // NUMBER in QLUA
+    string order_num = 42; // NUMBER in QLUA
+    string report_trade_date = 43; // NUMBER in QLUA
+    int32 settled = 44;  // NUMBER in QLUA
+    int32 clearing_type = 45; // NUMBER in QLUA
+    string report_comission = 46; // NUMBER in QLUA
+    string coupon_payment = 47; // NUMBER in QLUA
+    string principal_payment = 48; // NUMBER in QLUA
+    string principal_payment_date = 49; // NUMBER in QLUA
+    string nextdaysettle = 50; // NUMBER in QLUA
+    string settle_currency = 51;
+    string sec_code = 52;
+    string class_code = 53;
+    string compval = 54; // NUMBER in QLUA
+    string parenttradeno = 55; // NUMBER in QLUA
+    string bankid = 56;
+    string bankaccid = 57;
+    string precisebalance = 58; // NUMBER in QLUA
+    string confirmtime = 59; // NUMBER in QLUA
+    int32 ex_flags = 60; // NUMBER in QLUA
+    string confirmreport = 61; // NUMBER in QLUA
+}
+
+message StopOrder {
+
+    int64 order_num = 1; // NUMBER in QLUA
+    string ordertime = 2; // NUMBER in QLUA
+    int32 flags = 3; // NUMBER in QLUA
+    string brokerref = 4;
+    string firmid = 5;
+    string account = 6;
+    int32 condition = 7; // NUMBER in QLUA
+    string condition_price = 8; // NUMBER in QLUA
+    string price = 9; // NUMBER in QLUA
+    uint32 qty = 10; // NUMBER in QLUA
+    string linkedorder = 11; // NUMBER in QLUA
+    string expiry = 12; // NUMBER in QLUA
+    string trans_id = 13; // NUMBER in QLUA
+    string client_code = 14;
+    string co_order_num = 15; // NUMBER in QLUA
+    string co_order_price = 16; // NUMBER in QLUA
+    int32 stop_order_type = 17; // NUMBER in QLUA
+    string orderdate = 18; // NUMBER in QLUA
+    string alltrade_num = 19; // NUMBER in QLUA
+    int32 stopflags = 20; // NUMBER in QLUA
+    string offset = 21; // NUMBER in QLUA
+    string spread = 22; // NUMBER in QLUA
+    string balance = 23; // NUMBER in QLUA
+    string uid = 24; // NUMBER in QLUA
+    uint32 filled_qty = 25; // NUMBER in QLUA
+    string withdraw_time = 26; // NUMBER in QLUA
+    string condition_price2 = 27; // NUMBER in QLUA
+    string active_from_time = 28; // NUMBER in QLUA
+    string active_to_time = 29; // NUMBER in QLUA
+    string sec_code = 30;
+    string class_code = 31;
+    string condition_sec_code = 32;
+    string condition_class_code = 33;
+    string canceled_uid = 34; // NUMBER in QLUA
+    DateTimeEntry order_date_time = 35; // TABLE in QLUA
+    DateTimeEntry withdraw_datetime = 36; // TABLE in QLUA
+}
+
+message TransReply {
+
+    int64 trans_id = 1; // NUMBER in QLUA
+    int32 status = 2; // NUMBER in QLUA
+    string result_msg = 3;
+    DateTimeEntry date_time = 4; // TABLE in QLUA
+    string uid = 5; // NUMBER in QLUA
+    int32 flags = 6; // NUMBER in QLUA
+    string server_trans_id = 7; // NUMBER in QLUA
+    string order_num = 8; // NUMBER in QLUA
+    string price = 9; // NUMBER in QLUA
+    string quantity = 10; // NUMBER in QLUA
+    string balance = 11; // NUMBER in QLUA
+    string firm_id = 12;
+    string account = 13;
+    string client_code = 14;
+    string brokerref = 15;
+    string class_code = 16;
+    string sec_code = 17;
+    string exchange_code = 18;
+}
+
+message ParamEventData {
+
+    string class_code = 1;
+    string sec_code = 2;
+}
+
+message QuoteEventData {
+
+    string class_code = 1;
+    string sec_code = 2;
+}
+
 message Qlua_Request {
 
-    ProcedureType type = 1;
-    bytes args = 2; // the protoc-lua-plugin gives out a corrupted .lua file if we're using google.protobuf.Any
+    ProcedureType type = 2;
+    bytes args = 3; // the protoc-lua-plugin gives out a corrupted .lua file if we're using google.protobuf.Any
 }
 
 message Qlua_Response {
@@ -222,7 +750,7 @@ message GetOrderByNumber_Request {
 
 message GetOrderByNumber_Result {
 
-    repeated qlua.types.TableEntry order = 1;
+    repeated TableEntry order = 1;
     int32 indx = 2;
 }
 
@@ -384,8 +912,8 @@ message GetQuoteLevel2_Result {
 
     string bid_count = 1;
     string offer_count = 2;
-    repeated QuoteEntry bid = 3;
-    repeated QuoteEntry offer = 4;
+    repeated QuoteEntry bids = 3;
+    repeated QuoteEntry offers = 4;
 }
 
 message GetLinesCount_Request {
@@ -414,7 +942,7 @@ message GetCandlesByIndex_Request {
 
 message GetCandlesByIndex_Result {
 
-    repeated qlua.types.CandleEntry t = 1;
+    repeated CandleEntry t = 1;
     int32 n = 2;
     string l = 3;
 }

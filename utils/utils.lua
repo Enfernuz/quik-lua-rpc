@@ -1,4 +1,5 @@
 local qlua_msg = require("quik-lua-rpc.messages.qlua_msg_pb")
+local qlua_types = require("quik-lua-rpc.messages.qlua_types_pb")
 local table = require('table')
 local os = require('os')
 local string = require('string')
@@ -20,7 +21,7 @@ local utils = {}
 function utils.insert_table(dst, src)
   
   for k,v in pairs(src) do
-      local table_entry = qlua_msg.TableEntry() 
+      local table_entry = qlua_types.TableEntry() 
       table_entry.k = tostring(k)
       table_entry.v = tostring(v)
       table.sinsert(dst, table_entry)
@@ -73,7 +74,7 @@ end
 function utils.insert_candles_table(dst, src)
   
   for i,v in ipairs(src) do
-      local candle = qlua_msg.CandleEntry() 
+      local candle = qlua_types.CandleEntry() 
       candle.open = tostring(v.open)
       candle.close = tostring(v.close)
       candle.high = tostring(v.high)

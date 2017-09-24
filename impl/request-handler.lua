@@ -315,8 +315,8 @@ request_handlers[qlua_msg.ProcedureType.GET_QUOTE_LEVEL2] = function(request_arg
   local t = getQuoteLevel2(args.class_code, args.sec_code)
   result.bid_count = t.bid_count
   result.offer_count = t.offer_count
-  if t.bid ~= nil then utils.insert_quote_table(result.bid, t.bid) end
-  if t.offer ~= nil then utils.insert_quote_table(result.offer, t.offer) end
+  if t.bid ~= nil then utils.insert_quote_table(result.bids, t.bid) end
+  if t.offer ~= nil then utils.insert_quote_table(result.offers, t.offer) end
   return result
 end
 
