@@ -1,5 +1,5 @@
-local qlua_msg = require("quik-lua-rpc.messages.qlua_msg_pb")
-local qlua_events = require("quik-lua-rpc.messages.qlua_event_data_pb")
+local qlua_rpc = require("quik-lua-rpc.messages.qlua_rpc_pb")
+local qlua_events = require("quik-lua-rpc.messages.qlua_events_pb")
 local zmq = require("lzmq")
 local zmq_poller = require("lzmq.poller")
 local inspect = require("inspect")
@@ -183,7 +183,7 @@ function QluaService:start(rep_socket_addr, pub_socket_addr)
 
       local ok, ret = pcall( function() return msg_request:recv(self.rep_socket) end)
       if ok and not (ret == nil or ret == -1) then
-        local request = qlua_msg.Qlua_Request()
+        local request = qlua_rpc.Qlua_Request()
         request:ParseFromString( ret:data() )
         
         local response = request_handler:handle(request)

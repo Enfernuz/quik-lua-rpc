@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-import "quik-lua-rpc/messages/qlua_types.proto";
+import "quik-lua-rpc/messages/qlua_structures.proto";
 
 package qlua.procs;
 
@@ -222,7 +222,7 @@ message GetOrderByNumber_Request {
 
 message GetOrderByNumber_Result {
 
-    repeated qlua.types.TableEntry order = 1;
+    qlua.structs.Order order = 1;
     int32 indx = 2;
 }
 
@@ -269,7 +269,7 @@ message GetClassInfo_Request {
 }
 
 message GetClassInfo_Result {
-    map<string, string> class_info = 1;
+    qlua.structs.Klass class_info = 1;
 }
 
 message GetClassSecurities_Request {
@@ -289,7 +289,19 @@ message GetMoney_Request {
 }
 
 message GetMoney_Result {
-    map<string, string> money = 1;
+
+    message Money {
+    
+        string money_open_limit = 1; // NUMBER in QLUA
+        string money_limit_locked_nonmarginal_value = 2; // NUMBER in QLUA
+        string money_limit_locked = 3; // NUMBER in QLUA
+        string money_open_balance = 4; // NUMBER in QLUA
+        string money_current_limit = 5; // NUMBER in QLUA
+        string money_current_balance = 6; // NUMBER in QLUA
+        string money_limit_available = 7; // NUMBER in QLUA
+    }
+
+    Money money = 1;
 }
 
 message GetMoneyEx_Request {
@@ -302,7 +314,7 @@ message GetMoneyEx_Request {
 }
 
 message GetMoneyEx_Result {
-    map<string, string> money_ex = 1;
+    qlua.structs.MoneyLimit money_ex = 1;
 }
 
 message GetDepo_Request {
@@ -414,7 +426,7 @@ message GetCandlesByIndex_Request {
 
 message GetCandlesByIndex_Result {
 
-    repeated qlua.types.CandleEntry t = 1;
+    repeated qlua.structs.CandleEntry t = 1;
     int32 n = 2;
     string l = 3;
 }
@@ -667,11 +679,11 @@ message DestroyTable_Result {
 message InsertRow_Request {
 
     int32 t_id = 1;
-    sint32 key = 2;
+    int32 key = 2;
 }
 
 message InsertRow_Result {
-    sint32 result = 1;
+    int32 result = 1;
 }
 
 message IsWindowClosed_Request {
@@ -721,10 +733,10 @@ message SetWindowCaption_Result {
 message SetWindowPos_Request {
 
     int32 t_id = 1;
-    sint32 x = 2;
-    sint32 y = 3;
-    sint32 dx = 4;
-    sint32 dy = 5;
+    int32 x = 2;
+    int32 y = 3;
+    int32 dx = 4;
+    int32 dy = 5;
 }
 
 message SetWindowPos_Result {
@@ -765,10 +777,10 @@ message GetWindowRect_Request {
 
 message GetWindowRect_Result {
 
-    sint32 top = 1;
-    sint32 left = 2;
-    sint32 bottom = 3;
-    sint32 right = 4;
+    int32 top = 1;
+    int32 left = 2;
+    int32 bottom = 3;
+    int32 right = 4;
 }
 
 // NB: на самом деле, библиотечная функция RGB должна называться BGR, ибо она выдаёт числа именно в этом формате. В SetColor, однако, тоже ожидается цвет в формате BGR, так что это не баг, а фича.
@@ -786,8 +798,8 @@ message RGB_Result {
 message SetColor_Request {
 
     int32 t_id = 1;
-    sint32 row = 2;
-    sint32 col = 3;
+    int32 row = 2;
+    int32 col = 3;
     int32 b_color = 4;
     int32 f_color = 5;
     int32 sel_b_color = 6;
@@ -801,8 +813,8 @@ message SetColor_Result {
 message Highlight_Request {
 
     int32 t_id = 1;
-    sint32 row = 2;
-    sint32 col = 3;
+    int32 row = 2;
+    int32 col = 3;
     int32 b_color = 4;
     int32 f_color = 5;
     int64 timeout = 6;
@@ -815,11 +827,11 @@ message Highlight_Result {
 message SetSelectedRow_Request {
 
     int32 table_id = 1;
-    sint32 row = 2;
+    int32 row = 2;
 }
 
 message SetSelectedRow_Result {
-    sint32 result = 1;
+    int32 result = 1;
 }
 
 message AddLabel_Request {

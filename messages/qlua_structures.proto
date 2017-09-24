@@ -1,39 +1,25 @@
 syntax = "proto3";
 
-import "quik-lua-rpc/messages/qlua_types.proto";
+package qlua.structs;
 
-package qlua.events;
+// Текущие позиции по бумагам
+// Торговые счета
+// Отчеты по сделкам для исполнения
+// Инструменты
+// Обязательства и требования по активам
+// Валюта: обязательства и требования по активам
 
-enum EventType {
+// Классы
+message Klass {
 
-    EVENT_TYPE_UNKNOWN = 0;
-    PUBLISHER_ONLINE = 1; // no data attached
-    PUBLISHER_OFFLINE = 2; // no data attached
-    ON_CLOSE = 3; // no data attached
-    ON_CONNECTED = 4; // no data attached
-    ON_DISCONNECTED = 5; // no data attached
-    ON_FIRM = 6; 
-    ON_ALL_TRADE = 7; 
-    ON_TRADE = 8; 
-    ON_ORDER = 9;
-    ON_ACCOUNT_BALANCE = 10;
-    ON_FUTURES_LIMIT_CHANGE = 11;
-    ON_FUTURES_LIMIT_DELETE = 12;
-    ON_FUTURES_CLIENT_HOLDING = 13;
-    ON_MONEY_LIMIT = 14;
-    ON_MONEY_LIMIT_DELETE = 15;
-    ON_DEPO_LIMIT = 16;
-    ON_DEPO_LIMIT_DELETE = 17;
-    ON_ACCOUNT_POSITION = 18;
-    ON_NEG_DEAL = 19;
-    ON_NEG_TRADE = 20;
-    ON_STOP_ORDER = 21;
-    ON_TRANS_REPLY = 22;
-    ON_PARAM = 23;
-    ON_QUOTE = 24;
-    ON_CLEAN_UP = 25; // no data attached
+    string firmid = 1;
+    string name = 2;
+    string code = 3;
+    uint32 npars = 4; // NUMBER in QLUA
+    uint32 nsecs = 5; // NUMBER in QLUA
 }
 
+// Фирмы
 message Firm {
 
     string firmid = 1;
@@ -42,6 +28,7 @@ message Firm {
     string exchange = 4;
 }
 
+// Обезличенные сделки
 message AllTrade {
 
     int64 trade_num = 1; // NUMBER in QLUA
@@ -58,12 +45,13 @@ message AllTrade {
     string repoterm = 12; // NUMBER in QLUA
     string sec_code = 13;
     string class_code = 14;
-    qlua.types.DateTimeEntry datetime = 15; // TABLE in QLUA
+    DateTimeEntry datetime = 15; // TABLE in QLUA
     int32 period = 16; // NUMBER in QLUA
     string open_interest = 17; // NUMBER in QLUA
     string exchange_code = 18;
 }
 
+// Сделки
 message Trade {
 
     int64 trade_num = 1; // NUMBER in QLUA
@@ -102,7 +90,7 @@ message Trade {
     string station_id = 34;
     string sec_code = 35;
     string class_code = 36;
-    qlua.types.DateTimeEntry datetime = 37; // TABLE in QLUA
+    DateTimeEntry datetime = 37; // TABLE in QLUA
     string bank_acc_id = 38;
     string broker_comission = 39; // NUMBER in QLUA
     string linked_trade = 40; // NUMBER in QLUA
@@ -110,12 +98,13 @@ message Trade {
     string trans_id = 42; // NUMBER in QLUA; if not nullable then it should be of type long
     int32 kind = 43; // NUMBER in QLUA
     string clearing_bank_accid = 44;
-    qlua.types.DateTimeEntry canceled_datetime = 45; // TABLE in QLUA
+    DateTimeEntry canceled_datetime = 45; // TABLE in QLUA
     string clearing_firmid = 46;
     string system_ref = 47;
     string uid = 48; // NUMBER in QLUA
 }
 
+// Заявки
 message Order {
 
     int64 order_num = 1; // NUMBER in QLUA
@@ -142,8 +131,8 @@ message Order {
     string expiry = 22; // NUMBER in QLUA
     string sec_code = 23;
     string class_code = 24;
-    qlua.types.DateTimeEntry datetime = 25; // TABLE in QLUA
-    qlua.types.DateTimeEntry withdraw_datetime = 26; // TABLE in QLUA
+    DateTimeEntry datetime = 25; // TABLE in QLUA
+    DateTimeEntry withdraw_datetime = 26; // TABLE in QLUA
     string bank_acc_id = 27;
     int32 value_entry_type = 28; // NUMBER in QLUA
     string repoterm = 29; // NUMBER in QLUA
@@ -162,6 +151,7 @@ message Order {
     int32 visible = 42; // NUMBER in QLUA
 }
 
+// Текущие позиции по клиентским счетам
 message AccountBalance {
 
     string firmid = 1;
@@ -181,6 +171,50 @@ message AccountBalance {
     int32 firmuse = 15; // NUMBER in QLUA
 }
 
+//
+
+// Стоп-заявки
+message StopOrder {
+
+    int64 order_num = 1; // NUMBER in QLUA
+    string ordertime = 2; // NUMBER in QLUA
+    int32 flags = 3; // NUMBER in QLUA
+    string brokerref = 4;
+    string firmid = 5;
+    string account = 6;
+    int32 condition = 7; // NUMBER in QLUA
+    string condition_price = 8; // NUMBER in QLUA
+    string price = 9; // NUMBER in QLUA
+    uint32 qty = 10; // NUMBER in QLUA
+    string linkedorder = 11; // NUMBER in QLUA
+    string expiry = 12; // NUMBER in QLUA
+    string trans_id = 13; // NUMBER in QLUA
+    string client_code = 14;
+    string co_order_num = 15; // NUMBER in QLUA
+    string co_order_price = 16; // NUMBER in QLUA
+    int32 stop_order_type = 17; // NUMBER in QLUA
+    string orderdate = 18; // NUMBER in QLUA
+    string alltrade_num = 19; // NUMBER in QLUA
+    int32 stopflags = 20; // NUMBER in QLUA
+    string offset = 21; // NUMBER in QLUA
+    string spread = 22; // NUMBER in QLUA
+    string balance = 23; // NUMBER in QLUA
+    string uid = 24; // NUMBER in QLUA
+    uint32 filled_qty = 25; // NUMBER in QLUA
+    string withdraw_time = 26; // NUMBER in QLUA
+    string condition_price2 = 27; // NUMBER in QLUA
+    string active_from_time = 28; // NUMBER in QLUA
+    string active_to_time = 29; // NUMBER in QLUA
+    string sec_code = 30;
+    string class_code = 31;
+    string condition_sec_code = 32;
+    string condition_class_code = 33;
+    string canceled_uid = 34; // NUMBER in QLUA
+    DateTimeEntry order_date_time = 35; // TABLE in QLUA
+    DateTimeEntry withdraw_datetime = 36; // TABLE in QLUA
+}
+
+// Лимиты по фьючерсам
 message FuturesLimit {
 
     string firmid = 1;
@@ -202,12 +236,7 @@ message FuturesLimit {
     string real_varmargin = 17; // NUMBER in QLUA
 }
 
-message FuturesLimitDelete {
-
-    string firmid = 1;
-    int32 limit_type = 2; // NUMBER in QLUA
-}
-
+// Позиции по клиентским счетам (фьючерсы)
 message FuturesClientHolding {
 
     string firmid = 1;
@@ -231,6 +260,7 @@ message FuturesClientHolding {
     int32 session_status = 19; // NUMBER in QLUA
 }
 
+// Лимиты по денежным средствам
 message MoneyLimit {
 
     string currcode = 1;
@@ -245,45 +275,56 @@ message MoneyLimit {
     string locked_value_coef = 10; // NUMBER in QLUA
     string locked_margin_value = 11; // NUMBER in QLUA
     string leverage = 12; // NUMBER in QLUA
-    sint32 limit_kind = 13; // NUMBER in QLUA
+    int32 limit_kind = 13; // NUMBER in QLUA
 }
 
+// Удаление денежного лимита
 message MoneyLimitDelete {
 
     string currcode = 1;
     string tag = 2;
     string client_code = 3;
     string firmid = 4;
-    sint32 limit_kind = 5;
+    int32 limit_kind = 5;
 }
 
-message DepoLimit {
-
-    string sec_code = 1;
-    string trdaccid = 2;
-    string firmid = 3;
-    string client_code = 4;
-    sint32 openbal = 5; // NUMBER in QLUA
-    uint32 openlimit = 6; // NUMBER in QLUA
-    sint32 currentbal = 7; // NUMBER in QLUA
-    uint32 currentlimit = 8; // NUMBER in QLUA
-    uint32 locked_sell = 9; // NUMBER in QLUA
-    uint32 locked_buy = 10; // NUMBER in QLUA
-    string locked_buy_value = 11; // NUMBER in QLUA
-    string locked_sell_value = 12; // NUMBER in QLUA
-    string awg_position_price = 13; // NUMBER in QLUA
-    sint32 limit_kind = 14; // NUMBER in QLUA
-}
-
+// Удаление бумажного лимита
 message DepoLimitDelete {
 
     string sec_code = 1;
     string trdaccid = 2;
     string firmid = 3;
     string client_code = 4;
-    sint32 limit_kind = 5;
+    int32 limit_kind = 5;
 }
 
+// Удаление фьючерсного лимита
+message FuturesLimitDelete {
+
+    string firmid = 1;
+    int32 limit_type = 2; // NUMBER in QLUA
+}
+
+// Лимиты по бумагам
+message DepoLimit {
+
+    string sec_code = 1;
+    string trdaccid = 2;
+    string firmid = 3;
+    string client_code = 4;
+    int32 openbal = 5; // NUMBER in QLUA
+    uint32 openlimit = 6; // NUMBER in QLUA
+    int32 currentbal = 7; // NUMBER in QLUA
+    uint32 currentlimit = 8; // NUMBER in QLUA
+    uint32 locked_sell = 9; // NUMBER in QLUA
+    uint32 locked_buy = 10; // NUMBER in QLUA
+    string locked_buy_value = 11; // NUMBER in QLUA
+    string locked_sell_value = 12; // NUMBER in QLUA
+    string awg_position_price = 13; // NUMBER in QLUA
+    int32 limit_kind = 14; // NUMBER in QLUA
+}
+
+// Денежные позиции
 message AccountPosition {
 
     string firmid = 1;
@@ -306,6 +347,7 @@ message AccountPosition {
     string settlebal = 18; // NUMBER in QLUA
 }
 
+// Заявки на внебиржевые сделки
 message NegDeal {
 
     int64 neg_deal_num = 1; // NUMBER in QLUA
@@ -353,11 +395,12 @@ message NegDeal {
     string bank_acc_id = 43;
     string withdraw_date = 44; // NUMBER in QLUA
     string linkedorder = 45; // NUMBER in QLUA
-    qlua.types.DateTimeEntry activation_date_time = 46; // TABLE in QLUA
-    qlua.types.DateTimeEntry withdraw_date_time = 47; // TABLE in QLUA
-    qlua.types.DateTimeEntry date_time = 48; // TABLE in QLUA
+    DateTimeEntry activation_date_time = 46; // TABLE in QLUA
+    DateTimeEntry withdraw_date_time = 47; // TABLE in QLUA
+    DateTimeEntry date_time = 48; // TABLE in QLUA
 }
 
+// Сделки для исполнения
 message NegTrade {
 
     int64 trade_num = 1; // NUMBER in QLUA
@@ -423,52 +466,45 @@ message NegTrade {
     string confirmreport = 61; // NUMBER in QLUA
 }
 
-message StopOrder {
+//
 
-    int64 order_num = 1; // NUMBER in QLUA
-    string ordertime = 2; // NUMBER in QLUA
-    int32 flags = 3; // NUMBER in QLUA
-    string brokerref = 4;
-    string firmid = 5;
-    string account = 6;
-    int32 condition = 7; // NUMBER in QLUA
-    string condition_price = 8; // NUMBER in QLUA
-    string price = 9; // NUMBER in QLUA
-    uint32 qty = 10; // NUMBER in QLUA
-    string linkedorder = 11; // NUMBER in QLUA
-    string expiry = 12; // NUMBER in QLUA
-    string trans_id = 13; // NUMBER in QLUA
-    string client_code = 14;
-    string co_order_num = 15; // NUMBER in QLUA
-    string co_order_price = 16; // NUMBER in QLUA
-    int32 stop_order_type = 17; // NUMBER in QLUA
-    string orderdate = 18; // NUMBER in QLUA
-    string alltrade_num = 19; // NUMBER in QLUA
-    int32 stopflags = 20; // NUMBER in QLUA
-    string offset = 21; // NUMBER in QLUA
-    string spread = 22; // NUMBER in QLUA
-    string balance = 23; // NUMBER in QLUA
-    string uid = 24; // NUMBER in QLUA
-    uint32 filled_qty = 25; // NUMBER in QLUA
-    string withdraw_time = 26; // NUMBER in QLUA
-    string condition_price2 = 27; // NUMBER in QLUA
-    string active_from_time = 28; // NUMBER in QLUA
-    string active_to_time = 29; // NUMBER in QLUA
-    string sec_code = 30;
-    string class_code = 31;
-    string condition_sec_code = 32;
-    string condition_class_code = 33;
-    string canceled_uid = 34; // NUMBER in QLUA
-    qlua.types.DateTimeEntry order_date_time = 35; // TABLE in QLUA
-    qlua.types.DateTimeEntry withdraw_datetime = 36; // TABLE in QLUA
+//
+
+//
+
+// Свечки графика
+message CandleEntry {
+
+    string open = 1;
+    string close = 2;
+    string high = 3;
+    string low = 4;
+    string volume = 5;
+    DateTimeEntry datetime = 6;
+    int32 does_exist = 7;
 }
 
-message TransReply {
+// Формат даты и времени, используемый в таблицах
+message DateTimeEntry {
+
+    string mcs = 1; // not sure if it's integral, so leave it be string until figured out
+    string ms = 2; // not sure if it's integral, so leave it be string until figured out
+    int32 sec = 3;
+    int32 min = 4;
+    int32 hour = 5;
+    int32 day = 6;
+    int32 week_day = 7;
+    int32 month = 8;
+    int32 year = 9;
+}
+
+// Транзакции
+message Transaction {
 
     int64 trans_id = 1; // NUMBER in QLUA
     int32 status = 2; // NUMBER in QLUA
     string result_msg = 3;
-    qlua.types.DateTimeEntry date_time = 4; // TABLE in QLUA
+    DateTimeEntry date_time = 4; // TABLE in QLUA
     string uid = 5; // NUMBER in QLUA
     int32 flags = 6; // NUMBER in QLUA
     string server_trans_id = 7; // NUMBER in QLUA
@@ -485,14 +521,6 @@ message TransReply {
     string exchange_code = 18;
 }
 
-message ParamEventData {
+//
 
-    string class_code = 1;
-    string sec_code = 2;
-}
-
-message QuoteEventData {
-
-    string class_code = 1;
-    string sec_code = 2;
-}
+//

@@ -2,31 +2,6 @@ syntax = "proto3";
 
 package qlua.types;
 
-message DateTimeEntry {
-
-    string mcs = 1; // not sure if it's integral, so leave it be string until figured out
-    string ms = 2; // not sure if it's integral, so leave it be string until figured out
-    int32 sec = 3;
-    int32 min = 4;
-    int32 hour = 5;
-    int32 day = 6;
-    int32 week_day = 7;
-    int32 month = 8;
-    int32 year = 9;
-}
-
-message CandleEntry {
-
-    string open = 1;
-    string close = 2;
-    string high = 3;
-    string low = 4;
-    string volume = 5;
-    int32 does_exist = 6;
-    DateTimeEntry datetime = 7;
-}
-
-
 message TableEntry {
 
     string k = 1;
