@@ -326,7 +326,20 @@ message GetDepo_Request {
 }
 
 message GetDepo_Result {
-    map<string, string> depo = 1;
+
+    message Depo {
+        
+        string depo_limit_locked_buy_value = 1;
+        string depo_current_balance = 2;
+        string depo_limit_locked_buy = 3;
+        string depo_limit_locked = 4;
+        string depo_limit_available = 5;
+        string depo_current_limit = 6;
+        string depo_open_balance = 7;
+        string depo_open_limit = 8;
+    }
+
+    Depo depo = 1;
 }
 
 message GetDepoEx_Request {
@@ -339,7 +352,7 @@ message GetDepoEx_Request {
 }
 
 message GetDepoEx_Result {
-    map<string, string> depo_ex = 1;
+    qlua.structs.DepoLimit depo_ex = 1;
 }
 
 message GetFuturesLimit_Request {
@@ -351,7 +364,7 @@ message GetFuturesLimit_Request {
 }
 
 message GetFuturesLimit_Result {
-    map<string, string> futures_limit = 1;
+    qlua.structs.FuturesLimit futures_limit = 1;
 }
 
 message GetFuturesHolding_Request {
@@ -363,7 +376,7 @@ message GetFuturesHolding_Request {
 }
 
 message GetFuturesHolding_Result {
-    map<string, string> futures_holding = 1;
+    qlua.structs.FuturesClientHolding futures_holding = 1;
 }
 
 message GetSecurityInfo_Request {
@@ -373,11 +386,20 @@ message GetSecurityInfo_Request {
 }
 
 message GetSecurityInfo_Result {
-    map<string, string> security_info = 1;
+    qlua.structs.Security security_info = 1;
 }
 
 message GetTradeDate_Result {
-    map<string, string> trade_date = 1;
+
+    message TradeDate {
+    
+        string date = 1;
+        uint32 year = 2;
+        uint32 month = 3;
+        uint32 day = 4;
+    }
+    
+    TradeDate trade_date = 1;
 }
 
 message GetQuoteLevel2_Request {
@@ -396,8 +418,8 @@ message GetQuoteLevel2_Result {
 
     string bid_count = 1;
     string offer_count = 2;
-    repeated QuoteEntry bid = 3;
-    repeated QuoteEntry offer = 4;
+    repeated QuoteEntry bids = 3;
+    repeated QuoteEntry offers = 4;
 }
 
 message GetLinesCount_Request {
@@ -582,7 +604,16 @@ message GetParamEx_Request {
 }
 
 message GetParamEx_Result {
-    map<string, string> param_ex = 1;
+
+    message ParamEx {
+    
+        string param_type = 1;
+        string param_value = 2;
+        string param_image = 3;
+        string result = 4;
+    }
+
+    ParamEx param_ex = 1;
 }
 
 message GetPortfolioInfo_Request {
@@ -592,7 +623,52 @@ message GetPortfolioInfo_Request {
 }
 
 message GetPortfolioInfo_Result {
-    map<string, string> portfolio_info = 1;
+
+    message PortfolioInfo {
+    
+        string is_leverage = 1;
+        string in_assets = 2;
+        string leverage = 3;
+        string open_limit = 4;
+        string val_short = 5;
+        string val_long = 6;
+        string val_long_margin = 7;
+        string val_long_asset = 8;
+        string assets = 9;
+        string cur_leverage = 10;
+        string margin = 11;
+        string lim_all = 12;
+        string av_lim_all = 13;
+        string locked_buy = 14;
+        string locked_buy_margin = 15;
+        string locked_buy_asset = 16;
+        string locked_sell = 17;
+        string locked_value_coef = 18;
+        string in_all_assets = 19;
+        string all_assets = 20;
+        string profit_loss = 21;
+        string rate_change = 22;
+        string lim_buy = 23;
+        string lim_sell = 24;
+        string lim_non_margin = 25;
+        string lim_buy_asset = 26;
+        string val_short_net = 27;
+        string val_long_net = 28;
+        string total_money_bal = 29;
+        string total_locked_money = 30;
+        string haircuts = 31;
+        string assets_without_hc = 32;
+        string status_coef = 33;
+        string varmargin = 34;
+        string go_for_positions = 35;
+        string go_for_orders = 36;
+        string rate_futures = 37;
+        string is_qual_client = 38;
+        string is_futures = 39;
+        string curr_tag = 40;
+    }
+
+    PortfolioInfo portfolio_info = 1;
 }
 
 message GetPortfolioInfoEx_Request {
@@ -603,7 +679,35 @@ message GetPortfolioInfoEx_Request {
 }
 
 message GetPortfolioInfoEx_Result {
-    map<string, string> portfolio_info_ex = 1;
+
+    message PortfolioInfoEx {
+    
+        GetPortfolioInfo_Result.PortfolioInfo portfolio_info = 1;
+        string init_margin = 2;
+        string min_margin = 3;
+        string corrected_margin = 4;
+        string client_type = 5;
+        string portfolio_value = 6;
+        string start_limit_open_pos = 7;
+        string total_limit_open_pos = 8;
+        string limit_open_pos = 9;
+        string used_lim_open_pos = 10;
+        string acc_var_margin = 11;
+        string cl_var_margin = 12;
+        string opt_liquid_cost = 13;
+        string fut_asset = 14;
+        string fut_total_asset = 15;
+        string fut_debt = 16;
+        string fut_rate_asset = 17;
+        string fut_rate_asset_open = 18;
+        string fut_rate_go = 19;
+        string planed_rate_go = 20;
+        string cash_leverage = 21;
+        string fut_position_type = 22;
+        string fut_accured_int = 23;
+    }
+
+    PortfolioInfoEx portfolio_info_ex = 1;
 }
 
 message GetBuySellInfo_Request {
@@ -616,7 +720,60 @@ message GetBuySellInfo_Request {
 }
 
 message GetBuySellInfo_Result {
-    map<string, string> buy_sell_info = 1;
+
+    message BuySellInfo {
+    
+        string is_margin_sec = 1;
+        string is_asset_sec = 2;
+        string balance = 3;
+        string can_buy = 4;
+        string can_sell = 5;
+        string position_valuation = 6;
+        string value = 7;
+        string open_value = 8;
+        string lim_long = 9;
+        string long_coef = 10;
+        string lim_short = 11;
+        string short_coef = 12;
+        string value_coef = 13;
+        string open_value_coef = 14;
+        string share = 15;
+        string short_wa_price = 16;
+        string long_wa_price = 17;
+        string profit_loss = 18;
+        string spread_hc = 19;
+        string can_buy_own = 20;
+        string can_sell_own = 21;
+    }
+    
+    BuySellInfo buy_sell_info = 1;
+}
+
+message GetBuySellInfoEx_Request {
+
+    string firm_id = 1;
+    string client_code = 2;
+    string class_code = 3;
+    string sec_code = 4;
+    string price = 5;
+}
+
+message GetBuySellInfoEx_Result {
+
+    message BuySellInfoEx {
+    
+        GetBuySellInfo_Result.BuySellInfo buy_sell_info = 1;
+        string limit_kind = 2; // NUMBER in QLUA
+        string d_long = 3;
+        string d_min_long = 4;
+        string d_short = 5;
+        string d_min_short = 6;
+        string client_type = 7;
+        string is_long_allowed = 8;
+        string is_short_allowed = 9;
+    }
+
+    BuySellInfoEx buy_sell_info_ex = 1;
 }
 
 // Важно! Это не указано в документации к Quik:

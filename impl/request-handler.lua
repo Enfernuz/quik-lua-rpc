@@ -266,7 +266,14 @@ request_handlers[qlua_rpc.ProcedureType.GET_DEPO] = function(request_args)
   local result = qlua_rpc.GetDepo_Result()
   local t = getDepo(args.client_code, args.firmid, args.sec_code, args.trdaccid) -- returns a table with zero'ed values if no info found or in case of an error
   if t ~= nil then
-    utils.put_to_string_string_pb_map(t, result.depo, qlua_rpc.GetDepo_Result.DepoEntry)
+    result.depo.depo_limit_locked_buy_value = value_to_string_or_empty_string(t.depo_limit_locked_buy_value)
+    result.depo.depo_current_balance = value_to_string_or_empty_string(t.depo_current_balance)
+    result.depo.depo_limit_locked_buy = value_to_string_or_empty_string(t.depo_limit_locked_buy)
+    result.depo.depo_limit_locked = value_to_string_or_empty_string(t.depo_limit_locked)
+    result.depo.depo_limit_available = value_to_string_or_empty_string(t.depo_limit_available)
+    result.depo.depo_current_limit = value_to_string_or_empty_string(t.depo_current_limit)
+    result.depo.depo_open_balance = value_to_string_or_empty_string(t.depo_open_balance)
+    result.depo.depo_open_limit = value_to_string_or_empty_string(t.depo_open_limit)
   end
   return result
 end
@@ -278,7 +285,7 @@ request_handlers[qlua_rpc.ProcedureType.GET_DEPO_EX] = function(request_args)
     error(string.format("Процедура getDepoEx(%s, %s, %s, %s, %d) возвратила nil.", args.firmid, args.client_code, args.sec_code, args.trdaccid, args.limit_kind), 0)
   else
     local result = qlua_rpc.GetDepoEx_Result()
-    utils.put_to_string_string_pb_map(t, result.depo_ex, qlua_rpc.GetDepoEx_Result.DepoExEntry)
+    struct_factory.create_DepoLimit(t, result.depo_ex)
     return result
   end
 end
@@ -290,7 +297,7 @@ request_handlers[qlua_rpc.ProcedureType.GET_FUTURES_LIMIT] = function(request_ar
     error(string.format("Процедура getFuturesLimit(%s, %s, %d, %s) возвратила nil.", args.firmid, args.trdaccid, args.limit_type, args.currcode), 0)
   else
     local result = qlua_rpc.GetFuturesLimit_Result()
-    utils.put_to_string_string_pb_map(t, result.futures_limit, qlua_rpc.GetFuturesLimit_Result.FuturesLimitEntry)
+    struct_factory.create_FuturesLimit(t, result.futures_limit)
     return result
   end
 end
@@ -302,7 +309,7 @@ request_handlers[qlua_rpc.ProcedureType.GET_FUTURES_HOLDING] = function(request_
     error(string.format("Процедура getFuturesLHolding(%s, %s, %d, %d) возвратила nil.", args.firmid, args.trdaccid, args.sec_code, args.type), 0)
   else
     local result = qlua_rpc.GetFuturesHolding_Result()
-    utils.put_to_string_string_pb_map(t, result.futures_holding, qlua_rpc.GetFuturesHolding_Result.FuturesHoldingEntry)
+    struct_factory.create_FuturesClientHolding(t, result.futures_holding)
     return result
   end
 end
@@ -314,7 +321,7 @@ request_handlers[qlua_rpc.ProcedureType.GET_SECURITY_INFO] = function(request_ar
     error(string.format("Процедура getSecurityInfo(%s, %s) возвратила nil.", args.class_code, args.sec_code), 0)
   else
     local result = qlua_rpc.GetSecurityInfo_Result()
-    utils.put_to_string_string_pb_map(t, result.security_info, qlua_rpc.GetSecurityInfo_Result.SecurityInfoEntry)
+    struct_factory.create_Security(t, result.security_info)
     return result
   end
 end
@@ -322,7 +329,12 @@ end
 request_handlers[qlua_rpc.ProcedureType.GET_TRADE_DATE] = function() 
   local result = qlua_rpc.GetTradeDate_Result()
   local t = getTradeDate()
-  utils.put_to_string_string_pb_map(t, result.trade_date, qlua_rpc.GetTradeDate_Result.TradeDateEntry)
+  
+  result.trade_date.date = value_or_empty_string(t.date)
+  result.trade_date.year = t.year
+  result.trade_date.month = t.month
+  result.trade_date.day = t.day
+  
   return result
 end
 
@@ -532,7 +544,10 @@ request_handlers[qlua_rpc.ProcedureType.GET_PARAM_EX] = function(request_args)
     error(string.format("Процедура getParamEx(%s, %s, %s) возвратила nil.", args.class_code, args.sec_code, args.param_name), 0)
   else
     local result = qlua_rpc.GetParamEx_Result()
-    utils.put_to_string_string_pb_map(t, result.param_ex, qlua_rpc.GetParamEx_Result.ParamExEntry)
+    result.param_ex.param_type = value_or_empty_string(t.param_type)
+    result.param_ex.param_value = value_or_empty_string(t.param_value)
+    result.param_ex.param_image = value_or_empty_string(t.param_image)
+    result.param_ex.result = value_or_empty_string(t.result)
     return result
   end
 end
@@ -544,7 +559,10 @@ request_handlers[qlua_rpc.ProcedureType.GET_PARAM_EX_2] = function(request_args)
     error(string.format("Процедура getParamEx2(%s, %s, %s) возвратила nil.", args.class_code, args.sec_code, args.param_name), 0)
   else
     local result = qlua_rpc.GetParamEx_Result()
-    utils.put_to_string_string_pb_map(t, result.param_ex, qlua_rpc.GetParamEx_Result.ParamExEntry)
+    result.param_ex.param_type = value_or_empty_string(t.param_type)
+    result.param_ex.param_value = value_or_empty_string(t.param_value)
+    result.param_ex.param_image = value_or_empty_string(t.param_image)
+    result.param_ex.result = value_or_empty_string(t.result)
     return result
   end
 end
@@ -556,7 +574,48 @@ request_handlers[qlua_rpc.ProcedureType.GET_PORTFOLIO_INFO] = function(request_a
     error(string.format("Процедура getPortfolioInfo(%s, %s) возвратила nil.", args.firm_id, args.client_code), 0)
   else
     local result = qlua_rpc.GetPortfolioInfo_Result()
-    utils.put_to_string_string_pb_map(t, result.portfolio_info, qlua_rpc.GetPortfolioInfo_Result.PortfolioInfoEntry)
+    
+    result.portfolio_info.is_leverage = value_or_empty_string(t.is_leverage)
+    result.portfolio_info.in_assets = value_or_empty_string(t.in_assets)
+    result.portfolio_info.leverage = value_or_empty_string(t.leverage)
+    result.portfolio_info.open_limit = value_or_empty_string(t.open_limit)
+    result.portfolio_info.val_short = value_or_empty_string(t.val_short)
+    result.portfolio_info.val_long = value_or_empty_string(t.val_long)
+    result.portfolio_info.val_long_margin = value_or_empty_string(t.val_long_margin)
+    result.portfolio_info.val_long_asset = value_or_empty_string(t.val_long_asset)
+    result.portfolio_info.assets = value_or_empty_string(t.assets)
+    result.portfolio_info.cur_leverage = value_or_empty_string(t.cur_leverage)
+    result.portfolio_info.margin = value_or_empty_string(t.margin)
+    result.portfolio_info.lim_all = value_or_empty_string(t.lim_all)
+    result.portfolio_info.av_lim_all = value_or_empty_string(t.av_lim_all)
+    result.portfolio_info.locked_buy = value_or_empty_string(t.locked_buy)
+    result.portfolio_info.locked_buy_margin = value_or_empty_string(t.locked_buy_margin)
+    result.portfolio_info.locked_buy_asset = value_or_empty_string(t.locked_buy_asset)
+    result.portfolio_info.locked_sell = value_or_empty_string(t.locked_sell)
+    result.portfolio_info.locked_value_coef = value_or_empty_string(t.locked_value_coef)
+    result.portfolio_info.in_all_assets = value_or_empty_string(t.in_all_assets)
+    result.portfolio_info.all_assets = value_or_empty_string(t.all_assets)
+    result.portfolio_info.profit_loss = value_or_empty_string(t.profit_loss)
+    result.portfolio_info.rate_change = value_or_empty_string(t.rate_change)
+    result.portfolio_info.lim_buy = value_or_empty_string(t.lim_buy)
+    result.portfolio_info.lim_sell = value_or_empty_string(t.lim_sell)
+    result.portfolio_info.lim_non_margin = value_or_empty_string(t.lim_non_margin)
+    result.portfolio_info.lim_buy_asset = value_or_empty_string(t.lim_buy_asset)
+    result.portfolio_info.val_short_net = value_or_empty_string(t.val_short_net)
+    result.portfolio_info.val_long_net = value_or_empty_string(t.val_long_net)
+    result.portfolio_info.total_money_bal = value_or_empty_string(t.total_money_bal)
+    result.portfolio_info.total_locked_money = value_or_empty_string(t.total_locked_money)
+    result.portfolio_info.haircuts = value_or_empty_string(t.haircuts)
+    result.portfolio_info.assets_without_hc = value_or_empty_string(t.assets_without_hc)
+    result.portfolio_info.status_coef = value_or_empty_string(t.status_coef)
+    result.portfolio_info.varmargin = value_or_empty_string(t.varmargin)
+    result.portfolio_info.go_for_positions = value_or_empty_string(t.go_for_positions)
+    result.portfolio_info.go_for_orders = value_or_empty_string(t.go_for_orders)
+    result.portfolio_info.rate_futures = value_or_empty_string(t.rate_futures)
+    result.portfolio_info.is_qual_client = value_or_empty_string(t.is_qual_client)
+    result.portfolio_info.is_futures = value_or_empty_string(t.is_futures)
+    result.portfolio_info.curr_tag = value_or_empty_string(t.curr_tag)
+    
     return result
   end
 end
@@ -568,7 +627,71 @@ request_handlers[qlua_rpc.ProcedureType.GET_PORTFOLIO_INFO_EX] = function(reques
     error(string.format("Процедура getPortfolioInfoEx(%s, %s, %d) возвратила nil.", args.firm_id, args.client_code, args.limit_kind), 0)
   else
     local result = qlua_rpc.GetPortfolioInfoEx_Result()
-    utils.put_to_string_string_pb_map(t, result.portfolio_info_ex, qlua_rpc.GetPortfolioInfoEx_Result.PortfolioInfoExEntry)
+    
+    result.portfolio_info_ex.portfolio_info.is_leverage = value_or_empty_string(t.is_leverage)
+    result.portfolio_info_ex.portfolio_info.in_assets = value_or_empty_string(t.in_assets)
+    result.portfolio_info_ex.portfolio_info.leverage = value_or_empty_string(t.leverage)
+    result.portfolio_info_ex.portfolio_info.open_limit = value_or_empty_string(t.open_limit)
+    result.portfolio_info_ex.portfolio_info.val_short = value_or_empty_string(t.val_short)
+    result.portfolio_info_ex.portfolio_info.val_long = value_or_empty_string(t.val_long)
+    result.portfolio_info_ex.portfolio_info.val_long_margin = value_or_empty_string(t.val_long_margin)
+    result.portfolio_info_ex.portfolio_info.val_long_asset = value_or_empty_string(t.val_long_asset)
+    result.portfolio_info_ex.portfolio_info.assets = value_or_empty_string(t.assets)
+    result.portfolio_info_ex.portfolio_info.cur_leverage = value_or_empty_string(t.cur_leverage)
+    result.portfolio_info_ex.portfolio_info.margin = value_or_empty_string(t.margin)
+    result.portfolio_info_ex.portfolio_info.lim_all = value_or_empty_string(t.lim_all)
+    result.portfolio_info_ex.portfolio_info.av_lim_all = value_or_empty_string(t.av_lim_all)
+    result.portfolio_info_ex.portfolio_info.locked_buy = value_or_empty_string(t.locked_buy)
+    result.portfolio_info_ex.portfolio_info.locked_buy_margin = value_or_empty_string(t.locked_buy_margin)
+    result.portfolio_info_ex.portfolio_info.locked_buy_asset = value_or_empty_string(t.locked_buy_asset)
+    result.portfolio_info_ex.portfolio_info.locked_sell = value_or_empty_string(t.locked_sell)
+    result.portfolio_info_ex.portfolio_info.locked_value_coef = value_or_empty_string(t.locked_value_coef)
+    result.portfolio_info_ex.portfolio_info.in_all_assets = value_or_empty_string(t.in_all_assets)
+    result.portfolio_info_ex.portfolio_info.all_assets = value_or_empty_string(t.all_assets)
+    result.portfolio_info_ex.portfolio_info.profit_loss = value_or_empty_string(t.profit_loss)
+    result.portfolio_info_ex.portfolio_info.rate_change = value_or_empty_string(t.rate_change)
+    result.portfolio_info_ex.portfolio_info.lim_buy = value_or_empty_string(t.lim_buy)
+    result.portfolio_info_ex.portfolio_info.lim_sell = value_or_empty_string(t.lim_sell)
+    result.portfolio_info_ex.portfolio_info.lim_non_margin = value_or_empty_string(t.lim_non_margin)
+    result.portfolio_info_ex.portfolio_info.lim_buy_asset = value_or_empty_string(t.lim_buy_asset)
+    result.portfolio_info_ex.portfolio_info.val_short_net = value_or_empty_string(t.val_short_net)
+    result.portfolio_info_ex.portfolio_info.val_long_net = value_or_empty_string(t.val_long_net)
+    result.portfolio_info_ex.portfolio_info.total_money_bal = value_or_empty_string(t.total_money_bal)
+    result.portfolio_info_ex.portfolio_info.total_locked_money = value_or_empty_string(t.total_locked_money)
+    result.portfolio_info_ex.portfolio_info.haircuts = value_or_empty_string(t.haircuts)
+    result.portfolio_info_ex.portfolio_info.assets_without_hc = value_or_empty_string(t.assets_without_hc)
+    result.portfolio_info_ex.portfolio_info.status_coef = value_or_empty_string(t.status_coef)
+    result.portfolio_info_ex.portfolio_info.varmargin = value_or_empty_string(t.varmargin)
+    result.portfolio_info_ex.portfolio_info.go_for_positions = value_or_empty_string(t.go_for_positions)
+    result.portfolio_info_ex.portfolio_info.go_for_orders = value_or_empty_string(t.go_for_orders)
+    result.portfolio_info_ex.portfolio_info.rate_futures = value_or_empty_string(t.rate_futures)
+    result.portfolio_info_ex.portfolio_info.is_qual_client = value_or_empty_string(t.is_qual_client)
+    result.portfolio_info_ex.portfolio_info.is_futures = value_or_empty_string(t.is_futures)
+    result.portfolio_info_ex.portfolio_info.curr_tag = value_or_empty_string(t.curr_tag)
+    
+    result.portfolio_info_ex.init_margin = value_or_empty_string(t.init_margin)
+    result.portfolio_info_ex.min_margin = value_or_empty_string(t.min_margin)
+    result.portfolio_info_ex.corrected_margin = value_or_empty_string(t.corrected_margin)
+    result.portfolio_info_ex.client_type = value_or_empty_string(t.client_type)
+    result.portfolio_info_ex.portfolio_value = value_or_empty_string(t.portfolio_value)
+    result.portfolio_info_ex.start_limit_open_pos = value_or_empty_string(t.start_limit_open_pos)
+    result.portfolio_info_ex.total_limit_open_pos = value_or_empty_string(t.total_limit_open_pos)
+    result.portfolio_info_ex.limit_open_pos = value_or_empty_string(t.limit_open_pos)
+    result.portfolio_info_ex.used_lim_open_pos = value_or_empty_string(t.used_lim_open_pos)
+    result.portfolio_info_ex.acc_var_margin = value_or_empty_string(t.acc_var_margin)
+    result.portfolio_info_ex.cl_var_margin = value_or_empty_string(t.cl_var_margin)
+    result.portfolio_info_ex.opt_liquid_cost = value_or_empty_string(t.opt_liquid_cost)
+    result.portfolio_info_ex.fut_asset = value_or_empty_string(t.fut_asset)
+    result.portfolio_info_ex.fut_total_asset = value_or_empty_string(t.fut_total_asset)
+    result.portfolio_info_ex.fut_debt = value_or_empty_string(t.fut_debt)
+    result.portfolio_info_ex.fut_rate_asset = value_or_empty_string(t.fut_rate_asset)
+    result.portfolio_info_ex.fut_rate_asset_open = value_or_empty_string(t.fut_rate_asset_open)
+    result.portfolio_info_ex.fut_rate_go = value_or_empty_string(t.fut_rate_go)
+    result.portfolio_info_ex.planed_rate_go = value_or_empty_string(t.planed_rate_go)
+    result.portfolio_info_ex.cash_leverage = value_or_empty_string(t.cash_leverage)
+    result.portfolio_info_ex.fut_position_type = value_or_empty_string(t.fut_position_type)
+    result.portfolio_info_ex.fut_accured_int = value_or_empty_string(t.fut_accured_int)
+    
     return result
   end
 end
@@ -584,7 +707,29 @@ request_handlers[qlua_rpc.ProcedureType.GET_BUY_SELL_INFO] = function(request_ar
     error(string.format("Процедура getBuySellInfo(%s, %s, %s, %s, %s) возвратила nil.", args.firm_id, args.client_code, args.class_code, args.sec_code, price), 0)
   else
     local result = qlua_rpc.GetBuySellInfo_Result()
-    utils.put_to_string_string_pb_map(t, result.buy_sell_info, qlua_rpc.GetBuySellInfo_Result.BuySellInfoEntry)
+    
+    result.buy_sell_info.is_margin_sec = value_or_empty_string(t.is_margin_sec)
+    result.buy_sell_info.is_asset_sec = value_or_empty_string(t.is_asset_sec)
+    result.buy_sell_info.balance = value_or_empty_string(t.balance)
+    result.buy_sell_info.can_buy = value_or_empty_string(t.can_buy)
+    result.buy_sell_info.can_sell = value_or_empty_string(t.can_sell)
+    result.buy_sell_info.position_valuation = value_or_empty_string(t.position_valuation)
+    result.buy_sell_info.value = value_or_empty_string(t.value)
+    result.buy_sell_info.open_value = value_or_empty_string(t.open_value)
+    result.buy_sell_info.lim_long = value_or_empty_string(t.lim_long)
+    result.buy_sell_info.long_coef = value_or_empty_string(t.long_coef)
+    result.buy_sell_info.lim_short = value_or_empty_string(t.lim_short)
+    result.buy_sell_info.short_coef = value_or_empty_string(t.short_coef)
+    result.buy_sell_info.value_coef = value_or_empty_string(t.value_coef)
+    result.buy_sell_info.open_value_coef = value_or_empty_string(t.open_value_coef)
+    result.buy_sell_info.share = value_or_empty_string(t.share)
+    result.buy_sell_info.short_wa_price = value_or_empty_string(t.short_wa_price)
+    result.buy_sell_info.long_wa_price = value_or_empty_string(t.long_wa_price)
+    result.buy_sell_info.profit_loss = value_or_empty_string(t.profit_loss)
+    result.buy_sell_info.spread_hc = value_or_empty_string(t.spread_hc)
+    result.buy_sell_info.can_buy_own = value_or_empty_string(t.can_buy_own)
+    result.buy_sell_info.can_sell_own = value_or_empty_string(t.can_sell_own)
+    
     return result
   end
 end
@@ -596,7 +741,38 @@ request_handlers[qlua_rpc.ProcedureType.GET_BUY_SELL_INFO_EX] = function(request
     error(string.format("Процедура getBuySellInfoEx(%s, %s, %s, %s, %d) возвратила nil.", args.firm_id, args.client_code, args.class_code, args.sec_code, args.price), 0)
   else
     local result = qlua_rpc.GetBuySellInfo_Result()
-    utils.put_to_string_string_pb_map(t, result.buy_sell_info, qlua_rpc.GetBuySellInfo_Result.BuySellInfoEntry)
+    
+    result.buy_sell_info_ex.buy_sell_info.is_margin_sec = value_or_empty_string(t.is_margin_sec)
+    result.buy_sell_info_ex.buy_sell_info.is_asset_sec = value_or_empty_string(t.is_asset_sec)
+    result.buy_sell_info_ex.buy_sell_info.balance = value_or_empty_string(t.balance)
+    result.buy_sell_info_ex.buy_sell_info.can_buy = value_or_empty_string(t.can_buy)
+    result.buy_sell_info_ex.buy_sell_info.can_sell = value_or_empty_string(t.can_sell)
+    result.buy_sell_info_ex.buy_sell_info.position_valuation = value_or_empty_string(t.position_valuation)
+    result.buy_sell_info_ex.buy_sell_info.value = value_or_empty_string(t.value)
+    result.buy_sell_info_ex.buy_sell_info.open_value = value_or_empty_string(t.open_value)
+    result.buy_sell_info_ex.buy_sell_info.lim_long = value_or_empty_string(t.lim_long)
+    result.buy_sell_info_ex.buy_sell_info.long_coef = value_or_empty_string(t.long_coef)
+    result.buy_sell_info_ex.buy_sell_info.lim_short = value_or_empty_string(t.lim_short)
+    result.buy_sell_info_ex.buy_sell_info.short_coef = value_or_empty_string(t.short_coef)
+    result.buy_sell_info_ex.buy_sell_info.value_coef = value_or_empty_string(t.value_coef)
+    result.buy_sell_info_ex.buy_sell_info.open_value_coef = value_or_empty_string(t.open_value_coef)
+    result.buy_sell_info_ex.buy_sell_info.share = value_or_empty_string(t.share)
+    result.buy_sell_info_ex.buy_sell_info.short_wa_price = value_or_empty_string(t.short_wa_price)
+    result.buy_sell_info_ex.buy_sell_info.long_wa_price = value_or_empty_string(t.long_wa_price)
+    result.buy_sell_info_ex.buy_sell_info.profit_loss = value_or_empty_string(t.profit_loss)
+    result.buy_sell_info_ex.buy_sell_info.spread_hc = value_or_empty_string(t.spread_hc)
+    result.buy_sell_info_ex.buy_sell_info.can_buy_own = value_or_empty_string(t.can_buy_own)
+    result.buy_sell_info_ex.buy_sell_info.can_sell_own = value_or_empty_string(t.can_sell_own)
+    
+    result.buy_sell_info_ex.limit_kind = value_to_string_or_empty_string(t.limit_kind)
+    result.buy_sell_info_ex.d_long = value_or_empty_string(t.d_long)
+    result.buy_sell_info_ex.d_min_long = value_or_empty_string(t.d_min_long)
+    result.buy_sell_info_ex.d_short = value_or_empty_string(t.d_short)
+    result.buy_sell_info_ex.d_min_short = value_or_empty_string(t.d_min_short)
+    result.buy_sell_info_ex.client_type = value_or_empty_string(t.client_type)
+    result.buy_sell_info_ex.is_long_allowed = value_or_empty_string(t.is_long_allowed)
+    result.buy_sell_info_ex.is_short_allowed = value_or_empty_string(t.is_short_allowed)
+    
     return result
   end
 end

@@ -526,4 +526,24 @@ function StructFactory.create_Transaction(trans_reply, existing_struct)
   return result
 end
 
+function StructFactory.create_Security(security, existing_struct)
+  
+  local result = (existing_struct == nil and qlua_structs.Transaction() or existing_struct)
+  
+  result.code = value_or_empty_string(security.code)
+  result.name = value_or_empty_string(security.name)
+  result.short_name = value_or_empty_string(security.short_name)
+  result.class_code = value_or_empty_string(security.class_code)
+  result.class_name = value_or_empty_string(security.class_name)
+  result.face_value = value_to_string_or_empty_string(security.face_value)
+  result.face_unit = value_or_empty_string(security.face_unit)
+  result.scale = value_to_string_or_empty_string(security.scale)
+  result.mat_date = value_to_string_or_empty_string(security.mat_date)
+  result.lot_size = value_to_string_or_empty_string(security.lot_size)
+  result.isin_code = value_or_empty_string(security.isin_code)
+  result.min_price_step = value_to_string_or_empty_string(security.min_price_step)
+  
+  return result
+end
+
 return StructFactory

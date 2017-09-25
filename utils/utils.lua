@@ -48,8 +48,8 @@ function utils.insert_quote_table(dst, src)
   
   for _, v in ipairs(src) do
       local quote = qlua_rpc.GetQuoteLevel2_Result.QuoteEntry() 
-      quote.price = tostring(v.price)
-      quote.quantity = tostring(v.quantity)
+      quote.price = v.price
+      quote.quantity = v.quantity
       table.sinsert(dst, quote)
   end
 end

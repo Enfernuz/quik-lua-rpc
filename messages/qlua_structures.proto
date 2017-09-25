@@ -5,7 +5,6 @@ package qlua.structs;
 // Текущие позиции по бумагам
 // Торговые счета
 // Отчеты по сделкам для исполнения
-// Инструменты
 // Обязательства и требования по активам
 // Валюта: обязательства и требования по активам
 
@@ -470,7 +469,22 @@ message NegTrade {
 
 //
 
-//
+// Инструменты
+message Security {
+
+    string code = 1;
+    string name = 2;
+    string short_name = 3;
+    string class_code = 4;
+    string class_name = 5;
+    string face_value = 6; // NUMBER in QLUA
+    string face_unit = 7;
+    string scale = 8; // NUMBER in QLUA
+    string mat_date = 9; // NUMBER in QLUA
+    string lot_size = 10; // NUMBER in QLUA
+    string isin_code = 11;
+    string min_price_step = 12; // NUMBER in QLUA
+}
 
 // Свечки графика
 message CandleEntry {
