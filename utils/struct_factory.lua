@@ -1,6 +1,8 @@
-local qlua_structs = require("quik-lua-rpc.messages.qlua_structures_pb")
-local qlua_events = require("quik-lua-rpc.messages.qlua_events_pb")
-local utils = require("quik-lua-rpc.utils.utils")
+package.path = "../?.lua;" .. package.path
+
+local qlua_structs = require("messages.qlua_structures_pb")
+local qlua_events = require("messages.qlua_events_pb")
+local utils = require("utils.utils")
 
 local value_to_string_or_empty_string = utils.value_to_string_or_empty_string
 local value_or_empty_string = utils.value_or_empty_string
@@ -9,12 +11,14 @@ local StructFactory = {}
 
 function StructFactory.create_Firm(firm, existing_struct)
   
+  if firm == nil then error("No firm provided.", 2) end
+  
   local result = (existing_struct == nil and qlua_structs.Firm() or existing_struct)
   
-  result.firmid = firm.firmid
-  result.firm_name = firm.firm_name
+  result.firmid = utils.Cp2151ToUtf8(firm.firmid)
+  result.firm_name = value_or_empty_string(firm.firm_name)
   result.status = firm.status
-  result.exchange = firm.exchange
+  result.exchange = value_or_empty_string(firm.exchange)
   
   return result
 end

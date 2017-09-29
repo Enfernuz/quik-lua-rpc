@@ -1,12 +1,14 @@
-local qlua_rpc = require("quik-lua-rpc.messages.qlua_rpc_pb")
-local qlua_events = require("quik-lua-rpc.messages.qlua_events_pb")
+package.path = getScriptPath() .. package.path
+
+local qlua_rpc = require("messages.qlua_rpc_pb")
+local qlua_events = require("messages.qlua_events_pb")
 local zmq = require("lzmq")
 local zmq_poller = require("lzmq.poller")
 local inspect = require("inspect")
-local utils = require("quik-lua-rpc.utils.utils")
-local uuid = require("quik-lua-rpc.utils.uuid")
-local request_handler = require("quik-lua-rpc.impl.request-handler")
-local event_handler = require("quik-lua-rpc.impl.event-handler")
+local utils = require("utils.utils")
+local uuid = require("utils.uuid")
+local request_handler = require("impl.request-handler")
+local event_handler = require("impl.event-handler")
 
 local pcall = pcall
 assert(pcall ~= nil, "pcall function is missing.")

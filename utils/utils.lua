@@ -1,6 +1,8 @@
-local qlua_rpc = require("quik-lua-rpc.messages.qlua_rpc_pb")
-local qlua_types = require("quik-lua-rpc.messages.qlua_types_pb")
-local qlua_structs = require("quik-lua-rpc.messages.qlua_structures_pb")
+package.path = "../?.lua;" .. package.path
+
+local qlua_rpc = require("messages.qlua_rpc_pb")
+local qlua_types = require("messages.qlua_types_pb")
+local qlua_structs = require("messages.qlua_structures_pb")
 local table = require('table')
 local os = require('os')
 local string = require('string')

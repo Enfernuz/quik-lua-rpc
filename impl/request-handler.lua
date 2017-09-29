@@ -1,6 +1,8 @@
-local qlua_rpc = require("quik-lua-rpc.messages.qlua_rpc_pb")
-local struct_factory = require("quik-lua-rpc.utils.struct_factory")
-local utils = require("quik-lua-rpc.utils.utils")
+package.path = "../?.lua;" .. package.path
+
+local qlua_rpc = require("messages.qlua_rpc_pb")
+local struct_factory = require("utils.struct_factory")
+local utils = require("utils.utils")
 local inspect = require("inspect")
 local table = require('table')
 local bit = require('bit')
