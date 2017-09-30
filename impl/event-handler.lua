@@ -67,7 +67,7 @@ function EventHandler:handle(event_type, event_data)
   local f_handler = event_handlers[event_type]
   
   if f_handler == nil then 
-    error(string.format("Unknown event type: %d.", event_type), 0)
+    error(string.format("Unknown event type: %s.", event_type), 0)
   else
     local ok, result = pcall( function() return f_handler(event_data) end )
     if ok then
