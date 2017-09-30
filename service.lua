@@ -1,4 +1,4 @@
-package.path = getScriptPath() .. package.path
+package.path = getScriptPath() .. '/?.lua;' .. package.path
 
 local qlua_rpc = require("messages.qlua_rpc_pb")
 local qlua_events = require("messages.qlua_events_pb")
