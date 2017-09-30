@@ -228,6 +228,9 @@ local nmdc = {
 }
 
 function utils.Cp2151ToUtf8(s)
+  
+  if s == nil then return nil end
+  
   local r, b = ''
   for i = 1, s and s:len() or 0 do
     b = s:byte(i)
@@ -249,6 +252,9 @@ function utils.Cp2151ToUtf8(s)
 end
 
 function utils.Utf8ToCp1251(s)
+  
+  if s == nil then return nil end
+  
   local a, j, r, b = 0, 0, ''
   for i = 1, s and s:len() or 0 do
     b = s:byte(i)

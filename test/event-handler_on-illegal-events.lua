@@ -2,7 +2,7 @@ package.path = "../?.lua;" .. package.path
 
 require 'busted.runner'()
 
-describe("impl.event-handler", function()
+describe("The function impl.event-handler", function()
     
   local sut = require("impl.event-handler")
   

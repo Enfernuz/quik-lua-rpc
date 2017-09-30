@@ -10,9 +10,9 @@ local value_or_empty_string = utils.value_or_empty_string
 local StructFactory = {}
 
 function StructFactory.create_Firm(firm, existing_struct)
-  
+
   if firm == nil then error("No firm provided.", 2) end
-  
+
   local result = (existing_struct == nil and qlua_structs.Firm() or existing_struct)
   
   result.firmid = utils.Cp2151ToUtf8(firm.firmid)

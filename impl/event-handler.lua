@@ -61,7 +61,7 @@ event_handlers[qlua_events.EventType.ON_QUOTE] = function(quote)
 end
 
 function EventHandler:handle(event_type, event_data)
-  
+
   if event_type == nil then error("No event_type provided.", 2) end
 
   local f_handler = event_handlers[event_type]
