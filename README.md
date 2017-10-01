@@ -10,7 +10,7 @@ An RPC-service over the qlua library API for the QUIK trading terminal
 --------
 ### Установка программы
 
-Скопировать репозиторий в `%PATH_TO_QUIK%/lua`, где `%PATH_TO_QUIK%` -- путь до терминала QUIK. Если папки `lua` там нет, нужно её создать.
+Скопировать репозиторий в `%PATH_TO_QUIK%/lua/`, где `%PATH_TO_QUIK%` -- путь до терминала QUIK. Если папки `lua` там нет, нужно её создать.
 
 ### Установка зависимостей
 
@@ -30,3 +30,34 @@ An RPC-service over the qlua library API for the QUIK trading terminal
 1. Скачать Lua-биндинг для protobuf отсюда: https://github.com/Enfernuz/protobuf-lua
 
 	Это форк форка форка :smile:, наверное, единственного Lua-биндинга для protobuf. По  мере работы с ним я внёс некоторые изменения в плагин для генерации Lua-кода, поэтому эта версия будет полезна тем, кто пожелает доработать RPC-сервис по своему усмотрению.
+2. Папку `protobuf` поместить в `%PATH_TO_QUIK%/lua/`
+3. (Опционально) Скомпилировать файл protobuf/pb.c как DLL под свою машину. 
+	
+	Кому не хочется возиться, можете попробовать использовать уже готовую pb.dll: в папке dependencies/protobuf/ можно найти сборки 	под версии терминала 7.2.2.3 и 7.14.1.7. Думаю, любая из них подойдёт, т.к. линковка pb.dll осуществлялась с qlua.dll, которая вряд ли сильно менялась от версии к версии.
+	
+	Для компиляции я пользовался MinGW с командной оболочкой в виде MSYS.
+	1. В терминале MSYS переместиться в папку /protobuf/, где находится файл pb.c
+	2. Чтобы файл скомпилировался под Windows, нужно убрать строчки 23-33:
+	```С
+	#if defined(_ALLBSD_SOURCE) || defined(__APPLE__)
+	#include <machine/endian.h>
+	#else
+	#include <endian.h>
+	#endif
+	```
+	Эти строчки можно убрать безболезненно, т.к. процессоры архитектуры x86 и amd64 имеют little endianness, так что препроцессор не вставит функции из endian.h, которые используются далее в файле.
+	
+	3. Получить объектный файл: `gcc -O3 -I%PATH_TO_LUA%/include -с pb.c`, где `%PATH_TO_LUA%` -- путь до дистрибутива Lua. Если ставили Lua в комплекте с LuaRocks, то это будет путь до LuaRocks. Пример: `gcc -O3 -ID:/programs/LuaRocks/include -с pb.c`
+	
+	4. Получить DLL: `gcc -shared -o pb.dll pb.o -L%libraries_folder% -l%lua_library%`, где `%libraries_folder%` -- папка с .dll-библиотеками Lua, `%lua_library%` -- имя .dll-библиотеки Lua.
+	
+	Пример:
+	* `%libraries_folder%` -- `D:/QUIK`
+	* `%lua_library%` -- `qlua`
+	* Итого: `gcc -shared -o pb.dll pb.o -LD:/QUIK -lqlua`
+	
+	Линковать лучше с прокси-библиотекой Lua (qlua.dll), которая поставляется в коробке с QUIK. Не уверен, что если слинковаться с DLL из, например, Lua for Windows, или с той, что поставляется с LuaRocks, то всё будет работать. Я пробовал линковаться также с lua5.1.dll, которая находится в корне QUIK, но при запуске скрипта получал ошибку, связанную с загрузкой библиотек.
+	
+4. Файл pb.dll положить в `%PATH_TO_QUIK%/Include/protobuf/` , где `%PATH_TO_QUIK%` -- путь до терминала QUIK (например, `D:/QUIK`)
+	
+	
