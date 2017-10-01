@@ -4,7 +4,7 @@ An RPC-service over the qlua library API for the QUIK trading terminal
 
 Что это?
 --------
-
+*COMING SOON*
 
 Как пользоваться?
 --------
@@ -14,7 +14,13 @@ An RPC-service over the qlua library API for the QUIK trading terminal
 
 ### Установка зависимостей
 
-#### Установка *LuaRocks* (менеджер пакетов для Lua)
+### Легко
+
+*COMING SOON*
+
+### Сложно
+
+##### Установка *LuaRocks* (менеджер пакетов для Lua)
 1. Где взять
 	* Архивы с дистрибутивами: http://luarocks.github.io/luarocks/releases/
 	* Инструкцию по установке можно найти здесь: https://github.com/luarocks/luarocks/wiki/Installation-instructions-for-Windows
@@ -26,7 +32,7 @@ An RPC-service over the qlua library API for the QUIK trading terminal
 
 	На самом деле, нам нужна не вся Lua, а её бинарники (.dll) и заголовочные файлы. Если не хотите ставить ту, что идёт с LuaRocks, то минимальный набор файлов можно взять здесь: http://luabinaries.sourceforge.net/download.html (например, `lua-5.3.4_Win32_bin.zip`). Качать нужно 32-битные версии (Win32), т.к. QUIK использует 32-битную Lua.
 	
-#### Установка *protobuf* (библиотека для сериализации/десериализации)
+##### Установка *protobuf* (библиотека для сериализации/десериализации)
 1. Скачать Lua-биндинг для protobuf отсюда: https://github.com/Enfernuz/protobuf-lua
 
 	Это форк форка форка :smile:, наверное, единственного Lua-биндинга для protobuf. По  мере работы с ним я внёс некоторые изменения в плагин для генерации Lua-кода, поэтому эта версия будет полезна тем, кто пожелает доработать RPC-сервис по своему усмотрению.
@@ -62,7 +68,7 @@ An RPC-service over the qlua library API for the QUIK trading terminal
 	
 4. Файл pb.dll положить в `%PATH_TO_QUIK%/Include/protobuf/` , где `%PATH_TO_QUIK%` -- путь до терминала QUIK (например, `D:/QUIK`). Если папки `Include` нет, необходимо её создать.
 	
-#### Установка *lzmq* (Lua-биндинг для ZeroMQ -- библиотеки для межпроцессной коммуникации)
+##### Установка *lzmq* (Lua-биндинг для ZeroMQ -- библиотеки для межпроцессной коммуникации)
 1. Скачать бинарники ZeroMQ для Windows
 	* Страница с дистрибутивами: http://zeromq.org/distro:microsoft-windows
 	* Пример дистрибутива: http://miru.hk/archive/ZeroMQ-4.0.4~miru1.0-x86.exe -- 32-битная версия, т.к. 64-битная не подойдёт.
@@ -100,3 +106,17 @@ An RPC-service over the qlua library API for the QUIK trading terminal
 	Как видите, вариант геморройный, поэтому проще скопировать оригинальную версию libzmq-???.dll в корень QUIK.
 	
 	Ещё более геморройный вариант: собрать статические версии libzmq из исходников ZMQ, но этот способ мы оставим особо пытливым и разбирающимся в теме.
+	
+#### Запуск программы
+В терминале QUIK в меню Lua-скриптов добавить скрипт `%PATH_TO_SERVICE%/service.lua`, где `%PATH_TO_SERVICE%` -- путь до папки с программой включительно (например, `D:/QUIK/lua/quik-lua-rpc`).
+
+Адрес, по которому доступен RPC-компонент, определяется в функции `OnInit` в первом аргументе метода `QluaService:start`.
+
+Адрес, по которому доступен компонент для рассылки событий, определяется в функции `OnInit` во втором аргументе метода `QluaService:start`.
+
+Вы можете использовать как оба компонента, так и один из них (передавая в качестве адреса для другого компонента `nil`).
+На данный момент ZeroMQ под Windows не поддерживает IPC-абстракцию (`ipc://`), поэтому для транспортного уровня остаётся (`tcp://`).
+
+Примеры
+--------
+*COMING SOON*
