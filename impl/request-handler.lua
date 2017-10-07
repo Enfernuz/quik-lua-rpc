@@ -6,32 +6,17 @@ local utils = require("utils.utils")
 local table = require('table')
 local bit = require('bit')
 
-local unpack = unpack
-assert(unpack ~= nil, "unpack function is missing.")
+local unpack = assert(unpack, "unpack function is missing.")
+local error = assert(error, "error function is missing.")
+local type = assert(type, "type function is missing.")
+local pcall = assert(pcall, "pcall function is missing.")
+local ipairs = assert(ipairs, "ipairs function is missing.")
+local loadstring = assert(loadstring, "loadstring function is missing.")
+local tostring = assert(tostring, "tostring function is missing.")
+local tonumber = assert(tonumber, "tonumber function is missing.")
 
-local error = error
-assert(error ~= nil, "error function is missing.")
-
-local type = type
-assert(type ~= nil, "type function is missing.")
-
-local pcall = pcall
-assert(pcall ~= nil, "pcall function is missing.")
-
-local ipairs = ipairs
-assert(ipairs ~= nil, "ipairs function is missing.")
-
-local loadstring = loadstring
-assert(loadstring ~= nil, "loadstring function is missing.")
-
-local tostring = tostring
-assert(tostring ~= nil, "tostring function is missing.")
-
-local tonumber = tonumber
-assert(tonumber ~= nil, "tonumber function is missing.")
-
-local value_to_string_or_empty_string = utils.value_to_string_or_empty_string
-local value_or_empty_string = utils.value_or_empty_string
+local value_to_string_or_empty_string = assert(utils.value_to_string_or_empty_string)
+local value_or_empty_string = assert(utils.value_or_empty_string)
 
 local function parse_request_args(request_args, request_ctr)
   

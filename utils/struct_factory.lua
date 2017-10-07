@@ -4,8 +4,8 @@ local qlua_structs = require("messages.qlua_structures_pb")
 local qlua_events = require("messages.qlua_events_pb")
 local utils = require("utils.utils")
 
-local value_to_string_or_empty_string = utils.value_to_string_or_empty_string
-local value_or_empty_string = utils.value_or_empty_string
+local value_to_string_or_empty_string = assert(utils.value_to_string_or_empty_string)
+local value_or_empty_string = assert(utils.value_or_empty_string)
 
 local StructFactory = {}
 

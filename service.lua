@@ -9,11 +9,8 @@ local uuid = require("utils.uuid")
 local request_handler = require("impl.request-handler")
 local event_handler = require("impl.event-handler")
 
-local pcall = pcall
-assert(pcall ~= nil, "pcall function is missing.")
-
-local tostring = tostring
-assert(tostring ~= nil, "tostring function is missing.")
+local pcall = assert(pcall, "pcall function is missing.")
+local tostring = assert(tostring, "tostring function is missing.")
 
 local QluaService = {
   

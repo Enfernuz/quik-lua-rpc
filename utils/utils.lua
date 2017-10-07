@@ -7,17 +7,10 @@ local table = require('table')
 local os = require('os')
 local string = require('string')
 
-local pairs = pairs
-assert(pairs ~= nil, "pairs function is missing")
-
-local ipairs = ipairs
-assert(ipairs ~= nil, "ipairs function is missing")
-
-local tostring = tostring
-assert(tostring ~= nil, "tostring function is missing")
-
-local error = error
-assert(error ~= nil, "error function is missing")
+local pairs = assert(pairs, "pairs function is missing")
+local ipairs = assert(ipairs, "ipairs function is missing")
+local tostring = assert(tostring, "tostring function is missing")
+local error = assert(error, "error function is missing")
 
 local utils = {}
 
