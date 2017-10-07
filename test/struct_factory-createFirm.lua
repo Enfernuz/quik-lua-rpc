@@ -39,7 +39,7 @@ describe("The function utils.struct_factory.create_Firm", function()
         
       local result = sut.create_Firm(firm)
         
-      -- check the result is the protobuf Firm structure
+      -- check the result is a protobuf Firm structure
       local expected_pb_firm_meta = getmetatable( qlua_structs.Firm() )
       local actual_meta = getmetatable(result)
       assert.are.equal(expected_pb_firm_meta, actual_meta)
