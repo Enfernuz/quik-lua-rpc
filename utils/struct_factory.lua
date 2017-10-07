@@ -4,6 +4,10 @@ local qlua_structs = require("messages.qlua_structures_pb")
 local qlua_events = require("messages.qlua_events_pb")
 local utils = require("utils.utils")
 
+local assert = assert
+local tostring = assert(tostring)
+local error = assert(error)
+
 local value_to_string_or_empty_string = assert(utils.value_to_string_or_empty_string)
 local value_or_empty_string = assert(utils.value_or_empty_string)
 
@@ -25,11 +29,13 @@ end
 
 function StructFactory.create_AllTrade(alltrade, existing_struct)
   
+  if alltrade == nil then error("No alltrade provided.", 2) end
+  
   local result = (existing_struct == nil and qlua_structs.AllTrade() or existing_struct)
   
   result.trade_num = alltrade.trade_num
   result.flags = alltrade.flags
-  result.price = tostring(alltrade.price)
+  result.price = tostring( assert(alltrade.price, "The given 'alltrade' table has no 'price' field.") )
   result.qty = alltrade.qty
   result.value = value_to_string_or_empty_string(alltrade.value)
   result.accruedint = value_to_string_or_empty_string(alltrade.accruedint)
@@ -41,7 +47,7 @@ function StructFactory.create_AllTrade(alltrade, existing_struct)
   result.repoterm = value_to_string_or_empty_string(alltrade.repoterm)
   result.sec_code = alltrade.sec_code
   result.class_code = alltrade.class_code
-  utils.copy_datetime(result.datetime, alltrade.datetime)
+  utils.copy_datetime(result.datetime, assert(alltrade.datetime, "The given 'alltrade' table has no 'datetime' field."))
   result.period = alltrade.period
   result.open_interest = value_to_string_or_empty_string(alltrade.open_interest)
   result.exchange_code = value_or_empty_string(alltrade.exchange_code)
