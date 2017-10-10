@@ -19,23 +19,26 @@ describe("The function utils.struct_factory.create_AllTrade", function()
 
   describe("WHEN given an alltrade", function()
       
-    local alltrade
+    local alltrade, numeric_fields_names
+    
+    local nonnullable_fields_names = {"trade_num", "flags", "price", "qty", "sec_code", "class_code", "datetime", "period"}
+    local nullable_fields_names = {"value", "accruedint", "yield", "settlecode", "reporate", "repovalue", "repo2value", "repoterm", "open_interest", "exchange_code"}
     
     setup(function()
         
       alltrade = {
         trade_num = 1234567890,
         flags = 0x04,
-        price = "19.90",
+        price = 19.90,
         qty = 250,
-        value = "4975.0",
-        accruedint = "1.0",
-        yield = "2.1",
+        value = 4975.0,
+        accruedint = 1.0,
+        yield = 2.1,
         settlecode = "test-settlecode",
-        reporate = "3.59",
-        repovalue = "2.78",
-        repo2value = "8.72",
-        repoterm = "28",
+        reporate = 3.59,
+        repovalue = 2.78,
+        repo2value = 8.72,
+        repoterm = 28,
         sec_code = "AFKS",
         class_code = "TQBR",
         datetime = {
@@ -50,9 +53,10 @@ describe("The function utils.struct_factory.create_AllTrade", function()
           year = 2017
         },
         period = 1,
-        open_interest = "100500",
+        open_interest = 100500,
         exchange_code = "MOEX"
       }
+      
     end)
   
     teardown(function()
@@ -71,7 +75,12 @@ describe("The function utils.struct_factory.create_AllTrade", function()
       -- check that the result has the same data as the given alltrade
       local t_data = {}
       for field, value in result:ListFields() do
-        t_data[tostring(field.name)] = value
+        local key = tostring(field.name)
+        if type(alltrade[key]) == 'number' then 
+          t_data[key] = tonumber(value)
+        else
+          t_data[key] = value
+        end
       end
       t_data.datetime = {} -- it's a protobuf DateTimeEntry in the result, so we should reconstruct it separately as it contains additional protobuf fields.
       for field, value in result.datetime:ListFields() do
@@ -81,8 +90,7 @@ describe("The function utils.struct_factory.create_AllTrade", function()
       
     end)
       
-    local nonnullable_fields_names = {"trade_num", "flags", "price", "qty", "sec_code", "class_code", "datetime", "period"}
-    local nullable_fields_names = {"value", "accruedint", "yield", "settlecode", "reporate", "repovalue", "repo2value", "repoterm", "open_interest", "exchange_code"}
+    ----- dynamic test generation -----
       
     for _, field_name in ipairs(nonnullable_fields_names) do
       
@@ -152,16 +160,16 @@ describe("The function utils.struct_factory.create_AllTrade", function()
       alltrade_utf8 = {
         trade_num = 1234567890,
         flags = 0x04,
-        price = "19.90",
+        price = 19.90,
         qty = 250,
-        value = "4975.0",
-        accruedint = "1.0",
-        yield = "2.1",
+        value = 4975.0,
+        accruedint = 1.0,
+        yield = 2.1,
         settlecode = "тестовый сеттл код",
-        reporate = "3.59",
-        repovalue = "2.78",
-        repo2value = "8.72",
-        repoterm = "28",
+        reporate = 3.59,
+        repovalue = 2.78,
+        repo2value = 8.72,
+        repoterm = 28,
         sec_code = "AFKS",
         class_code = "TQBR",
         datetime = {
@@ -176,16 +184,24 @@ describe("The function utils.struct_factory.create_AllTrade", function()
           year = 2017
         },
         period = 1,
-        open_interest = "100500",
-        exchange_code = "ММВБ"
+        open_interest = 100500,
+        exchange_code = "тестовый эксчейндж код"
+      }
+      
+      -- the list of fields that potentially may be encoded in CP1251 encoding
+      local fields_that_may_be_encoded_in_cp1251 = {
+        settlecode = true, 
+        exchange_code = true
       }
       
       alltrade_cp1251 = {}
       for k, v in pairs(alltrade_utf8) do
-        alltrade_cp1251[k] = v
+        if fields_that_may_be_encoded_in_cp1251[k] then
+          alltrade_cp1251[k] = utils.Utf8ToCp1251( alltrade_utf8[k] )
+        else
+          alltrade_cp1251[k] = v
+        end
       end
-      alltrade_cp1251.settlecode = utils.Utf8ToCp1251(alltrade_utf8.settlecode)
-      alltrade_cp1251.exchange_code = utils.Utf8ToCp1251(alltrade_utf8.exchange_code)
     end)
   
     teardown(function()
@@ -197,14 +213,22 @@ describe("The function utils.struct_factory.create_AllTrade", function()
       
       local result = sut.create_AllTrade(alltrade_cp1251)
       
+      -- check that the result has the same data as the given alltrade
       local t_data = {}
       for field, value in result:ListFields() do
-        t_data[tostring(field.name)] = value
+        local key = tostring(field.name)
+        if type(alltrade_utf8[key]) == 'number' then 
+          t_data[key] = tonumber(value)
+        else
+          t_data[key] = value
+        end
       end
+     
       t_data.datetime = {} -- it's a protobuf DateTimeEntry in the result, so we should reconstruct it separately as it contains additional protobuf fields.
       for field, value in result.datetime:ListFields() do
         t_data.datetime[tostring(field.name)] = tonumber(value)
       end
+      
       assert.are.same(alltrade_utf8, t_data)
     end)
   

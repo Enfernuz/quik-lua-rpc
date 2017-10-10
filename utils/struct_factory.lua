@@ -57,6 +57,8 @@ end
 
 function StructFactory.create_Trade(trade, existing_struct)
   
+  if trade == nil then error("No trade provided.", 2) end
+  
   local result = (existing_struct == nil and qlua_structs.Trade() or existing_struct)
   
   result.trade_num = trade.trade_num
@@ -66,9 +68,9 @@ function StructFactory.create_Trade(trade, existing_struct)
   result.firmid = value_or_empty_string(trade.firmid)
   result.canceled_uid = value_to_string_or_empty_string(trade.canceled_uid)
   result.account = value_or_empty_string(trade.account)
-  result.price = tostring(trade.price)
+  result.price = tostring( assert(trade.price, "The given 'trade' table has no 'price' field.") )
   result.qty = trade.qty
-  result.value = tostring(trade.value)
+  result.value = tostring( assert(trade.value, "The given 'trade' table has no 'value' field.") )
   result.accruedint = value_to_string_or_empty_string(trade.accruedint)
   result.yield = value_to_string_or_empty_string(trade.yield)
   result.settlecode = value_or_empty_string(trade.settlecode)
@@ -103,7 +105,7 @@ function StructFactory.create_Trade(trade, existing_struct)
   result.trans_id = value_to_string_or_empty_string(trade.trans_id)
   result.kind = trade.kind
   result.clearing_bank_accid = value_or_empty_string(trade.clearing_bank_accid)
-  if trade.canceled_datetime ~= nil then utils.copy_datetime(result.canceled_datetime, trade.canceled_datetime) end
+  if trade.canceled_datetime then utils.copy_datetime(result.canceled_datetime, trade.canceled_datetime) end
   result.clearing_firmid = value_or_empty_string(trade.clearing_firmid)
   result.system_ref = value_or_empty_string(trade.system_ref)
   result.uid = value_to_string_or_empty_string(trade.uid)
