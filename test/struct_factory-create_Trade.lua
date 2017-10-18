@@ -132,7 +132,7 @@ describe("The function utils.struct_factory.create_Trade", function()
       assert.are.same(trade, t_data)
     end)
       
-    local nonnullable_fields_names = {"trade_num", "order_num", "price", "qty", "value", "flags", "sec_code", "class_code", "datetime", "period", "kind", }
+    local nonnullable_fields_names = {"trade_num", "order_num", "price", "qty", "value", "flags", "sec_code", "class_code", "datetime", "period", "kind"}
     local nullable_fields_names = {"brokerref", "userid", "firmid", "canceled_uid", "account", "accruedint", "yield", "settlecode", "cpfirmid", "price2", "reporate", "client_code", "accrued2", "repoterm", "repovalue", "repo2value", "start_discount", "lower_discount", "upper_discount", "block_securities", "clearing_comission", "exchange_comission", "tech_center_comission", "settle_date", "settle_currency", "trade_currency", "exchange_code", "station_id", "bank_acc_id", "broker_comission", "linked_trade", "trans_id", "clearing_bank_accid", "clearing_firmid", "system_ref", "uid"}
       
     for _, field_name in ipairs(nonnullable_fields_names) do

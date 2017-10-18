@@ -61,21 +61,21 @@ function StructFactory.create_Trade(trade, existing_struct)
   
   local result = (existing_struct == nil and qlua_structs.Trade() or existing_struct)
   
-  result.trade_num = trade.trade_num
-  result.order_num = trade.order_num
+  result.trade_num = assert(trade.trade_num, "The given 'trade' table has no 'trade_num' field.")
+  result.order_num = assert(trade.order_num, "The given 'trade' table has no 'order_num' field.")
   result.brokerref = value_or_empty_string(trade.brokerref)
   result.userid = value_or_empty_string(trade.userid)
   result.firmid = value_or_empty_string(trade.firmid)
   result.canceled_uid = value_to_string_or_empty_string(trade.canceled_uid)
   result.account = value_or_empty_string(trade.account)
   result.price = tostring( assert(trade.price, "The given 'trade' table has no 'price' field.") )
-  result.qty = trade.qty
+  result.qty = assert(trade.qty, "The given 'trade' table has no 'qty' field.")
   result.value = tostring( assert(trade.value, "The given 'trade' table has no 'value' field.") )
   result.accruedint = value_to_string_or_empty_string(trade.accruedint)
   result.yield = value_to_string_or_empty_string(trade.yield)
   result.settlecode = value_or_empty_string(trade.settlecode)
   result.cpfirmid = value_or_empty_string(trade.cpfirmid)
-  result.flags = trade.flags
+  result.flags = assert(trade.flags, "The given 'trade' table has no 'flags' field.")
   result.price2 = value_to_string_or_empty_string(trade.price2)
   result.reporate = value_to_string_or_empty_string(trade.reporate)
   result.client_code = value_or_empty_string(trade.client_code)
@@ -95,15 +95,15 @@ function StructFactory.create_Trade(trade, existing_struct)
   result.trade_currency = value_or_empty_string(trade.trade_currency)
   result.exchange_code = value_or_empty_string(trade.exchange_code)
   result.station_id = value_or_empty_string(trade.station_id)
-  result.sec_code = trade.sec_code
-  result.class_code = trade.class_code
-  utils.copy_datetime(result.datetime, trade.datetime)
+  result.sec_code = assert(trade.sec_code, "The given 'trade' table has no 'sec_code' field.")
+  result.class_code = assert(trade.class_code, "The given 'trade' table has no 'class_code' field.")
+  utils.copy_datetime(result.datetime, assert(trade.datetime, "The given 'trade' table has no 'datetime' field."))
   result.bank_acc_id = value_or_empty_string(trade.bank_acc_id)
   result.broker_comission = value_to_string_or_empty_string(trade.broker_comission)
   result.linked_trade = value_to_string_or_empty_string(trade.linked_trade)
-  result.period = trade.period
+  result.period = assert(trade.period, "The given 'trade' table has no 'period' field.")
   result.trans_id = value_to_string_or_empty_string(trade.trans_id)
-  result.kind = trade.kind
+  result.kind = assert(trade.kind, "The given 'trade' table has no 'kind' field.")
   result.clearing_bank_accid = value_or_empty_string(trade.clearing_bank_accid)
   if trade.canceled_datetime then utils.copy_datetime(result.canceled_datetime, trade.canceled_datetime) end
   result.clearing_firmid = value_or_empty_string(trade.clearing_firmid)
@@ -115,18 +115,20 @@ end
 
 function StructFactory.create_Order(order, existing_struct)
   
+  if order == nil then error("No order provided.", 2) end
+  
   local result = (existing_struct == nil and qlua_structs.Order() or existing_struct)
   
-  result.order_num = order.order_num
-  result.flags = order.flags
+  result.order_num = assert(order.order_num, "The given 'order' table has no 'order_num' field.")
+  result.flags = assert(order.flags, "The given 'order' table has no 'flags' field.")
   result.brokerref = value_or_empty_string(order.brokerref)
   result.userid = value_or_empty_string(order.userid)
   result.firmid = value_or_empty_string(order.firmid)
   result.account = value_or_empty_string(order.account)
-  result.price = tostring(order.price)
-  result.qty = tostring(order.qty)
+  result.price = tostring( assert(order.price, "The given 'order' table has no 'price' field.") )
+  result.qty = assert(order.qty, "The given 'order' table has no 'qty' field.")
   result.balance = value_to_string_or_empty_string(order.balance)
-  result.value = tostring(order.value)
+  result.value = tostring( assert(order.value, "The given 'order' table has no 'value' field.") )
   result.accruedint = value_to_string_or_empty_string(order.accruedint)
   result.yield = value_to_string_or_empty_string(order.yield)
   result.trans_id = value_to_string_or_empty_string(order.trans_id)
@@ -139,12 +141,12 @@ function StructFactory.create_Order(order, existing_struct)
   result.activation_time = value_to_string_or_empty_string(order.activation_time)
   result.linkedorder = value_to_string_or_empty_string(order.linkedorder)
   result.expiry = value_to_string_or_empty_string(order.expiry)
-  result.sec_code = order.sec_code
-  result.class_code = order.class_code
-  utils.copy_datetime(result.datetime, order.datetime)
-  if order.withdraw_datetime ~= nil then utils.copy_datetime(result.withdraw_datetime, order.withdraw_datetime) end
+  result.sec_code = assert(order.sec_code, "The given 'order' table has no 'sec_code' field.")
+  result.class_code = assert(order.class_code, "The given 'order' table has no 'class_code' field.")
+  utils.copy_datetime(result.datetime, assert(order.datetime, "The given 'order' table has no 'datetime' field."))
+  if order.withdraw_datetime then utils.copy_datetime(result.withdraw_datetime, order.withdraw_datetime) end
   result.bank_acc_id = value_or_empty_string(order.bank_acc_id)
-  result.value_entry_type = order.value_entry_type
+  result.value_entry_type = assert(order.value_entry_type, "The given 'order' table has no 'value_entry_type' field.")
   result.repoterm = value_to_string_or_empty_string(order.repoterm)
   result.repovalue = value_to_string_or_empty_string(order.repovalue)
   result.repo2value = value_to_string_or_empty_string(order.repo2value)
@@ -152,13 +154,13 @@ function StructFactory.create_Order(order, existing_struct)
   result.start_discount = value_to_string_or_empty_string(order.start_discount)
   result.reject_reason = value_or_empty_string(order.reject_reason)
   result.ext_order_flags = value_to_string_or_empty_string(order.ext_order_flags)
-  result.min_qty = order.min_qty
-  result.exec_type = order.exec_type
-  result.side_qualifier = order.side_qualifier
-  result.acnt_type = order.acnt_type
-  result.capacity = order.capacity
-  result.passive_only_order = order.passive_only_order
-  result.visible = order.visible
+  result.min_qty = assert(order.min_qty, "The given 'order' table has no 'min_qty' field.")
+  result.exec_type = assert(order.exec_type, "The given 'order' table has no 'exec_type' field.")
+  result.side_qualifier = assert(order.side_qualifier, "The given 'order' table has no 'side_qualifier' field.")
+  result.acnt_type = assert(order.acnt_type, "The given 'order' table has no 'acnt_type' field.")
+  result.capacity = assert(order.capacity, "The given 'order' table has no 'capacity' field.")
+  result.passive_only_order = assert(order.passive_only_order, "The given 'order' table has no 'passive_only_order' field.")
+  result.visible = assert(order.visible, "The given 'order' table has no 'visible' field.")
   
   return result
 end
