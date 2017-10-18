@@ -167,14 +167,16 @@ end
 
 function StructFactory.create_AccountBalance(acc_bal, existing_struct)
   
+  if acc_bal == nil then error("No acc_bal table provided.", 2) end
+  
   local result = (existing_struct == nil and qlua_structs.AccountBalance() or existing_struct)
   
-  result.firmid = acc_bal.firmid
-  result.sec_code = acc_bal.sec_code
-  result.trdaccid = acc_bal.trdaccid
-  result.depaccid = acc_bal.depaccid
-  result.openbal = tostring(acc_bal.openbal)
-  result.currentpos = tostring(acc_bal.currentpos)
+  result.firmid = utils.Cp2151ToUtf8( assert(acc_bal.firmid, "The given 'acc_bal' table has no 'firmid' field.") )
+  result.sec_code = assert(acc_bal.sec_code, "The given 'acc_bal' table has no 'sec_code' field.")
+  result.trdaccid = utils.Cp2151ToUtf8( assert(acc_bal.trdaccid, "The given 'acc_bal' table has no 'trdaccid' field.") )
+  result.depaccid = utils.Cp2151ToUtf8( assert(acc_bal.depaccid, "The given 'acc_bal' table has no 'depaccid' field.") )
+  result.openbal = tostring( assert(acc_bal.openbal, "The given 'acc_bal' table has no 'openbal' field.") )
+  result.currentpos = tostring( assert(acc_bal.currentpos, "The given 'acc_bal' table has no 'currentpos' field.") )
   result.plannedpossell = value_to_string_or_empty_string(acc_bal.plannedpossell)
   result.plannedposbuy = value_to_string_or_empty_string(acc_bal.plannedposbuy)
   result.planbal = value_to_string_or_empty_string(acc_bal.planbal)
@@ -183,7 +185,7 @@ function StructFactory.create_AccountBalance(acc_bal, existing_struct)
   result.planned = value_to_string_or_empty_string(acc_bal.planned)
   result.settlebal = value_to_string_or_empty_string(acc_bal.settlebal)
   result.bank_acc_id = value_or_empty_string(acc_bal.bank_acc_id)
-  result.firmuse = acc_bal.firmuse
+  result.firmuse = assert(acc_bal.firmuse, "The given 'acc_bal' table has no 'firmuse' field.")
   
   return result
 end
