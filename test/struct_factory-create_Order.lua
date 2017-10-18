@@ -102,7 +102,7 @@ describe("The function utils.struct_factory.create_Order", function()
       local actual_meta = getmetatable(result)
       assert.are.equal(expected_meta, actual_meta)
       
-      -- check that the result has the same data as the given alltrade
+      -- check that the result has the same data as the given order
       local t_data = {}
       for field, value in result:ListFields() do
         local key = tostring(field.name)
