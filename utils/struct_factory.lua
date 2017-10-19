@@ -192,11 +192,13 @@ end
 
 function StructFactory.create_FuturesLimit(fut_limit, existing_struct)
   
+  if fut_limit == nil then error("No fut_limit table provided.", 2) end
+  
   local result = (existing_struct == nil and qlua_structs.FuturesLimit() or existing_struct)
   
-  result.firmid = fut_limit.firmid
-  result.trdaccid = fut_limit.trdaccid
-  result.limit_type = fut_limit.limit_type
+  result.firmid = utils.Cp2151ToUtf8( assert(fut_limit.firmid, "The given 'fut_limit' table has no 'firmid' field.") )
+  result.trdaccid = utils.Cp2151ToUtf8( assert(fut_limit.trdaccid, "The given 'fut_limit' table has no 'trdaccid' field.") )
+  result.limit_type = assert(fut_limit.limit_type, "The given 'fut_limit' table has no 'limit_type' field.")
   result.liquidity_coef = value_to_string_or_empty_string(fut_limit.liquidity_coef)
   result.cbp_prev_limit = value_to_string_or_empty_string(fut_limit.cbp_prev_limit)
   result.cbplimit = value_to_string_or_empty_string(fut_limit.cbplimit)
@@ -209,7 +211,7 @@ function StructFactory.create_FuturesLimit(fut_limit, existing_struct)
   result.options_premium = value_to_string_or_empty_string(fut_limit.options_premium)
   result.ts_comission = value_to_string_or_empty_string(fut_limit.ts_comission)
   result.kgo = value_to_string_or_empty_string(fut_limit.kgo)
-  result.currcode = fut_limit.currcode
+  result.currcode = utils.Cp2151ToUtf8( assert(fut_limit.currcode, "The given 'fut_limit' table has no 'currcode' field.") )
   result.real_varmargin = value_to_string_or_empty_string(fut_limit.real_varmargin)
   
   return result
@@ -217,10 +219,12 @@ end
 
 function StructFactory.create_FuturesLimitDelete(lim_del, existing_struct)
   
+  if lim_del == nil then error("No lim_del table provided.", 2) end
+  
   local result = (existing_struct == nil and qlua_structs.FuturesLimitDelete() or existing_struct)
   
-  result.firmid = lim_del.firmid
-  result.limit_type = lim_del.limit_type
+  result.firmid = utils.Cp2151ToUtf8( assert(lim_del.firmid, "The given 'lim_del' table has no 'firmid' field.") )
+  result.limit_type = assert(lim_del.limit_type, "The given 'lim_del' table has no 'limit_type' field.")
   
   return result
 end
