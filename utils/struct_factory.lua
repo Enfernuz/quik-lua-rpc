@@ -231,19 +231,21 @@ end
 
 function StructFactory.create_FuturesClientHolding(fut_pos, existing_struct)
   
+  if fut_pos == nil then error("No fut_pos table provided.", 2) end
+  
   local result = (existing_struct == nil and qlua_structs.FuturesClientHolding() or existing_struct)
   
-  result.firmid = fut_pos.firmid
-  result.trdaccid = fut_pos.trdaccid
-  result.sec_code = fut_pos.sec_code
-  result.type = fut_pos.type
+  result.firmid = utils.Cp2151ToUtf8( assert(fut_pos.firmid, "The given 'fut_pos' table has no 'firmid' field.") )
+  result.trdaccid = utils.Cp2151ToUtf8( assert(fut_pos.trdaccid, "The given 'fut_pos' table has no 'trdaccid' field.") )
+  result.sec_code = assert(fut_pos.sec_code, "The given 'fut_pos' table has no 'sec_code' field.")
+  result.type = assert(fut_pos.type, "The given 'fut_pos' table has no 'type' field.")
   result.startbuy = value_to_string_or_empty_string(fut_pos.startbuy)
   result.startsell = value_to_string_or_empty_string(fut_pos.startsell)
   result.todaybuy = value_to_string_or_empty_string(fut_pos.todaybuy)
   result.todaysell = value_to_string_or_empty_string(fut_pos.todaysell)
   result.totalnet = value_to_string_or_empty_string(fut_pos.totalnet)
-  result.openbuys = fut_pos.openbuys
-  result.opensells = fut_pos.opensells
+  result.openbuys = assert(fut_pos.openbuys, "The given 'fut_pos' table has no 'openbuys' field.")
+  result.opensells = assert(fut_pos.opensells, "The given 'fut_pos' table has no 'opensells' field.")
   result.cbplused = value_to_string_or_empty_string(fut_pos.cbplused)
   result.cbplplanned = value_to_string_or_empty_string(fut_pos.cbplplanned)
   result.varmargin = value_to_string_or_empty_string(fut_pos.varmargin)
@@ -251,7 +253,7 @@ function StructFactory.create_FuturesClientHolding(fut_pos, existing_struct)
   result.positionvalue = value_to_string_or_empty_string(fut_pos.positionvalue)
   result.real_varmargin = value_to_string_or_empty_string(fut_pos.real_varmargin)
   result.total_varmargin = value_to_string_or_empty_string(fut_pos.total_varmargin)
-  result.session_status = fut_pos.session_status
+  result.session_status = assert(fut_pos.session_status, "The given 'fut_pos' table has no 'session_status' field.")
   
   return result
 end
