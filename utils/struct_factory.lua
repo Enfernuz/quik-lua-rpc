@@ -365,19 +365,21 @@ end
 
 function StructFactory.create_NegDeal(neg_deal, existing_struct)
   
+  if neg_deal == nil then error("No neg_deal table provided.", 2) end
+  
   local result = (existing_struct == nil and qlua_structs.NegDeal() or existing_struct)
   
-  result.neg_deal_num = neg_deal.neg_deal_num
+  result.neg_deal_num = assert(neg_deal.neg_deal_num, "The given 'neg_deal' table has no 'neg_deal_num' field.")
   result.neg_deal_time = value_to_string_or_empty_string(neg_deal.neg_deal_time)
-  result.flags = neg_deal.flags
+  result.flags = assert(neg_deal.flags, "The given 'neg_deal' table has no 'flags' field.")
   result.brokerref = value_or_empty_string(neg_deal.brokerref)
   result.userid = value_or_empty_string(neg_deal.userid)
   result.firmid = value_or_empty_string(neg_deal.firmid)
   result.cpuserid = value_or_empty_string(neg_deal.cpuserid)
   result.cpfirmid = value_or_empty_string(neg_deal.cpfirmid)
   result.account = value_or_empty_string(neg_deal.account)
-  result.price = tostring(neg_deal.price)
-  result.qty = neg_deal.qty
+  result.price = tostring( assert(neg_deal.price, "The given 'neg_deal' table has no 'price' field.") )
+  result.qty = assert(neg_deal.qty, "The given 'neg_deal' table has no 'qty' field.")
   result.matchref = value_or_empty_string(neg_deal.matchref)
   result.settlecode = value_or_empty_string(neg_deal.settlecode)
   result.yield = value_to_string_or_empty_string(neg_deal.yield)
@@ -388,7 +390,7 @@ function StructFactory.create_NegDeal(neg_deal, existing_struct)
   result.refundrate = value_to_string_or_empty_string(neg_deal.refundrate)
   result.trans_id = value_to_string_or_empty_string(neg_deal.trans_id)
   result.client_code = value_or_empty_string(neg_deal.client_code)
-  result.repoentry = neg_deal.repoentry
+  result.repoentry = assert(neg_deal.repoentry, "The given 'neg_deal' table has no 'repoentry' field.")
   result.repovalue = value_to_string_or_empty_string(neg_deal.repovalue)
   result.repo2value = value_to_string_or_empty_string(neg_deal.repo2value)
   result.repoterm = value_to_string_or_empty_string(neg_deal.repoterm)
@@ -407,14 +409,14 @@ function StructFactory.create_NegDeal(neg_deal, existing_struct)
   result.neg_deal_activation_time = value_to_string_or_empty_string(neg_deal.neg_deal_activation_time)
   result.quoteno = value_to_string_or_empty_string(neg_deal.quoteno)
   result.settle_currency = value_or_empty_string(neg_deal.settle_currency)
-  result.sec_code = neg_deal.sec_code
-  result.class_code = neg_deal.class_code
+  result.sec_code = assert(neg_deal.sec_code, "The given 'neg_deal' table has no 'sec_code' field.")
+  result.class_code = utils.Cp2151ToUtf8( assert(neg_deal.class_code, "The given 'neg_deal' table has no 'class_code' field.") )
   result.bank_acc_id = value_or_empty_string(neg_deal.bank_acc_id)
   result.withdraw_date = value_to_string_or_empty_string(neg_deal.withdraw_date)
   result.linkedorder = value_to_string_or_empty_string(neg_deal.linkedorder)
-  if neg_deal.activation_date_time ~= nil then utils.copy_datetime(result.activation_date_time, neg_deal.activation_date_time) end
-  if neg_deal.withdraw_date_time ~= nil then utils.copy_datetime(result.withdraw_date_time, neg_deal.withdraw_date_time) end
-  if neg_deal.date_time ~= nil then utils.copy_datetime(result.date_time, neg_deal.date_time) end
+  if neg_deal.activation_date_time then utils.copy_datetime(result.activation_date_time, neg_deal.activation_date_time) end
+  if neg_deal.withdraw_date_time then utils.copy_datetime(result.withdraw_date_time, neg_deal.withdraw_date_time) end
+  if neg_deal.date_time then utils.copy_datetime(result.date_time, neg_deal.date_time) end
   
   return result
 end
