@@ -283,13 +283,15 @@ end
 
 function StructFactory.create_MoneyLimitDelete(mlimit_del, existing_struct)
   
+  if mlimit_del == nil then error("No mlimit_del table provided.", 2) end
+  
   local result = (existing_struct == nil and qlua_structs.MoneyLimitDelete() or existing_struct)
   
-  result.currcode = mlimit_del.currcode
-  result.tag = value_or_empty_string(mlimit_del.tag)
-  result.client_code = mlimit_del.client_code
-  result.firmid = mlimit_del.firmid
-  result.limit_kind = mlimit_del.limit_kind
+  result.currcode = utils.Cp2151ToUtf8( assert(mlimit_del.currcode, "The given 'mlimit_del' table has no 'currcode' field.") )
+  result.tag = utils.Cp2151ToUtf8( assert(mlimit_del.tag, "The given 'mlimit_del' table has no 'tag' field.") )
+  result.client_code = utils.Cp2151ToUtf8( assert(mlimit_del.client_code, "The given 'mlimit_del' table has no 'client_code' field.") )
+  result.firmid = utils.Cp2151ToUtf8( assert(mlimit_del.firmid, "The given 'mlimit_del' table has no 'firmid' field.") )
+  result.limit_kind = assert(mlimit_del.limit_kind, "The given 'mlimit_del' table has no 'limit_kind' field.")
   
   return result
 end
