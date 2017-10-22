@@ -423,19 +423,21 @@ end
 
 function StructFactory.create_NegTrade(neg_trade, existing_struct)
   
+  if neg_trade == nil then error("No neg_trade table provided.", 2) end
+  
   local result = (existing_struct == nil and qlua_structs.NegTrade() or existing_struct)
   
-  result.trade_num = neg_trade.trade_num
+  result.trade_num = assert(neg_trade.trade_num, "The given 'neg_trade' table has no 'trade_num' field.")
   result.trade_date = value_to_string_or_empty_string(neg_trade.trade_date)
   result.settle_date = value_to_string_or_empty_string(neg_trade.settle_date)
-  result.flags = neg_trade.flags
+  result.flags = assert(neg_trade.flags, "The given 'neg_trade' table has no 'flags' field.")
   result.brokerref = value_or_empty_string(neg_trade.brokerref)
   result.firmid = value_or_empty_string(neg_trade.firmid)
   result.account = value_or_empty_string(neg_trade.account)
   result.cpfirmid = value_or_empty_string(neg_trade.cpfirmid)
   result.cpaccount = value_or_empty_string(neg_trade.cpaccount)
-  result.price = tostring(neg_trade.price)
-  result.qty = neg_trade.qty
+  result.price = tostring( assert(neg_trade.price, "The given 'neg_trade' table has no 'price' field.") )
+  result.qty = assert(neg_trade.qty, "The given 'neg_trade' table has no 'qty' field.")
   result.value = value_to_string_or_empty_string(neg_trade.value)
   result.settlecode = value_or_empty_string(neg_trade.settlecode)
   result.report_num = value_to_string_or_empty_string(neg_trade.report_num)
@@ -459,8 +461,8 @@ function StructFactory.create_NegTrade(neg_trade, existing_struct)
   result.upper_discount = value_to_string_or_empty_string(neg_trade.upper_discount)
   result.block_securities = value_to_string_or_empty_string(neg_trade.block_securities)
   result.urgency_flag = value_to_string_or_empty_string(neg_trade.urgency_flag)
-  result.type = neg_trade.type
-  result.operation_type = neg_trade.operation_type
+  result.type = assert(neg_trade.type, "The given 'neg_trade' table has no 'type' field.")
+  result.operation_type = assert(neg_trade.operation_type, "The given 'neg_trade' table has no 'operation_type' field.")
   result.expected_discount = value_to_string_or_empty_string(neg_trade.expected_discount)
   result.expected_quantity = value_to_string_or_empty_string(neg_trade.expected_quantity)
   result.expected_repovalue = value_to_string_or_empty_string(neg_trade.expected_repovalue)
@@ -468,23 +470,23 @@ function StructFactory.create_NegTrade(neg_trade, existing_struct)
   result.expected_return_value = value_to_string_or_empty_string(neg_trade.expected_return_value)
   result.order_num = value_to_string_or_empty_string(neg_trade.order_num)
   result.report_trade_date = value_to_string_or_empty_string(neg_trade.report_trade_date)
-  result.settled = neg_trade.settled
-  result.clearing_type = neg_trade.clearing_type
+  result.settled = assert(neg_trade.settled, "The given 'neg_trade' table has no 'settled' field.")
+  result.clearing_type = assert(neg_trade.clearing_type, "The given 'neg_trade' table has no 'clearing_type' field.")
   result.report_comission = value_to_string_or_empty_string(neg_trade.report_comission)
   result.coupon_payment = value_to_string_or_empty_string(neg_trade.coupon_payment)
   result.principal_payment = value_to_string_or_empty_string(neg_trade.principal_payment)
   result.principal_payment_date = value_to_string_or_empty_string(neg_trade.principal_payment_date)
   result.nextdaysettle = value_to_string_or_empty_string(neg_trade.nextdaysettle)
   result.settle_currency = value_or_empty_string(neg_trade.settle_currency)
-  result.sec_code = neg_trade.sec_code
-  result.class_code = neg_trade.class_code
+  result.sec_code = assert(neg_trade.sec_code, "The given 'neg_trade' table has no 'sec_code' field.")
+  result.class_code = utils.Cp2151ToUtf8( assert(neg_trade.class_code, "The given 'neg_trade' table has no 'class_code' field.") )
   result.compval = value_to_string_or_empty_string(neg_trade.compval)
   result.parenttradeno = value_to_string_or_empty_string(neg_trade.parenttradeno)
   result.bankid = value_or_empty_string(neg_trade.bankid)
   result.bankaccid = value_or_empty_string(neg_trade.bankaccid)
   result.precisebalance = value_to_string_or_empty_string(neg_trade.precisebalance)
   result.confirmtime = value_to_string_or_empty_string(neg_trade.confirmtime)
-  result.ex_flags = neg_trade.ex_flags
+  result.ex_flags = assert(neg_trade.ex_flags, "The given 'neg_trade' table has no 'ex_flags' field.")
   result.confirmreport = value_to_string_or_empty_string(neg_trade.confirmreport)
   
   return result
