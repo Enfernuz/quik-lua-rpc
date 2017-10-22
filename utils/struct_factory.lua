@@ -298,35 +298,39 @@ end
 
 function StructFactory.create_DepoLimit(dlimit, existing_struct)
   
+  if dlimit == nil then error("No dlimit table provided.", 2) end
+  
   local result = (existing_struct == nil and qlua_structs.DepoLimit() or existing_struct)
   
-  result.sec_code = dlimit.sec_code
-  result.trdaccid = dlimit.trdaccid
-  result.firmid = dlimit.firmid
-  result.client_code = dlimit.client_code
-  result.openbal = dlimit.openbal
-  result.openlimit = dlimit.openlimit
-  result.currentbal = dlimit.currentbal
-  result.currentlimit = dlimit.currentlimit
-  result.locked_sell = dlimit.locked_sell
-  result.locked_buy = dlimit.locked_buy
-  result.locked_buy_value = value_to_string_or_empty_string(dlimit.locked_buy_value)
-  result.locked_sell_value = value_to_string_or_empty_string(dlimit.locked_sell_value)
-  result.awg_position_price = value_to_string_or_empty_string(dlimit.awg_position_price)
-  result.limit_kind = dlimit.limit_kind
+  result.sec_code = utils.Cp2151ToUtf8( assert(dlimit.sec_code, "The given 'dlimit' table has no 'sec_code' field.") )
+  result.trdaccid = utils.Cp2151ToUtf8( assert(dlimit.trdaccid, "The given 'dlimit' table has no 'trdaccid' field.") )
+  result.firmid = utils.Cp2151ToUtf8( assert(dlimit.firmid, "The given 'dlimit' table has no 'firmid' field.") )
+  result.client_code = utils.Cp2151ToUtf8( assert(dlimit.client_code, "The given 'dlimit' table has no 'client_code' field.") )
+  result.openbal = assert(dlimit.openbal, "The given 'dlimit' table has no 'openbal' field.")
+  result.openlimit = assert(dlimit.openlimit, "The given 'dlimit' table has no 'openlimit' field.")
+  result.currentbal = assert(dlimit.currentbal, "The given 'dlimit' table has no 'currentbal' field.")
+  result.currentlimit = assert(dlimit.currentlimit, "The given 'dlimit' table has no 'currentlimit' field.")
+  result.locked_sell = assert(dlimit.locked_sell, "The given 'dlimit' table has no 'locked_sell' field.")
+  result.locked_buy = assert(dlimit.locked_buy, "The given 'dlimit' table has no 'locked_buy' field.")
+  result.locked_buy_value = tostring( assert(dlimit.locked_buy_value, "The given 'dlimit' table has no 'locked_buy_value' field.") )
+  result.locked_sell_value = tostring( assert(dlimit.locked_sell_value, "The given 'dlimit' table has no 'locked_sell_value' field.") )
+  result.awg_position_price = tostring( assert(dlimit.awg_position_price, "The given 'dlimit' table has no 'awg_position_price' field.") )
+  result.limit_kind = assert(dlimit.limit_kind, "The given 'dlimit' table has no 'limit_kind' field.")
   
   return result
 end
 
 function StructFactory.create_DepoLimitDelete(dlimit_del, existing_struct)
   
+  if dlimit_del == nil then error("No dlimit_del table provided.", 2) end
+  
   local result = (existing_struct == nil and qlua_structs.DepoLimitDelete() or existing_struct)
   
-  result.sec_code = dlimit_del.sec_code
-  result.trdaccid = dlimit_del.trdaccid
-  result.firmid = dlimit_del.firmid
-  result.client_code = dlimit_del.client_code
-  result.limit_kind = dlimit_del.limit_kind
+  result.sec_code = utils.Cp2151ToUtf8( assert(dlimit_del.sec_code, "The given 'dlimit_del' table has no 'sec_code' field.") )
+  result.trdaccid = utils.Cp2151ToUtf8( assert(dlimit_del.trdaccid, "The given 'dlimit_del' table has no 'trdaccid' field.") )
+  result.firmid = utils.Cp2151ToUtf8( assert(dlimit_del.firmid, "The given 'dlimit_del' table has no 'firmid' field.") )
+  result.client_code = utils.Cp2151ToUtf8( assert(dlimit_del.client_code, "The given 'dlimit_del' table has no 'client_code' field.") )
+  result.limit_kind = assert(dlimit_del.limit_kind, "The given 'dlimit_del' table has no 'limit_kind' field.")
   
   return result
 end
