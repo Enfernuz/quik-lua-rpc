@@ -37,12 +37,12 @@ describe("The function utils.struct_factory.create_FuturesLimitDelete", function
         
       local result = sut.create_FuturesLimitDelete(lim_del)
         
-      -- check the result is a protobuf FuturesLimit structure
+      -- check the result is a protobuf FuturesLimitDelete structure
       local expected_meta = getmetatable( qlua_structs.FuturesLimitDelete() )
       local actual_meta = getmetatable(result)
       assert.are.equal(expected_meta, actual_meta)
       
-      -- check that the result has the same data as the given futures limit delete
+      -- check that the result has the same data as the given futures limit delete table
       local t_data = {}
       for field, value in result:ListFields() do
         local key = tostring(field.name)

@@ -259,13 +259,15 @@ function StructFactory.create_FuturesClientHolding(fut_pos, existing_struct)
 end
 
 function StructFactory.create_MoneyLimit(mlimit, existing_struct)
+  
+  if mlimit == nil then error("No mlimit table provided.", 2) end
 
   local result = (existing_struct == nil and qlua_structs.MoneyLimit() or existing_struct)
   
-  result.currcode = value_or_empty_string(mlimit.currcode)
-  result.tag = value_or_empty_string(mlimit.tag)
-  result.firmid = value_or_empty_string(mlimit.firmid)
-  result.client_code = value_or_empty_string(mlimit.client_code)
+  result.currcode = utils.Cp2151ToUtf8( assert(mlimit.currcode, "The given 'mlimit' table has no 'currcode' field.") )
+  result.tag = utils.Cp2151ToUtf8( assert(mlimit.tag, "The given 'mlimit' table has no 'tag' field.") )
+  result.firmid = utils.Cp2151ToUtf8( assert(mlimit.firmid, "The given 'mlimit' table has no 'firmid' field.") )
+  result.client_code = utils.Cp2151ToUtf8( assert(mlimit.client_code, "The given 'mlimit' table has no 'client_code' field.") )
   result.openbal = value_to_string_or_empty_string(mlimit.openbal)
   result.openlimit = value_to_string_or_empty_string(mlimit.openlimit)
   result.currentbal = value_to_string_or_empty_string(mlimit.currentbal)
@@ -274,7 +276,7 @@ function StructFactory.create_MoneyLimit(mlimit, existing_struct)
   result.locked_value_coef = value_to_string_or_empty_string(mlimit.locked_value_coef)
   result.locked_margin_value = value_to_string_or_empty_string(mlimit.locked_margin_value)
   result.leverage = value_to_string_or_empty_string(mlimit.leverage)
-  result.limit_kind = mlimit.limit_kind
+  result.limit_kind = assert(mlimit.limit_kind, "The given 'mlimit' table has no 'limit_kind' field.")
   
   return result
 end

@@ -54,12 +54,12 @@ describe("The function utils.struct_factory.create_FuturesClientHolding", functi
         
       local result = sut.create_FuturesClientHolding(fut_pos)
         
-      -- check the result is a protobuf FuturesLimit structure
+      -- check the result is a protobuf FuturesClientHolding structure
       local expected_meta = getmetatable( qlua_structs.FuturesClientHolding() )
       local actual_meta = getmetatable(result)
       assert.are.equal(expected_meta, actual_meta)
       
-      -- check that the result has the same data as the given account balance
+      -- check that the result has the same data as the given futures client holding table
       local t_data = {}
       for field, value in result:ListFields() do
         local key = tostring(field.name)
@@ -133,7 +133,7 @@ describe("The function utils.struct_factory.create_FuturesClientHolding", functi
   
   -----
   
-  describe("WHEN given a futures limit table with CP1251-encoded values", function()
+  describe("WHEN given a futures client holding table with CP1251-encoded values", function()
       
     local utils = require("utils.utils")
     
