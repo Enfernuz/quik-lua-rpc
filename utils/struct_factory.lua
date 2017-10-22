@@ -337,11 +337,13 @@ end
 
 function StructFactory.create_AccountPosition(acc_pos, existing_struct)
   
+  if acc_pos == nil then error("No acc_pos table provided.", 2) end
+  
   local result = (existing_struct == nil and qlua_structs.AccountPosition() or existing_struct)
   
-  result.firmid = acc_pos.firmid
-  result.currcode = acc_pos.currcode
-  result.tag = value_or_empty_string(acc_pos.tag)
+  result.firmid = utils.Cp2151ToUtf8( assert(acc_pos.firmid, "The given 'acc_pos' table has no 'firmid' field.") )
+  result.currcode = utils.Cp2151ToUtf8( assert(acc_pos.currcode, "The given 'acc_pos' table has no 'currcode' field.") )
+  result.tag = utils.Cp2151ToUtf8( assert(acc_pos.tag, "The given 'acc_pos' table has no 'tag' field.") )
   result.description = value_or_empty_string(acc_pos.description)
   result.openbal = value_to_string_or_empty_string(acc_pos.openbal)
   result.currentpos = value_to_string_or_empty_string(acc_pos.currentpos)
