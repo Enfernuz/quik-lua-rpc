@@ -494,44 +494,46 @@ end
 
 function StructFactory.create_StopOrder(stop_order, existing_struct)
   
+  if stop_order == nil then error("No stop_order table provided.", 2) end
+  
   local result = (existing_struct == nil and qlua_structs.StopOrder() or existing_struct)
   
-  result.order_num = stop_order.order_num
+  result.order_num = assert(stop_order.order_num, "The given 'stop_order' table has no 'order_num' field.")
   result.ordertime = value_to_string_or_empty_string(stop_order.ordertime)
-  result.flags = stop_order.flags
+  result.flags = assert(stop_order.flags, "The given 'stop_order' table has no 'flags' field.")
   result.brokerref = value_or_empty_string(stop_order.brokerref)
-  result.firmid = stop_order.firmid
-  result.account = stop_order.account
-  result.condition = stop_order.condition
-  result.condition_price = tostring(stop_order.condition_price)
-  result.price = tostring(stop_order.price)
-  result.qty = stop_order.qty
+  result.firmid = value_or_empty_string(stop_order.firmid)
+  result.account = utils.Cp2151ToUtf8( assert(stop_order.account, "The given 'stop_order' table has no 'account' field.") )
+  result.condition = assert(stop_order.condition, "The given 'stop_order' table has no 'condition' field.")
+  result.condition_price = tostring( assert(stop_order.condition_price, "The given 'stop_order' table has no 'condition_price' field.") )
+  result.price = tostring( assert(stop_order.price, "The given 'stop_order' table has no 'price' field.") )
+  result.qty = assert(stop_order.qty, "The given 'stop_order' table has no 'qty' field.")
   result.linkedorder = value_to_string_or_empty_string(stop_order.linkedorder)
   result.expiry = value_to_string_or_empty_string(stop_order.expiry)
   result.trans_id = value_to_string_or_empty_string(stop_order.trans_id)
-  result.client_code = value_or_empty_string(stop_order.client_code)
+  result.client_code = utils.Cp2151ToUtf8( assert(stop_order.client_code, "The given 'stop_order' table has no 'client_code' field.") )
   result.co_order_num = value_to_string_or_empty_string(stop_order.co_order_num)
   result.co_order_price = value_to_string_or_empty_string(stop_order.co_order_price)
-  result.stop_order_type = stop_order.stop_order_type
+  result.stop_order_type = assert(stop_order.stop_order_type, "The given 'stop_order' table has no 'stop_order_type' field.")
   result.orderdate = value_to_string_or_empty_string(stop_order.orderdate)
   result.alltrade_num = value_to_string_or_empty_string(stop_order.alltrade_num)
-  result.stopflags = stop_order.stopflags
+  result.stopflags = assert(stop_order.stopflags, "The given 'stop_order' table has no 'stopflags' field.")
   result.offset = value_to_string_or_empty_string(stop_order.offset)
   result.spread = value_to_string_or_empty_string(stop_order.spread)
   result.balance = value_to_string_or_empty_string(stop_order.balance)
   result.uid = value_to_string_or_empty_string(stop_order.uid)
-  result.filled_qty = stop_order.filled_qty
+  result.filled_qty = assert(stop_order.filled_qty, "The given 'stop_order' table has no 'filled_qty' field.")
   result.withdraw_time = value_to_string_or_empty_string(stop_order.withdraw_time)
   result.condition_price2 = value_to_string_or_empty_string(stop_order.condition_price2)
   result.active_from_time = value_to_string_or_empty_string(stop_order.active_from_time)
   result.active_to_time = value_to_string_or_empty_string(stop_order.active_to_time)
-  result.sec_code = stop_order.sec_code
-  result.class_code = stop_order.class_code
+  result.sec_code = assert(stop_order.sec_code, "The given 'stop_order' table has no 'sec_code' field.")
+  result.class_code = utils.Cp2151ToUtf8( assert(stop_order.class_code, "The given 'stop_order' table has no 'class_code' field.") )
   result.condition_sec_code = value_or_empty_string(stop_order.condition_sec_code)
   result.condition_class_code = value_or_empty_string(stop_order.condition_class_code)
   result.canceled_uid = value_to_string_or_empty_string(stop_order.canceled_uid)
-  utils.copy_datetime(result.order_date_time, stop_order.order_date_time)
-  if stop_order.withdraw_datetime ~= nil then utils.copy_datetime(result.withdraw_datetime, stop_order.withdraw_datetime) end
+  utils.copy_datetime(result.order_date_time, assert(stop_order.order_date_time, "The given 'stop_order' table has no 'order_date_time' field."))
+  if stop_order.withdraw_datetime then utils.copy_datetime(result.withdraw_datetime, stop_order.withdraw_datetime) end
   
   return result
 end
