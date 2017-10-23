@@ -540,14 +540,16 @@ end
 
 function StructFactory.create_Transaction(trans_reply, existing_struct)
   
+  if trans_reply == nil then error("No trans_reply table provided.", 2) end
+  
   local result = (existing_struct == nil and qlua_structs.Transaction() or existing_struct)
   
-  result.trans_id = trans_reply.trans_id
-  result.status = trans_reply.status
+  result.trans_id = assert(trans_reply.trans_id, "The given 'trans_reply' table has no 'trans_id' field.")
+  result.status = assert(trans_reply.status, "The given 'trans_reply' table has no 'status' field.")
   result.result_msg = value_or_empty_string(trans_reply.result_msg)
-  if trans_reply.date_time ~= nil then utils.copy_datetime(result.date_time, trans_reply.date_time) end
+  utils.copy_datetime(result.date_time, assert(trans_reply.date_time, "The given 'trans_reply' table has no 'date_time' field."))
   result.uid = value_to_string_or_empty_string(trans_reply.uid)
-  result.flags = trans_reply.flags
+  result.flags = assert(trans_reply.flags, "The given 'trans_reply' table has no 'flags' field.")
   result.server_trans_id = value_to_string_or_empty_string(trans_reply.server_trans_id)
   result.order_num = value_to_string_or_empty_string(trans_reply.order_num)
   result.price = value_to_string_or_empty_string(trans_reply.price)
