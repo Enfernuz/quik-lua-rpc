@@ -568,12 +568,14 @@ end
 
 function StructFactory.create_Security(security, existing_struct)
   
-  local result = (existing_struct == nil and qlua_structs.Transaction() or existing_struct)
+  if security == nil then error("No security table provided.", 2) end
   
-  result.code = value_or_empty_string(security.code)
+  local result = (existing_struct == nil and qlua_structs.Security() or existing_struct)
+  
+  result.code = assert(security.code, "The given 'security' table has no 'code' field.")
   result.name = value_or_empty_string(security.name)
   result.short_name = value_or_empty_string(security.short_name)
-  result.class_code = value_or_empty_string(security.class_code)
+  result.class_code = utils.Cp2151ToUtf8( assert(security.class_code, "The given 'security' table has no 'class_code' field.") )
   result.class_name = value_or_empty_string(security.class_name)
   result.face_value = value_to_string_or_empty_string(security.face_value)
   result.face_unit = value_or_empty_string(security.face_unit)

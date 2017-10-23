@@ -87,7 +87,7 @@ describe("The function utils.struct_factory.create_Transaction", function()
       assert.are.same(trans_reply, t_data)
     end)
       
-    local nonnullable_fields_names = {"trans_id", "status", "date_time", "flags", }
+    local nonnullable_fields_names = {"trans_id", "status", "date_time", "flags"}
     local nullable_fields_names = {"result_msg", "uid", "server_trans_id", "order_num", "price", "quantity", "balance", "firm_id", "account", "client_code", "brokerref", "class_code", "sec_code", "exchange_code"}
       
     for _, field_name in ipairs(nonnullable_fields_names) do
