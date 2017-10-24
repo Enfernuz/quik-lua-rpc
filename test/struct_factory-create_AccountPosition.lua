@@ -72,6 +72,39 @@ describe("The function utils.struct_factory.create_AccountPosition", function()
       assert.are.same(acc_pos, t_data)
     end)
       
+    describe("AND an existing AccountPosition protobuf struct", function()
+      
+      local existing_struct
+      
+      setup(function()
+        existing_struct = qlua_structs.AccountPosition()
+      end)
+  
+      teardown(function()
+        existing_struct = nil
+      end)
+    
+      it("SHOULD return the existing AccountPosition protobuf struct which equals (data-wide, not literally) to the given AccountPosition table", function()
+          
+        local result = sut.create_AccountPosition(acc_pos, existing_struct)
+        
+        assert.are.equals(existing_struct, result)
+        
+        -- check that the result has the same data as the given account position table
+        local t_data = {}
+        for field, value in result:ListFields() do
+          local key = tostring(field.name)
+          if type(acc_pos[key]) == 'number' then 
+            t_data[key] = tonumber(value)
+          else
+            t_data[key] = value
+          end
+        end
+
+        assert.are.same(acc_pos, t_data)
+      end)
+    end)    
+    
     local nonnullable_fields_names = {"firmid", "currcode", "tag"}
     local nullable_fields_names = {"description", "openbal", "currentpos", "plannedpos", "limit1", "limit2", "orderbuy", "ordersell", "netto", "plannedbal", "debit", "credit", "bank_acc_id", "margincall", "settlebal"}
       

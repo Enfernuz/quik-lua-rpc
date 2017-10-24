@@ -67,6 +67,39 @@ describe("The function utils.struct_factory.create_DepoLimit", function()
 
       assert.are.same(dlimit, t_data)
     end)
+  
+    describe("AND an existing DepoLimit protobuf struct", function()
+      
+      local existing_struct
+      
+      setup(function()
+        existing_struct = qlua_structs.DepoLimit()
+      end)
+  
+      teardown(function()
+        existing_struct = nil
+      end)
+    
+      it("SHOULD return the existing DepoLimit protobuf struct which equals (data-wide, not literally) to the given depo limit table", function()
+          
+        local result = sut.create_DepoLimit(dlimit, existing_struct)
+        
+        assert.are.equals(existing_struct, result)
+        
+        -- check that the result has the same data as the given depo limit table
+        local t_data = {}
+        for field, value in result:ListFields() do
+          local key = tostring(field.name)
+          if type(dlimit[key]) == 'number' then 
+            t_data[key] = tonumber(value)
+          else
+            t_data[key] = value
+          end
+        end
+
+        assert.are.same(dlimit, t_data)
+      end)
+    end)
       
     local nonnullable_fields_names = {"sec_code", "trdaccid", "firmid", "client_code", "openbal", "openlimit", "currentbal", "currentlimit", "locked_sell", "locked_buy", "locked_buy_value", "locked_sell_value", "awg_position_price", "limit_kind"}
     local nullable_fields_names = {}

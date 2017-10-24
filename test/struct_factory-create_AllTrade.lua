@@ -82,12 +82,52 @@ describe("The function utils.struct_factory.create_AllTrade", function()
           t_data[key] = value
         end
       end
+      
       t_data.datetime = {} -- it's a protobuf DateTimeEntry in the result, so we should reconstruct it separately as it contains additional protobuf fields.
       for field, value in result.datetime:ListFields() do
         t_data.datetime[tostring(field.name)] = tonumber(value)
       end
+      
       assert.are.same(alltrade, t_data)
       
+    end)
+  
+    describe("AND an existing AllTrade protobuf struct", function()
+      
+      local existing_struct
+      
+      setup(function()
+        existing_struct = qlua_structs.AllTrade()
+      end)
+  
+      teardown(function()
+        existing_struct = nil
+      end)
+    
+      it("SHOULD return the existing AllTrade protobuf struct which equals (data-wide, not literally) to the given AllTrade table", function()
+          
+        local result = sut.create_AllTrade(alltrade, existing_struct)
+        
+        assert.are.equals(existing_struct, result)
+        
+        -- check that the result has the same data as the given alltrade table
+        local t_data = {}
+        for field, value in result:ListFields() do
+          local key = tostring(field.name)
+          if type(alltrade[key]) == 'number' then 
+            t_data[key] = tonumber(value)
+          else
+            t_data[key] = value
+          end
+        end
+        
+        t_data.datetime = {} -- it's a protobuf DateTimeEntry in the result, so we should reconstruct it separately as it contains additional protobuf fields.
+        for field, value in result.datetime:ListFields() do
+          t_data.datetime[tostring(field.name)] = tonumber(value)
+        end
+
+        assert.are.same(alltrade, t_data)
+      end)
     end)
       
     ----- dynamic test generation -----

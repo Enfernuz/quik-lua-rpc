@@ -150,7 +150,7 @@ describe("The function utils.struct_factory.create_Trade", function()
         
         assert.are.equals(existing_struct, result)
         
-        -- check that the result has the same data as the given transaction table
+        -- check that the result has the same data as the given trade table
         local t_data = {}
         for field, value in result:ListFields() do
           local key = tostring(field.name)
