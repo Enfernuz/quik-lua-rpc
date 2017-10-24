@@ -66,6 +66,39 @@ describe("The function utils.struct_factory.create_MoneyLimit", function()
 
       assert.are.same(mlimit, t_data)
     end)
+  
+    describe("AND an existing MoneyLimit protobuf struct", function()
+      
+      local existing_struct
+      
+      setup(function()
+        existing_struct = qlua_structs.MoneyLimit()
+      end)
+  
+      teardown(function()
+        existing_struct = nil
+      end)
+    
+      it("SHOULD return the existing MoneyLimit protobuf struct which equals (data-wide, not literally) to the given MoneyLimit table", function()
+          
+        local result = sut.create_MoneyLimit(mlimit, existing_struct)
+        
+        assert.are.equals(existing_struct, result)
+        
+        -- check that the result has the same data as the given money limit table
+        local t_data = {}
+        for field, value in result:ListFields() do
+          local key = tostring(field.name)
+          if type(mlimit[key]) == 'number' then 
+            t_data[key] = tonumber(value)
+          else
+            t_data[key] = value
+          end
+        end
+
+        assert.are.same(mlimit, t_data)
+      end)
+    end)
       
     local nonnullable_fields_names = {"currcode", "tag", "firmid", "client_code", "limit_kind"}
     local nullable_fields_names = {"openbal", "openlimit", "currentbal", "currentlimit", "locked", "locked_value_coef", "locked_margin_value", "leverage"}

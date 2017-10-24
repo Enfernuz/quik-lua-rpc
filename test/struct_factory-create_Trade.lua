@@ -162,14 +162,57 @@ describe("The function utils.struct_factory.create_Trade", function()
         end
         
         t_data.datetime = {} -- it's a protobuf DateTimeEntry in the result, so we should reconstruct it separately as it contains additional protobuf fields.
-      for field, value in result.datetime:ListFields() do
-        t_data.datetime[tostring(field.name)] = tonumber(value)
-      end
+        for field, value in result.datetime:ListFields() do
+          t_data.datetime[tostring(field.name)] = tonumber(value)
+        end
+        
+        t_data.canceled_datetime = {} -- same here
+        for field, value in result.canceled_datetime:ListFields() do
+          t_data.canceled_datetime[tostring(field.name)] = tonumber(value)
+        end
+
+        assert.are.same(trade, t_data)
+      end)
+    end)
+  
+    describe("AND an existing Trade protobuf struct", function()
       
-      t_data.canceled_datetime = {} -- same here
-      for field, value in result.canceled_datetime:ListFields() do
-        t_data.canceled_datetime[tostring(field.name)] = tonumber(value)
-      end
+      local existing_struct
+      
+      setup(function()
+        existing_struct = qlua_structs.Trade()
+      end)
+  
+      teardown(function()
+        existing_struct = nil
+      end)
+    
+      it("SHOULD return the existing Trade protobuf struct which equals (data-wide, not literally) to the given Trade table", function()
+          
+        local result = sut.create_Trade(trade, existing_struct)
+        
+        assert.are.equals(existing_struct, result)
+        
+        -- check that the result has the same data as the given trade table
+        local t_data = {}
+        for field, value in result:ListFields() do
+          local key = tostring(field.name)
+          if type(trade[key]) == 'number' then 
+            t_data[key] = tonumber(value)
+          else
+            t_data[key] = value
+          end
+        end
+        
+        t_data.datetime = {} -- it's a protobuf DateTimeEntry in the result, so we should reconstruct it separately as it contains additional protobuf fields.
+        for field, value in result.datetime:ListFields() do
+          t_data.datetime[tostring(field.name)] = tonumber(value)
+        end
+        
+        t_data.canceled_datetime = {} -- same here
+        for field, value in result.canceled_datetime:ListFields() do
+          t_data.canceled_datetime[tostring(field.name)] = tonumber(value)
+        end
 
         assert.are.same(trade, t_data)
       end)

@@ -125,6 +125,49 @@ describe("The function utils.struct_factory.create_Order", function()
       
       assert.are.same(order, t_data)
     end)
+  
+    describe("AND an existing Order protobuf struct", function()
+      
+      local existing_struct
+      
+      setup(function()
+        existing_struct = qlua_structs.Order()
+      end)
+  
+      teardown(function()
+        existing_struct = nil
+      end)
+    
+      it("SHOULD return the existing Order protobuf struct which equals (data-wide, not literally) to the given order table", function()
+          
+        local result = sut.create_Order(order, existing_struct)
+        
+        assert.are.equals(existing_struct, result)
+        
+        -- check that the result has the same data as the given order table
+        local t_data = {}
+        for field, value in result:ListFields() do
+          local key = tostring(field.name)
+          if type(order[key]) == 'number' then 
+            t_data[key] = tonumber(value)
+          else
+            t_data[key] = value
+          end
+        end
+        
+        t_data.datetime = {} -- it's a protobuf DateTimeEntry in the result, so we should reconstruct it separately as it contains additional protobuf fields.
+      for field, value in result.datetime:ListFields() do
+        t_data.datetime[tostring(field.name)] = tonumber(value)
+      end
+      
+      t_data.withdraw_datetime = {} -- same here
+      for field, value in result.withdraw_datetime:ListFields() do
+        t_data.withdraw_datetime[tostring(field.name)] = tonumber(value)
+      end
+
+        assert.are.same(order, t_data)
+      end)
+    end)
       
     local nonnullable_fields_names = {"order_num", "flags", "price", "qty", "value", "sec_code", "class_code", "datetime", "value_entry_type", "min_qty", "exec_type", "side_qualifier", "acnt_type", "capacity", "passive_only_order", "visible"}
     local nullable_fields_names = {"brokerref", "userid", "firmid", "account", "balance", "accruedint", "yield", "trans_id", "client_code", "price2", "settlecode", "uid", "canceled_uid", "exchange_code", "activation_time", "linkedorder", "expiry", "bank_acc_id", "repoterm", "repovalue", "repo2value", "repo_value_balance", "start_discount", "reject_reason", "ext_order_flags"}

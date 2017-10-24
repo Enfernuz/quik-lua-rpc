@@ -146,6 +146,54 @@ describe("The function utils.struct_factory.create_NegDeal", function()
       
       assert.are.same(neg_deal, t_data)
     end)
+  
+    describe("AND an existing NegDeal protobuf struct", function()
+      
+      local existing_struct
+      
+      setup(function()
+        existing_struct = qlua_structs.NegDeal()
+      end)
+  
+      teardown(function()
+        existing_struct = nil
+      end)
+    
+      it("SHOULD return the existing NegDeal protobuf struct which equals (data-wide, not literally) to the given neg deal table", function()
+          
+        local result = sut.create_NegDeal(neg_deal, existing_struct)
+        
+        assert.are.equals(existing_struct, result)
+        
+        -- check that the result has the same data as the given neg deal table
+        local t_data = {}
+        for field, value in result:ListFields() do
+          local key = tostring(field.name)
+          if type(neg_deal[key]) == 'number' then 
+            t_data[key] = tonumber(value)
+          else
+            t_data[key] = value
+          end
+        end
+        
+        t_data.date_time = {} -- it's a protobuf DateTimeEntry in the result, so we should reconstruct it separately as it contains additional protobuf fields.
+      for field, value in result.date_time:ListFields() do
+        t_data.date_time[tostring(field.name)] = tonumber(value)
+      end
+      
+      t_data.activation_date_time = {} -- same here
+      for field, value in result.activation_date_time:ListFields() do
+        t_data.activation_date_time[tostring(field.name)] = tonumber(value)
+      end
+      
+      t_data.withdraw_date_time = {} -- same here
+      for field, value in result.withdraw_date_time:ListFields() do
+        t_data.withdraw_date_time[tostring(field.name)] = tonumber(value)
+      end
+
+        assert.are.same(neg_deal, t_data)
+      end)
+    end)
       
     local nonnullable_fields_names = {"neg_deal_num", "flags", "price", "qty", "repoentry", "sec_code", "class_code", }
     local nullable_fields_names = {"neg_deal_time", "brokerref", "userid", "firmid", "cpuserid", "cpfirmid", "account", "matchref", "settlecode", "yield", "accruedint", "value", "price2", "reporate", "refundrate", "trans_id", "client_code", "repovalue", "repo2value", "repoterm", "start_discount", "lower_discount", "upper_discount", "block_securities", "uid", "withdraw_time", "neg_deal_date", "balance", "origin_repovalue", "origin_qty", "origin_discount", "neg_deal_activation_date", "neg_deal_activation_time", "quoteno", "settle_currency", "bank_acc_id", "withdraw_date", "linkedorder"}

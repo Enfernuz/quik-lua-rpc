@@ -114,6 +114,39 @@ describe("The function utils.struct_factory.create_NegTrade", function()
       
       assert.are.same(neg_trade, t_data)
     end)
+  
+    describe("AND an existing NegTrade protobuf struct", function()
+      
+      local existing_struct
+      
+      setup(function()
+        existing_struct = qlua_structs.NegTrade()
+      end)
+  
+      teardown(function()
+        existing_struct = nil
+      end)
+    
+      it("SHOULD return the existing NegTrade protobuf struct which equals (data-wide, not literally) to the given neg trade table", function()
+          
+        local result = sut.create_NegTrade(neg_trade, existing_struct)
+        
+        assert.are.equals(existing_struct, result)
+        
+        -- check that the result has the same data as the given neg trade table
+        local t_data = {}
+        for field, value in result:ListFields() do
+          local key = tostring(field.name)
+          if type(neg_trade[key]) == 'number' then 
+            t_data[key] = tonumber(value)
+          else
+            t_data[key] = value
+          end
+        end
+
+        assert.are.same(neg_trade, t_data)
+      end)
+    end)
       
     local nonnullable_fields_names = {"trade_num", "flags", "price", "qty", "type", "operation_type", "settled", "clearing_type", "sec_code", "class_code", "ex_flags"}
     local nullable_fields_names = {"trade_date", "settle_date", "brokerref", "firmid", "account", "cpfirmid", "cpaccount", "value", "settlecode", "report_num", "cpreport_num", "accruedint", "repotradeno", "price1", "reporate", "price2", "client_code", "ts_comission", "balance", "settle_time", "amount", "repovalue", "repoterm", "repo2value", "return_value", "discount", "lower_discount", "upper_discount", "block_securities", "urgency_flag", "expected_discount", "expected_quantity", "expected_repovalue", "expected_repo2value", "expected_return_value", "order_num", "report_trade_date", "report_comission", "coupon_payment", "principal_payment", "principal_payment_date", "nextdaysettle", "settle_currency", "compval", "parenttradeno", "bankid", "bankaccid", "precisebalance", "confirmtime", "confirmreport"}

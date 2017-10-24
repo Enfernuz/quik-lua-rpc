@@ -119,6 +119,49 @@ describe("The function utils.struct_factory.create_StopOrder", function()
 
       assert.are.same(stop_order, t_data)
     end)
+  
+    describe("AND an existing StopOrder protobuf struct", function()
+      
+      local existing_struct
+      
+      setup(function()
+        existing_struct = qlua_structs.StopOrder()
+      end)
+  
+      teardown(function()
+        existing_struct = nil
+      end)
+    
+      it("SHOULD return the existing StopOrder protobuf struct which equals (data-wide, not literally) to the given stop order table", function()
+          
+        local result = sut.create_StopOrder(stop_order, existing_struct)
+        
+        assert.are.equals(existing_struct, result)
+        
+        -- check that the result has the same data as the given security table
+        local t_data = {}
+        for field, value in result:ListFields() do
+          local key = tostring(field.name)
+          if type(stop_order[key]) == 'number' then 
+            t_data[key] = tonumber(value)
+          else
+            t_data[key] = value
+          end
+        end
+        
+        t_data.order_date_time = {} -- it's a protobuf DateTimeEntry in the result, so we should reconstruct it separately as it contains additional protobuf fields.
+      for field, value in result.order_date_time:ListFields() do
+        t_data.order_date_time[tostring(field.name)] = tonumber(value)
+      end
+      
+      t_data.withdraw_datetime = {} -- same here
+      for field, value in result.withdraw_datetime:ListFields() do
+        t_data.withdraw_datetime[tostring(field.name)] = tonumber(value)
+      end
+
+        assert.are.same(stop_order, t_data)
+      end)
+    end)
       
     local nonnullable_fields_names = {"order_num", "flags", "account", "condition", "condition_price", "price", "qty", "client_code", "stop_order_type", "stopflags", "filled_qty", "sec_code", "class_code", "order_date_time"}
     local nullable_fields_names = {"ordertime", "brokerref", "firmid", "linkedorder", "expiry", "trans_id", "co_order_num", "co_order_price", "orderdate", "alltrade_num", "offset", "spread", "balance", "uid", "withdraw_time", "condition_price2", "active_from_time", "active_to_time", "condition_sec_code", "condition_class_code", "canceled_uid"}

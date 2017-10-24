@@ -70,6 +70,39 @@ describe("The function utils.struct_factory.create_FuturesLimit", function()
 
       assert.are.same(fut_limit, t_data)
     end)
+  
+    describe("AND an existing FuturesLimit protobuf struct", function()
+      
+      local existing_struct
+      
+      setup(function()
+        existing_struct = qlua_structs.FuturesLimit()
+      end)
+  
+      teardown(function()
+        existing_struct = nil
+      end)
+    
+      it("SHOULD return the existing FuturesLimit protobuf struct which equals (data-wide, not literally) to the given futures limit table", function()
+          
+        local result = sut.create_FuturesLimit(fut_limit, existing_struct)
+        
+        assert.are.equals(existing_struct, result)
+        
+        -- check that the result has the same data as the given futures limit table
+        local t_data = {}
+        for field, value in result:ListFields() do
+          local key = tostring(field.name)
+          if type(fut_limit[key]) == 'number' then 
+            t_data[key] = tonumber(value)
+          else
+            t_data[key] = value
+          end
+        end
+
+        assert.are.same(fut_limit, t_data)
+      end)
+    end)
       
     local nonnullable_fields_names = {"firmid", "trdaccid", "limit_type", "currcode"}
     local nullable_fields_names = {"liquidity_coef", "cbp_prev_limit", "cbplimit", "cbplused", "cbplplanned", "varmargin", "accruedint", "cbplused_for_orders", "cbplused_for_positions", "options_premium", "ts_comission", "kgo", "real_varmargin"}

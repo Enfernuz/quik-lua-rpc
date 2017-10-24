@@ -55,6 +55,39 @@ describe("The function utils.struct_factory.create_FuturesLimitDelete", function
 
       assert.are.same(lim_del, t_data)
     end)
+  
+    describe("AND an existing FuturesLimitDelete protobuf struct", function()
+      
+      local existing_struct
+      
+      setup(function()
+        existing_struct = qlua_structs.FuturesLimitDelete()
+      end)
+  
+      teardown(function()
+        existing_struct = nil
+      end)
+    
+      it("SHOULD return the existing FuturesLimitDelete protobuf struct which equals (data-wide, not literally) to the given futures limit delete table", function()
+          
+        local result = sut.create_FuturesLimitDelete(lim_del, existing_struct)
+        
+        assert.are.equals(existing_struct, result)
+        
+        -- check that the result has the same data as the given futures limit delete table
+        local t_data = {}
+        for field, value in result:ListFields() do
+          local key = tostring(field.name)
+          if type(lim_del[key]) == 'number' then 
+            t_data[key] = tonumber(value)
+          else
+            t_data[key] = value
+          end
+        end
+
+        assert.are.same(lim_del, t_data)
+      end)
+    end)
       
     local nonnullable_fields_names = {"firmid", "limit_type"}
     local nullable_fields_names = {}

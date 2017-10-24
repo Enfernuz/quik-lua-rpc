@@ -72,6 +72,39 @@ describe("The function utils.struct_factory.create_FuturesClientHolding", functi
 
       assert.are.same(fut_pos, t_data)
     end)
+  
+    describe("AND an existing FuturesClientHolding protobuf struct", function()
+      
+      local existing_struct
+      
+      setup(function()
+        existing_struct = qlua_structs.FuturesClientHolding()
+      end)
+  
+      teardown(function()
+        existing_struct = nil
+      end)
+    
+      it("SHOULD return the existing FuturesClientHolding protobuf struct which equals (data-wide, not literally) to the given FuturesClientHolding table", function()
+          
+        local result = sut.create_FuturesClientHolding(fut_pos, existing_struct)
+        
+        assert.are.equals(existing_struct, result)
+        
+        -- check that the result has the same data as the given futures client holding table
+        local t_data = {}
+        for field, value in result:ListFields() do
+          local key = tostring(field.name)
+          if type(fut_pos[key]) == 'number' then 
+            t_data[key] = tonumber(value)
+          else
+            t_data[key] = value
+          end
+        end
+
+        assert.are.same(fut_pos, t_data)
+      end)
+    end)
       
     local nonnullable_fields_names = {"firmid", "trdaccid", "sec_code", "type", "openbuys", "opensells", "session_status"}
     local nullable_fields_names = {"startbuy", "startsell", "todaybuy", "todaysell", "totalnet", "cbplused", "cbplplanned", "varmargin", "avrposnprice", "positionvalue", "real_varmargin", "total_varmargin"}
