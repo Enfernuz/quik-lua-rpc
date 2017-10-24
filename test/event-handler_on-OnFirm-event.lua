@@ -20,7 +20,7 @@ describe("impl.event-handler", function()
       
     describe("AND given a firm", function()
         
-      local firm, protobuf_struct_Firm_meta
+      local firm
       
       setup(function()
       
