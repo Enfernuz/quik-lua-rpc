@@ -86,6 +86,44 @@ describe("The function utils.struct_factory.create_Transaction", function()
 
       assert.are.same(trans_reply, t_data)
     end)
+  
+    describe("AND an existing Transaction protobuf struct", function()
+      
+      local existing_struct
+      
+      setup(function()
+        existing_struct = qlua_structs.Transaction()
+      end)
+  
+      teardown(function()
+        existing_struct = nil
+      end)
+    
+      it("SHOULD return the existing Transaction protobuf struct which equals (data-wide, not literally) to the given Transaction table", function()
+          
+        local result = sut.create_Transaction(trans_reply, existing_struct)
+        
+        assert.are.equals(existing_struct, result)
+        
+        -- check that the result has the same data as the given transaction table
+        local t_data = {}
+        for field, value in result:ListFields() do
+          local key = tostring(field.name)
+          if type(trans_reply[key]) == 'number' then 
+            t_data[key] = tonumber(value)
+          else
+            t_data[key] = value
+          end
+        end
+        
+        t_data.date_time = {} -- it's a protobuf DateTimeEntry in the result, so we should reconstruct it separately as it contains additional protobuf fields.
+        for field, value in result.date_time:ListFields() do
+          t_data.date_time[tostring(field.name)] = tonumber(value)
+        end
+
+        assert.are.same(trans_reply, t_data)
+      end)
+    end)
       
     local nonnullable_fields_names = {"trans_id", "status", "date_time", "flags"}
     local nullable_fields_names = {"result_msg", "uid", "server_trans_id", "order_num", "price", "quantity", "balance", "firm_id", "account", "client_code", "brokerref", "class_code", "sec_code", "exchange_code"}

@@ -65,6 +65,39 @@ describe("The function utils.struct_factory.create_Security", function()
 
       assert.are.same(security, t_data)
     end)
+  
+    describe("AND an existing Security protobuf struct", function()
+      
+      local existing_struct
+      
+      setup(function()
+        existing_struct = qlua_structs.Security()
+      end)
+  
+      teardown(function()
+        existing_struct = nil
+      end)
+    
+      it("SHOULD return the existing Security protobuf struct which equals (data-wide, not literally) to the given Security table", function()
+          
+        local result = sut.create_Security(security, existing_struct)
+        
+        assert.are.equals(existing_struct, result)
+        
+        -- check that the result has the same data as the given transaction table
+        local t_data = {}
+        for field, value in result:ListFields() do
+          local key = tostring(field.name)
+          if type(security[key]) == 'number' then 
+            t_data[key] = tonumber(value)
+          else
+            t_data[key] = value
+          end
+        end
+
+        assert.are.same(security, t_data)
+      end)
+    end)
       
     local nonnullable_fields_names = {"code", "class_code"}
     local nullable_fields_names = {"name", "short_name", "class_name", "face_value", "face_unit", "scale", "mat_date", "lot_size", "isin_code", "min_price_step"}

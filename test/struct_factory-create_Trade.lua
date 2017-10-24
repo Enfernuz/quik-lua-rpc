@@ -131,6 +131,49 @@ describe("The function utils.struct_factory.create_Trade", function()
       
       assert.are.same(trade, t_data)
     end)
+  
+    describe("AND an existing Trade protobuf struct", function()
+      
+      local existing_struct
+      
+      setup(function()
+        existing_struct = qlua_structs.Trade()
+      end)
+  
+      teardown(function()
+        existing_struct = nil
+      end)
+    
+      it("SHOULD return the existing Trade protobuf struct which equals (data-wide, not literally) to the given Trade table", function()
+          
+        local result = sut.create_Trade(trade, existing_struct)
+        
+        assert.are.equals(existing_struct, result)
+        
+        -- check that the result has the same data as the given transaction table
+        local t_data = {}
+        for field, value in result:ListFields() do
+          local key = tostring(field.name)
+          if type(trade[key]) == 'number' then 
+            t_data[key] = tonumber(value)
+          else
+            t_data[key] = value
+          end
+        end
+        
+        t_data.datetime = {} -- it's a protobuf DateTimeEntry in the result, so we should reconstruct it separately as it contains additional protobuf fields.
+      for field, value in result.datetime:ListFields() do
+        t_data.datetime[tostring(field.name)] = tonumber(value)
+      end
+      
+      t_data.canceled_datetime = {} -- same here
+      for field, value in result.canceled_datetime:ListFields() do
+        t_data.canceled_datetime[tostring(field.name)] = tonumber(value)
+      end
+
+        assert.are.same(trade, t_data)
+      end)
+    end)
       
     local nonnullable_fields_names = {"trade_num", "order_num", "price", "qty", "value", "flags", "sec_code", "class_code", "datetime", "period", "kind"}
     local nullable_fields_names = {"brokerref", "userid", "firmid", "canceled_uid", "account", "accruedint", "yield", "settlecode", "cpfirmid", "price2", "reporate", "client_code", "accrued2", "repoterm", "repovalue", "repo2value", "start_discount", "lower_discount", "upper_discount", "block_securities", "clearing_comission", "exchange_comission", "tech_center_comission", "settle_date", "settle_currency", "trade_currency", "exchange_code", "station_id", "bank_acc_id", "broker_comission", "linked_trade", "trans_id", "clearing_bank_accid", "clearing_firmid", "system_ref", "uid"}
