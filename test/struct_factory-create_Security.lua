@@ -17,7 +17,7 @@ describe("The function utils.struct_factory.create_Security", function()
   
   -----
 
-  describe("WHEN given a Security table", function()
+  describe("WHEN given a security table", function()
       
     local security
     
@@ -159,7 +159,7 @@ describe("The function utils.struct_factory.create_Security", function()
   
   -----
   
-  describe("WHEN given a money limit table with CP1251-encoded values", function()
+  describe("WHEN given a security table with CP1251-encoded values", function()
       
     local utils = require("utils.utils")
     
