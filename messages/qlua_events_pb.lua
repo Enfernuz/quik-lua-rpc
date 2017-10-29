@@ -29,12 +29,6 @@ module.EVENTTYPE_ON_TRANS_REPLY_ENUM = protobuf.EnumValueDescriptor()
 module.EVENTTYPE_ON_PARAM_ENUM = protobuf.EnumValueDescriptor()
 module.EVENTTYPE_ON_QUOTE_ENUM = protobuf.EnumValueDescriptor()
 module.EVENTTYPE_ON_CLEAN_UP_ENUM = protobuf.EnumValueDescriptor()
-module.PARAM = protobuf.Descriptor()
-module.PARAM_CLASS_CODE_FIELD = protobuf.FieldDescriptor()
-module.PARAM_SEC_CODE_FIELD = protobuf.FieldDescriptor()
-module.QUOTE = protobuf.Descriptor()
-module.QUOTE_CLASS_CODE_FIELD = protobuf.FieldDescriptor()
-module.QUOTE_SEC_CODE_FIELD = protobuf.FieldDescriptor()
 
 module.EVENTTYPE_EVENT_TYPE_UNKNOWN_ENUM.name = 'EVENT_TYPE_UNKNOWN'
 module.EVENTTYPE_EVENT_TYPE_UNKNOWN_ENUM.index = 0
@@ -117,60 +111,6 @@ module.EVENTTYPE_ON_CLEAN_UP_ENUM.number = 25
 module.EVENTTYPE.name = 'EventType'
 module.EVENTTYPE.full_name = '.qlua.events.EventType'
 module.EVENTTYPE.values = {module.EVENTTYPE_EVENT_TYPE_UNKNOWN_ENUM,module.EVENTTYPE_PUBLISHER_ONLINE_ENUM,module.EVENTTYPE_PUBLISHER_OFFLINE_ENUM,module.EVENTTYPE_ON_CLOSE_ENUM,module.EVENTTYPE_ON_CONNECTED_ENUM,module.EVENTTYPE_ON_DISCONNECTED_ENUM,module.EVENTTYPE_ON_FIRM_ENUM,module.EVENTTYPE_ON_ALL_TRADE_ENUM,module.EVENTTYPE_ON_TRADE_ENUM,module.EVENTTYPE_ON_ORDER_ENUM,module.EVENTTYPE_ON_ACCOUNT_BALANCE_ENUM,module.EVENTTYPE_ON_FUTURES_LIMIT_CHANGE_ENUM,module.EVENTTYPE_ON_FUTURES_LIMIT_DELETE_ENUM,module.EVENTTYPE_ON_FUTURES_CLIENT_HOLDING_ENUM,module.EVENTTYPE_ON_MONEY_LIMIT_ENUM,module.EVENTTYPE_ON_MONEY_LIMIT_DELETE_ENUM,module.EVENTTYPE_ON_DEPO_LIMIT_ENUM,module.EVENTTYPE_ON_DEPO_LIMIT_DELETE_ENUM,module.EVENTTYPE_ON_ACCOUNT_POSITION_ENUM,module.EVENTTYPE_ON_NEG_DEAL_ENUM,module.EVENTTYPE_ON_NEG_TRADE_ENUM,module.EVENTTYPE_ON_STOP_ORDER_ENUM,module.EVENTTYPE_ON_TRANS_REPLY_ENUM,module.EVENTTYPE_ON_PARAM_ENUM,module.EVENTTYPE_ON_QUOTE_ENUM,module.EVENTTYPE_ON_CLEAN_UP_ENUM}
-module.PARAM_CLASS_CODE_FIELD.name = 'class_code'
-module.PARAM_CLASS_CODE_FIELD.full_name = '.qlua.events.Param.class_code'
-module.PARAM_CLASS_CODE_FIELD.number = 1
-module.PARAM_CLASS_CODE_FIELD.index = 0
-module.PARAM_CLASS_CODE_FIELD.label = 1
-module.PARAM_CLASS_CODE_FIELD.has_default_value = false
-module.PARAM_CLASS_CODE_FIELD.default_value = ''
-module.PARAM_CLASS_CODE_FIELD.type = 9
-module.PARAM_CLASS_CODE_FIELD.cpp_type = 9
-
-module.PARAM_SEC_CODE_FIELD.name = 'sec_code'
-module.PARAM_SEC_CODE_FIELD.full_name = '.qlua.events.Param.sec_code'
-module.PARAM_SEC_CODE_FIELD.number = 2
-module.PARAM_SEC_CODE_FIELD.index = 1
-module.PARAM_SEC_CODE_FIELD.label = 1
-module.PARAM_SEC_CODE_FIELD.has_default_value = false
-module.PARAM_SEC_CODE_FIELD.default_value = ''
-module.PARAM_SEC_CODE_FIELD.type = 9
-module.PARAM_SEC_CODE_FIELD.cpp_type = 9
-
-module.PARAM.name = 'Param'
-module.PARAM.full_name = '.qlua.events.Param'
-module.PARAM.nested_types = {}
-module.PARAM.enum_types = {}
-module.PARAM.fields = {module.PARAM_CLASS_CODE_FIELD, module.PARAM_SEC_CODE_FIELD}
-module.PARAM.is_extendable = false
-module.PARAM.extensions = {}
-module.QUOTE_CLASS_CODE_FIELD.name = 'class_code'
-module.QUOTE_CLASS_CODE_FIELD.full_name = '.qlua.events.Quote.class_code'
-module.QUOTE_CLASS_CODE_FIELD.number = 1
-module.QUOTE_CLASS_CODE_FIELD.index = 0
-module.QUOTE_CLASS_CODE_FIELD.label = 1
-module.QUOTE_CLASS_CODE_FIELD.has_default_value = false
-module.QUOTE_CLASS_CODE_FIELD.default_value = ''
-module.QUOTE_CLASS_CODE_FIELD.type = 9
-module.QUOTE_CLASS_CODE_FIELD.cpp_type = 9
-
-module.QUOTE_SEC_CODE_FIELD.name = 'sec_code'
-module.QUOTE_SEC_CODE_FIELD.full_name = '.qlua.events.Quote.sec_code'
-module.QUOTE_SEC_CODE_FIELD.number = 2
-module.QUOTE_SEC_CODE_FIELD.index = 1
-module.QUOTE_SEC_CODE_FIELD.label = 1
-module.QUOTE_SEC_CODE_FIELD.has_default_value = false
-module.QUOTE_SEC_CODE_FIELD.default_value = ''
-module.QUOTE_SEC_CODE_FIELD.type = 9
-module.QUOTE_SEC_CODE_FIELD.cpp_type = 9
-
-module.QUOTE.name = 'Quote'
-module.QUOTE.full_name = '.qlua.events.Quote'
-module.QUOTE.nested_types = {}
-module.QUOTE.enum_types = {}
-module.QUOTE.fields = {module.QUOTE_CLASS_CODE_FIELD, module.QUOTE_SEC_CODE_FIELD}
-module.QUOTE.is_extendable = false
-module.QUOTE.extensions = {}
 
 module.EventType = {}
 module.EventType.EVENT_TYPE_UNKNOWN = 0
@@ -199,11 +139,9 @@ module.EventType.ON_TRADE = 8
 module.EventType.ON_TRANS_REPLY = 22
 module.EventType.PUBLISHER_OFFLINE = 2
 module.EventType.PUBLISHER_ONLINE = 1
-module.Param = protobuf.Message(module.PARAM)
-module.Quote = protobuf.Message(module.QUOTE)
 
 
-module.MESSAGE_TYPES = {'Param','Quote'}
+module.MESSAGE_TYPES = {}
 module.ENUM_TYPES = {'EventType'}
 
 return module

@@ -31,15 +31,3 @@ enum EventType {
     ON_QUOTE = 24;
     ON_CLEAN_UP = 25; // no data attached
 }
-
-message Param {
-
-    string class_code = 1;
-    string sec_code = 2;
-}
-
-message Quote {
-
-    string class_code = 1;
-    string sec_code = 2;
-}

@@ -439,6 +439,12 @@ module.TRANSACTION_BROKERREF_FIELD = protobuf.FieldDescriptor()
 module.TRANSACTION_CLASS_CODE_FIELD = protobuf.FieldDescriptor()
 module.TRANSACTION_SEC_CODE_FIELD = protobuf.FieldDescriptor()
 module.TRANSACTION_EXCHANGE_CODE_FIELD = protobuf.FieldDescriptor()
+module.PARAMEVENTINFO = protobuf.Descriptor()
+module.PARAMEVENTINFO_CLASS_CODE_FIELD = protobuf.FieldDescriptor()
+module.PARAMEVENTINFO_SEC_CODE_FIELD = protobuf.FieldDescriptor()
+module.QUOTEEVENTINFO = protobuf.Descriptor()
+module.QUOTEEVENTINFO_CLASS_CODE_FIELD = protobuf.FieldDescriptor()
+module.QUOTEEVENTINFO_SEC_CODE_FIELD = protobuf.FieldDescriptor()
 
 module.KLASS_FIRMID_FIELD.name = 'firmid'
 module.KLASS_FIRMID_FIELD.full_name = '.qlua.structs.Klass.firmid'
@@ -4759,6 +4765,60 @@ module.TRANSACTION.enum_types = {}
 module.TRANSACTION.fields = {module.TRANSACTION_TRANS_ID_FIELD, module.TRANSACTION_STATUS_FIELD, module.TRANSACTION_RESULT_MSG_FIELD, module.TRANSACTION_DATE_TIME_FIELD, module.TRANSACTION_UID_FIELD, module.TRANSACTION_FLAGS_FIELD, module.TRANSACTION_SERVER_TRANS_ID_FIELD, module.TRANSACTION_ORDER_NUM_FIELD, module.TRANSACTION_PRICE_FIELD, module.TRANSACTION_QUANTITY_FIELD, module.TRANSACTION_BALANCE_FIELD, module.TRANSACTION_FIRM_ID_FIELD, module.TRANSACTION_ACCOUNT_FIELD, module.TRANSACTION_CLIENT_CODE_FIELD, module.TRANSACTION_BROKERREF_FIELD, module.TRANSACTION_CLASS_CODE_FIELD, module.TRANSACTION_SEC_CODE_FIELD, module.TRANSACTION_EXCHANGE_CODE_FIELD}
 module.TRANSACTION.is_extendable = false
 module.TRANSACTION.extensions = {}
+module.PARAMEVENTINFO_CLASS_CODE_FIELD.name = 'class_code'
+module.PARAMEVENTINFO_CLASS_CODE_FIELD.full_name = '.qlua.structs.ParamEventInfo.class_code'
+module.PARAMEVENTINFO_CLASS_CODE_FIELD.number = 1
+module.PARAMEVENTINFO_CLASS_CODE_FIELD.index = 0
+module.PARAMEVENTINFO_CLASS_CODE_FIELD.label = 1
+module.PARAMEVENTINFO_CLASS_CODE_FIELD.has_default_value = false
+module.PARAMEVENTINFO_CLASS_CODE_FIELD.default_value = ''
+module.PARAMEVENTINFO_CLASS_CODE_FIELD.type = 9
+module.PARAMEVENTINFO_CLASS_CODE_FIELD.cpp_type = 9
+
+module.PARAMEVENTINFO_SEC_CODE_FIELD.name = 'sec_code'
+module.PARAMEVENTINFO_SEC_CODE_FIELD.full_name = '.qlua.structs.ParamEventInfo.sec_code'
+module.PARAMEVENTINFO_SEC_CODE_FIELD.number = 2
+module.PARAMEVENTINFO_SEC_CODE_FIELD.index = 1
+module.PARAMEVENTINFO_SEC_CODE_FIELD.label = 1
+module.PARAMEVENTINFO_SEC_CODE_FIELD.has_default_value = false
+module.PARAMEVENTINFO_SEC_CODE_FIELD.default_value = ''
+module.PARAMEVENTINFO_SEC_CODE_FIELD.type = 9
+module.PARAMEVENTINFO_SEC_CODE_FIELD.cpp_type = 9
+
+module.PARAMEVENTINFO.name = 'ParamEventInfo'
+module.PARAMEVENTINFO.full_name = '.qlua.structs.ParamEventInfo'
+module.PARAMEVENTINFO.nested_types = {}
+module.PARAMEVENTINFO.enum_types = {}
+module.PARAMEVENTINFO.fields = {module.PARAMEVENTINFO_CLASS_CODE_FIELD, module.PARAMEVENTINFO_SEC_CODE_FIELD}
+module.PARAMEVENTINFO.is_extendable = false
+module.PARAMEVENTINFO.extensions = {}
+module.QUOTEEVENTINFO_CLASS_CODE_FIELD.name = 'class_code'
+module.QUOTEEVENTINFO_CLASS_CODE_FIELD.full_name = '.qlua.structs.QuoteEventInfo.class_code'
+module.QUOTEEVENTINFO_CLASS_CODE_FIELD.number = 1
+module.QUOTEEVENTINFO_CLASS_CODE_FIELD.index = 0
+module.QUOTEEVENTINFO_CLASS_CODE_FIELD.label = 1
+module.QUOTEEVENTINFO_CLASS_CODE_FIELD.has_default_value = false
+module.QUOTEEVENTINFO_CLASS_CODE_FIELD.default_value = ''
+module.QUOTEEVENTINFO_CLASS_CODE_FIELD.type = 9
+module.QUOTEEVENTINFO_CLASS_CODE_FIELD.cpp_type = 9
+
+module.QUOTEEVENTINFO_SEC_CODE_FIELD.name = 'sec_code'
+module.QUOTEEVENTINFO_SEC_CODE_FIELD.full_name = '.qlua.structs.QuoteEventInfo.sec_code'
+module.QUOTEEVENTINFO_SEC_CODE_FIELD.number = 2
+module.QUOTEEVENTINFO_SEC_CODE_FIELD.index = 1
+module.QUOTEEVENTINFO_SEC_CODE_FIELD.label = 1
+module.QUOTEEVENTINFO_SEC_CODE_FIELD.has_default_value = false
+module.QUOTEEVENTINFO_SEC_CODE_FIELD.default_value = ''
+module.QUOTEEVENTINFO_SEC_CODE_FIELD.type = 9
+module.QUOTEEVENTINFO_SEC_CODE_FIELD.cpp_type = 9
+
+module.QUOTEEVENTINFO.name = 'QuoteEventInfo'
+module.QUOTEEVENTINFO.full_name = '.qlua.structs.QuoteEventInfo'
+module.QUOTEEVENTINFO.nested_types = {}
+module.QUOTEEVENTINFO.enum_types = {}
+module.QUOTEEVENTINFO.fields = {module.QUOTEEVENTINFO_CLASS_CODE_FIELD, module.QUOTEEVENTINFO_SEC_CODE_FIELD}
+module.QUOTEEVENTINFO.is_extendable = false
+module.QUOTEEVENTINFO.extensions = {}
 
 module.AccountBalance = protobuf.Message(module.ACCOUNTBALANCE)
 module.AccountPosition = protobuf.Message(module.ACCOUNTPOSITION)
@@ -4777,13 +4837,15 @@ module.MoneyLimitDelete = protobuf.Message(module.MONEYLIMITDELETE)
 module.NegDeal = protobuf.Message(module.NEGDEAL)
 module.NegTrade = protobuf.Message(module.NEGTRADE)
 module.Order = protobuf.Message(module.ORDER)
+module.ParamEventInfo = protobuf.Message(module.PARAMEVENTINFO)
+module.QuoteEventInfo = protobuf.Message(module.QUOTEEVENTINFO)
 module.Security = protobuf.Message(module.SECURITY)
 module.StopOrder = protobuf.Message(module.STOPORDER)
 module.Trade = protobuf.Message(module.TRADE)
 module.Transaction = protobuf.Message(module.TRANSACTION)
 
 
-module.MESSAGE_TYPES = {'Klass','Firm','AllTrade','Trade','Order','AccountBalance','StopOrder','FuturesLimit','FuturesClientHolding','MoneyLimit','MoneyLimitDelete','DepoLimitDelete','FuturesLimitDelete','DepoLimit','AccountPosition','NegDeal','NegTrade','Security','CandleEntry','DateTimeEntry','Transaction'}
+module.MESSAGE_TYPES = {'Klass','Firm','AllTrade','Trade','Order','AccountBalance','StopOrder','FuturesLimit','FuturesClientHolding','MoneyLimit','MoneyLimitDelete','DepoLimitDelete','FuturesLimitDelete','DepoLimit','AccountPosition','NegDeal','NegTrade','Security','CandleEntry','DateTimeEntry','Transaction','ParamEventInfo','QuoteEventInfo'}
 module.ENUM_TYPES = {}
 
 return module

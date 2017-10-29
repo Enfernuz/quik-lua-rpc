@@ -535,6 +535,16 @@ message Transaction {
     string exchange_code = 18;
 }
 
-//
+// Информация из события изменения текущих параметров
+message ParamEventInfo {
 
-//
+    string class_code = 1;
+    string sec_code = 2;
+}
+
+// Информация из события изменения стакана
+message QuoteEventInfo {
+
+    string class_code = 1;
+    string sec_code = 2;
+}
