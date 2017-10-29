@@ -588,4 +588,28 @@ function StructFactory.create_Security(security, existing_struct)
   return result
 end
 
+function StructFactory.create_ParamEventInfo(param) 
+  
+  if param == nil then error("No param table provided.", 2) end
+  
+  local result = qlua_structs.ParamEventInfo()
+  
+  result.class_code = utils.Cp2151ToUtf8( assert(param.class_code, "The given 'param' table has no 'class_code' field.") )
+  result.sec_code = assert(param.sec_code, "The given 'param' table has no 'sec_code' field.")
+  
+  return result
+end
+
+function StructFactory.create_QuoteEventInfo(quote) 
+  
+  if quote == nil then error("No quote table provided.", 2) end
+  
+  local result = qlua_structs.QuoteEventInfo()
+  
+  result.class_code = utils.Cp2151ToUtf8( assert(quote.class_code, "The given 'quote' table has no 'class_code' field.") )
+  result.sec_code = assert(quote.sec_code, "The given 'quote' table has no 'sec_code' field.")
+  
+  return result
+end
+
 return StructFactory

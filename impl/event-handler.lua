@@ -42,20 +42,8 @@ event_handlers[qlua_events.EventType.ON_NEG_DEAL] = struct_factory.create_NegDea
 event_handlers[qlua_events.EventType.ON_NEG_TRADE] = struct_factory.create_NegTrade
 event_handlers[qlua_events.EventType.ON_STOP_ORDER] = struct_factory.create_StopOrder
 event_handlers[qlua_events.EventType.ON_TRANS_REPLY] = struct_factory.create_Transaction
-
-event_handlers[qlua_events.EventType.ON_PARAM] = function(param) 
-  local result = qlua_events.Param()
-  result.class_code = value_or_empty_string(param.class_code)
-  result.sec_code = value_or_empty_string(param.sec_code)
-  return result
-end
-
-event_handlers[qlua_events.EventType.ON_QUOTE] = function(quote) 
-  local result = qlua_events.Quote()
-  result.class_code = value_or_empty_string(quote.class_code)
-  result.sec_code = value_or_empty_string(quote.sec_code)
-  return result
-end
+event_handlers[qlua_events.EventType.ON_PARAM] = struct_factory.create_ParamEventInfo
+event_handlers[qlua_events.EventType.ON_QUOTE] = struct_factory.create_QuoteEventInfo
 
 function EventHandler:handle(event_type, event_data)
 
