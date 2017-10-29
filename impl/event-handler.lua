@@ -2,13 +2,9 @@ package.path = "../?.lua;" .. package.path
 
 local qlua_events = require("messages.qlua_events_pb")
 local struct_factory = require("utils.struct_factory")
-local utils = require("utils.utils")
 
 local error = assert(error, "error function is missing.")
 local pcall = assert(pcall, "pcall function is missing.")
-
-local value_to_string_or_empty_string = assert(utils.value_to_string_or_empty_string)
-local value_or_empty_string = assert(utils.value_or_empty_string)
 
 local EventHandler = {}
 
