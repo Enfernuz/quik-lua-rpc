@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package qlua.procs;
+
+enum IconType {
+
+    UNDEFINED = 0;
+    INFO = 1;
+    WARNING = 2;
+    ERROR = 3;
+}
+
+message Request {
+    
+    string message = 1;
+    IconType icon_type = 2;
+}
+    
+message Result {
+    int32 result = 1;
+}

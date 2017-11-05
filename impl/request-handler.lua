@@ -1,6 +1,7 @@
 package.path = "../?.lua;" .. package.path
 
 local qlua_rpc = require("messages.qlua_rpc_pb")
+local qlua_Message = require("messages.Message_pb")
 local struct_factory = require("utils.struct_factory")
 local utils = require("utils.utils")
 local table = require('table')
@@ -57,16 +58,16 @@ function RequestHandler:handle(request)
     ok, result = pcall( function() return f_handler(request.args) end )
   end
   
-  local response = qlua_rpc.Qlua_Response()
+  local response = qlua_rpc.Envelope.Response()
   response.type = request.type
   
   if ok then 
-    if result ~= nil then
+    if result then
       response.result = result:SerializeToString()
     end
   else
     response.is_error = true
-    if result ~= nil then
+    if result then
       response.result = result
     end
   end
@@ -93,16 +94,18 @@ request_handlers[qlua_rpc.ProcedureType.GET_INFO_PARAM] = function(request_args)
 end
 
 request_handlers[qlua_rpc.ProcedureType.MESSAGE] = function(request_args) 
-  local args = parse_request_args(request_args, qlua_rpc.Message_Request)
-  local ret = (args.icon_type == qlua_rpc.MessageIconType.ICON_TYPE_UNDEFINED and message(args.message) or message(args.message, args.icon_type))
+  
+  local args = parse_request_args(request_args, qlua_Message.Request)
+
+  local ret = (args.icon_type == qlua_Message.IconType.UNDEFINED and message(args.message) or message(args.message, args.icon_type))
   if ret == nil then
-    if args.icon_type == qlua_rpc.MessageIconType.ICON_TYPE_UNDEFINED then 
+    if args.icon_type == qlua_Message.IconType.UNDEFINED then 
       error(string.format("Процедура message(%s) возвратила nil.", args.message), 0)
     else
       error(string.format("Процедура message(%s, %d) возвратила nil.", args.message, args.icon_type), 0)
     end
   else
-    local result = qlua_rpc.Message_Result()
+    local result = qlua_Message.Result()
     result.result = ret
     return result
   end

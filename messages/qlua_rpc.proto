@@ -135,25 +135,20 @@ enum Interval {
     INTERVAL_MN1 = 17;
 }
 
-enum MessageIconType {
+message Envelope {
 
-    MESSAGE_ICON_TYPE_UNDEFINED = 0;
-    MESSAGE_ICON_TYPE_INFO = 1;
-    MESSAGE_ICON_TYPE_WARNING = 2;
-    MESSAGE_ICON_TYPE_ERROR = 3;
-}
-
-message Qlua_Request {
-
-    ProcedureType type = 1;
-    bytes args = 2; // the protoc-lua-plugin gives out a corrupted .lua file if we're using google.protobuf.Any
-}
-
-message Qlua_Response {
-
-    ProcedureType type = 1;
-    bool is_error = 2;
-    bytes result = 3;
+    message Request {
+        
+        ProcedureType type = 1;
+        bytes args = 2; // the protoc-lua-plugin gives out a corrupted .lua file if we're using google.protobuf.Any
+    }
+    
+    message Response {
+    
+        ProcedureType type = 1;
+        bool is_error = 2;
+        bytes result = 3;
+    }
 }
 
 message IsConnected_Result {
@@ -176,16 +171,6 @@ message GetInfoParam_Request {
 
 message GetInfoParam_Result {
     string info_param = 1;
-}
-
-message Message_Request {
-
-    string message = 1;
-    MessageIconType icon_type = 2;
-}
-
-message Message_Result {
-    int32 result = 1;
 }
 
 message Sleep_Request {

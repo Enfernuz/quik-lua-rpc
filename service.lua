@@ -181,7 +181,7 @@ function QluaService:start(rep_socket_addr, pub_socket_addr)
 
       local ok, ret = pcall( function() return msg_request:recv(self.rep_socket) end)
       if ok and not (ret == nil or ret == -1) then
-        local request = qlua_rpc.Qlua_Request()
+        local request = qlua_rpc.Envelope.Request()
         request:ParseFromString( ret:data() )
         
         local response = request_handler:handle(request)
