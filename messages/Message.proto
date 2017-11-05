@@ -1,6 +1,9 @@
 syntax = "proto3";
 
-package qlua.procs;
+package qlua.rpc.message;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
 
 enum IconType {
 

@@ -1,7 +1,26 @@
 package.path = "../?.lua;" .. package.path
 
 local qlua_rpc = require("messages.qlua_rpc_pb")
-local qlua_Message = require("messages.Message_pb")
+
+local qlua = { 
+  rpc = {} 
+}
+
+qlua.rpc.message = require("messages.message_pb")
+qlua.rpc.isConnected = require("messages.isConnected_pb")
+qlua.rpc.getScriptPath = require("messages.getScriptPath_pb")
+qlua.rpc.getInfoParam = require("messages.getInfoParam_pb")
+qlua.rpc.sleep = require("messages.sleep_pb")
+qlua.rpc.getWorkingFolder = require("messages.getWorkingFolder_pb")
+qlua.rpc.PrintDbgStr = require("messages.PrintDbgStr_pb")
+qlua.rpc.getItem = require("messages.getItem_pb")
+qlua.rpc.getOrderByNumber = require("messages.getOrderByNumber_pb")
+qlua.rpc.getNumberOf = require("messages.getNumberOf_pb")
+qlua.rpc.SearchItems = require("messages.SearchItems_pb")
+qlua.rpc.getClassesList = require("messages.getClassesList_pb")
+qlua.rpc.getClassInfo = require("messages.getClassInfo_pb")
+qlua.rpc.getClassSecurities = require("messages.getClassSecurities_pb")
+
 local struct_factory = require("utils.struct_factory")
 local utils = require("utils.utils")
 local table = require('table')
@@ -76,82 +95,82 @@ function RequestHandler:handle(request)
 end
   
 request_handlers[qlua_rpc.ProcedureType.IS_CONNECTED] = function() 
-  local result = qlua_rpc.IsConnected_Result()
+  local result = qlua.rpc.isConnected.Result()
   result.is_connected = isConnected()
   return result
 end
 
 request_handlers[qlua_rpc.ProcedureType.GET_SCRIPT_PATH] = function() 
-  local result = qlua_rpc.GetScriptPath_Result()
+  local result = qlua.rpc.getScriptPath.Result()
   result.script_path = getScriptPath()
 end
 
 request_handlers[qlua_rpc.ProcedureType.GET_INFO_PARAM] = function(request_args)
-  local args = parse_request_args(request_args, qlua_rpc.GetInfoParam_Request)
-  local result = qlua_rpc.GetInfoParam_Result()
+  local args = parse_request_args(request_args, qlua.rpc.getInfoParam.Request)
+  local result = qlua.rpc.getInfoParam.Result()
   result.info_param = getInfoParam(args.param_name)
   return result
 end
 
 request_handlers[qlua_rpc.ProcedureType.MESSAGE] = function(request_args) 
   
-  local args = parse_request_args(request_args, qlua_Message.Request)
+  local args = parse_request_args(request_args, qlua.rpc.message.Request)
 
-  local ret = (args.icon_type == qlua_Message.IconType.UNDEFINED and message(args.message) or message(args.message, args.icon_type))
+  local ret = (args.icon_type == qlua.rpc.message.IconType.UNDEFINED and message(args.message) or message(args.message, args.icon_type))
   if ret == nil then
-    if args.icon_type == qlua_Message.IconType.UNDEFINED then 
+    if args.icon_type == qlua.rpc.message.IconType.UNDEFINED then 
       error(string.format("Процедура message(%s) возвратила nil.", args.message), 0)
     else
       error(string.format("Процедура message(%s, %d) возвратила nil.", args.message, args.icon_type), 0)
     end
   else
-    local result = qlua_Message.Result()
+    local result = qlua.rpc.message.Result()
     result.result = ret
     return result
   end
 end
 
 request_handlers[qlua_rpc.ProcedureType.SLEEP] = function(request_args) 
-  local args = parse_request_args(request_args, qlua_rpc.Sleep_Request)
+  local args = parse_request_args(request_args, qlua.rpc.sleep.Request)
   local ret = sleep(args.time) -- TO-DO: pcall
   if ret == nil then
     error(string.format("Процедура sleep(%d) возвратила nil.", args.time), 0)
   else
-    local result = qlua_rpc.Sleep_Result()
+    local result = qlua.rpc.sleep.Result()
     result.result = ret
     return result
   end
 end
 
 request_handlers[qlua_rpc.ProcedureType.GET_WORKING_FOLDER] = function() 
-  local result = qlua_rpc.GetWorkingFolder_Result()
+  local result = qlua.rpc.getWorkingFolder.Result()
   result.working_folder = getWorkingFolder()
   return result
 end
 
 request_handlers[qlua_rpc.ProcedureType.PRINT_DBG_STR] = function(request_args) 
-  local args = parse_request_args(request_args, qlua_rpc.PrintDbgStr_Request)
+  local args = parse_request_args(request_args, qlua.rpc.PrintDbgStr.Request)
   PrintDbgStr(args.s)
   return nil
 end
 
 request_handlers[qlua_rpc.ProcedureType.GET_ITEM] = function(request_args) 
-  local args = parse_request_args(request_args, qlua_rpc.GetItem_Request)
-  local result = qlua_rpc.GetItem_Result()
+  local args = parse_request_args(request_args, qlua.rpc.getItem.Request)
+  local result = qlua.rpc.getItem.Result()
   local t = getItem(args.table_name, args.index)
-  if t ~= nil then
-    utils.put_to_string_string_pb_map(t, result.table_row, qlua_rpc.GetItem_Result.TableRowEntry)
+  if t then
+    utils.put_to_string_string_pb_map(t, result.table_row, qlua.rpc.getItem.Result.TableRowEntry)
   end
   return result
 end
 
 request_handlers[qlua_rpc.ProcedureType.GET_ORDER_BY_NUMBER] = function(request_args) 
-  local args = parse_request_args(request_args, qlua_rpc.GetOrderByNumber_Request)
+  local args = parse_request_args(request_args, qlua.rpc.getOrderByNumber.Request)
   local t, i = getOrderByNumber(args.class_code, args.order_id)
   if t == nil then
     error(string.format("Процедура getOrderByNumber(%s, %d) вернула (nil, nil).", args.class_code, args.order_id), 0)
   else
-    local result = qlua_rpc.GetOrderByNumber_Result()
+    local result = qlua.rpc.getOrderByNumber.Result()
     result.order = struct_factory.create_Order(t)
     result.indx = i
     return result
@@ -159,14 +178,14 @@ request_handlers[qlua_rpc.ProcedureType.GET_ORDER_BY_NUMBER] = function(request_
 end
 
 request_handlers[qlua_rpc.ProcedureType.GET_NUMBER_OF] = function(request_args) 
-  local args = parse_request_args(request_args, qlua_rpc.GetNumberOf_Request)
-  local result = qlua_rpc.GetNumberOf_Result()
+  local args = parse_request_args(request_args, qlua.rpc.getNumberOf.Request)
+  local result = qlua.rpc.getNumberOf.Result()
   result.result = getNumberOf(args.table_name) -- returns -1 in case of error
   return result
 end
 
 request_handlers[qlua_rpc.ProcedureType.SEARCH_ITEMS] = function(request_args) 
-  local args = parse_request_args(request_args, qlua_rpc.SearchItems_Request)
+  local args = parse_request_args(request_args, qlua.rpc.SearchItems.Request)
   local fn_ctr, error_msg = loadstring("return "..args.fn_def)
   local items
   if fn_ctr == nil then 
@@ -179,8 +198,8 @@ request_handlers[qlua_rpc.ProcedureType.SEARCH_ITEMS] = function(request_args)
     end
   end
   
-  local result = qlua_rpc.SearchItems_Result()
-  if items ~= nil then 
+  local result = qlua.rpc.SearchItems.Result()
+  if items then 
     for i, item_index in ipairs(items) do
       table.sinsert(result.items_indices, item_index)
     end
@@ -190,19 +209,19 @@ request_handlers[qlua_rpc.ProcedureType.SEARCH_ITEMS] = function(request_args)
 end
 
 request_handlers[qlua_rpc.ProcedureType.GET_CLASSES_LIST] = function() 
-  local result = qlua_rpc.GetClassesList_Result()
+  local result = qlua.rpc.getClassesList.Result()
   result.classes_list = getClassesList()
   return result
 end
 
 request_handlers[qlua_rpc.ProcedureType.GET_CLASS_INFO] = function(request_args) 
-  local args = parse_request_args(request_args, qlua_rpc.GetClassInfo_Request)
+  local args = parse_request_args(request_args, qlua.rpc.getClassInfo.Request)
 
   local t = getClassInfo(args.class_code)
   if t == nil then
     error(string.format("Процедура getClassInfo(%s) вернула nil.", args.class_code), 0)
   else
-    local result = qlua_rpc.GetClassInfo_Result()
+    local result = qlua.rpc.getClassInfo.Result()
     
     result.class_info.firmid = utils.value_or_empty_string(t.firmid)
     result.class_info.name = utils.value_or_empty_string(t.name)
@@ -215,10 +234,10 @@ request_handlers[qlua_rpc.ProcedureType.GET_CLASS_INFO] = function(request_args)
 end
 
 request_handlers[qlua_rpc.ProcedureType.GET_CLASS_SECURITIES] = function(request_args) 
-  local args = parse_request_args(request_args, qlua_rpc.GetClassSecurities_Request)
-  local result = qlua_rpc.GetClassSecurities_Result()
+  local args = parse_request_args(request_args, qlua.rpc.getClassSecurities.Request)
+  local result = qlua.rpc.getClassSecurities.Result()
   local ret = getClassSecurities(args.class_code) -- returns an empty string if no securities found for the given class_code
-  if ret ~= nil then result.class_securities = ret end
+  if ret then result.class_securities = ret end
   return result
 end
 

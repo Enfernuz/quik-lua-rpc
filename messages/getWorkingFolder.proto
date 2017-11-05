@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package qlua.rpc.getWorkingFolder;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Result {
+    string working_folder = 1;
+}
