@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package qlua.rpc.GetWindowRect;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Request {
+    int32 t_id = 1;
+}
+
+message Result {
+
+    int32 top = 1;
+    int32 left = 2;
+    int32 bottom = 3;
+    int32 right = 4;
+}

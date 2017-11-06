@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package qlua.rpc.datasource.SetEmptyCallback;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc.datasource";
+
+message Request {
+    string datasource_uuid = 1;
+}
+
+message Result {
+    bool result = 1;
+}

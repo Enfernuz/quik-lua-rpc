@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package qlua.rpc.datasource.SetUpdateCallback;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc.datasource";
+
+message Request {
+
+    string datasource_uuid = 1; 
+    string f_cb_def = 2; // NB: формат функции: "function (NUMBER index, TABLE datasource) function_body end"
+}
+
+message Result {
+    bool result = 1;
+}

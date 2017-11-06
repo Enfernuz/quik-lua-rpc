@@ -1,8 +1,17 @@
 package.path = "../?.lua;" .. package.path
 
-local qlua_rpc = require("messages.qlua_rpc_pb")
+local qlua = {
+  rpc = {}
+}
+
 local qlua_types = require("messages.qlua_types_pb")
 local qlua_structs = require("messages.qlua_structures_pb")
+
+qlua.rpc.getQuoteLevel2 = require("messages.getQuoteLevel2_pb")
+qlua.rpc.datasource = {}
+qlua.rpc.datasource.CreateDataSource = require("messages.datasource.CreateDataSource_pb")
+qlua.rpc.AddColumn = require("messages.AddColumn_pb")
+
 local table = require('table')
 local os = require('os')
 local string = require('string')
@@ -42,7 +51,7 @@ end
 function utils.insert_quote_table(dst, src)
   
   for _, v in ipairs(src) do
-      local quote = qlua_rpc.GetQuoteLevel2_Result.QuoteEntry() 
+      local quote = qlua.rpc.getQuoteLevel2.QuoteEntry() 
       quote.price = v.price
       quote.quantity = v.quantity
       table.sinsert(dst, quote)
@@ -103,13 +112,13 @@ function utils.sleep(s)
 end
 
 local qtable_parameter_types = {}
-qtable_parameter_types[qlua_rpc.ColumnParameterType.QTABLE_INT_TYPE] = QTABLE_INT_TYPE
-qtable_parameter_types[qlua_rpc.ColumnParameterType.QTABLE_DOUBLE_TYPE] = QTABLE_DOUBLE_TYPE
-qtable_parameter_types[qlua_rpc.ColumnParameterType.QTABLE_INT64_TYPE] = QTABLE_INT64_TYPE
-qtable_parameter_types[qlua_rpc.ColumnParameterType.QTABLE_CACHED_STRING_TYPE] = QTABLE_CACHED_STRING_TYPE
-qtable_parameter_types[qlua_rpc.ColumnParameterType.QTABLE_TIME_TYPE] = QTABLE_TIME_TYPE
-qtable_parameter_types[qlua_rpc.ColumnParameterType.QTABLE_DATE_TYPE] = QTABLE_DATE_TYPE
-qtable_parameter_types[qlua_rpc.ColumnParameterType.QTABLE_STRING_TYPE] = QTABLE_STRING_TYPE
+qtable_parameter_types[qlua.rpc.AddColumn.ColumnParameterType.QTABLE_INT_TYPE] = QTABLE_INT_TYPE
+qtable_parameter_types[qlua.rpc.AddColumn.ColumnParameterType.QTABLE_DOUBLE_TYPE] = QTABLE_DOUBLE_TYPE
+qtable_parameter_types[qlua.rpc.AddColumn.ColumnParameterType.QTABLE_INT64_TYPE] = QTABLE_INT64_TYPE
+qtable_parameter_types[qlua.rpc.AddColumn.ColumnParameterType.QTABLE_CACHED_STRING_TYPE] = QTABLE_CACHED_STRING_TYPE
+qtable_parameter_types[qlua.rpc.AddColumn.ColumnParameterType.QTABLE_TIME_TYPE] = QTABLE_TIME_TYPE
+qtable_parameter_types[qlua.rpc.AddColumn.ColumnParameterType.QTABLE_DATE_TYPE] = QTABLE_DATE_TYPE
+qtable_parameter_types[qlua.rpc.AddColumn.ColumnParameterType.QTABLE_STRING_TYPE] = QTABLE_STRING_TYPE
 
 function utils.to_qtable_parameter_type(pb_column_parameter_type)
   
@@ -120,23 +129,23 @@ function utils.to_qtable_parameter_type(pb_column_parameter_type)
 end
 
 local interval_types = {}
-interval_types[qlua_rpc.Interval.INTERVAL_TICK] = INTERVAL_TICK
-interval_types[qlua_rpc.Interval.INTERVAL_M1] = INTERVAL_M1
-interval_types[qlua_rpc.Interval.INTERVAL_M2] = INTERVAL_M2
-interval_types[qlua_rpc.Interval.INTERVAL_M3] = INTERVAL_M3
-interval_types[qlua_rpc.Interval.INTERVAL_M4] = INTERVAL_M4
-interval_types[qlua_rpc.Interval.INTERVAL_M5] = INTERVAL_M5
-interval_types[qlua_rpc.Interval.INTERVAL_M6] = INTERVAL_M6
-interval_types[qlua_rpc.Interval.INTERVAL_M10] = INTERVAL_M10
-interval_types[qlua_rpc.Interval.INTERVAL_M15] = INTERVAL_M15
-interval_types[qlua_rpc.Interval.INTERVAL_M20] = INTERVAL_M20
-interval_types[qlua_rpc.Interval.INTERVAL_M30] = INTERVAL_M30
-interval_types[qlua_rpc.Interval.INTERVAL_H1] = INTERVAL_H1
-interval_types[qlua_rpc.Interval.INTERVAL_H2] = INTERVAL_H2
-interval_types[qlua_rpc.Interval.INTERVAL_H4] = INTERVAL_H4
-interval_types[qlua_rpc.Interval.INTERVAL_D1] = INTERVAL_D1
-interval_types[qlua_rpc.Interval.INTERVAL_W1] = INTERVAL_W1
-interval_types[qlua_rpc.Interval.INTERVAL_MN1] = INTERVAL_MN1
+interval_types[qlua.rpc.datasource.CreateDataSource.Interval.INTERVAL_TICK] = INTERVAL_TICK
+interval_types[qlua.rpc.datasource.CreateDataSource.Interval.INTERVAL_M1] = INTERVAL_M1
+interval_types[qlua.rpc.datasource.CreateDataSource.Interval.INTERVAL_M2] = INTERVAL_M2
+interval_types[qlua.rpc.datasource.CreateDataSource.Interval.INTERVAL_M3] = INTERVAL_M3
+interval_types[qlua.rpc.datasource.CreateDataSource.Interval.INTERVAL_M4] = INTERVAL_M4
+interval_types[qlua.rpc.datasource.CreateDataSource.Interval.INTERVAL_M5] = INTERVAL_M5
+interval_types[qlua.rpc.datasource.CreateDataSource.Interval.INTERVAL_M6] = INTERVAL_M6
+interval_types[qlua.rpc.datasource.CreateDataSource.Interval.INTERVAL_M10] = INTERVAL_M10
+interval_types[qlua.rpc.datasource.CreateDataSource.Interval.INTERVAL_M15] = INTERVAL_M15
+interval_types[qlua.rpc.datasource.CreateDataSource.Interval.INTERVAL_M20] = INTERVAL_M20
+interval_types[qlua.rpc.datasource.CreateDataSource.Interval.INTERVAL_M30] = INTERVAL_M30
+interval_types[qlua.rpc.datasource.CreateDataSource.Interval.INTERVAL_H1] = INTERVAL_H1
+interval_types[qlua.rpc.datasource.CreateDataSource.Interval.INTERVAL_H2] = INTERVAL_H2
+interval_types[qlua.rpc.datasource.CreateDataSource.Interval.INTERVAL_H4] = INTERVAL_H4
+interval_types[qlua.rpc.datasource.CreateDataSource.Interval.INTERVAL_D1] = INTERVAL_D1
+interval_types[qlua.rpc.datasource.CreateDataSource.Interval.INTERVAL_W1] = INTERVAL_W1
+interval_types[qlua.rpc.datasource.CreateDataSource.Interval.INTERVAL_MN1] = INTERVAL_MN1
 
 function utils.to_interval(pb_interval)
 

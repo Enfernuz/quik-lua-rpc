@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package qlua.rpc.AddLabel;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Request {
+
+    string chart_tag = 1;
+    map<string, string> label_params = 2;
+}
+
+message Result {
+    int32 label_id = 1;
+}

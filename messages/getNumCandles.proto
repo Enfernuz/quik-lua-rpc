@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package qlua.rpc.getNumCandles;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Request {
+    string tag = 1;
+}
+
+message Result {
+    int32 num_candles = 1;
+}

@@ -1,6 +1,11 @@
 package.path = getScriptPath() .. '/?.lua;' .. package.path
 
-local qlua_rpc = require("messages.qlua_rpc_pb")
+local qlua = {
+  rpc = {}
+}
+
+qlua.rpc.RPC = require("messages.RPC_pb")
+
 local qlua_events = require("messages.qlua_events_pb")
 local zmq = require("lzmq")
 local zmq_poller = require("lzmq.poller")
@@ -170,7 +175,7 @@ function QluaService:start(rep_socket_addr, pub_socket_addr)
   
   self.ctx = zmq.context()
   
-  if rep_socket_addr ~= nil then
+  if rep_socket_addr then
     self.rep_socket = self.ctx:socket(zmq.REP)
     self.rep_socket:bind(rep_socket_addr)
     uuid.seed()
@@ -181,7 +186,7 @@ function QluaService:start(rep_socket_addr, pub_socket_addr)
 
       local ok, ret = pcall( function() return msg_request:recv(self.rep_socket) end)
       if ok and not (ret == nil or ret == -1) then
-        local request = qlua_rpc.Envelope.Request()
+        local request = qlua.rpc.RPC.Request()
         request:ParseFromString( ret:data() )
         
         local response = request_handler:handle(request)
@@ -193,7 +198,7 @@ function QluaService:start(rep_socket_addr, pub_socket_addr)
     end)
   end
 
-  if pub_socket_addr ~= nil then
+  if pub_socket_addr then
     self.pub_socket = self.ctx:socket(zmq.PUB)
     self.pub_socket:bind(pub_socket_addr)
     
@@ -217,8 +222,8 @@ function QluaService:terminate()
     
   -- Set non-negative linger to prevent termination hanging in case if there's a message pending for a disconnected subscriber
   
-  if self.rep_socket ~= nil then self.rep_socket:close(1) end
-  if self.pub_socket ~= nil then self.pub_socket:close(1) end
+  if self.rep_socket then self.rep_socket:close(1) end
+  if self.pub_socket then self.pub_socket:close(1) end
   self.ctx:term(1)
 end
 

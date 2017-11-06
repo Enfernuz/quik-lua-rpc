@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package qlua.rpc.bit.band;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc.bit";
+
+message Request {
+
+    int32 x1 = 1;
+    int32 x2 = 2;
+    repeated int32 xi = 3;
+}
+
+message Result {
+    int32 result = 1;
+}
