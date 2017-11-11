@@ -1,12 +1,8 @@
 package.path = getScriptPath() .. '/?.lua;' .. package.path
 
-local qlua = {
-  rpc = {}
-}
+local qlua = require("qlua.api")
 
-qlua.rpc.RPC = require("messages.RPC_pb")
-
-local qlua_events = require("messages.qlua_events_pb")
+local qlua_events = require("qlua.rpc.qlua_events_pb")
 local zmq = require("lzmq")
 local zmq_poller = require("lzmq.poller")
 local utils = require("utils.utils")
@@ -186,7 +182,7 @@ function QluaService:start(rep_socket_addr, pub_socket_addr)
 
       local ok, ret = pcall( function() return msg_request:recv(self.rep_socket) end)
       if ok and not (ret == nil or ret == -1) then
-        local request = qlua.rpc.RPC.Request()
+        local request = qlua.RPC.Request()
         request:ParseFromString( ret:data() )
         
         local response = request_handler:handle(request)

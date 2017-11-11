@@ -1,7 +1,7 @@
 package.path = "../?.lua;" .. package.path
 
-local qlua_structs = require("messages.qlua_structures_pb")
-local qlua_events = require("messages.qlua_events_pb")
+local qlua_structs = require("qlua.rpc.qlua_structures_pb")
+local qlua_events = require("qlua.rpc.qlua_events_pb")
 local utils = require("utils.utils")
 
 local assert = assert

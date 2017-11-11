@@ -1,92 +1,6 @@
 package.path = "../?.lua;" .. package.path
 
-local qlua = { 
-  rpc = {} 
-}
-
-qlua.rpc.RPC = require("messages.RPC_pb")
-qlua.rpc.message = require("messages.message_pb")
-qlua.rpc.isConnected = require("messages.isConnected_pb")
-qlua.rpc.getScriptPath = require("messages.getScriptPath_pb")
-qlua.rpc.getInfoParam = require("messages.getInfoParam_pb")
-qlua.rpc.sleep = require("messages.sleep_pb")
-qlua.rpc.getWorkingFolder = require("messages.getWorkingFolder_pb")
-qlua.rpc.PrintDbgStr = require("messages.PrintDbgStr_pb")
-qlua.rpc.getItem = require("messages.getItem_pb")
-qlua.rpc.getOrderByNumber = require("messages.getOrderByNumber_pb")
-qlua.rpc.getNumberOf = require("messages.getNumberOf_pb")
-qlua.rpc.SearchItems = require("messages.SearchItems_pb")
-qlua.rpc.getClassesList = require("messages.getClassesList_pb")
-qlua.rpc.getClassInfo = require("messages.getClassInfo_pb")
-qlua.rpc.getClassSecurities = require("messages.getClassSecurities_pb")
-qlua.rpc.getMoney = require("messages.getMoney_pb")
-qlua.rpc.getMoneyEx = require("messages.getMoneyEx_pb")
-qlua.rpc.getDepo = require("messages.getDepo_pb")
-qlua.rpc.getDepoEx = require("messages.getDepoEx_pb")
-qlua.rpc.getFuturesLimit = require("messages.getFuturesLimit_pb")
-qlua.rpc.getFuturesHolding = require("messages.getFuturesHolding_pb")
-qlua.rpc.getSecurityInfo = require("messages.getSecurityInfo_pb")
-qlua.rpc.getTradeDate = require("messages.getTradeDate_pb")
-qlua.rpc.getQuoteLevel2 = require("messages.getQuoteLevel2_pb")
-qlua.rpc.getLinesCount = require("messages.getLinesCount_pb")
-qlua.rpc.getNumCandles = require("messages.getNumCandles_pb")
-qlua.rpc.getCandlesByIndex = require("messages.getCandlesByIndex_pb")
-qlua.rpc.datasource = {}
-qlua.rpc.datasource.CreateDataSource = require("messages.datasource.CreateDataSource_pb")
-qlua.rpc.datasource.SetUpdateCallback = require("messages.datasource.SetUpdateCallback_pb")
-qlua.rpc.datasource.O = require("messages.datasource.O_pb")
-qlua.rpc.datasource.H = require("messages.datasource.H_pb")
-qlua.rpc.datasource.L = require("messages.datasource.L_pb")
-qlua.rpc.datasource.C = require("messages.datasource.C_pb")
-qlua.rpc.datasource.V = require("messages.datasource.V_pb")
-qlua.rpc.datasource.T = require("messages.datasource.T_pb")
-qlua.rpc.datasource.Size = require("messages.datasource.Size_pb")
-qlua.rpc.datasource.Close = require("messages.datasource.Close_pb")
-qlua.rpc.datasource.SetEmptyCallback = require("messages.datasource.SetEmptyCallback_pb")
-qlua.rpc.sendTransaction = require("messages.sendTransaction_pb")
-qlua.rpc.CalcBuySell = require("messages.CalcBuySell_pb")
-qlua.rpc.getParamEx = require("messages.getParamEx_pb")
-qlua.rpc.getParamEx2 = require("messages.getParamEx2_pb")
-qlua.rpc.getPortfolioInfo = require("messages.getPortfolioInfo_pb")
-qlua.rpc.getPortfolioInfoEx = require("messages.getPortfolioInfoEx_pb")
-qlua.rpc.getBuySellInfo = require("messages.getBuySellInfo_pb")
-qlua.rpc.getBuySellInfoEx = require("messages.getBuySellInfoEx_pb")
-qlua.rpc.AddColumn = require("messages.AddColumn_pb")
-qlua.rpc.AllocTable = require("messages.AllocTable_pb")
-qlua.rpc.Clear = require("messages.Clear_pb")
-qlua.rpc.CreateWindow = require("messages.CreateWindow_pb")
-qlua.rpc.DeleteRow = require("messages.DeleteRow_pb")
-qlua.rpc.DestroyTable = require("messages.DestroyTable_pb")
-qlua.rpc.InsertRow = require("messages.InsertRow_pb")
-qlua.rpc.IsWindowClosed = require("messages.IsWindowClosed_pb")
-qlua.rpc.GetCell = require("messages.GetCell_pb")
-qlua.rpc.SetCell = require("messages.SetCell_pb")
-qlua.rpc.SetWindowCaption = require("messages.SetWindowCaption_pb")
-qlua.rpc.SetWindowPos = require("messages.SetWindowPos_pb")
-qlua.rpc.SetTableNotificationCallback = require("messages.SetTableNotificationCallback_pb")
-qlua.rpc.GetTableSize = require("messages.GetTableSize_pb")
-qlua.rpc.GetWindowCaption = require("messages.GetWindowCaption_pb")
-qlua.rpc.GetWindowRect = require("messages.GetWindowRect_pb")
-qlua.rpc.RGB = require("messages.RGB_pb")
-qlua.rpc.SetColor = require("messages.SetColor_pb")
-qlua.rpc.Highlight = require("messages.Highlight_pb")
-qlua.rpc.SetSelectedRow = require("messages.SetSelectedRow_pb")
-qlua.rpc.AddLabel = require("messages.AddLabel_pb")
-qlua.rpc.DelLabel = require("messages.DelLabel_pb")
-qlua.rpc.DelAllLabels = require("messages.DelAllLabels_pb")
-qlua.rpc.GetLabelParams = require("messages.GetLabelParams_pb")
-qlua.rpc.SetLabelParams = require("messages.SetLabelParams_pb")
-qlua.rpc.Subscribe_Level_II_Quotes = require("messages.Subscribe_Level_II_Quotes_pb")
-qlua.rpc.Unsubscribe_Level_II_Quotes = require("messages.Unsubscribe_Level_II_Quotes_pb")
-qlua.rpc.IsSubscribed_Level_II_Quotes = require("messages.IsSubscribed_Level_II_Quotes_pb")
-qlua.rpc.ParamRequest = require("messages.ParamRequest_pb")
-qlua.rpc.CancelParamRequest = require("messages.CancelParamRequest_pb")
-qlua.rpc.bit = {}
-qlua.rpc.bit.tohex = require("messages.bit.tohex_pb")
-qlua.rpc.bit.bnot = require("messages.bit.bnot_pb")
-qlua.rpc.bit.band = require("messages.bit.band_pb")
-qlua.rpc.bit.bor = require("messages.bit.bor_pb")
-qlua.rpc.bit.bxor = require("messages.bit.bxor_pb")
+local qlua = require("qlua.api")
 
 local struct_factory = require("utils.struct_factory")
 local utils = require("utils.utils")
@@ -144,7 +58,7 @@ function RequestHandler:handle(request)
     ok, result = pcall( function() return f_handler(request.args) end )
   end
   
-  local response = qlua.rpc.RPC.Response()
+  local response = qlua.RPC.Response()
   response.type = request.type
   
   if ok then 
@@ -161,98 +75,98 @@ function RequestHandler:handle(request)
   return response
 end
   
-request_handlers[qlua.rpc.RPC.ProcedureType.IS_CONNECTED] = function() 
-  local result = qlua.rpc.isConnected.Result()
+request_handlers[qlua.RPC.ProcedureType.IS_CONNECTED] = function() 
+  local result = qlua.isConnected.Result()
   result.is_connected = isConnected()
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_SCRIPT_PATH] = function() 
-  local result = qlua.rpc.getScriptPath.Result()
+request_handlers[qlua.RPC.ProcedureType.GET_SCRIPT_PATH] = function() 
+  local result = qlua.getScriptPath.Result()
   result.script_path = getScriptPath()
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_INFO_PARAM] = function(request_args)
-  local args = parse_request_args(request_args, qlua.rpc.getInfoParam.Request)
-  local result = qlua.rpc.getInfoParam.Result()
+request_handlers[qlua.RPC.ProcedureType.GET_INFO_PARAM] = function(request_args)
+  local args = parse_request_args(request_args, qlua.getInfoParam.Request)
+  local result = qlua.getInfoParam.Result()
   result.info_param = getInfoParam(args.param_name)
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.MESSAGE] = function(request_args) 
+request_handlers[qlua.RPC.ProcedureType.MESSAGE] = function(request_args) 
   
-  local args = parse_request_args(request_args, qlua.rpc.message.Request)
+  local args = parse_request_args(request_args, qlua.message.Request)
 
-  local ret = (args.icon_type == qlua.rpc.message.IconType.UNDEFINED and message(args.message) or message(args.message, args.icon_type))
+  local ret = (args.icon_type == qlua.message.IconType.UNDEFINED and message(args.message) or message(args.message, args.icon_type))
   if ret == nil then
-    if args.icon_type == qlua.rpc.message.IconType.UNDEFINED then 
+    if args.icon_type == qlua.message.IconType.UNDEFINED then 
       error(string.format("Процедура message(%s) возвратила nil.", args.message), 0)
     else
       error(string.format("Процедура message(%s, %d) возвратила nil.", args.message, args.icon_type), 0)
     end
   else
-    local result = qlua.rpc.message.Result()
+    local result = qlua.message.Result()
     result.result = ret
     return result
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.SLEEP] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.sleep.Request)
+request_handlers[qlua.RPC.ProcedureType.SLEEP] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.sleep.Request)
   local ret = sleep(args.time) -- TO-DO: pcall
   if ret == nil then
     error(string.format("Процедура sleep(%d) возвратила nil.", args.time), 0)
   else
-    local result = qlua.rpc.sleep.Result()
+    local result = qlua.sleep.Result()
     result.result = ret
     return result
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_WORKING_FOLDER] = function() 
-  local result = qlua.rpc.getWorkingFolder.Result()
+request_handlers[qlua.RPC.ProcedureType.GET_WORKING_FOLDER] = function() 
+  local result = qlua.getWorkingFolder.Result()
   result.working_folder = getWorkingFolder()
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.PRINT_DBG_STR] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.PrintDbgStr.Request)
+request_handlers[qlua.RPC.ProcedureType.PRINT_DBG_STR] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.PrintDbgStr.Request)
   PrintDbgStr(args.s)
   return nil
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_ITEM] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getItem.Request)
-  local result = qlua.rpc.getItem.Result()
+request_handlers[qlua.RPC.ProcedureType.GET_ITEM] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getItem.Request)
+  local result = qlua.getItem.Result()
   local t = getItem(args.table_name, args.index)
   if t then
-    utils.put_to_string_string_pb_map(t, result.table_row, qlua.rpc.getItem.Result.TableRowEntry)
+    utils.put_to_string_string_pb_map(t, result.table_row, qlua.getItem.Result.TableRowEntry)
   end
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_ORDER_BY_NUMBER] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getOrderByNumber.Request)
+request_handlers[qlua.RPC.ProcedureType.GET_ORDER_BY_NUMBER] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getOrderByNumber.Request)
   local t, i = getOrderByNumber(args.class_code, args.order_id)
   if t == nil then
     error(string.format("Процедура getOrderByNumber(%s, %d) вернула (nil, nil).", args.class_code, args.order_id), 0)
   else
-    local result = qlua.rpc.getOrderByNumber.Result()
+    local result = qlua.getOrderByNumber.Result()
     result.order = struct_factory.create_Order(t)
     result.indx = i
     return result
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_NUMBER_OF] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getNumberOf.Request)
-  local result = qlua.rpc.getNumberOf.Result()
+request_handlers[qlua.RPC.ProcedureType.GET_NUMBER_OF] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getNumberOf.Request)
+  local result = qlua.getNumberOf.Result()
   result.result = getNumberOf(args.table_name) -- returns -1 in case of error
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.SEARCH_ITEMS] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.SearchItems.Request)
+request_handlers[qlua.RPC.ProcedureType.SEARCH_ITEMS] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.SearchItems.Request)
   local fn_ctr, error_msg = loadstring("return "..args.fn_def)
   local items
   if fn_ctr == nil then 
@@ -265,7 +179,7 @@ request_handlers[qlua.rpc.RPC.ProcedureType.SEARCH_ITEMS] = function(request_arg
     end
   end
   
-  local result = qlua.rpc.SearchItems.Result()
+  local result = qlua.SearchItems.Result()
   if items then 
     for i, item_index in ipairs(items) do
       table.sinsert(result.items_indices, item_index)
@@ -275,20 +189,20 @@ request_handlers[qlua.rpc.RPC.ProcedureType.SEARCH_ITEMS] = function(request_arg
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_CLASSES_LIST] = function() 
-  local result = qlua.rpc.getClassesList.Result()
+request_handlers[qlua.RPC.ProcedureType.GET_CLASSES_LIST] = function() 
+  local result = qlua.getClassesList.Result()
   result.classes_list = getClassesList()
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_CLASS_INFO] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getClassInfo.Request)
+request_handlers[qlua.RPC.ProcedureType.GET_CLASS_INFO] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getClassInfo.Request)
 
   local t = getClassInfo(args.class_code)
   if t == nil then
     error(string.format("Процедура getClassInfo(%s) вернула nil.", args.class_code), 0)
   else
-    local result = qlua.rpc.getClassInfo.Result()
+    local result = qlua.getClassInfo.Result()
     
     result.class_info.firmid = utils.value_or_empty_string(t.firmid)
     result.class_info.name = utils.value_or_empty_string(t.name)
@@ -300,17 +214,17 @@ request_handlers[qlua.rpc.RPC.ProcedureType.GET_CLASS_INFO] = function(request_a
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_CLASS_SECURITIES] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getClassSecurities.Request)
-  local result = qlua.rpc.getClassSecurities.Result()
+request_handlers[qlua.RPC.ProcedureType.GET_CLASS_SECURITIES] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getClassSecurities.Request)
+  local result = qlua.getClassSecurities.Result()
   local ret = getClassSecurities(args.class_code) -- returns an empty string if no securities found for the given class_code
   if ret then result.class_securities = ret end
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_MONEY] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getMoney.Request)
-  local result = qlua.rpc.getMoney.Result()
+request_handlers[qlua.RPC.ProcedureType.GET_MONEY] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getMoney.Request)
+  local result = qlua.getMoney.Result()
   local t = getMoney(args.client_code, args.firmid, args.tag, args.currcode) -- returns a table with zero'ed values if no info found or in case of an error
   if t then
     result.money.money_open_limit = value_to_string_or_empty_string(t.money_open_limit)
@@ -324,21 +238,21 @@ request_handlers[qlua.rpc.RPC.ProcedureType.GET_MONEY] = function(request_args)
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_MONEY_EX] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getMoneyEx.Request)
+request_handlers[qlua.RPC.ProcedureType.GET_MONEY_EX] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getMoneyEx.Request)
   local t = getMoneyEx(args.firmid, args.client_code, args.tag, args.currcode, args.limit_kind) -- returns nil if no info found or in case of an error
   if t == nil then 
     error(string.format("Процедура getMoneyEx(%s, %s, %s, %s, %d) возвратила nil.", args.firmid, args.client_code, args.tag, args.currcode, args.limit_kind), 0)
   else
-    local result = qlua.rpc.getMoneyEx.Result()
+    local result = qlua.getMoneyEx.Result()
     struct_factory.create_MoneyLimit(t, result.money_ex)
     return result
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_DEPO] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getDepo.Request)
-  local result = qlua.rpc.getDepo.Result()
+request_handlers[qlua.RPC.ProcedureType.GET_DEPO] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getDepo.Request)
+  local result = qlua.getDepo.Result()
   local t = getDepo(args.client_code, args.firmid, args.sec_code, args.trdaccid) -- returns a table with zero'ed values if no info found or in case of an error
   if t then
     result.depo.depo_limit_locked_buy_value = value_to_string_or_empty_string(t.depo_limit_locked_buy_value)
@@ -353,56 +267,56 @@ request_handlers[qlua.rpc.RPC.ProcedureType.GET_DEPO] = function(request_args)
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_DEPO_EX] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getDepoEx.Request)
+request_handlers[qlua.RPC.ProcedureType.GET_DEPO_EX] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getDepoEx.Request)
   local t = getDepoEx(args.firmid, args.client_code, args.sec_code, args.trdaccid, args.limit_kind) -- returns nil if no info found or in case of an error
   if t == nil then
     error(string.format("Процедура getDepoEx(%s, %s, %s, %s, %d) возвратила nil.", args.firmid, args.client_code, args.sec_code, args.trdaccid, args.limit_kind), 0)
   else
-    local result = qlua.rpc.getDepoEx.Result()
+    local result = qlua.getDepoEx.Result()
     struct_factory.create_DepoLimit(t, result.depo_ex)
     return result
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_FUTURES_LIMIT] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getFuturesLimit.Request)
+request_handlers[qlua.RPC.ProcedureType.GET_FUTURES_LIMIT] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getFuturesLimit.Request)
   local t = getFuturesLimit(args.firmid, args.trdaccid, args.limit_type, args.currcode) -- returns nil if no info found or in case of an error
   if t == nil then
     error(string.format("Процедура getFuturesLimit(%s, %s, %d, %s) возвратила nil.", args.firmid, args.trdaccid, args.limit_type, args.currcode), 0)
   else
-    local result = qlua.rpc.getFuturesLimit.Result()
+    local result = qlua.getFuturesLimit.Result()
     struct_factory.create_FuturesLimit(t, result.futures_limit)
     return result
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_FUTURES_HOLDING] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getFuturesHolding.Request)
+request_handlers[qlua.RPC.ProcedureType.GET_FUTURES_HOLDING] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getFuturesHolding.Request)
   local t = getFuturesHolding(args.firmid, args.trdaccid, args.sec_code, args.type) -- returns nil if no info found or in case of an error
   if t == nil then
     error(string.format("Процедура getFuturesLHolding(%s, %s, %d, %d) возвратила nil.", args.firmid, args.trdaccid, args.sec_code, args.type), 0)
   else
-    local result = qlua.rpc.getFuturesHolding.Result()
+    local result = qlua.getFuturesHolding.Result()
     struct_factory.create_FuturesClientHolding(t, result.futures_holding)
     return result
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_SECURITY_INFO] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getSecurityInfo.Request)
+request_handlers[qlua.RPC.ProcedureType.GET_SECURITY_INFO] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getSecurityInfo.Request)
   local t = getSecurityInfo(args.class_code, args.sec_code) -- returns nil if no info found or in case of an error
   if t == nil then
     error(string.format("Процедура getSecurityInfo(%s, %s) возвратила nil.", args.class_code, args.sec_code), 0)
   else
-    local result = qlua.rpc.getSecurityInfo.Result()
+    local result = qlua.getSecurityInfo.Result()
     struct_factory.create_Security(t, result.security_info)
     return result
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_TRADE_DATE] = function() 
-  local result = qlua.rpc.getTradeDate.Result()
+request_handlers[qlua.RPC.ProcedureType.GET_TRADE_DATE] = function() 
+  local result = qlua.getTradeDate.Result()
   local t = getTradeDate()
   
   result.trade_date.date = value_or_empty_string(t.date)
@@ -413,9 +327,9 @@ request_handlers[qlua.rpc.RPC.ProcedureType.GET_TRADE_DATE] = function()
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_QUOTE_LEVEL2] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getQuoteLevel2.Request)
-  local result = qlua.rpc.getQuoteLevel2.Result()
+request_handlers[qlua.RPC.ProcedureType.GET_QUOTE_LEVEL2] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getQuoteLevel2.Request)
+  local result = qlua.getQuoteLevel2.Result()
   local t = getQuoteLevel2(args.class_code, args.sec_code)
   result.bid_count = t.bid_count
   result.offer_count = t.offer_count
@@ -424,23 +338,23 @@ request_handlers[qlua.rpc.RPC.ProcedureType.GET_QUOTE_LEVEL2] = function(request
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_LINES_COUNT] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getLinesCount.Request)
-  local result = qlua.rpc.getLinesCount.Result()
+request_handlers[qlua.RPC.ProcedureType.GET_LINES_COUNT] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getLinesCount.Request)
+  local result = qlua.getLinesCount.Result()
   result.lines_count = getLinesCount(args.tag) -- returns 0 if no chart with this tag found
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_NUM_CANDLES] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getNumCandles.Request)
-  local result = qlua.rpc.getNumCandles.Result()
+request_handlers[qlua.RPC.ProcedureType.GET_NUM_CANDLES] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getNumCandles.Request)
+  local result = qlua.getNumCandles.Result()
   result.num_candles = getNumCandles(args.tag) -- returns 0 if no chart with this tag found
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_CANDLES_BY_INDEX] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getCandlesByIndex.Request)
-  local result = qlua.rpc.getCandlesByIndex.Result()
+request_handlers[qlua.RPC.ProcedureType.GET_CANDLES_BY_INDEX] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getCandlesByIndex.Request)
+  local result = qlua.getCandlesByIndex.Result()
   local t, n, l = getCandlesByIndex(args.tag, args.line, args.first_candle, args.count) -- returns ({}, 0, "") if no info found or in case of error
   result.n = n
   result.l = l
@@ -450,8 +364,8 @@ request_handlers[qlua.rpc.RPC.ProcedureType.GET_CANDLES_BY_INDEX] = function(req
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.CREATE_DATA_SOURCE] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.datasource.CreateDataSource.Request)
+request_handlers[qlua.RPC.ProcedureType.CREATE_DATA_SOURCE] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.datasource.CreateDataSource.Request)
   local interval = utils.to_interval(args.interval) -- TO-DO: pcall
   
   local ds, error_desc
@@ -468,15 +382,15 @@ request_handlers[qlua.rpc.RPC.ProcedureType.CREATE_DATA_SOURCE] = function(reque
       error(string.format("Процедура CreateDataSource(%s, %s, %d, %s) возвратила nil и сообщение об ошибке: [%s].", args.class_code, args.sec_code, interval, args.param, error_desc), 0)
     end
   else
-    local result = qlua.rpc.datasource.CreateDataSource.Result()
+    local result = qlua.datasource.CreateDataSource.Result()
     result.datasource_uuid = uuid()
     RequestHandler.datasources[result.datasource_uuid] = ds
     return result
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.DS_SET_UPDATE_CALLBACK] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.datasource.SetUpdateCallback.Request)
+request_handlers[qlua.RPC.ProcedureType.DS_SET_UPDATE_CALLBACK] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.datasource.SetUpdateCallback.Request)
   
   local ds = RequestHandler:get_datasource(args.datasource_uuid)
   
@@ -486,68 +400,68 @@ request_handlers[qlua.rpc.RPC.ProcedureType.DS_SET_UPDATE_CALLBACK] = function(r
   else
     local f_cb = f_cb_ctr()
     local callback = function (index) f_cb(index, ds) end
-    local result = qlua.rpc.datasource.SetUpdateCallback.Result()
+    local result = qlua.datasource.SetUpdateCallback.Result()
     result.result = ds:SetUpdateCallback(callback)
     return result
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.DS_O] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.datasource.O.Request)
+request_handlers[qlua.RPC.ProcedureType.DS_O] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.datasource.O.Request)
  
   local ds = RequestHandler:get_datasource(args.datasource_uuid)
   
-  local result = qlua.rpc.datasource.O.Result()
+  local result = qlua.datasource.O.Result()
   result.value = tostring( ds:O(args.candle_index) )
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.DS_H] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.datasource.H.Request)
+request_handlers[qlua.RPC.ProcedureType.DS_H] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.datasource.H.Request)
  
   local ds = RequestHandler:get_datasource(args.datasource_uuid)
   
-  local result = qlua.rpc.datasource.H.Result()
+  local result = qlua.datasource.H.Result()
   result.value = tostring( ds:H(args.candle_index) )
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.DS_L] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.datasource.L.Request)
+request_handlers[qlua.RPC.ProcedureType.DS_L] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.datasource.L.Request)
  
   local ds = RequestHandler:get_datasource(args.datasource_uuid)
   
-  local result = qlua.rpc.datasource.L.Result()
+  local result = qlua.datasource.L.Result()
   result.value = tostring( ds:L(args.candle_index) )
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.DS_C] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.datasource.C.Request)
+request_handlers[qlua.RPC.ProcedureType.DS_C] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.datasource.C.Request)
  
   local ds = RequestHandler:get_datasource(args.datasource_uuid)
   
-  local result = qlua.rpc.datasource.C.Result()
+  local result = qlua.datasource.C.Result()
   result.value = tostring( ds:C(args.candle_index) )
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.DS_V] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.datasource.V.Request)
+request_handlers[qlua.RPC.ProcedureType.DS_V] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.datasource.V.Request)
  
   local ds = RequestHandler:get_datasource(args.datasource_uuid)
   
-  local result = qlua.rpc.datasource.V.Result()
+  local result = qlua.datasource.V.Result()
   result.value = tostring( ds:V(args.candle_index) )
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.DS_T] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.datasource.T.Request)
+request_handlers[qlua.RPC.ProcedureType.DS_T] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.datasource.T.Request)
   
   local ds = RequestHandler:get_datasource(args.datasource_uuid)
   
-  local result = qlua.rpc.datasource.T.Result()
+  local result = qlua.datasource.T.Result()
   local t = ds:T(args.candle_index)
   result.year = t.year
   result.month = t.month
@@ -561,47 +475,47 @@ request_handlers[qlua.rpc.RPC.ProcedureType.DS_T] = function(request_args)
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.DS_SIZE] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.datasource.Size.Request)
+request_handlers[qlua.RPC.ProcedureType.DS_SIZE] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.datasource.Size.Request)
   
   local ds = RequestHandler:get_datasource(args.datasource_uuid)
 
-  local result = qlua.rpc.datasource.Size.Result()
+  local result = qlua.datasource.Size.Result()
   result.value = ds:Size()
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.DS_CLOSE] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.datasource.Close.Request)
+request_handlers[qlua.RPC.ProcedureType.DS_CLOSE] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.datasource.Close.Request)
   
   local ds = RequestHandler:get_datasource(args.datasource_uuid)
   
-  local result = qlua.rpc.datasource.Close.Result()
+  local result = qlua.datasource.Close.Result()
   result.result = ds:Close()
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.DS_SET_EMPTY_CALLBACK] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.datasource.SetEmptyCallback.Request)
+request_handlers[qlua.RPC.ProcedureType.DS_SET_EMPTY_CALLBACK] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.datasource.SetEmptyCallback.Request)
   
   local ds = RequestHandler:get_datasource(args.datasource_uuid)
   
-  local result = qlua.rpc.datasource.SetEmptyCallback.Result()
+  local result = qlua.datasource.SetEmptyCallback.Result()
   result.result = ds:SetEmptyCallback()
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.SEND_TRANSACTION] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.sendTransaction.Request)
+request_handlers[qlua.RPC.ProcedureType.SEND_TRANSACTION] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.sendTransaction.Request)
   local t = utils.create_table(args.transaction)
-  local result = qlua.rpc.sendTransaction.Result()
+  local result = qlua.sendTransaction.Result()
   result.result = sendTransaction(t) -- returns an empty string (seems to be always)
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.CALC_BUY_SELL] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.CalcBuySell.Request)
-  local result = qlua.rpc.CalcBuySell.Result()
+request_handlers[qlua.RPC.ProcedureType.CALC_BUY_SELL] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.CalcBuySell.Request)
+  local result = qlua.CalcBuySell.Result()
   local price = tonumber(args.price)
   if price == nil then
     error(string.format("Не удалось преобразовать в число значение '%s' параметра price", args.price), 0) 
@@ -612,13 +526,13 @@ request_handlers[qlua.rpc.RPC.ProcedureType.CALC_BUY_SELL] = function(request_ar
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_PARAM_EX] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getParamEx.Request)
+request_handlers[qlua.RPC.ProcedureType.GET_PARAM_EX] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getParamEx.Request)
   local t = getParamEx(args.class_code, args.sec_code, args.param_name) -- always returns a table
   if t == nil then
     error(string.format("Процедура getParamEx(%s, %s, %s) возвратила nil.", args.class_code, args.sec_code, args.param_name), 0)
   else
-    local result = qlua.rpc.getParamEx.Result()
+    local result = qlua.getParamEx.Result()
     result.param_ex.param_type = value_or_empty_string(t.param_type)
     result.param_ex.param_value = value_or_empty_string(t.param_value)
     result.param_ex.param_image = value_or_empty_string(t.param_image)
@@ -627,13 +541,13 @@ request_handlers[qlua.rpc.RPC.ProcedureType.GET_PARAM_EX] = function(request_arg
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_PARAM_EX_2] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getParamEx2.Request)
+request_handlers[qlua.RPC.ProcedureType.GET_PARAM_EX_2] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getParamEx2.Request)
   local t = getParamEx2(args.class_code, args.sec_code, args.param_name) -- always returns a table
   if t == nil then
     error(string.format("Процедура getParamEx2(%s, %s, %s) возвратила nil.", args.class_code, args.sec_code, args.param_name), 0)
   else
-    local result = qlua.rpc.getParamEx2.Result()
+    local result = qlua.getParamEx2.Result()
     result.param_ex.param_type = value_or_empty_string(t.param_type)
     result.param_ex.param_value = value_or_empty_string(t.param_value)
     result.param_ex.param_image = value_or_empty_string(t.param_image)
@@ -642,13 +556,13 @@ request_handlers[qlua.rpc.RPC.ProcedureType.GET_PARAM_EX_2] = function(request_a
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_PORTFOLIO_INFO] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getPortfolioInfo.Request)
+request_handlers[qlua.RPC.ProcedureType.GET_PORTFOLIO_INFO] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getPortfolioInfo.Request)
   local t = getPortfolioInfo(args.firm_id, args.client_code) -- returns {} in case of error
   if t == nil then
     error(string.format("Процедура getPortfolioInfo(%s, %s) возвратила nil.", args.firm_id, args.client_code), 0)
   else
-    local result = qlua.rpc.getPortfolioInfo.Result()
+    local result = qlua.getPortfolioInfo.Result()
     
     result.portfolio_info.is_leverage = value_or_empty_string(t.is_leverage)
     result.portfolio_info.in_assets = value_or_empty_string(t.in_assets)
@@ -695,13 +609,13 @@ request_handlers[qlua.rpc.RPC.ProcedureType.GET_PORTFOLIO_INFO] = function(reque
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_PORTFOLIO_INFO_EX] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getPortfolioInfoEx.Request)
+request_handlers[qlua.RPC.ProcedureType.GET_PORTFOLIO_INFO_EX] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getPortfolioInfoEx.Request)
   local t = getPortfolioInfoEx(args.firm_id, args.client_code, args.limit_kind) -- returns {} in case of error
   if t == nil then
     error(string.format("Процедура getPortfolioInfoEx(%s, %s, %d) возвратила nil.", args.firm_id, args.client_code, args.limit_kind), 0)
   else
-    local result = qlua.rpc.getPortfolioInfoEx.Result()
+    local result = qlua.getPortfolioInfoEx.Result()
     
     result.portfolio_info_ex.portfolio_info.is_leverage = value_or_empty_string(t.is_leverage)
     result.portfolio_info_ex.portfolio_info.in_assets = value_or_empty_string(t.in_assets)
@@ -771,8 +685,8 @@ request_handlers[qlua.rpc.RPC.ProcedureType.GET_PORTFOLIO_INFO_EX] = function(re
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_BUY_SELL_INFO] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getBuySellInfo.Request)
+request_handlers[qlua.RPC.ProcedureType.GET_BUY_SELL_INFO] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getBuySellInfo.Request)
   local price = tonumber(args.price)
   if price == nil then 
     error(string.format("Не удалось преобразовать в число значение '%s' параметра price", args.price), 0)
@@ -781,7 +695,7 @@ request_handlers[qlua.rpc.RPC.ProcedureType.GET_BUY_SELL_INFO] = function(reques
   if t == nil then
     error(string.format("Процедура getBuySellInfo(%s, %s, %s, %s, %s) возвратила nil.", args.firm_id, args.client_code, args.class_code, args.sec_code, price), 0)
   else
-    local result = qlua.rpc.getBuySellInfo.Result()
+    local result = qlua.getBuySellInfo.Result()
     
     result.buy_sell_info.is_margin_sec = value_or_empty_string(t.is_margin_sec)
     result.buy_sell_info.is_asset_sec = value_or_empty_string(t.is_asset_sec)
@@ -809,13 +723,13 @@ request_handlers[qlua.rpc.RPC.ProcedureType.GET_BUY_SELL_INFO] = function(reques
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_BUY_SELL_INFO_EX] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.getBuySellInfoEx.Request)
+request_handlers[qlua.RPC.ProcedureType.GET_BUY_SELL_INFO_EX] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.getBuySellInfoEx.Request)
   local t = getBuySellInfoEx(args.firm_id, args.client_code, args.class_code, args.sec_code, args.price) -- returns {} in case of error
   if t == nil then
     error(string.format("Процедура getBuySellInfoEx(%s, %s, %s, %s, %d) возвратила nil.", args.firm_id, args.client_code, args.class_code, args.sec_code, args.price), 0)
   else
-    local result = qlua.rpc.getBuySellInfoEx.Result()
+    local result = qlua.getBuySellInfoEx.Result()
     
     result.buy_sell_info_ex.buy_sell_info.is_margin_sec = value_or_empty_string(t.is_margin_sec)
     result.buy_sell_info_ex.buy_sell_info.is_asset_sec = value_or_empty_string(t.is_asset_sec)
@@ -852,82 +766,82 @@ request_handlers[qlua.rpc.RPC.ProcedureType.GET_BUY_SELL_INFO_EX] = function(req
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.ADD_COLUMN] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.AddColumn.Request)
-  local result = qlua.rpc.AddColumn.Result()
+request_handlers[qlua.RPC.ProcedureType.ADD_COLUMN] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.AddColumn.Request)
+  local result = qlua.AddColumn.Result()
   result.result = AddColumn(args.t_id, args.icode, args.name, args.is_default, utils.to_qtable_parameter_type(args.par_type), args.width) -- returns 0 or 1
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.ALLOC_TABLE] = function() 
-  local result = qlua.rpc.AllocTable.Result()
+request_handlers[qlua.RPC.ProcedureType.ALLOC_TABLE] = function() 
+  local result = qlua.AllocTable.Result()
   result.t_id = AllocTable() -- returns a number
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.CLEAR] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.Clear.Request)
-  local result = qlua.rpc.Clear.Result()
+request_handlers[qlua.RPC.ProcedureType.CLEAR] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.Clear.Request)
+  local result = qlua.Clear.Result()
   result.result = Clear(args.t_id) -- returns true or false
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.CREATE_WINDOW] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.CreateWindow.Request)
-  local result = qlua.rpc.CreateWindow.Result()
+request_handlers[qlua.RPC.ProcedureType.CREATE_WINDOW] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.CreateWindow.Request)
+  local result = qlua.CreateWindow.Result()
   result.result = CreateWindow(args.t_id) -- returns 0 or 1
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.DELETE_ROW] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.DeleteRow.Request)
-  local result = qlua.rpc.DeleteRow.Result()
+request_handlers[qlua.RPC.ProcedureType.DELETE_ROW] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.DeleteRow.Request)
+  local result = qlua.DeleteRow.Result()
   result.result = DeleteRow(args.t_id, args.key) -- returns true or false
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.DESTROY_TABLE] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.DestroyTable.Request)
-  local result = qlua.rpc.DestroyTable.Result()
+request_handlers[qlua.RPC.ProcedureType.DESTROY_TABLE] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.DestroyTable.Request)
+  local result = qlua.DestroyTable.Result()
   result.result = DestroyTable(args.t_id) -- returns true or false
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.INSERT_ROW] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.InsertRow.Request)
-  local result = qlua.rpc.InsertRow.Result()
+request_handlers[qlua.RPC.ProcedureType.INSERT_ROW] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.InsertRow.Request)
+  local result = qlua.InsertRow.Result()
   result.result = InsertRow(args.t_id, args.key) -- returns a number
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.IS_WINDOW_CLOSED] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.IsWindowClosed.Request)
+request_handlers[qlua.RPC.ProcedureType.IS_WINDOW_CLOSED] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.IsWindowClosed.Request)
   local ret = IsWindowClosed(args.t_id) -- returns nil in case of error
   if ret == nil then
     error(string.format("Процедура IsWindowClosed(%s) вернула nil.", args.t_id), 0)
   else
-    local result = qlua.rpc.IsWindowClosed.Result()
+    local result = qlua.IsWindowClosed.Result()
     result.result = ret
     return result
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_CELL] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.GetCell.Request)
+request_handlers[qlua.RPC.ProcedureType.GET_CELL] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.GetCell.Request)
   local t_cell = GetCell(args.t_id, args.key, args.code) -- returns nil in case of error
   if t_cell == nil then
     error(string.format("Процедура GetCell(%s, %s, %s) вернула nil.", args.t_id, args.key, args.code), 0)
   else
-    local result = qlua.rpc.GetCell.Result()
+    local result = qlua.GetCell.Result()
     result.image = t_cell.image
     if t_cell.value then result.value = tostring(t_cell.value) end
     return result
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.SET_CELL] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.SetCell.Request)
-  local result = qlua.rpc.SetCell.Result()
+request_handlers[qlua.RPC.ProcedureType.SET_CELL] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.SetCell.Request)
+  local result = qlua.SetCell.Result()
   if args.value == "" or args.value == nil then
     result.result = SetCell(args.t_id, args.key, args.code, args.text) -- returns true or false
   else
@@ -941,64 +855,64 @@ request_handlers[qlua.rpc.RPC.ProcedureType.SET_CELL] = function(request_args)
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.SET_WINDOW_CAPTION] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.SetWindowCaption.Request)
-  local result = qlua.rpc.SetWindowCaption.Result()
+request_handlers[qlua.RPC.ProcedureType.SET_WINDOW_CAPTION] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.SetWindowCaption.Request)
+  local result = qlua.SetWindowCaption.Result()
   result.result = SetWindowCaption(args.t_id, args.str) -- returns true or false
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.SET_WINDOW_POS] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.SetWindowPos.Request)
-  local result = qlua.rpc.SetWindowPos.Result()
+request_handlers[qlua.RPC.ProcedureType.SET_WINDOW_POS] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.SetWindowPos.Request)
+  local result = qlua.SetWindowPos.Result()
   result.result = SetWindowPos(args.t_id, args.x, args.y, args.dx, args.dy) -- returns true or false
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.SET_TABLE_NOTIFICATION_CALLBACK] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.SetTableNotificationCallback.Request)  
+request_handlers[qlua.RPC.ProcedureType.SET_TABLE_NOTIFICATION_CALLBACK] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.SetTableNotificationCallback.Request)  
   local f_cb_ctr, error_msg = loadstring("return "..args.f_cb_def)
   if f_cb_ctr == nil then 
    error(string.format("Не удалось распарсить определение функции из переданной строки. Описание ошибки: [%s].", error_msg), 0)
   else
-    local result = qlua.rpc.SetTableNotificationCallback.Result()
+    local result = qlua.SetTableNotificationCallback.Result()
     result.result = SetTableNotificationCallback(args.t_id, f_cb_ctr()) -- returns 0 or 1
     return result
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_TABLE_SIZE] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.GetTableSize.Request)
+request_handlers[qlua.RPC.ProcedureType.GET_TABLE_SIZE] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.GetTableSize.Request)
   local rows, col = GetTableSize(args.t_id) -- returns nil in case of error
   if rows == nil or col == nil then
     error(string.format("Процедура GetTableSize(%s) вернула nil.", args.t_id), 0)
   else
-    local result = qlua.rpc.GetTableSize.Result()
+    local result = qlua.GetTableSize.Result()
     result.rows = rows
     result.col = col
     return result
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_WINDOW_CAPTION] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.GetWindowCaption.Request)
+request_handlers[qlua.RPC.ProcedureType.GET_WINDOW_CAPTION] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.GetWindowCaption.Request)
   local caption = GetWindowCaption(args.t_id) -- returns nil in case of error
   if caption == nil then 
     error(string.format("Процедура GetWindowCaption(%s) возвратила nil.", args.t_id), 0)
   else
-    local result = qlua.rpc.GetWindowCaption.Result()
+    local result = qlua.GetWindowCaption.Result()
     result.caption = caption
     return result
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_WINDOW_RECT] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.GetWindowRect.Request)
+request_handlers[qlua.RPC.ProcedureType.GET_WINDOW_RECT] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.GetWindowRect.Request)
   local top, left, bottom, right = GetWindowRect(args.t_id) -- returns nil in case of error
   if top == nil or left == nil or bottom == nil or right == nil then
     error(string.format("Процедура GetWindowRect(%s) возвратила nil.", args.t_id), 0)
   else
-    local result = qlua.rpc.GetWindowRect.Result()
+    local result = qlua.GetWindowRect.Result()
     result.top = top
     result.left = left
     result.bottom = bottom
@@ -1007,120 +921,120 @@ request_handlers[qlua.rpc.RPC.ProcedureType.GET_WINDOW_RECT] = function(request_
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.RGB] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.RGB.Request)
-  local result = qlua.rpc.RGB.Result()
+request_handlers[qlua.RPC.ProcedureType.RGB] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.RGB.Request)
+  local result = qlua.RGB.Result()
   -- NB: на самом деле, библиотечная функция RGB должна называться BGR, ибо она выдаёт числа именно в этом формате. В SetColor, однако, тоже ожидается цвет в формате BGR, так что это не баг, а фича.
   result.result = RGB(args.red, args.green, args.blue) -- returns a number
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.SET_COLOR] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.SetColor.Request)
-  local result = qlua.rpc.SetColor.Result()
+request_handlers[qlua.RPC.ProcedureType.SET_COLOR] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.SetColor.Request)
+  local result = qlua.SetColor.Result()
   result.result = SetColor(args.t_id, args.row, args.col, args.b_color, args.f_color, args.sel_b_color, args.sel_f_color) -- what does it return in case of error ?
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.HIGHLIGHT] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.Highlight.Request)
-  local result = qlua.rpc.Highlight.Result()
+request_handlers[qlua.RPC.ProcedureType.HIGHLIGHT] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.Highlight.Request)
+  local result = qlua.Highlight.Result()
   result.result = Highlight(args.t_id, args.row, args.col, args.b_color, args.f_color, args.timeout) -- what does it return in case of error ?
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.SET_SELECTED_ROW] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.SetSelectedRow.Request)
-  local result = qlua.rpc.SetSelectedRow.Result()
+request_handlers[qlua.RPC.ProcedureType.SET_SELECTED_ROW] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.SetSelectedRow.Request)
+  local result = qlua.SetSelectedRow.Result()
   result.result = SetSelectedRow(args.table_id, args.row) -- returns -1 in case of error
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.ADD_LABEL] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.AddLabel.Request)
+request_handlers[qlua.RPC.ProcedureType.ADD_LABEL] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.AddLabel.Request)
   local label_params = utils.create_table(args.label_params)
   local ret = AddLabel(args.chart_tag, label_params) -- returns nil in case of error
   if ret == nil then
     error(string.format("Процедура AddLabel(%s, %s) возвратила nil.", args.chart_tag, utils.table.tostring(label_params)), 0)
   else
-    local result = qlua.rpc.AddLabel.Result()
+    local result = qlua.AddLabel.Result()
     result.label_id = ret
     return result
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.DEL_LABEL] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.DelLabel.Request)
-  local result = qlua.rpc.DelLabel.Result()
+request_handlers[qlua.RPC.ProcedureType.DEL_LABEL] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.DelLabel.Request)
+  local result = qlua.DelLabel.Result()
   result.result = DelLabel(args.chart_tag, args.label_id) -- returns true or false
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.DEL_ALL_LABELS] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.DelAllLabels.Request)
-  local result = qlua.rpc.DelAllLabels.Result()
+request_handlers[qlua.RPC.ProcedureType.DEL_ALL_LABELS] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.DelAllLabels.Request)
+  local result = qlua.DelAllLabels.Result()
   result.result = DelAllLabels(args.chart_tag) -- returns true or false
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.GET_LABEL_PARAMS] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.GetLabelParams.Request)
+request_handlers[qlua.RPC.ProcedureType.GET_LABEL_PARAMS] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.GetLabelParams.Request)
   local t = GetLabelParams(args.chart_tag, args.label_id) -- returns nil in case of error
   if t == nil then
     error(string.format("Процедура GetLabelParams(%s, %d) возвратила nil.", args.chart_tag, args.label_id), 0)
   else
-    local result = qlua.rpc.GetLabelParams.Result()
-    utils.put_to_string_string_pb_map(t, result.label_params, qlua.rpc.GetLabelParams.Result.LabelParamsEntry)
+    local result = qlua.GetLabelParams.Result()
+    utils.put_to_string_string_pb_map(t, result.label_params, qlua.GetLabelParams.Result.LabelParamsEntry)
     return result
   end
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.SET_LABEL_PARAMS] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.SetLabelParams.Request)
+request_handlers[qlua.RPC.ProcedureType.SET_LABEL_PARAMS] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.SetLabelParams.Request)
   local label_params = utils.create_table(args.label_params)
-  local result = qlua.rpc.SetLabelParams.Result()
+  local result = qlua.SetLabelParams.Result()
   result.result = SetLabelParams(args.chart_tag, args.label_id, label_params) -- returns true or false
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.SUBSCRIBE_LEVEL_II_QUOTES] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.Subscribe_Level_II_Quotes.Request)
-  local result = qlua.rpc.Subscribe_Level_II_Quotes.Result()
+request_handlers[qlua.RPC.ProcedureType.SUBSCRIBE_LEVEL_II_QUOTES] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.Subscribe_Level_II_Quotes.Request)
+  local result = qlua.Subscribe_Level_II_Quotes.Result()
   result.result = Subscribe_Level_II_Quotes(args.class_code, args.sec_code) -- returns true or false
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.UNSUBSCRIBE_LEVEL_II_QUOTES] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.Unsubscribe_Level_II_Quotes.Request)
-  local result = qlua.rpc.Unsubscribe_Level_II_Quotes.Result()
+request_handlers[qlua.RPC.ProcedureType.UNSUBSCRIBE_LEVEL_II_QUOTES] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.Unsubscribe_Level_II_Quotes.Request)
+  local result = qlua.Unsubscribe_Level_II_Quotes.Result()
   result.result = Unsubscribe_Level_II_Quotes(args.class_code, args.sec_code) -- returns true or false
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.IS_SUBSCRIBED_LEVEL_II_QUOTES] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.IsSubscribed_Level_II_Quotes.Request)
-  local result = qlua.rpc.IsSubscribed_Level_II_Quotes.Result()
+request_handlers[qlua.RPC.ProcedureType.IS_SUBSCRIBED_LEVEL_II_QUOTES] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.IsSubscribed_Level_II_Quotes.Request)
+  local result = qlua.IsSubscribed_Level_II_Quotes.Result()
   result.result = IsSubscribed_Level_II_Quotes(args.class_code, args.sec_code) -- returns true or false
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.PARAM_REQUEST] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.ParamRequest.Request)
-  local result = qlua.rpc.ParamRequest.Result()
+request_handlers[qlua.RPC.ProcedureType.PARAM_REQUEST] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.ParamRequest.Request)
+  local result = qlua.ParamRequest.Result()
   result.result = ParamRequest(args.class_code, args.sec_code, args.db_name) -- returns true or false
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.CANCEL_PARAM_REQUEST] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.CancelParamRequest.Request)
-  local result = qlua.rpc.CancelParamRequest.Result()
+request_handlers[qlua.RPC.ProcedureType.CANCEL_PARAM_REQUEST] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.CancelParamRequest.Request)
+  local result = qlua.CancelParamRequest.Result()
   result.result = CancelParamRequest(args.class_code, args.sec_code, args.db_name) -- returns true or false
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.BIT_TOHEX] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.bit.tohex.Request)
-  local result = qlua.rpc.bit.tohex.Result()
+request_handlers[qlua.RPC.ProcedureType.BIT_TOHEX] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.bit.tohex.Request)
+  local result = qlua.bit.tohex.Result()
   if args.n == 0 then
     result.result = bit.tohex(args.x)
   else
@@ -1129,16 +1043,16 @@ request_handlers[qlua.rpc.RPC.ProcedureType.BIT_TOHEX] = function(request_args)
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.BIT_BNOT] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.bit.bnot.Request)
-  local result = qlua.rpc.bit.bnot.Result()
+request_handlers[qlua.RPC.ProcedureType.BIT_BNOT] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.bit.bnot.Request)
+  local result = qlua.bit.bnot.Result()
   result.result = bit.bnot(args.x)
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.BIT_BAND] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.bit.band.Request)
-  local result = qlua.rpc.bit.band.Result()
+request_handlers[qlua.RPC.ProcedureType.BIT_BAND] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.bit.band.Request)
+  local result = qlua.bit.band.Result()
   local xs = {args.x1, args.x2}
   for i, e in ipairs(args.xi) do
     table.sinsert(xs, e)
@@ -1148,9 +1062,9 @@ request_handlers[qlua.rpc.RPC.ProcedureType.BIT_BAND] = function(request_args)
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.BIT_BOR] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.bit.bor.Request)
-  local result = qlua.rpc.bit.bor.Result()
+request_handlers[qlua.RPC.ProcedureType.BIT_BOR] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.bit.bor.Request)
+  local result = qlua.bit.bor.Result()
   local xs = {args.x1, args.x2}
   for i, e in ipairs(args.xi) do
     table.sinsert(xs, e)
@@ -1160,9 +1074,9 @@ request_handlers[qlua.rpc.RPC.ProcedureType.BIT_BOR] = function(request_args)
   return result
 end
 
-request_handlers[qlua.rpc.RPC.ProcedureType.BIT_BXOR] = function(request_args) 
-  local args = parse_request_args(request_args, qlua.rpc.bit.bxor.Request)
-  local result = qlua.rpc.bit.bxor.Result()
+request_handlers[qlua.RPC.ProcedureType.BIT_BXOR] = function(request_args) 
+  local args = parse_request_args(request_args, qlua.bit.bxor.Request)
+  local result = qlua.bit.bxor.Result()
   local xs = {args.x1, args.x2}
   for i, e in ipairs(args.xi) do
     table.sinsert(xs, e)
