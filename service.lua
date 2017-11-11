@@ -22,6 +22,8 @@ local QluaService = {
   is_running = false
 }
 
+QluaService._VERSION = '0.1.0'
+
 function OnClose()
   QluaService:publish(qlua_events.EventType.ON_CLOSE)
   QluaService:terminate()

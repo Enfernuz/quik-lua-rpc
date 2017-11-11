@@ -14,24 +14,25 @@ local ipairs = assert(ipairs, "ipairs function is missing")
 local tostring = assert(tostring, "tostring function is missing")
 local error = assert(error, "error function is missing")
 
-local utils = {}
+local module = {}
+module._VERSION = '0.1.0'
 
-function utils.value_or_empty_string(val)
-  return (val == nil and "" or utils.Cp2151ToUtf8(val))
+function module.value_or_empty_string(val)
+  return (val == nil and "" or module.Cp2151ToUtf8(val))
 end
 
-function utils.value_to_string_or_empty_string(val)
+function module.value_to_string_or_empty_string(val)
   return (val == nil and "" or tostring(val))
 end
 
-function utils.copy_pb_struct(dst, src)
+function module.copy_pb_struct(dst, src)
   
   for k, v in pairs(src) do
     dst[k] = v
   end
 end
 
-function utils.insert_table(dst, src)
+function module.insert_table(dst, src)
   
   for k, v in pairs(src) do
       local table_entry = qlua_types.TableEntry() 
@@ -41,7 +42,7 @@ function utils.insert_table(dst, src)
   end
 end
 
-function utils.insert_quote_table(dst, src)
+function module.insert_quote_table(dst, src)
   
   for _, v in ipairs(src) do
       local quote = qlua.rpc.getQuoteLevel2.QuoteEntry() 
@@ -51,7 +52,7 @@ function utils.insert_quote_table(dst, src)
   end
 end
 
-function utils.copy_datetime(dst, src)
+function module.copy_datetime(dst, src)
   
   dst.mcs = tostring(src.mcs)
   dst.ms = tostring(src.ms)
@@ -64,7 +65,7 @@ function utils.copy_datetime(dst, src)
   dst.year = src.year
 end
 
-function utils.create_table(pb_map)
+function module.create_table(pb_map)
   
   local t = {}
   for _, e in ipairs(pb_map) do
@@ -74,17 +75,17 @@ function utils.create_table(pb_map)
   return t
 end
 
-function utils.put_to_string_string_pb_map(t, pb_map, pb_map_entry_ctr)
+function module.put_to_string_string_pb_map(t, pb_map, pb_map_entry_ctr)
   
   for k, v in pairs(t) do
     local entry = pb_map_entry_ctr()
-    entry.key = utils.Cp2151ToUtf8( tostring(k) )
-    entry.value = utils.Cp2151ToUtf8( tostring(v) )
+    entry.key = module.Cp2151ToUtf8( tostring(k) )
+    entry.value = module.Cp2151ToUtf8( tostring(v) )
     table.sinsert(pb_map, entry)
   end
 end
 
-function utils.insert_candles_table(dst, src)
+function module.insert_candles_table(dst, src)
   
   for _, v in ipairs(src) do
       local candle = qlua_structs.CandleEntry() 
@@ -94,12 +95,12 @@ function utils.insert_candles_table(dst, src)
       candle.low = tostring(v.low)
       candle.volume = tostring(v.volume)
       candle.does_exist = v.doesExist
-      utils.copy_datetime(candle.datetime, v.datetime)
+      module.copy_datetime(candle.datetime, v.datetime)
       table.sinsert(dst, candle)
   end
 end
 
-function utils.sleep(s)
+function module.sleep(s)
   local ntime = os.clock() + s
   repeat until os.clock() > ntime
 end
@@ -113,7 +114,7 @@ qtable_parameter_types[qlua.AddColumn.ColumnParameterType.QTABLE_TIME_TYPE] = QT
 qtable_parameter_types[qlua.AddColumn.ColumnParameterType.QTABLE_DATE_TYPE] = QTABLE_DATE_TYPE
 qtable_parameter_types[qlua.AddColumn.ColumnParameterType.QTABLE_STRING_TYPE] = QTABLE_STRING_TYPE
 
-function utils.to_qtable_parameter_type(pb_column_parameter_type)
+function module.to_qtable_parameter_type(pb_column_parameter_type)
   
   local par_type = qtable_parameter_types[pb_column_parameter_type]
   if par_type == nil then error("Unknown column parameter type.") end
@@ -140,7 +141,7 @@ interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_D1] = INTERVAL
 interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_W1] = INTERVAL_W1
 interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_MN1] = INTERVAL_MN1
 
-function utils.to_interval(pb_interval)
+function module.to_interval(pb_interval)
 
   local interval = interval_types[pb_interval]
   if interval == nil then error("Unknown interval type.") end
@@ -148,10 +149,10 @@ function utils.to_interval(pb_interval)
   return interval
 end
 
-utils.table = {}
+module.table = {}
 
 -- copy-pasted & adapted from http://lua-users.org/wiki/TableUtils
-function utils.table.val_to_str ( v )
+function module.table.val_to_str ( v )
   if "string" == type( v ) then
     v = string.gsub( v, "\n", "\\n" )
     if string.match( string.gsub(v,"[^'\"]",""), '^"+$' ) then
@@ -159,31 +160,31 @@ function utils.table.val_to_str ( v )
     end
     return '"' .. string.gsub(v,'"', '\\"' ) .. '"'
   else
-    return "table" == type( v ) and utils.table.tostring( v ) or
+    return "table" == type( v ) and module.table.tostring( v ) or
       tostring( v )
   end
 end
 
 -- copy-pasted & adapted from http://lua-users.org/wiki/TableUtils
-function utils.table.key_to_str ( k )
+function module.table.key_to_str ( k )
   if "string" == type( k ) and string.match( k, "^[_%a][_%a%d]*$" ) then
     return k
   else
-    return "[" .. utils.table.val_to_str( k ) .. "]"
+    return "[" .. module.table.val_to_str( k ) .. "]"
   end
 end
 
 -- copy-pasted & adapted from http://lua-users.org/wiki/TableUtils
-function utils.table.tostring( tbl )
+function module.table.tostring( tbl )
   local result, done = {}, {}
   for k, v in ipairs( tbl ) do
-    table.sinsert( result, utils.table.val_to_str( v ) )
+    table.sinsert( result, module.table.val_to_str( v ) )
     done[ k ] = true
   end
   for k, v in pairs( tbl ) do
     if not done[ k ] then
       table.sinsert( result,
-        utils.table.key_to_str( k ) .. "=" .. utils.table.val_to_str( v ) )
+        module.table.key_to_str( k ) .. "=" .. module.table.val_to_str( v ) )
     end
   end
   return "{" .. table.sconcat( result, "," ) .. "}"
@@ -222,7 +223,7 @@ local nmdc = {
   [124] = '|'
 }
 
-function utils.Cp2151ToUtf8(s)
+function module.Cp2151ToUtf8(s)
   
   if s == nil then return nil end
   
@@ -246,7 +247,7 @@ function utils.Cp2151ToUtf8(s)
   return r
 end
 
-function utils.Utf8ToCp1251(s)
+function module.Utf8ToCp1251(s)
   
   if s == nil then return nil end
   
@@ -274,4 +275,4 @@ function utils.Utf8ToCp1251(s)
   return r
 end
 
-return utils
+return module

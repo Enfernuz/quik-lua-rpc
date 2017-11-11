@@ -35,6 +35,8 @@ local RequestHandler = {
   datasources = {}
 }
 
+RequestHandler._VERSION = '0.1.0'
+
 local request_handlers = {}
 
 function RequestHandler:get_datasource(datasource_uuid) 

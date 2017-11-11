@@ -7,6 +7,7 @@ local error = assert(error, "error function is missing.")
 local pcall = assert(pcall, "pcall function is missing.")
 
 local EventHandler = {}
+EventHandler._VERSION = '0.1.0'
 
 local function return_nil() 
   return nil 

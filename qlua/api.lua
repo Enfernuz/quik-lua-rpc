@@ -1,6 +1,7 @@
 package.path = "../?.lua;" .. package.path
 
 local module = {}
+module._VERSION = '0.1.0'
 
 -- thanks to https://stackoverflow.com/a/9146653
 local path = (...):match("(.-)[^%.]+$") .. "rpc/"

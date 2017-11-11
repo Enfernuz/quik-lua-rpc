@@ -12,6 +12,7 @@ local value_to_string_or_empty_string = assert(utils.value_to_string_or_empty_st
 local value_or_empty_string = assert(utils.value_or_empty_string)
 
 local StructFactory = {}
+StructFactory._VERSION = '0.1.0'
 
 function StructFactory.create_Firm(firm, existing_struct)
 
