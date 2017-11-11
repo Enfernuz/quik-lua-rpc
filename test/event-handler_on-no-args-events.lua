@@ -4,7 +4,7 @@ require 'busted.runner'()
 
 describe("impl.event-handler", function()
     
-  local qlua_events = require("messages.qlua_events_pb")
+  local qlua_events = require("qlua.rpc.qlua_events_pb")
     
   local sut = require("impl.event-handler")
   

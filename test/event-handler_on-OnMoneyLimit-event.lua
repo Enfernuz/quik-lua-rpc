@@ -6,7 +6,7 @@ local match = require("luassert.match")
 
 describe("impl.event-handler", function()
     
-  local qlua_events = require("messages.qlua_events_pb")
+  local qlua_events = require("qlua.rpc.qlua_events_pb")
 
   local struct_factory = mock( require("utils.struct_factory") )
     

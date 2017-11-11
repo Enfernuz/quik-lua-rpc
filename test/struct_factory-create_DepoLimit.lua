@@ -4,7 +4,7 @@ require 'busted.runner'()
 
 describe("The function utils.struct_factory.create_DepoLimit", function()
     
-  local qlua_structs = require("messages.qlua_structures_pb")
+  local qlua_structs = require("qlua.rpc.qlua_structures_pb")
     
   local sut = require("utils.struct_factory")
   
