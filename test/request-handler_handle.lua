@@ -37,7 +37,7 @@ describe("impl.request-handler", function()
       result_stub = nil
     end)
 
-    it("SHOULD return an instance of qlua.RPC.Response with the 'type' field equal to that of the request", function()
+    it("SHOULD return a qlua.RPC.Response with the 'type' field equal to that of the request and the 'is_error' field set to false", function()
         
       local response = sut:handle(request)
       
@@ -46,6 +46,7 @@ describe("impl.request-handler", function()
       
       assert.are.equal(expected_meta, actual_meta)
       assert.are.equal(request.type, response.type)
+      assert.is_not_true(response.is_error)
     end)
   
     it("SHOULD call the rpc-handler's call_procedure function once, passing the request type as the 1st arg and the request args as the 2nd arg", function()
