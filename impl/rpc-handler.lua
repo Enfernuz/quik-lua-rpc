@@ -15,14 +15,14 @@ local error = assert(error, "error function is missing.")
 
 local module = {
   
-  _VERSION = '0.1.0',
+  _VERSION = '0.1.1',
   datasources = {}
 }
 
 local function parse_request_args(request_args, request_ctr)
   
-  if request_args == nil then error("Запрос не содержит аргументов.", 0) end
-  if request_ctr == nil then error("Отсутствует конструктор запроса.", 0) end
+  if request_args == nil then error("The request has no arguments.", 0) end
+  if request_ctr == nil then error("There's no request constructor function passed in.", 0) end
   -- we can go all defensive and check for the arguments' types as well (table for args, function for ctr), but let's just assume we'll never pass incorrect types :)
   
   local args = request_ctr()
