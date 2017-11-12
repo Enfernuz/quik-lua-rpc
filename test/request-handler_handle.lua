@@ -7,7 +7,6 @@ local match = require("luassert.match")
 describe("impl.request-handler", function()
   
   local qlua = require("qlua.api")
-  local protobuf = require("protobuf")
   local sut = require("impl.request-handler")
 
   describe("WHEN given a request", function()

@@ -35,15 +35,21 @@ local handlers = {}
 
 handlers[qlua.RPC.ProcedureType.IS_CONNECTED] = function()
   
+  local proc_result = isConnected()
+  
   local result = qlua.isConnected.Result()
-  result.is_connected = isConnected()
+  result.is_connected = proc_result
+  
   return result
 end
 
 handlers[qlua.RPC.ProcedureType.GET_SCRIPT_PATH] = function()
   
+  local proc_result = getScriptPath()
+  
   local result = qlua.getScriptPath.Result()
-  result.script_path = getScriptPath()
+  result.script_path = proc_result
+  
   return result
 end
 
