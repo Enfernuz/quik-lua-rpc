@@ -65,7 +65,7 @@ describe("impl.rpc-handler", function()
         assert.are.equal(proc_result, result.result)
       end)
     
-      insulate("AND the message function returns nil", function()
+      insulate("AND the 'sleep' function returns nil", function()
           
         setup(function()
           _G.sleep = spy.new(function(time) return nil end)

@@ -142,6 +142,17 @@ describe("impl.rpc-handler", function()
     
         assert.are.equal(second, response.indx)
       end)
+    
+      insulate("AND the 'getOrderByNumber' function returns nil", function()
+          
+        setup(function()
+          _G.getOrderByNumber = spy.new(function(class_code, order_id) return nil end)
+        end)
+      
+        it("SHOULD raise an error", function()
+          assert.has_error(function() sut.call_procedure(request.type, request.args) end, string.format("Процедура getOrderByNumber(%s, %d) вернула (nil, nil).", request_args.class_code, request_args.order_id))
+        end)
+      end)
     end)
   
     describe("WITHOUT arguments", function()
