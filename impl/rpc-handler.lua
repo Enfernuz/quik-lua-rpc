@@ -100,8 +100,12 @@ handlers[qlua.RPC.ProcedureType.SLEEP] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_WORKING_FOLDER] = function() 
+  
+  local proc_result = getWorkingFolder()
+  
   local result = qlua.getWorkingFolder.Result()
-  result.working_folder = getWorkingFolder()
+  result.working_folder = proc_result
+  
   return result
 end
 
