@@ -64,6 +64,17 @@ describe("impl.rpc-handler", function()
         
         assert.are.equal(proc_result, result.result)
       end)
+    
+      insulate("AND the message function returns nil", function()
+          
+        setup(function()
+          _G.sleep = spy.new(function(time) return nil end)
+        end)
+      
+        it("SHOULD raise an error", function()
+          assert.has_error(function() sut.call_procedure(request.type, request.args) end, string.format("Процедура sleep(%d) возвратила nil.", request_args.time))
+        end)
+      end)
     end)
   
     describe("WITHOUT arguments", function()
