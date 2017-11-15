@@ -133,14 +133,19 @@ handlers[qlua.RPC.ProcedureType.GET_ITEM] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_ORDER_BY_NUMBER] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.getOrderByNumber.Request)
+  
   local t, i = getOrderByNumber(args.class_code, args.order_id)
+  
   if t == nil then
     error(string.format("Процедура getOrderByNumber(%s, %d) вернула (nil, nil).", args.class_code, args.order_id), 0)
   else
+    
     local result = qlua.getOrderByNumber.Result()
-    result.order = struct_factory.create_Order(t)
+    struct_factory.create_Order(t, result.order)
     result.indx = i
+    
     return result
   end
 end

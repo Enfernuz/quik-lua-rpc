@@ -7,7 +7,6 @@ local match = require("luassert.match")
 describe("impl.rpc-handler", function()
   
   local qlua = require("qlua.api")
-  local utils = require("utils.utils")
   local sut = require("impl.rpc-handler")
 
   describe("WHEN given a request of type ProcedureType.GET_ITEM", function()
