@@ -56,8 +56,12 @@ end
 handlers[qlua.RPC.ProcedureType.GET_INFO_PARAM] = function(request_args)
   
   local args = parse_request_args(request_args, qlua.getInfoParam.Request)
+  
+  local proc_result = getInfoParam(args.param_name)
+  
   local result = qlua.getInfoParam.Result()
-  result.info_param = getInfoParam(args.param_name)
+  result.info_param = proc_result
+  
   return result
 end
 
@@ -65,8 +69,9 @@ handlers[qlua.RPC.ProcedureType.MESSAGE] = function(request_args)
   
   local args = parse_request_args(request_args, qlua.message.Request)
 
-  local ret = (args.icon_type == qlua.message.IconType.UNDEFINED and message(args.message) or message(args.message, args.icon_type))
-  if ret == nil then
+  local proc_result = (args.icon_type == qlua.message.IconType.UNDEFINED and message(args.message) or message(args.message, args.icon_type))
+  
+  if proc_result == nil then
     if args.icon_type == qlua.message.IconType.UNDEFINED then 
       error(string.format("Процедура message(%s) возвратила nil.", args.message), 0)
     else
@@ -74,19 +79,22 @@ handlers[qlua.RPC.ProcedureType.MESSAGE] = function(request_args)
     end
   else
     local result = qlua.message.Result()
-    result.result = ret
+    result.result = proc_result
     return result
   end
 end
 
 handlers[qlua.RPC.ProcedureType.SLEEP] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.sleep.Request)
-  local ret = sleep(args.time) -- TO-DO: pcall
-  if ret == nil then
+  
+  local proc_result = sleep(args.time)
+  
+  if proc_result == nil then
     error(string.format("Процедура sleep(%d) возвратила nil.", args.time), 0)
   else
     local result = qlua.sleep.Result()
-    result.result = ret
+    result.result = proc_result
     return result
   end
 end
