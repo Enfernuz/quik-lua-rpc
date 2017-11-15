@@ -119,12 +119,16 @@ handlers[qlua.RPC.ProcedureType.PRINT_DBG_STR] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_ITEM] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.getItem.Request)
+  
+  local proc_result = getItem(args.table_name, args.index)
+  
   local result = qlua.getItem.Result()
-  local t = getItem(args.table_name, args.index)
-  if t then
-    utils.put_to_string_string_pb_map(t, result.table_row, qlua.getItem.Result.TableRowEntry)
+  if proc_result then
+    utils.put_to_string_string_pb_map(proc_result, result.table_row, qlua.getItem.Result.TableRowEntry)
   end
+  
   return result
 end
 
