@@ -110,8 +110,11 @@ handlers[qlua.RPC.ProcedureType.GET_WORKING_FOLDER] = function()
 end
 
 handlers[qlua.RPC.ProcedureType.PRINT_DBG_STR] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.PrintDbgStr.Request)
+  
   PrintDbgStr(args.s)
+  
   return nil
 end
 
