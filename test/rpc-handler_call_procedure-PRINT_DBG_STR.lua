@@ -46,7 +46,7 @@ describe("impl.rpc-handler", function()
         proc_result = nil
       end)
     
-      it("SHOULD call the PrintDbgStr function once, passing the procedure arguments to it", function()
+      it("SHOULD call the global 'PrintDbgStr' function once, passing the procedure arguments to it", function()
         
         local response = sut.call_procedure(request.type, request.args)
     

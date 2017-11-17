@@ -29,23 +29,31 @@ describe("impl.rpc-handler", function()
       request = nil
     end)
   
-    it("SHOULD call the isConnected function once", function()
+    it("SHOULD call the global 'isConnected' function once", function()
         
       local response = sut.call_procedure(request.type)
     
       assert.spy(_G.isConnected).was.called()
     end)
 
-    it("SHOULD return a qlua.isConnected.Result with its data mapped to the result of the called procedure", function()
+    it("SHOULD return a qlua.isConnected.Result instance", function()
         
-      local result = sut.call_procedure(request.type)
-      
-      local expected_meta = getmetatable( qlua.isConnected.Result() )
-      local actual_meta = getmetatable(result)
+      local actual_result = sut.call_procedure(request.type)
+      local expected_result = qlua.isConnected.Result()
+        
+      local actual_meta = getmetatable(actual_result)
+      local expected_meta = getmetatable(expected_result)
       
       assert.are.equal(expected_meta, actual_meta)
-      
-      assert.are.equal(rpc_result, result.is_connected)
+    end)
+
+    it("SHOULD return a protobuf object which string-serialized form equals to that of the expected result", function()
+        
+      local actual_result = sut.call_procedure(request.type)
+      local expected_result = qlua.isConnected.Result()
+      expected_result.is_connected = rpc_result
+
+      assert.are.equal(expected_result:SerializeToString(), actual_result:SerializeToString())
     end)
   end)
 

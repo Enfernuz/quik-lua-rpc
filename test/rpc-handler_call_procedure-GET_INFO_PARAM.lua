@@ -46,23 +46,31 @@ describe("impl.rpc-handler", function()
         rpc_result = nil
       end)
     
-      it("SHOULD call the getInfoParam function once, passing the procedure arguments to it", function()
+      it("SHOULD call the global 'getInfoParam' function once, passing the procedure arguments to it", function()
         
         local response = sut.call_procedure(request.type, request.args)
     
         assert.spy(_G.getInfoParam).was.called_with(request_args.param_name)
       end)
     
-      it("SHOULD return a qlua.getInfoParam.Result with its data mapped to the result of the called procedure", function()
+      it("SHOULD return a qlua.getInfoParam.Result instance", function()
         
-        local result = sut.call_procedure(request.type, request)
-        
-        local expected_meta = getmetatable( qlua.getInfoParam.Result() )
-        local actual_meta = getmetatable(result)
-        
+        local actual_result = sut.call_procedure(request.type, request)
+        local expected_result = qlua.getInfoParam.Result()
+
+        local actual_meta = getmetatable(actual_result)
+        local expected_meta = getmetatable(expected_result)
+
         assert.are.equal(expected_meta, actual_meta)
+      end)
+    
+      it("SHOULD return a protobuf object which string-serialized form equals to that of the expected result", function()
+          
+        local actual_result = sut.call_procedure(request.type, request)
+        local expected_result = qlua.getInfoParam.Result()
+        expected_result.info_param = rpc_result
         
-        assert.are.equal(rpc_result, result.info_param)
+        assert.are.equal(expected_result:SerializeToString(), actual_result:SerializeToString())
       end)
     end)
   

@@ -46,26 +46,34 @@ describe("impl.rpc-handler", function()
         proc_result = nil
       end)
     
-      it("SHOULD call the sleep function once, passing the procedure arguments to it", function()
+      it("SHOULD call the global 'sleep' function once, passing the procedure arguments to it", function()
         
         local response = sut.call_procedure(request.type, request.args)
     
         assert.spy(_G.sleep).was.called_with(request_args.time)
       end)
     
-      it("SHOULD return a qlua.sleep.Result with its data mapped to the result of the called procedure", function()
+      it("SHOULD return a qlua.sleep.Result instance", function()
+          
+        local actual_result = sut.call_procedure(request.type, request)
+        local expected_result = qlua.sleep.Result()
         
-        local result = sut.call_procedure(request.type, request)
-        
-        local expected_meta = getmetatable( qlua.sleep.Result() )
-        local actual_meta = getmetatable(result)
+        local actual_meta = getmetatable(actual_result)
+        local expected_meta = getmetatable(expected_result)
         
         assert.are.equal(expected_meta, actual_meta)
-        
-        assert.are.equal(proc_result, result.result)
       end)
     
-      insulate("AND the 'sleep' function returns nil", function()
+      it("SHOULD return a protobuf object which string-serialized form equals to that of the expected result", function()
+        
+        local actual_result = sut.call_procedure(request.type, request)
+        local expected_result = qlua.sleep.Result()
+        expected_result.result = proc_result
+        
+        assert.are.equal(expected_result:SerializeToString(), actual_result:SerializeToString())
+      end)
+    
+      insulate("AND the global 'sleep' function returns nil", function()
           
         setup(function()
           _G.sleep = spy.new(function(time) return nil end)

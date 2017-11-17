@@ -119,7 +119,7 @@ describe("impl.rpc-handler", function()
         request_result = nil
       end)
     
-      it("SHOULD call the getOrderByNumber function once, passing the procedure arguments to it", function()
+      it("SHOULD call the global 'getOrderByNumber' function once, passing the procedure arguments to it", function()
         
         local response = sut.call_procedure(request.type, request.args)
     
@@ -127,23 +127,28 @@ describe("impl.rpc-handler", function()
         qlua.getOrderByNumber.Result:clear()
       end)
     
-      it("SHOULD create a qlua.getOrderByNumber.Result instance, call the struct_factory's create_Order function once, passing the first result of the 'getOrderByNumber' function and the instance's 'order' field to it, and return the qlua.getOrderByNumber.Result instance", function()
+      it("SHOULD return a qlua.getOrderByNumber.Result instance", function()
+          
+        local actual_result = sut.call_procedure(request.type, request.args)
+        local expected_result = qlua.getOrderByNumber.Result()
         
-        local response = sut.call_procedure(request.type, request.args)
-    
-        assert.spy(qlua.getOrderByNumber.Result).was.called(1)
-        assert.spy(struct_factory.create_Order).was.called_with(first, request_result.order)
-        assert.are.equal(response, request_result)
+        local actual_meta = getmetatable(actual_result)
+        local expected_meta = getmetatable(expected_result)
+        
+        assert.are.equal(expected_meta, actual_meta)
       end)
     
-      it("SHOULD return a qlua.getOrderByNumber.Result instance with the 'indx' field equals to the second result of the 'getOrderByNumber' function", function()
+      it("SHOULD return a protobuf object which string-serialized form equals to that of the expected result", function()
         
-        local response = sut.call_procedure(request.type, request.args)
+        local actual_result = sut.call_procedure(request.type, request.args)
+        local expected_result = qlua.getOrderByNumber.Result()
+        struct_factory.create_Order(first, expected_result.order)
+        expected_result.indx = second
     
-        assert.are.equal(second, response.indx)
+        assert.are.equal(expected_result:SerializeToString(), actual_result:SerializeToString())
       end)
     
-      insulate("AND the 'getOrderByNumber' function returns nil", function()
+      insulate("AND the global 'getOrderByNumber' function returns nil", function()
           
         setup(function()
           _G.getOrderByNumber = spy.new(function(class_code, order_id) return nil end)

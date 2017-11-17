@@ -49,7 +49,7 @@ describe("impl.rpc-handler", function()
     
       -- Если поместить этот тест после нижнего insulate (если describe ниже сделать insulate и убрать teardown), то будет ошибка: после того insulate icon_type станет UNDEFINED, а не INFO.
       -- Вроде insulate выполняет какой-то сэндбоксинг, чтобы изолировать тестовое окружение, но, видимо, я не до конца разобрался, как он работает.
-      it("SHOULD call the message function once, passing the procedure arguments to it", function()
+      it("SHOULD call the global 'message' function once, passing the procedure arguments to it", function()
       
         local response = sut.call_procedure(request.type, request.args)
         assert.spy(_G.message).was.called_with(request_args.message, request_args.icon_type)
@@ -67,13 +67,13 @@ describe("impl.rpc-handler", function()
           request.args = request_args:SerializeToString()
         end)
       
-        it("SHOULD call the message function once, passing only the 'message' field from the procedure arguments to it", function()
+        it("SHOULD call the global 'message' function once, passing only the 'message' field from the procedure arguments to it", function()
           
           local response = sut.call_procedure(request.type, request.args)
           assert.spy(_G.message).was.called_with(request_args.message)
         end)
       
-        insulate("AND the message function returns nil", function()
+        insulate("AND the global 'message' function returns nil", function()
           
           setup(function()
             _G.message = function(msg, icon_type) return nil end
@@ -84,20 +84,28 @@ describe("impl.rpc-handler", function()
           end)
         end)
       end)
-
-      it("SHOULD return a qlua.message.Result with its data mapped to the result of the called procedure", function()
+    
+      it("SHOULD return a qlua.message.Result instance", function()
+          
+        local actual_result = sut.call_procedure(request.type, request.args)
+        local expected_result = qlua.message.Result()
         
-        local result = sut.call_procedure(request.type, request.args)
-        
-        local expected_meta = getmetatable( qlua.message.Result() )
-        local actual_meta = getmetatable(result)
+        local actual_meta = getmetatable(actual_result)
+        local expected_meta = getmetatable(expected_result)
         
         assert.are.equal(expected_meta, actual_meta)
+      end)
+
+      it("SHOULD return a protobuf object which string-serialized form equals to that of the expected result", function()
         
-        assert.are.equal(rpc_result, result.result)
+        local actual_result = sut.call_procedure(request.type, request.args)
+        local expected_result = qlua.message.Result()
+        expected_result.result = rpc_result
+        
+        assert.are.equal(expected_result:SerializeToString(), actual_result:SerializeToString())
       end)
     
-      insulate("AND the message function returns nil", function()
+      insulate("AND the global 'message' function returns nil", function()
           
           setup(function()
             _G.message = function(msg, icon_type) return nil end

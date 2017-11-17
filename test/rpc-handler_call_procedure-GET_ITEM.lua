@@ -7,6 +7,7 @@ local match = require("luassert.match")
 describe("impl.rpc-handler", function()
   
   local qlua = require("qlua.api")
+  local utils = require("utils.utils")
   local sut = require("impl.rpc-handler")
 
   describe("WHEN given a request of type ProcedureType.GET_ITEM", function()
@@ -48,28 +49,31 @@ describe("impl.rpc-handler", function()
         proc_result = nil
       end)
     
-      it("SHOULD call the getItem function once, passing the procedure arguments to it", function()
+      it("SHOULD call the global 'getItem' function once, passing the procedure arguments to it", function()
         
         local response = sut.call_procedure(request.type, request.args)
     
         assert.spy(_G.getItem).was.called_with(request_args.table_name, request_args.index)
       end)
     
-      it("SHOULD return a qlua.getItem.Result with its data mapped to the result of the called procedure", function()
+      it("SHOULD return a qlua.getItem.Result instance", function()
+          
+        local actual_result = sut.call_procedure(request.type, request)
+        local expected_result = qlua.getItem.Result()
         
-        local result = sut.call_procedure(request.type, request)
-        
-        local expected_meta = getmetatable( qlua.getItem.Result() )
-        local actual_meta = getmetatable(result)
-        
+        local actual_meta = getmetatable(actual_result)
+        local expected_meta = getmetatable(expected_result)
+
         assert.are.equal(expected_meta, actual_meta)
+      end)
+    
+      it("SHOULD return a protobuf object which string-serialized form equals to that of the expected result", function()
         
-        local data = {}
-        for _, entry in ipairs(result.table_row) do
-          data[entry.key] = entry.value
-        end
+        local actual_result = sut.call_procedure(request.type, request)
+        local expected_result = qlua.getItem.Result()
+        utils.put_to_string_string_pb_map(proc_result, expected_result.table_row, qlua.getItem.Result.TableRowEntry)
         
-        assert.are.same(proc_result, data)
+        assert.are.equal(expected_result:SerializeToString(), actual_result:SerializeToString())
       end)
     end)
   
