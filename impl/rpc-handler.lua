@@ -151,9 +151,14 @@ handlers[qlua.RPC.ProcedureType.GET_ORDER_BY_NUMBER] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_NUMBER_OF] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.getNumberOf.Request)
+  
+  local proc_result = getNumberOf(args.table_name) -- returns -1 in case of error
+  
   local result = qlua.getNumberOf.Result()
-  result.result = getNumberOf(args.table_name) -- returns -1 in case of error
+  result.result = proc_result
+  
   return result
 end
 
