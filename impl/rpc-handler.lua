@@ -21,8 +21,8 @@ local module = {
 
 local function parse_request_args(request_args, request_ctr)
   
-  if request_args == nil then error("The request has no arguments.", 0) end
-  if request_ctr == nil then error("There's no request constructor function passed in.", 0) end
+  if request_args == nil then error("The request has no arguments.") end
+  if request_ctr == nil then error("There's no request constructor function passed in.") end
   -- we can go all defensive and check for the arguments' types as well (table for args, function for ctr), but let's just assume we'll never pass incorrect types :)
   
   local args = request_ctr()
@@ -73,9 +73,9 @@ handlers[qlua.RPC.ProcedureType.MESSAGE] = function(request_args)
   
   if proc_result == nil then
     if args.icon_type == qlua.message.IconType.UNDEFINED then 
-      error(string.format("Процедура message(%s) возвратила nil.", args.message), 0)
+      error(string.format("Процедура message(%s) возвратила nil.", args.message))
     else
-      error(string.format("Процедура message(%s, %d) возвратила nil.", args.message, args.icon_type), 0)
+      error(string.format("Процедура message(%s, %d) возвратила nil.", args.message, args.icon_type))
     end
   else
     local result = qlua.message.Result()
@@ -91,7 +91,7 @@ handlers[qlua.RPC.ProcedureType.SLEEP] = function(request_args)
   local proc_result = sleep(args.time)
   
   if proc_result == nil then
-    error(string.format("Процедура sleep(%d) возвратила nil.", args.time), 0)
+    error(string.format("Процедура sleep(%d) возвратила nil.", args.time))
   else
     local result = qlua.sleep.Result()
     result.result = proc_result
@@ -139,7 +139,7 @@ handlers[qlua.RPC.ProcedureType.GET_ORDER_BY_NUMBER] = function(request_args)
   local t, i = getOrderByNumber(args.class_code, args.order_id)
   
   if t == nil then
-    error(string.format("Процедура getOrderByNumber(%s, %d) вернула (nil, nil).", args.class_code, args.order_id), 0)
+    error(string.format("Процедура getOrderByNumber(%s, %d) вернула (nil, nil).", args.class_code, args.order_id))
   else
     
     local result = qlua.getOrderByNumber.Result()
@@ -163,13 +163,15 @@ handlers[qlua.RPC.ProcedureType.GET_NUMBER_OF] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.SEARCH_ITEMS] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.SearchItems.Request)
+  
   local fn_ctr, error_msg = loadstring("return "..args.fn_def)
   local items
   if fn_ctr == nil then 
-    error(string.format("Не удалось распарсить определение функции из переданной строки. Описание ошибки: [%s].", error_msg), 0)
+    error(string.format("Не удалось распарсить определение функции из переданной строки. Описание ошибки: %s.", error_msg))
   else
-    if args.params == nil or args.params == "" then
+    if args.params == "" then
       items = SearchItems(args.table_name, args.start_index, args.end_index == 0 and (getNumberOf(args.table_name) - 1) or args.end_index, fn_ctr()) -- returns nil in case of empty list found or error
     else 
       items = SearchItems(args.table_name, args.start_index, args.end_index == 0 and (getNumberOf(args.table_name) - 1) or args.end_index, fn_ctr(), args.params) -- returns nil in case of empty list found or error
