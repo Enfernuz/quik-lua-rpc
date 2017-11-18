@@ -12,7 +12,8 @@ local value_or_empty_string = assert(utils.value_or_empty_string)
 
 local StructConverter = {
   _VERSION = '0.1.0', 
-  getMoney = {}
+  getMoney = {}, 
+  getDepo = {}
 }
 
 function StructConverter.getMoney.Money(money, existing_struct)
@@ -28,6 +29,24 @@ function StructConverter.getMoney.Money(money, existing_struct)
   result.money_current_limit = value_to_string_or_empty_string(money.money_current_limit)
   result.money_current_balance = value_to_string_or_empty_string(money.money_current_balance)
   result.money_limit_available = value_to_string_or_empty_string(money.money_limit_available)
+  
+  return result
+end
+
+function StructConverter.getDepo.Depo(depo, existing_struct)
+  
+  if depo == nil then error("No 'depo' table provided.", 2) end
+
+  local result = (existing_struct == nil and qlua.getDepo.Depo() or existing_struct)
+  
+  result.depo_limit_locked_buy_value = value_to_string_or_empty_string(depo.depo_limit_locked_buy_value)
+  result.depo_current_balance = value_to_string_or_empty_string(depo.depo_current_balance)
+  result.depo_limit_locked_buy = value_to_string_or_empty_string(depo.depo_limit_locked_buy)
+  result.depo_limit_locked = value_to_string_or_empty_string(depo.depo_limit_locked)
+  result.depo_limit_available = value_to_string_or_empty_string(depo.depo_limit_available)
+  result.depo_current_limit = value_to_string_or_empty_string(depo.depo_current_limit)
+  result.depo_open_balance = value_to_string_or_empty_string(depo.depo_open_balance)
+  result.depo_open_limit = value_to_string_or_empty_string(depo.depo_open_limit)
   
   return result
 end
