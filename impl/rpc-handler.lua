@@ -199,19 +199,16 @@ handlers[qlua.RPC.ProcedureType.GET_CLASSES_LIST] = function()
 end
 
 handlers[qlua.RPC.ProcedureType.GET_CLASS_INFO] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.getClassInfo.Request)
 
-  local t = getClassInfo(args.class_code)
-  if t == nil then
+  local proc_result = getClassInfo(args.class_code)
+  
+  if proc_result == nil then
     error(string.format("Процедура getClassInfo(%s) вернула nil.", args.class_code), 0)
   else
     local result = qlua.getClassInfo.Result()
-    
-    result.class_info.firmid = utils.value_or_empty_string(t.firmid)
-    result.class_info.name = utils.value_or_empty_string(t.name)
-    result.class_info.code = utils.value_or_empty_string(t.code)
-    result.class_info.npars = t.npars
-    result.class_info.nsecs = t.nsecs
+    struct_factory.create_Klass(proc_result, result.class_info)
 
     return result
   end
