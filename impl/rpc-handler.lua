@@ -189,8 +189,12 @@ handlers[qlua.RPC.ProcedureType.SEARCH_ITEMS] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_CLASSES_LIST] = function() 
+  
+  local proc_result = getClassesList()
+  
   local result = qlua.getClassesList.Result()
-  result.classes_list = getClassesList()
+  result.classes_list = proc_result
+  
   return result
 end
 
