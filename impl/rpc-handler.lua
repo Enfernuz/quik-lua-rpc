@@ -3,6 +3,7 @@ package.path = "../?.lua;" .. package.path
 local qlua = require("qlua.api")
 
 local struct_factory = require("utils.struct_factory")
+local struct_converter = require("utils.struct_converter")
 local utils = require("utils.utils")
 local table = require('table')
 local string = require('string')
@@ -227,18 +228,14 @@ handlers[qlua.RPC.ProcedureType.GET_CLASS_SECURITIES] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_MONEY] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.getMoney.Request)
+  
+  local proc_result = getMoney(args.client_code, args.firmid, args.tag, args.currcode) -- returns a table with zero'ed values if no info found or in case of error
+  
   local result = qlua.getMoney.Result()
-  local t = getMoney(args.client_code, args.firmid, args.tag, args.currcode) -- returns a table with zero'ed values if no info found or in case of an error
-  if t then
-    result.money.money_open_limit = value_to_string_or_empty_string(t.money_open_limit)
-    result.money.money_limit_locked_nonmarginal_value = value_to_string_or_empty_string(t.money_limit_locked_nonmarginal_value)
-    result.money.money_limit_locked = value_to_string_or_empty_string(t.money_limit_locked)
-    result.money.money_open_balance = value_to_string_or_empty_string(t.money_open_balance)
-    result.money.money_current_limit = value_to_string_or_empty_string(t.money_current_limit)
-    result.money.money_current_balance = value_to_string_or_empty_string(t.money_current_balance)
-    result.money.money_limit_available = value_to_string_or_empty_string(t.money_limit_available)
-  end
+  struct_converter.create_getMoney_Money(proc_result, result.money)
+    
   return result
 end
 
