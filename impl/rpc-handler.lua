@@ -215,10 +215,14 @@ handlers[qlua.RPC.ProcedureType.GET_CLASS_INFO] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_CLASS_SECURITIES] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.getClassSecurities.Request)
+  
+  local proc_result = getClassSecurities(args.class_code) -- returns an empty string if no securities found for the given class_code
+  
   local result = qlua.getClassSecurities.Result()
-  local ret = getClassSecurities(args.class_code) -- returns an empty string if no securities found for the given class_code
-  if ret then result.class_securities = ret end
+  result.class_securities = proc_result
+
   return result
 end
 
