@@ -12,7 +12,7 @@ local value_to_string_or_empty_string = assert(utils.value_to_string_or_empty_st
 local value_or_empty_string = assert(utils.value_or_empty_string)
 
 local StructFactory = {}
-StructFactory._VERSION = '0.1.0'
+StructFactory._VERSION = '0.2.0'
 
 function StructFactory.create_Firm(firm, existing_struct)
 
@@ -609,6 +609,21 @@ function StructFactory.create_QuoteEventInfo(quote)
   
   result.class_code = utils.Cp2151ToUtf8( assert(quote.class_code, "The given 'quote' table has no 'class_code' field.") )
   result.sec_code = assert(quote.sec_code, "The given 'quote' table has no 'sec_code' field.")
+  
+  return result
+end
+
+function StructFactory.create_Klass(class_info, existing_struct)
+  
+  if class_info == nil then error("No class_info table provided.", 2) end
+
+  local result = (existing_struct == nil and qlua_structs.Klass() or existing_struct)
+  
+  result.firmid = utils.value_or_empty_string(class_info.firmid)
+  result.name = utils.value_or_empty_string(class_info.name)
+  result.code = utils.Cp2151ToUtf8( assert(class_info.code, "The given 'class_info' table has no 'code' field.") )
+  if class_info.npars then result.npars = class_info.npars end
+  if class_info.nsecs then result.nsecs = class_info.nsecs end
   
   return result
 end
