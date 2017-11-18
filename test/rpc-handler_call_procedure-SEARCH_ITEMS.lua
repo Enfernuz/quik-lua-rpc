@@ -177,19 +177,13 @@ describe("impl.rpc-handler", function()
       
         insulate("AND IF the 'params' argument is an empty string", function()
           
-          local tmp, fn_ctr, fn
+          local tmp
             
           setup(function()
               
             tmp = request_args.params
             request_args.params = ""
             request.args = request_args:SerializeToString()
-            
-            fn_ctr = loadstring("return "..request_args.fn_def)
-            _G.loadstring = spy.new(function(fn_def) return fn_ctr end)
-            
-            fn = fn_ctr()
-            fn_ctr = spy.new(function() return fn end)
           end)
         
           teardown(function()
@@ -197,8 +191,6 @@ describe("impl.rpc-handler", function()
             request_args.params = tmp
             tmp = nil
             request.args = request_args:SerializeToString()
-            fn_ctr = nil
-            fn = nil
           end)
       
           before_each(function()
