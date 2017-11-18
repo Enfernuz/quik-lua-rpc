@@ -10,10 +10,12 @@ local error = assert(error)
 local value_to_string_or_empty_string = assert(utils.value_to_string_or_empty_string)
 local value_or_empty_string = assert(utils.value_or_empty_string)
 
-local StructConverter = {}
-StructConverter._VERSION = '0.1.0'
+local StructConverter = {
+  _VERSION = '0.1.0', 
+  getMoney = {}
+}
 
-function StructConverter.create_getMoney_Money(money, existing_struct)
+function StructConverter.getMoney.Money(money, existing_struct)
 
   if money == nil then error("No 'money' table provided.", 2) end
 

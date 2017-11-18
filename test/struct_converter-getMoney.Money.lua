@@ -2,7 +2,7 @@ package.path = "../?.lua;" .. package.path
 
 require 'busted.runner'()
 
-describe("The function utils.struct_converter.create_getMoney_Money", function()
+describe("The function utils.struct_converter.getMoney.Money", function()
     
   local qlua = require("qlua.api")
     
@@ -11,7 +11,7 @@ describe("The function utils.struct_converter.create_getMoney_Money", function()
   describe("WHEN given no 'money' table", function()
       
     it("SHOULD raise an error", function()
-      assert.has_error(sut.create_getMoney_Money, "No 'money' table provided.")
+      assert.has_error(sut.getMoney.Money, "No 'money' table provided.")
     end)
   end)
   
@@ -40,7 +40,7 @@ describe("The function utils.struct_converter.create_getMoney_Money", function()
   
     it("SHOULD return an equal protobuf getMoney.Money struct", function()
         
-      local result = sut.create_getMoney_Money(money)
+      local result = sut.getMoney.Money(money)
         
       -- check the result is a protobuf getMoney.Money structure
       local expected_meta = getmetatable( qlua.getMoney.Money() )
@@ -75,7 +75,7 @@ describe("The function utils.struct_converter.create_getMoney_Money", function()
     
       it("SHOULD return the existing getMoney.Money protobuf struct which equals (data-wide, not literally) to the given 'money' table", function()
           
-        local result = sut.create_getMoney_Money(money, existing_struct)
+        local result = sut.getMoney.Money(money, existing_struct)
         
         assert.are.equals(existing_struct, result)
         
@@ -116,7 +116,7 @@ describe("The function utils.struct_converter.create_getMoney_Money", function()
         end)
     
         it("SHOULD raise an error", function()
-          assert.has_error(function() sut.create_getMoney_Money(money) end)
+          assert.has_error(function() sut.getMoney.Money(money) end)
         end)
       end)
     
@@ -143,7 +143,7 @@ describe("The function utils.struct_converter.create_getMoney_Money", function()
     
         it("SHOULD return a struct with an empty string in that field", function()
           
-          local result = sut.create_getMoney_Money(money)
+          local result = sut.getMoney.Money(money)
           assert.are.equal("", result[field_name])
         end)
       end)
