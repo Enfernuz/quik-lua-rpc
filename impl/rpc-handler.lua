@@ -206,7 +206,7 @@ handlers[qlua.RPC.ProcedureType.GET_CLASS_INFO] = function(request_args)
   local proc_result = getClassInfo(args.class_code)
   
   if proc_result == nil then
-    error(string.format("Процедура getClassInfo(%s) вернула nil.", args.class_code), 0)
+    error(string.format("Процедура getClassInfo(%s) вернула nil.", args.class_code))
   else
     local result = qlua.getClassInfo.Result()
     struct_factory.create_Klass(proc_result, result.class_info)
@@ -234,37 +234,37 @@ handlers[qlua.RPC.ProcedureType.GET_MONEY] = function(request_args)
   local proc_result = getMoney(args.client_code, args.firmid, args.tag, args.currcode) -- returns a table with zero'ed values if no info found or in case of error
   
   local result = qlua.getMoney.Result()
-  struct_converter.create_getMoney_Money(proc_result, result.money)
+  struct_converter.getMoney.Money(proc_result, result.money)
     
   return result
 end
 
 handlers[qlua.RPC.ProcedureType.GET_MONEY_EX] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.getMoneyEx.Request)
-  local t = getMoneyEx(args.firmid, args.client_code, args.tag, args.currcode, args.limit_kind) -- returns nil if no info found or in case of an error
-  if t == nil then 
-    error(string.format("Процедура getMoneyEx(%s, %s, %s, %s, %d) возвратила nil.", args.firmid, args.client_code, args.tag, args.currcode, args.limit_kind), 0)
+  
+  local proc_result = getMoneyEx(args.firmid, args.client_code, args.tag, args.currcode, args.limit_kind) -- returns nil if no info found or in case of an error
+  
+  if proc_result == nil then 
+    error(string.format("Процедура getMoneyEx(%s, %s, %s, %s, %d) возвратила nil.", args.firmid, args.client_code, args.tag, args.currcode, args.limit_kind))
   else
     local result = qlua.getMoneyEx.Result()
-    struct_factory.create_MoneyLimit(t, result.money_ex)
+    struct_factory.create_MoneyLimit(proc_result, result.money_ex)
+    
     return result
   end
 end
 
 handlers[qlua.RPC.ProcedureType.GET_DEPO] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.getDepo.Request)
+  
+  
+  local proc_result = getDepo(args.client_code, args.firmid, args.sec_code, args.trdaccid) -- returns a table with zero'ed values if no info found or in case of an error
+
   local result = qlua.getDepo.Result()
-  local t = getDepo(args.client_code, args.firmid, args.sec_code, args.trdaccid) -- returns a table with zero'ed values if no info found or in case of an error
-  if t then
-    result.depo.depo_limit_locked_buy_value = value_to_string_or_empty_string(t.depo_limit_locked_buy_value)
-    result.depo.depo_current_balance = value_to_string_or_empty_string(t.depo_current_balance)
-    result.depo.depo_limit_locked_buy = value_to_string_or_empty_string(t.depo_limit_locked_buy)
-    result.depo.depo_limit_locked = value_to_string_or_empty_string(t.depo_limit_locked)
-    result.depo.depo_limit_available = value_to_string_or_empty_string(t.depo_limit_available)
-    result.depo.depo_current_limit = value_to_string_or_empty_string(t.depo_current_limit)
-    result.depo.depo_open_balance = value_to_string_or_empty_string(t.depo_open_balance)
-    result.depo.depo_open_limit = value_to_string_or_empty_string(t.depo_open_limit)
-  end
+  struct_converter.getDepo.Depo(proc_result, result.depo)
+  
   return result
 end
 
