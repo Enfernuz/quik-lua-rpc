@@ -93,6 +93,17 @@ describe("impl.rpc-handler", function()
         
         assert.are.equal(expected_result:SerializeToString(), actual_result:SerializeToString())
       end)
+    
+      insulate("AND the global 'getDepoEx' function returns nil", function()
+          
+        setup(function()
+          _G.getDepoEx = spy.new(function(firmid, client_code, sec_code, trdaccid, limit_kind) return nil end)
+        end)
+      
+        it("SHOULD raise an error", function()
+          assert.has_error(function() sut.call_procedure(request.type, request.args) end, string.format("Процедура getDepoEx(%s, %s, %s, %s, %d) возвратила nil.", request_args.firmid, request_args.client_code, request_args.sec_code, request_args.trdaccid, request_args.limit_kind))
+        end)
+      end)
     end)
   
     describe("WITHOUT arguments", function()

@@ -92,6 +92,17 @@ describe("impl.rpc-handler", function()
         
         assert.are.equal(expected_result:SerializeToString(), actual_result:SerializeToString())
       end)
+    
+      insulate("AND the global 'getMoneyEx' function returns nil", function()
+          
+        setup(function()
+          _G.getMoneyEx = spy.new(function(firmid, client_code, tag, currcode, limit_kind) return nil end)
+        end)
+      
+        it("SHOULD raise an error", function()
+          assert.has_error(function() sut.call_procedure(request.type, request.args) end, string.format("Процедура getMoneyEx(%s, %s, %s, %s, %d) возвратила nil.", request_args.firmid, request_args.client_code, request_args.tag, request_args.currcode, request_args.limit_kind))
+        end)
+      end)
     end)
   
     describe("WITHOUT arguments", function()
