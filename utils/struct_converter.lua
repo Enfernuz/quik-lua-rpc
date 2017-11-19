@@ -11,9 +11,10 @@ local value_to_string_or_empty_string = assert(utils.value_to_string_or_empty_st
 local value_or_empty_string = assert(utils.value_or_empty_string)
 
 local StructConverter = {
-  _VERSION = '0.1.0', 
+  _VERSION = '0.2.0', 
   getMoney = {}, 
-  getDepo = {}
+  getDepo = {}, 
+  getTradeDate = {}
 }
 
 function StructConverter.getMoney.Money(money, existing_struct)
@@ -47,6 +48,20 @@ function StructConverter.getDepo.Depo(depo, existing_struct)
   result.depo_current_limit = value_to_string_or_empty_string(depo.depo_current_limit)
   result.depo_open_balance = value_to_string_or_empty_string(depo.depo_open_balance)
   result.depo_open_limit = value_to_string_or_empty_string(depo.depo_open_limit)
+  
+  return result
+end
+
+function StructConverter.getTradeDate.TradeDate(trade_date, existing_struct)
+  
+  if trade_date == nil then error("No 'trade_date' table provided.", 2) end
+
+  local result = (existing_struct == nil and qlua.getTradeDate.TradeDate() or existing_struct)
+  
+  result.date = assert(trade_date.date, "The given 'trade_date' table has no 'date' field.")
+  result.year = assert(trade_date.year, "The given 'trade_date' table has no 'year' field.") 
+  result.month = assert(trade_date.month, "The given 'trade_date' table has no 'month' field.") 
+  result.day = assert(trade_date.day, "The given 'trade_date' table has no 'day' field.") 
   
   return result
 end
