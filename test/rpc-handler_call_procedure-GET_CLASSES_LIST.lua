@@ -34,7 +34,7 @@ describe("impl.rpc-handler", function()
         
       local response = sut.call_procedure(request.type)
     
-      assert.spy(_G.getClassesList).was.called()
+      assert.spy(_G.getClassesList).was.called(1)
     end)
   
     it("SHOULD return a qlua.getClassesList.Result instance", function()
