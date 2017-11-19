@@ -16,7 +16,7 @@ local error = assert(error, "error function is missing.")
 
 local module = {
   
-  _VERSION = '0.1.3',
+  _VERSION = '0.1.4',
   datasources = {}
 }
 
@@ -300,13 +300,17 @@ handlers[qlua.RPC.ProcedureType.GET_FUTURES_LIMIT] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_FUTURES_HOLDING] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.getFuturesHolding.Request)
-  local t = getFuturesHolding(args.firmid, args.trdaccid, args.sec_code, args.type) -- returns nil if no info found or in case of an error
-  if t == nil then
-    error(string.format("Процедура getFuturesLHolding(%s, %s, %d, %d) возвратила nil.", args.firmid, args.trdaccid, args.sec_code, args.type), 0)
+  
+  local proc_result = getFuturesHolding(args.firmid, args.trdaccid, args.sec_code, args.type) -- returns nil if no info found or in case of an error
+   
+  if proc_result == nil then
+    error(string.format("Процедура getFuturesHolding(%s, %s, %s, %d) возвратила nil.", args.firmid, args.trdaccid, args.sec_code, args.type))
   else
     local result = qlua.getFuturesHolding.Result()
-    struct_factory.create_FuturesClientHolding(t, result.futures_holding)
+    struct_factory.create_FuturesClientHolding(proc_result, result.futures_holding)
+    
     return result
   end
 end
