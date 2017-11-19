@@ -16,7 +16,7 @@ local error = assert(error, "error function is missing.")
 
 local module = {
   
-  _VERSION = '0.1.5',
+  _VERSION = '0.1.6',
   datasources = {}
 }
 
@@ -332,13 +332,11 @@ handlers[qlua.RPC.ProcedureType.GET_SECURITY_INFO] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_TRADE_DATE] = function() 
-  local result = qlua.getTradeDate.Result()
-  local t = getTradeDate()
   
-  result.trade_date.date = value_or_empty_string(t.date)
-  result.trade_date.year = t.year
-  result.trade_date.month = t.month
-  result.trade_date.day = t.day
+  local result = qlua.getTradeDate.Result()
+  
+  local proc_result = getTradeDate()
+  struct_converter.getTradeDate.TradeDate(proc_result, result.trade_date)
   
   return result
 end
