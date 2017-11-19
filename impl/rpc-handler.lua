@@ -16,7 +16,7 @@ local error = assert(error, "error function is missing.")
 
 local module = {
   
-  _VERSION = '0.1.1',
+  _VERSION = '0.1.2',
   datasources = {}
 }
 
@@ -259,7 +259,6 @@ handlers[qlua.RPC.ProcedureType.GET_DEPO] = function(request_args)
   
   local args = parse_request_args(request_args, qlua.getDepo.Request)
   
-  
   local proc_result = getDepo(args.client_code, args.firmid, args.sec_code, args.trdaccid) -- returns a table with zero'ed values if no info found or in case of an error
 
   local result = qlua.getDepo.Result()
@@ -269,13 +268,17 @@ handlers[qlua.RPC.ProcedureType.GET_DEPO] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_DEPO_EX] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.getDepoEx.Request)
-  local t = getDepoEx(args.firmid, args.client_code, args.sec_code, args.trdaccid, args.limit_kind) -- returns nil if no info found or in case of an error
-  if t == nil then
-    error(string.format("Процедура getDepoEx(%s, %s, %s, %s, %d) возвратила nil.", args.firmid, args.client_code, args.sec_code, args.trdaccid, args.limit_kind), 0)
+  
+  local proc_result = getDepoEx(args.firmid, args.client_code, args.sec_code, args.trdaccid, args.limit_kind) -- returns nil if no info found or in case of an error
+  
+  if proc_result == nil then
+    error(string.format("Процедура getDepoEx(%s, %s, %s, %s, %d) возвратила nil.", args.firmid, args.client_code, args.sec_code, args.trdaccid, args.limit_kind))
   else
     local result = qlua.getDepoEx.Result()
-    struct_factory.create_DepoLimit(t, result.depo_ex)
+    struct_factory.create_DepoLimit(proc_result, result.depo_ex)
+    
     return result
   end
 end
