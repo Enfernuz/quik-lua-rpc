@@ -16,7 +16,7 @@ local error = assert(error, "error function is missing.")
 
 local module = {
   
-  _VERSION = '0.1.4',
+  _VERSION = '0.1.5',
   datasources = {}
 }
 
@@ -316,13 +316,17 @@ handlers[qlua.RPC.ProcedureType.GET_FUTURES_HOLDING] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_SECURITY_INFO] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.getSecurityInfo.Request)
-  local t = getSecurityInfo(args.class_code, args.sec_code) -- returns nil if no info found or in case of an error
-  if t == nil then
-    error(string.format("Процедура getSecurityInfo(%s, %s) возвратила nil.", args.class_code, args.sec_code), 0)
+  
+  local proc_result = getSecurityInfo(args.class_code, args.sec_code) -- returns nil if no info found or in case of an error
+  
+  if proc_result == nil then
+    error(string.format("Процедура getSecurityInfo(%s, %s) возвратила nil.", args.class_code, args.sec_code))
   else
     local result = qlua.getSecurityInfo.Result()
-    struct_factory.create_Security(t, result.security_info)
+    struct_factory.create_Security(proc_result, result.security_info)
+    
     return result
   end
 end
