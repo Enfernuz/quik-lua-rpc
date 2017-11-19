@@ -81,7 +81,7 @@ describe("impl.rpc-handler", function()
         local actual_result = sut.call_procedure(request.type, request)
         local expected_result = qlua.getMoney.Result()
         
-        struct_converter.create_getMoney_Money(proc_result, expected_result.money)
+        struct_converter.getMoney.Money(proc_result, expected_result.money)
         
         assert.are.equal(expected_result:SerializeToString(), actual_result:SerializeToString())
       end)
