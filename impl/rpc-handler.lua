@@ -16,7 +16,7 @@ local error = assert(error, "error function is missing.")
 
 local module = {
   
-  _VERSION = '0.1.2',
+  _VERSION = '0.1.3',
   datasources = {}
 }
 
@@ -284,13 +284,17 @@ handlers[qlua.RPC.ProcedureType.GET_DEPO_EX] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_FUTURES_LIMIT] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.getFuturesLimit.Request)
-  local t = getFuturesLimit(args.firmid, args.trdaccid, args.limit_type, args.currcode) -- returns nil if no info found or in case of an error
-  if t == nil then
-    error(string.format("Процедура getFuturesLimit(%s, %s, %d, %s) возвратила nil.", args.firmid, args.trdaccid, args.limit_type, args.currcode), 0)
+  
+  local proc_result = getFuturesLimit(args.firmid, args.trdaccid, args.limit_type, args.currcode) -- returns nil if no info found or in case of an error
+  
+  if proc_result == nil then
+    error(string.format("Процедура getFuturesLimit(%s, %s, %d, %s) возвратила nil.", args.firmid, args.trdaccid, args.limit_type, args.currcode))
   else
     local result = qlua.getFuturesLimit.Result()
-    struct_factory.create_FuturesLimit(t, result.futures_limit)
+    struct_factory.create_FuturesLimit(proc_result, result.futures_limit)
+    
     return result
   end
 end
