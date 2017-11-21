@@ -45,7 +45,7 @@ describe("impl.rpc-handler", function()
         
         _G.SearchItems = spy.new(function(tbl_name, strt_indx, end_indx, fn, params) return proc_result end)
         _G.getNumberOf = spy.new(function(tbl_name) return getNumberOfResult end)
-        _G.table.sinsert = spy.new(function(t, el) return table.insert end)
+        _G.table.sinsert = spy.new(function(t, el) return table.insert(t, el) end)
       end)
 
       teardown(function()
@@ -255,9 +255,9 @@ describe("impl.rpc-handler", function()
             local expected_result = qlua.SearchItems.Result()
             
             for i, item_index in ipairs(proc_result) do
-              table.sinsert(expected_result.items_indices, item_index)
+              table.insert(expected_result.items_indices, item_index)
             end
-            
+                          
             assert.are.equal(expected_result:SerializeToString(), actual_result:SerializeToString())
           end)
         end)

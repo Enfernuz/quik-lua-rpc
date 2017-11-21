@@ -40,7 +40,7 @@ describe("impl.rpc-handler", function()
         proc_result = {param1 = "value1", param2 = "value2"}
         
         _G.getItem = spy.new(function(table_name, index) return proc_result end)
-        table.sinsert = table.insert
+        _G.table.sinsert = spy.new(function(t, el) return table.insert(t, el) end)
       end)
 
       teardown(function()
