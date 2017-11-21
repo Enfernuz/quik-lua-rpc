@@ -16,7 +16,7 @@ local error = assert(error, "error function is missing.")
 
 local module = {
   
-  _VERSION = '0.1.7',
+  _VERSION = '0.1.8',
   datasources = {}
 }
 
@@ -351,9 +351,14 @@ handlers[qlua.RPC.ProcedureType.GET_QUOTE_LEVEL2] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_LINES_COUNT] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.getLinesCount.Request)
+  
+  local proc_result = getLinesCount(args.tag) -- returns 0 if no chart with this tag found
+  
   local result = qlua.getLinesCount.Result()
-  result.lines_count = getLinesCount(args.tag) -- returns 0 if no chart with this tag found
+  result.lines_count = proc_result
+  
   return result
 end
 
