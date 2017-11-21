@@ -16,7 +16,7 @@ local error = assert(error, "error function is missing.")
 
 local module = {
   
-  _VERSION = '0.1.6',
+  _VERSION = '0.1.7',
   datasources = {}
 }
 
@@ -342,14 +342,12 @@ handlers[qlua.RPC.ProcedureType.GET_TRADE_DATE] = function()
 end
 
 handlers[qlua.RPC.ProcedureType.GET_QUOTE_LEVEL2] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.getQuoteLevel2.Request)
-  local result = qlua.getQuoteLevel2.Result()
-  local t = getQuoteLevel2(args.class_code, args.sec_code)
-  result.bid_count = t.bid_count
-  result.offer_count = t.offer_count
-  if t.bid then utils.insert_quote_table(result.bids, t.bid) end
-  if t.offer then utils.insert_quote_table(result.offers, t.offer) end
-  return result
+  
+  local proc_result = getQuoteLevel2(args.class_code, args.sec_code)
+
+  return struct_converter.getQuoteLevel2.Result(proc_result)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_LINES_COUNT] = function(request_args) 
