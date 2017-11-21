@@ -15,7 +15,7 @@ local tostring = assert(tostring, "tostring function is missing")
 local error = assert(error, "error function is missing")
 
 local module = {}
-module._VERSION = '0.1.0'
+module._VERSION = '1.1.0'
 
 function module.value_or_empty_string(val)
   return (val == nil and "" or module.Cp2151ToUtf8(val))
@@ -39,16 +39,6 @@ function module.insert_table(dst, src)
       table_entry.k = tostring(k)
       table_entry.v = tostring(v)
       table.sinsert(dst, table_entry)
-  end
-end
-
-function module.insert_quote_table(dst, src)
-  
-  for _, v in ipairs(src) do
-      local quote = qlua.rpc.getQuoteLevel2.QuoteEntry() 
-      quote.price = v.price
-      quote.quantity = v.quantity
-      table.sinsert(dst, quote)
   end
 end
 
