@@ -501,8 +501,8 @@ message CandleEntry {
 // Формат даты и времени, используемый в таблицах
 message DateTimeEntry {
 
-    string mcs = 1; // not sure if it's integral, so leave it be string until figured out
-    string ms = 2; // not sure if it's integral, so leave it be string until figured out
+    int32 mcs = 1;
+    int32 ms = 2;
     int32 sec = 3;
     int32 min = 4;
     int32 hour = 5;

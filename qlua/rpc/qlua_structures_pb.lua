@@ -4487,9 +4487,9 @@ module.DATETIMEENTRY_MCS_FIELD.number = 1
 module.DATETIMEENTRY_MCS_FIELD.index = 0
 module.DATETIMEENTRY_MCS_FIELD.label = 1
 module.DATETIMEENTRY_MCS_FIELD.has_default_value = false
-module.DATETIMEENTRY_MCS_FIELD.default_value = ''
-module.DATETIMEENTRY_MCS_FIELD.type = 9
-module.DATETIMEENTRY_MCS_FIELD.cpp_type = 9
+module.DATETIMEENTRY_MCS_FIELD.default_value = 0
+module.DATETIMEENTRY_MCS_FIELD.type = 5
+module.DATETIMEENTRY_MCS_FIELD.cpp_type = 1
 
 module.DATETIMEENTRY_MS_FIELD.name = 'ms'
 module.DATETIMEENTRY_MS_FIELD.full_name = '.qlua.structs.DateTimeEntry.ms'
@@ -4497,9 +4497,9 @@ module.DATETIMEENTRY_MS_FIELD.number = 2
 module.DATETIMEENTRY_MS_FIELD.index = 1
 module.DATETIMEENTRY_MS_FIELD.label = 1
 module.DATETIMEENTRY_MS_FIELD.has_default_value = false
-module.DATETIMEENTRY_MS_FIELD.default_value = ''
-module.DATETIMEENTRY_MS_FIELD.type = 9
-module.DATETIMEENTRY_MS_FIELD.cpp_type = 9
+module.DATETIMEENTRY_MS_FIELD.default_value = 0
+module.DATETIMEENTRY_MS_FIELD.type = 5
+module.DATETIMEENTRY_MS_FIELD.cpp_type = 1
 
 module.DATETIMEENTRY_SEC_FIELD.name = 'sec'
 module.DATETIMEENTRY_SEC_FIELD.full_name = '.qlua.structs.DateTimeEntry.sec'
