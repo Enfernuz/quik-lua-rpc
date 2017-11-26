@@ -384,28 +384,29 @@ handlers[qlua.RPC.ProcedureType.GET_CANDLES_BY_INDEX] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.CREATE_DATA_SOURCE] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.datasource.CreateDataSource.Request)
-  local interval = utils.to_interval(args.interval) -- TO-DO: pcall
+  
+  local interval = utils.to_interval(args.interval)
   
   local ds, error_desc
   if args.param == nil or args.param == "" then
     ds, error_desc = CreateDataSource(args.class_code, args.sec_code, interval)
+    if ds == nil then
+      error(string.format("Процедура CreateDataSource(%s, %s, %d) возвратила nil и сообщение об ошибке: [%s].", args.class_code, args.sec_code, interval, error_desc))
+    end
   else 
     ds, error_desc = CreateDataSource(args.class_code, args.sec_code, interval, args.param)
+    if ds == nil then
+      error(string.format("Процедура CreateDataSource(%s, %s, %d, %s) возвратила nil и сообщение об ошибке: [%s].", args.class_code, args.sec_code, interval, args.param, error_desc))
+    end
   end
   
-  if ds == nil then
-    if args.param == nil or args.param == "" then
-      error(string.format("Процедура CreateDataSource(%s, %s, %d) возвратила nil и сообщение об ошибке: [%s].", args.class_code, args.sec_code, interval, error_desc), 0)
-    else
-      error(string.format("Процедура CreateDataSource(%s, %s, %d, %s) возвратила nil и сообщение об ошибке: [%s].", args.class_code, args.sec_code, interval, args.param, error_desc), 0)
-    end
-  else
-    local result = qlua.datasource.CreateDataSource.Result()
-    result.datasource_uuid = uuid()
-    RequestHandler.datasources[result.datasource_uuid] = ds
-    return result
-  end
+  local result = qlua.datasource.CreateDataSource.Result()
+  result.datasource_uuid = uuid()
+  module.datasources[result.datasource_uuid] = ds
+  
+  return result
 end
 
 handlers[qlua.RPC.ProcedureType.DS_SET_UPDATE_CALLBACK] = function(request_args) 
