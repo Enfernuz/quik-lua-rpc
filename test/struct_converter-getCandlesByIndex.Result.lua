@@ -147,7 +147,7 @@ describe("[LQ TEST] The function utils.struct_converter.getCandlesByIndex.Result
         end
         candle.datetime = {} -- it's a protobuf DateTimeEntry in the result, so we should reconstruct it separately as it contains additional protobuf fields.
         for field, value in candle_entry.datetime:ListFields() do
-          candle.datetime[tostring(field.name)] = value
+          candle.datetime[field.name] = value
         end
         table.insert(data.t, candle)
       end
