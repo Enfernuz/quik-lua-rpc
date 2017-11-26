@@ -1,6 +1,7 @@
 package.path = "../?.lua;" .. package.path
 
 local qlua = require("qlua.api")
+local qlua_structs = require("qlua.rpc.qlua_structures_pb")
 local utils = require("utils.utils")
 
 local table = require("table")
@@ -13,20 +14,53 @@ local value_to_string_or_empty_string = assert(utils.value_to_string_or_empty_st
 local value_or_empty_string = assert(utils.value_or_empty_string)
 
 local StructConverter = {
-  _VERSION = '0.3.0', 
+  _VERSION = '0.4.0', 
   getMoney = {}, 
   getDepo = {}, 
   getTradeDate = {}, 
-  getQuoteLevel2 = {}
+  getQuoteLevel2 = {}, 
+  getCandlesByIndex = {}
 }
+
+local function copy_datetime(src, dst)
+  
+  -- TO-DO: add "not nil" assertions on the src's fields
+  dst.mcs = src.mcs
+  dst.ms = src.ms
+  dst.sec = src.sec
+  dst.min = src.min
+  dst.hour = src.hour
+  dst.day = src.day
+  dst.week_day = src.week_day
+  dst.month = src.month
+  dst.year = src.year
+end
 
 local function insert_quote_table(src, dst)
   
+  -- TO-DO: add "not nil" assertions on the quote's fields
   for _, v in ipairs(src) do
       local quote = qlua.getQuoteLevel2.QuoteEntry() 
       quote.price = v.price
       quote.quantity = v.quantity
       table.sinsert(dst, quote)
+  end
+end
+
+local function insert_candles_table(src, dst)
+  
+  -- TO-DO: add "not nil" assertions on the candle's fields
+  for _, v in ipairs(src) do
+    
+      local candle = qlua_structs.CandleEntry() 
+      candle.open = tostring(v.open)
+      candle.close = tostring(v.close)
+      candle.high = tostring(v.high)
+      candle.low = tostring(v.low)
+      candle.volume = tostring(v.volume)
+      candle.does_exist = v.doesExist
+      copy_datetime(v.datetime, candle.datetime)
+      table.sinsert(dst, candle)
   end
 end
 
@@ -89,6 +123,21 @@ function StructConverter.getQuoteLevel2.Result(quote_level_2)
   result.offer_count = assert(quote_level_2.offer_count, "The given 'quote_level_2' table has no 'offer_count' field.")
   if quote_level_2.bid and quote_level_2.bid ~= "" then insert_quote_table(quote_level_2.bid, result.bids) end
   if quote_level_2.offer and quote_level_2.offer ~= "" then insert_quote_table(quote_level_2.offer, result.offers) end
+  
+  return result
+end
+
+function StructConverter.getCandlesByIndex.Result(t, n, l) 
+  
+  if type(t) ~= 'table' then error("The 1st argument is not a table.", 2) end
+  if type(n) ~= 'number' then error("The 2nd argument is not a number.", 2) end
+  if type(l) ~= 'string' then error("The 3rd argument is not a string.", 2) end
+  
+  local result = qlua.getCandlesByIndex.Result()
+  
+  insert_candles_table(t, result.t)
+  result.n = n
+  result.l = l
   
   return result
 end

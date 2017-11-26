@@ -15,7 +15,7 @@ local tostring = assert(tostring, "tostring function is missing")
 local error = assert(error, "error function is missing")
 
 local module = {}
-module._VERSION = '1.1.0'
+module._VERSION = '2.1.0'
 
 function module.value_or_empty_string(val)
   return (val == nil and "" or module.Cp2151ToUtf8(val))
@@ -42,18 +42,7 @@ function module.insert_table(dst, src)
   end
 end
 
-function module.copy_datetime(dst, src)
-  
-  dst.mcs = tostring(src.mcs)
-  dst.ms = tostring(src.ms)
-  dst.sec = src.sec
-  dst.min = src.min
-  dst.hour = src.hour
-  dst.day = src.day
-  dst.week_day = src.week_day
-  dst.month = src.month
-  dst.year = src.year
-end
+
 
 function module.create_table(pb_map)
   
@@ -72,21 +61,6 @@ function module.put_to_string_string_pb_map(t, pb_map, pb_map_entry_ctr)
     entry.key = module.Cp2151ToUtf8( tostring(k) )
     entry.value = module.Cp2151ToUtf8( tostring(v) )
     table.sinsert(pb_map, entry)
-  end
-end
-
-function module.insert_candles_table(dst, src)
-  
-  for _, v in ipairs(src) do
-      local candle = qlua_structs.CandleEntry() 
-      candle.open = tostring(v.open)
-      candle.close = tostring(v.close)
-      candle.high = tostring(v.high)
-      candle.low = tostring(v.low)
-      candle.volume = tostring(v.volume)
-      candle.does_exist = v.doesExist
-      module.copy_datetime(candle.datetime, v.datetime)
-      table.sinsert(dst, candle)
   end
 end
 
