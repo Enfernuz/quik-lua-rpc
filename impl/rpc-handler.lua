@@ -375,15 +375,12 @@ handlers[qlua.RPC.ProcedureType.GET_NUM_CANDLES] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_CANDLES_BY_INDEX] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.getCandlesByIndex.Request)
-  local result = qlua.getCandlesByIndex.Result()
+  
   local t, n, l = getCandlesByIndex(args.tag, args.line, args.first_candle, args.count) -- returns ({}, 0, "") if no info found or in case of error
-  result.n = n
-  result.l = l
-  if t then 
-    utils.insert_candles_table(result.t, t)
-  end
-  return result
+  
+  return struct_converter.getCandlesByIndex.Result(t, n, l)
 end
 
 handlers[qlua.RPC.ProcedureType.CREATE_DATA_SOURCE] = function(request_args) 
