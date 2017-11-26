@@ -50,12 +50,12 @@ describe("The function utils.struct_converter.getQuoteLevel2.Result", function()
         
       local result = sut.getQuoteLevel2.Result(quote_level_2)
         
-      -- check the result is a protobuf getTradeDate.TradeDate structure
+      -- check the result is a protobuf getQuoteLevel2.Result structure
       local expected_meta = getmetatable( qlua.getQuoteLevel2.Result() )
       local actual_meta = getmetatable(result)
       assert.are.equal(expected_meta, actual_meta)
       
-      -- check that the result has the same data as the given 'trade_date' table
+      -- check that the result has the same data as the given 'quote_level_2' table
       local t_data = {bid = {}, offer = {}}
       for field, value in result:ListFields() do
         local key = tostring(field.name)
