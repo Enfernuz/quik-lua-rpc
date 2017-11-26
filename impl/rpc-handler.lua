@@ -16,9 +16,14 @@ local error = assert(error, "error function is missing.")
 
 local module = {
   
-  _VERSION = '0.1.9',
-  datasources = {}
+  _VERSION = '0.2.0'
 }
+
+local datasources = {}
+
+function module.get_datasource(datasource_uid)
+  return assert(datasources[datasource_uid], string.format("DataSource c uuid='%s' не найден.", datasource_uid))
+end
 
 local function parse_request_args(request_args, request_ctr)
   
@@ -404,7 +409,7 @@ handlers[qlua.RPC.ProcedureType.CREATE_DATA_SOURCE] = function(request_args)
   
   local result = qlua.datasource.CreateDataSource.Result()
   result.datasource_uuid = uuid()
-  module.datasources[result.datasource_uuid] = ds
+  datasources[result.datasource_uuid] = ds
   
   return result
 end
@@ -412,7 +417,7 @@ end
 handlers[qlua.RPC.ProcedureType.DS_SET_UPDATE_CALLBACK] = function(request_args) 
   local args = parse_request_args(request_args, qlua.datasource.SetUpdateCallback.Request)
   
-  local ds = RequestHandler:get_datasource(args.datasource_uuid)
+  local ds = module.datasources[args.datasource_uuid]
   
   local f_cb_ctr, error_msg = loadstring("return "..args.f_cb_def)
   if f_cb_ctr == nil then 
