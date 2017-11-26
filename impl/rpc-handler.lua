@@ -415,18 +415,21 @@ handlers[qlua.RPC.ProcedureType.CREATE_DATA_SOURCE] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.DS_SET_UPDATE_CALLBACK] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.datasource.SetUpdateCallback.Request)
   
-  local ds = module.datasources[args.datasource_uuid]
+  local ds = module.get_datasource(args.datasource_uuid)
   
   local f_cb_ctr, error_msg = loadstring("return "..args.f_cb_def)
   if f_cb_ctr == nil then 
-    error( string.format("Не удалось распарсить определение функции из переданной строки. Описание ошибки: [%s].", error_msg) )
+    error( string.format("Не удалось распарсить определение функции из переданной строки. Описание ошибки: %s.", error_msg) )
   else
     local f_cb = f_cb_ctr()
-    local callback = function (index) f_cb(index, ds) end
+    local callback = function(index) f_cb(index, ds) end
+    
     local result = qlua.datasource.SetUpdateCallback.Result()
     result.result = ds:SetUpdateCallback(callback)
+    
     return result
   end
 end
