@@ -516,12 +516,14 @@ handlers[qlua.RPC.ProcedureType.DS_T] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.DS_SIZE] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.datasource.Size.Request)
   
-  local ds = RequestHandler:get_datasource(args.datasource_uuid)
+  local ds = module.get_datasource(args.datasource_uuid)
 
   local result = qlua.datasource.Size.Result()
   result.value = ds:Size()
+  
   return result
 end
 
