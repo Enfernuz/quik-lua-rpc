@@ -495,9 +495,10 @@ handlers[qlua.RPC.ProcedureType.DS_V] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.DS_T] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.datasource.T.Request)
   
-  local ds = RequestHandler:get_datasource(args.datasource_uuid)
+  local ds = module.get_datasource(args.datasource_uuid)
   
   local result = qlua.datasource.T.Result()
   local t = ds:T(args.candle_index)
@@ -510,6 +511,7 @@ handlers[qlua.RPC.ProcedureType.DS_T] = function(request_args)
   result.sec = t.sec
   result.ms = t.ms
   result.count = t.count
+  
   return result
 end
 
