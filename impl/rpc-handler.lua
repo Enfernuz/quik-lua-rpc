@@ -528,12 +528,14 @@ handlers[qlua.RPC.ProcedureType.DS_SIZE] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.DS_CLOSE] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.datasource.Close.Request)
   
-  local ds = RequestHandler:get_datasource(args.datasource_uuid)
+  local ds = module.get_datasource(args.datasource_uuid)
   
   local result = qlua.datasource.Close.Result()
   result.result = ds:Close()
+  
   return result
 end
 
