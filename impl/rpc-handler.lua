@@ -540,12 +540,14 @@ handlers[qlua.RPC.ProcedureType.DS_CLOSE] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.DS_SET_EMPTY_CALLBACK] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.datasource.SetEmptyCallback.Request)
   
-  local ds = RequestHandler:get_datasource(args.datasource_uuid)
+  local ds = module.get_datasource(args.datasource_uuid)
   
   local result = qlua.datasource.SetEmptyCallback.Result()
   result.result = ds:SetEmptyCallback()
+  
   return result
 end
 
