@@ -60,7 +60,7 @@ describe("impl.rpc-handler", function()
         assert.spy(sut.get_datasource).was.called_with(request_args.datasource_uuid)
       end)
     
-      it("SHOULD call the 'L' function on the datasource returned by its 'get_datasource' function, passing self and the 'candle_index' argument it", function()
+      it("SHOULD call the 'L' function on the datasource returned by its 'get_datasource' function, passing self and the 'candle_index' argument to it", function()
           
         sut.call_procedure(request.type, request)
         
