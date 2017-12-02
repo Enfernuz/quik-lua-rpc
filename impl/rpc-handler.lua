@@ -825,8 +825,12 @@ handlers[qlua.RPC.ProcedureType.ADD_COLUMN] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.ALLOC_TABLE] = function() 
+  
+  local t_id = AllocTable() -- returns a number
+  
   local result = qlua.AllocTable.Result()
-  result.t_id = AllocTable() -- returns a number
+  result.t_id = t_id
+  
   return result
 end
 
