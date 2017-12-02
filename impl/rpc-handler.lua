@@ -813,9 +813,14 @@ handlers[qlua.RPC.ProcedureType.GET_BUY_SELL_INFO_EX] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.ADD_COLUMN] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.AddColumn.Request)
+  
+  local res = AddColumn(args.t_id, args.icode, args.name, args.is_default, utils.to_qtable_parameter_type(args.par_type), args.width) -- returns 0 or 1
+  
   local result = qlua.AddColumn.Result()
-  result.result = AddColumn(args.t_id, args.icode, args.name, args.is_default, utils.to_qtable_parameter_type(args.par_type), args.width) -- returns 0 or 1
+  result.result = res
+  
   return result
 end
 
