@@ -447,12 +447,14 @@ handlers[qlua.RPC.ProcedureType.DS_O] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.DS_H] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.datasource.H.Request)
  
-  local ds = RequestHandler:get_datasource(args.datasource_uuid)
+  local ds = module.get_datasource(args.datasource_uuid)
   
   local result = qlua.datasource.H.Result()
   result.value = tostring( ds:H(args.candle_index) )
+  
   return result
 end
 
