@@ -871,9 +871,14 @@ handlers[qlua.RPC.ProcedureType.DELETE_ROW] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.DESTROY_TABLE] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.DestroyTable.Request)
+  
+  local res = DestroyTable(args.t_id) -- returns true or false
+  
   local result = qlua.DestroyTable.Result()
-  result.result = DestroyTable(args.t_id) -- returns true or false
+  result.result = res
+  
   return result
 end
 
