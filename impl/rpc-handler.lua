@@ -847,9 +847,14 @@ handlers[qlua.RPC.ProcedureType.CLEAR] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.CREATE_WINDOW] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.CreateWindow.Request)
+  
+  local res = CreateWindow(args.t_id) -- returns 0 or 1
+  
   local result = qlua.CreateWindow.Result()
-  result.result = CreateWindow(args.t_id) -- returns 0 or 1
+  result.result = res
+  
   return result
 end
 
