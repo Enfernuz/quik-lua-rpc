@@ -1028,9 +1028,14 @@ handlers[qlua.RPC.ProcedureType.RGB] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.SET_COLOR] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.SetColor.Request)
+  
+  local res =  SetColor(args.t_id, args.row, args.col, args.b_color, args.f_color, args.sel_b_color, args.sel_f_color) -- what does it return in case of error ?
+  
   local result = qlua.SetColor.Result()
-  result.result = SetColor(args.t_id, args.row, args.col, args.b_color, args.f_color, args.sel_b_color, args.sel_f_color) -- what does it return in case of error ?
+  result.result = res
+  
   return result
 end
 
