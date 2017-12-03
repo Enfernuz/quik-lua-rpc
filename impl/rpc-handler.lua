@@ -939,9 +939,14 @@ handlers[qlua.RPC.ProcedureType.SET_CELL] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.SET_WINDOW_CAPTION] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.SetWindowCaption.Request)
+  
+  local res = SetWindowCaption(args.t_id, args.str) -- returns true or false
+  
   local result = qlua.SetWindowCaption.Result()
-  result.result = SetWindowCaption(args.t_id, args.str) -- returns true or false
+  result.result = res
+  
   return result
 end
 
