@@ -951,9 +951,14 @@ handlers[qlua.RPC.ProcedureType.SET_WINDOW_CAPTION] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.SET_WINDOW_POS] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.SetWindowPos.Request)
+  
+  local res = SetWindowPos(args.t_id, args.x, args.y, args.dx, args.dy) -- returns true or false
+  
   local result = qlua.SetWindowPos.Result()
-  result.result = SetWindowPos(args.t_id, args.x, args.y, args.dx, args.dy) -- returns true or false
+  result.result = res
+  
   return result
 end
 
