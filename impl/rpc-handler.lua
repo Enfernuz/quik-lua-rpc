@@ -895,10 +895,13 @@ handlers[qlua.RPC.ProcedureType.INSERT_ROW] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.IS_WINDOW_CLOSED] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.IsWindowClosed.Request)
+  
   local ret = IsWindowClosed(args.t_id) -- returns nil in case of error
+  
   if ret == nil then
-    error(string.format("Процедура IsWindowClosed(%s) вернула nil.", args.t_id), 0)
+    error( string.format("Процедура IsWindowClosed(%s) вернула nil.", args.t_id) )
   else
     local result = qlua.IsWindowClosed.Result()
     result.result = ret
