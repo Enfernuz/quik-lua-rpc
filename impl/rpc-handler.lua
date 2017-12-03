@@ -835,9 +835,14 @@ handlers[qlua.RPC.ProcedureType.ALLOC_TABLE] = function()
 end
 
 handlers[qlua.RPC.ProcedureType.CLEAR] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.Clear.Request)
+  
+  local res = Clear(args.t_id) -- returns true or false
+  
   local result = qlua.Clear.Result()
-  result.result = Clear(args.t_id) -- returns true or false
+  result.result = res
+  
   return result
 end
 
