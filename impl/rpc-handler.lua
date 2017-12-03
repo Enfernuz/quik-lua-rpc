@@ -883,9 +883,14 @@ handlers[qlua.RPC.ProcedureType.DESTROY_TABLE] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.INSERT_ROW] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.InsertRow.Request)
+  
+  local res = InsertRow(args.t_id, args.key) -- returns a number
+  
   local result = qlua.InsertRow.Result()
-  result.result = InsertRow(args.t_id, args.key) -- returns a number
+  result.result = res
+  
   return result
 end
 
