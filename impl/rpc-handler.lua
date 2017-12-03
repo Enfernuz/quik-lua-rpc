@@ -859,9 +859,14 @@ handlers[qlua.RPC.ProcedureType.CREATE_WINDOW] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.DELETE_ROW] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.DeleteRow.Request)
+  
+  local res = DeleteRow(args.t_id, args.key) -- returns true or false
+  
   local result = qlua.DeleteRow.Result()
-  result.result = DeleteRow(args.t_id, args.key) -- returns true or false
+  result.result = res
+  
   return result
 end
 
