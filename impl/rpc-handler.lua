@@ -1015,10 +1015,15 @@ handlers[qlua.RPC.ProcedureType.GET_WINDOW_RECT] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.RGB] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.RGB.Request)
-  local result = qlua.RGB.Result()
+  
   -- NB: на самом деле, библиотечная функция RGB должна называться BGR, ибо она выдаёт числа именно в этом формате. В SetColor, однако, тоже ожидается цвет в формате BGR, так что это не баг, а фича.
-  result.result = RGB(args.red, args.green, args.blue) -- returns a number
+  local res = RGB(args.red, args.green, args.blue) -- returns a number
+  
+  local result = qlua.RGB.Result()
+  result.result = res
+  
   return result
 end
 
