@@ -1174,9 +1174,14 @@ handlers[qlua.RPC.ProcedureType.IS_SUBSCRIBED_LEVEL_II_QUOTES] = function(reques
 end
 
 handlers[qlua.RPC.ProcedureType.PARAM_REQUEST] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.ParamRequest.Request)
+  
+  local res = ParamRequest(args.class_code, args.sec_code, args.db_name) -- returns true or false
+  
   local result = qlua.ParamRequest.Result()
-  result.result = ParamRequest(args.class_code, args.sec_code, args.db_name) -- returns true or false
+  result.result = res
+  
   return result
 end
 
