@@ -1040,9 +1040,14 @@ handlers[qlua.RPC.ProcedureType.SET_COLOR] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.HIGHLIGHT] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.Highlight.Request)
+  
+  local res = Highlight(args.t_id, args.row, args.col, args.b_color, args.f_color, args.timeout) -- what does it return in case of error ?
+  
   local result = qlua.Highlight.Result()
-  result.result = Highlight(args.t_id, args.row, args.col, args.b_color, args.f_color, args.timeout) -- what does it return in case of error ?
+  result.result = res
+  
   return result
 end
 
