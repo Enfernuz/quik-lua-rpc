@@ -1124,10 +1124,16 @@ handlers[qlua.RPC.ProcedureType.GET_LABEL_PARAMS] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.SET_LABEL_PARAMS] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.SetLabelParams.Request)
+  
   local label_params = utils.create_table(args.label_params)
+  
+  local res = SetLabelParams(args.chart_tag, args.label_id, label_params) -- returns true or false
+  
   local result = qlua.SetLabelParams.Result()
-  result.result = SetLabelParams(args.chart_tag, args.label_id, label_params) -- returns true or false
+  result.result = res
+  
   return result
 end
 
