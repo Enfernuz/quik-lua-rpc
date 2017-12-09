@@ -30,8 +30,8 @@ module.REQUEST_ROW_FIELD.index = 1
 module.REQUEST_ROW_FIELD.label = 1
 module.REQUEST_ROW_FIELD.has_default_value = false
 module.REQUEST_ROW_FIELD.default_value = 0
-module.REQUEST_ROW_FIELD.type = 5
-module.REQUEST_ROW_FIELD.cpp_type = 1
+module.REQUEST_ROW_FIELD.type = 13
+module.REQUEST_ROW_FIELD.cpp_type = 3
 
 module.REQUEST_COL_FIELD.name = 'col'
 module.REQUEST_COL_FIELD.full_name = '.qlua.rpc.Highlight.Request.col'
@@ -40,8 +40,8 @@ module.REQUEST_COL_FIELD.index = 2
 module.REQUEST_COL_FIELD.label = 1
 module.REQUEST_COL_FIELD.has_default_value = false
 module.REQUEST_COL_FIELD.default_value = 0
-module.REQUEST_COL_FIELD.type = 5
-module.REQUEST_COL_FIELD.cpp_type = 1
+module.REQUEST_COL_FIELD.type = 13
+module.REQUEST_COL_FIELD.cpp_type = 3
 
 module.REQUEST_B_COLOR_FIELD.name = 'b_color'
 module.REQUEST_B_COLOR_FIELD.full_name = '.qlua.rpc.Highlight.Request.b_color'
@@ -70,8 +70,8 @@ module.REQUEST_TIMEOUT_FIELD.index = 5
 module.REQUEST_TIMEOUT_FIELD.label = 1
 module.REQUEST_TIMEOUT_FIELD.has_default_value = false
 module.REQUEST_TIMEOUT_FIELD.default_value = 0
-module.REQUEST_TIMEOUT_FIELD.type = 3
-module.REQUEST_TIMEOUT_FIELD.cpp_type = 2
+module.REQUEST_TIMEOUT_FIELD.type = 13
+module.REQUEST_TIMEOUT_FIELD.cpp_type = 3
 
 module.REQUEST.name = 'Request'
 module.REQUEST.full_name = '.qlua.rpc.Highlight.Request'

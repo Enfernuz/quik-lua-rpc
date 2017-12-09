@@ -8,11 +8,11 @@ option java_package = "qlua.rpc";
 message Request {
 
     int32 t_id = 1;
-    int32 row = 2;
-    int32 col = 3;
+    uint32 row = 2;
+    uint32 col = 3;
     int32 b_color = 4;
     int32 f_color = 5;
-    int64 timeout = 6;
+    uint32 timeout = 6;
 }
 
 message Result {
