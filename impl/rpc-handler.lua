@@ -1242,14 +1242,17 @@ handlers[qlua.RPC.ProcedureType.BIT_BAND] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.BIT_BOR] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.bit.bor.Request)
-  local result = qlua.bit.bor.Result()
+  
   local xs = {args.x1, args.x2}
   for i, e in ipairs(args.xi) do
     table.sinsert(xs, e)
   end
-
+  
+  local result = qlua.bit.bor.Result()
   result.result = bit.bor( unpack(xs) )
+  
   return result
 end
 
