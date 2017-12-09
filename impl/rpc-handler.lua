@@ -1215,9 +1215,14 @@ handlers[qlua.RPC.ProcedureType.BIT_TOHEX] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.BIT_BNOT] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.bit.bnot.Request)
+  
+  local res = bit.bnot(args.x)
+  
   local result = qlua.bit.bnot.Result()
-  result.result = bit.bnot(args.x)
+  result.result = res
+  
   return result
 end
 
