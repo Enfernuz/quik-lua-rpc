@@ -1198,13 +1198,19 @@ handlers[qlua.RPC.ProcedureType.CANCEL_PARAM_REQUEST] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.BIT_TOHEX] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.bit.tohex.Request)
-  local result = qlua.bit.tohex.Result()
+
+  local res
   if args.n == 0 then
-    result.result = bit.tohex(args.x)
+    res = bit.tohex(args.x)
   else
-    result.result = bit.tohex(args.x, args.n)
+    res = bit.tohex(args.x, args.n)
   end
+  
+  local result = qlua.bit.tohex.Result()
+  result.result = res
+
   return result
 end
 
