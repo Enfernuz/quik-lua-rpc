@@ -26,8 +26,8 @@ module.REQUEST_ROW_FIELD.index = 1
 module.REQUEST_ROW_FIELD.label = 1
 module.REQUEST_ROW_FIELD.has_default_value = false
 module.REQUEST_ROW_FIELD.default_value = 0
-module.REQUEST_ROW_FIELD.type = 5
-module.REQUEST_ROW_FIELD.cpp_type = 1
+module.REQUEST_ROW_FIELD.type = 13
+module.REQUEST_ROW_FIELD.cpp_type = 3
 
 module.REQUEST.name = 'Request'
 module.REQUEST.full_name = '.qlua.rpc.SetSelectedRow.Request'
