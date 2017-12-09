@@ -1068,16 +1068,20 @@ handlers[qlua.RPC.ProcedureType.SET_SELECTED_ROW] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.ADD_LABEL] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.AddLabel.Request)
+  
   local label_params = utils.create_table(args.label_params)
-  local ret = AddLabel(args.chart_tag, label_params) -- returns nil in case of error
-  if ret == nil then
+  local res = AddLabel(args.chart_tag, label_params) -- returns nil in case of error
+  
+  if res == nil then
     error(string.format("Процедура AddLabel(%s, %s) возвратила nil.", args.chart_tag, utils.table.tostring(label_params)), 0)
-  else
-    local result = qlua.AddLabel.Result()
-    result.label_id = ret
-    return result
   end
+  
+  local result = qlua.AddLabel.Result()
+  result.label_id = res
+    
+  return result
 end
 
 handlers[qlua.RPC.ProcedureType.DEL_LABEL] = function(request_args) 
