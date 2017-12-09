@@ -1085,9 +1085,14 @@ handlers[qlua.RPC.ProcedureType.ADD_LABEL] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.DEL_LABEL] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.DelLabel.Request)
+  
+  local res = DelLabel(args.chart_tag, args.label_id) -- returns true or false
+  
   local result = qlua.DelLabel.Result()
-  result.result = DelLabel(args.chart_tag, args.label_id) -- returns true or false
+  result.result = res
+  
   return result
 end
 
