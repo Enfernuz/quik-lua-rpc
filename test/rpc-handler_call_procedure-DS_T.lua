@@ -72,14 +72,14 @@ describe("impl.rpc-handler", function()
     
       it("SHOULD call the 'T' function on the datasource returned by its 'get_datasource' function, passing self and the 'candle_index' argument to it", function()
           
-        sut.call_procedure(request.type, request)
+        sut.call_procedure(request.type, request.args)
         
         assert.spy(datasource.T).was.called_with(datasource, request_args.candle_index)
       end)
     
       it("SHOULD return a qlua.datasource.T.Result instance", function()
           
-        local actual_result = sut.call_procedure(request.type, request)
+        local actual_result = sut.call_procedure(request.type, request.args)
         local expected_result = qlua.datasource.T.Result()
         
         local actual_meta = getmetatable(actual_result)
@@ -90,7 +90,7 @@ describe("impl.rpc-handler", function()
     
       it("SHOULD return a protobuf object which string-serialized form equals to that of the expected result", function()
         
-        local actual_result = sut.call_procedure(request.type, request)
+        local actual_result = sut.call_procedure(request.type, request.args)
         local expected_result = qlua.datasource.T.Result()
         
         expected_result.year = proc_result.year

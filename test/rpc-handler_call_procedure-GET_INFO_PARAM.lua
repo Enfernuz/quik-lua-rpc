@@ -55,7 +55,7 @@ describe("impl.rpc-handler", function()
     
       it("SHOULD return a qlua.getInfoParam.Result instance", function()
         
-        local actual_result = sut.call_procedure(request.type, request)
+        local actual_result = sut.call_procedure(request.type, request.args)
         local expected_result = qlua.getInfoParam.Result()
 
         local actual_meta = getmetatable(actual_result)
@@ -66,7 +66,7 @@ describe("impl.rpc-handler", function()
     
       it("SHOULD return a protobuf object which string-serialized form equals to that of the expected result", function()
           
-        local actual_result = sut.call_procedure(request.type, request)
+        local actual_result = sut.call_procedure(request.type, request.args)
         local expected_result = qlua.getInfoParam.Result()
         expected_result.info_param = rpc_result
         

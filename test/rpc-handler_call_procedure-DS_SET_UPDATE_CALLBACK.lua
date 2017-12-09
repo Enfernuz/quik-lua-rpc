@@ -110,14 +110,14 @@ describe("impl.rpc-handler", function()
         -- TO-DO: how can we be sure that the function argument of 'SetUpdateCallback' is a correct callback function and not just ANY function?
         it("[LQ TEST] SHOULD call the 'SetUpdateCallback' function on the datasource returned by its 'get_datasource' function, passing the datasource and a function to it", function()
             
-          sut.call_procedure(request.type, request)
+          sut.call_procedure(request.type, request.args)
           
           assert.spy(datasource.SetUpdateCallback).was.called_with(datasource, match.is_function())
         end)
       
         it("SHOULD return a qlua.datasource.SetUpdateCallback.Result instance", function()
             
-          local actual_result = sut.call_procedure(request.type, request)
+          local actual_result = sut.call_procedure(request.type, request.args)
           local expected_result = qlua.datasource.SetUpdateCallback.Result()
           
           local actual_meta = getmetatable(actual_result)
@@ -128,7 +128,7 @@ describe("impl.rpc-handler", function()
 
         it("SHOULD return a protobuf object which string-serialized form equals to that of the expected result", function()
           
-          local actual_result = sut.call_procedure(request.type, request)
+          local actual_result = sut.call_procedure(request.type, request.args)
           local expected_result = qlua.datasource.SetUpdateCallback.Result()
           expected_result.result = proc_result
                         

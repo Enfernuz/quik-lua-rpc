@@ -55,7 +55,7 @@ describe("impl.rpc-handler", function()
     
       it("SHOULD return nil", function()
         
-        local result = sut.call_procedure(request.type, request)
+        local result = sut.call_procedure(request.type, request.args)
 
         assert.are.equal(nil, result)
       end)

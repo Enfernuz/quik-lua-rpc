@@ -229,7 +229,7 @@ describe("impl.rpc-handler", function()
       
           it("SHOULD return a qlua.SearchItems.Result instance", function()
               
-            local actual_result = sut.call_procedure(request.type, request)
+            local actual_result = sut.call_procedure(request.type, request.args)
             local expected_result = qlua.SearchItems.Result()
             
             local actual_meta = getmetatable(actual_result)
@@ -242,7 +242,7 @@ describe("impl.rpc-handler", function()
               
             _G.table.sinsert:clear()
               
-            sut.call_procedure(request.type, request)
+            sut.call_procedure(request.type, request.args)
             
             for i, item_index in ipairs(proc_result) do
               assert.spy(_G.table.sinsert).was.called_with(_, item_index)
@@ -251,7 +251,7 @@ describe("impl.rpc-handler", function()
       
           it("SHOULD return a protobuf object which string-serialized form equals to that of the expected result", function()
             
-            local actual_result = sut.call_procedure(request.type, request)
+            local actual_result = sut.call_procedure(request.type, request.args)
             local expected_result = qlua.SearchItems.Result()
             
             for i, item_index in ipairs(proc_result) do

@@ -70,7 +70,7 @@ describe("impl.rpc-handler", function()
     
       it("SHOULD return a qlua.getSecurityInfo.Result instance", function()
           
-        local actual_result = sut.call_procedure(request.type, request)
+        local actual_result = sut.call_procedure(request.type, request.args)
         local expected_result = qlua.getSecurityInfo.Result()
         
         local actual_meta = getmetatable(actual_result)
@@ -81,7 +81,7 @@ describe("impl.rpc-handler", function()
     
       it("SHOULD return a protobuf object which string-serialized form equals to that of the expected result", function()
         
-        local actual_result = sut.call_procedure(request.type, request)
+        local actual_result = sut.call_procedure(request.type, request.args)
         local expected_result = qlua.getSecurityInfo.Result()
         
         struct_factory.create_Security(proc_result, expected_result.security_info)
