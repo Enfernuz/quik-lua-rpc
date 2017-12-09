@@ -43,7 +43,7 @@ describe("impl.rpc-handler", function()
 
         proc_result = true
         
-        _G.SetColor = spy.new(function(red, green, blue) return proc_result end)
+        _G.SetColor = spy.new(function(t_id, row, col, b_color, f_color, sel_b_color, sel_f_color) return proc_result end)
       end)
 
       teardown(function()
