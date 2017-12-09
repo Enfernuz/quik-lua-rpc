@@ -1138,9 +1138,14 @@ handlers[qlua.RPC.ProcedureType.SET_LABEL_PARAMS] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.SUBSCRIBE_LEVEL_II_QUOTES] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.Subscribe_Level_II_Quotes.Request)
+  
+  local res = Subscribe_Level_II_Quotes(args.class_code, args.sec_code) -- returns true or false
+  
   local result = qlua.Subscribe_Level_II_Quotes.Result()
-  result.result = Subscribe_Level_II_Quotes(args.class_code, args.sec_code) -- returns true or false
+  result.result = res
+  
   return result
 end
 
