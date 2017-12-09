@@ -1186,9 +1186,14 @@ handlers[qlua.RPC.ProcedureType.PARAM_REQUEST] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.CANCEL_PARAM_REQUEST] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.CancelParamRequest.Request)
+  
+  local res = CancelParamRequest(args.class_code, args.sec_code, args.db_name) -- returns true or false
+  
   local result = qlua.CancelParamRequest.Result()
-  result.result = CancelParamRequest(args.class_code, args.sec_code, args.db_name) -- returns true or false
+  result.result = res
+  
   return result
 end
 
