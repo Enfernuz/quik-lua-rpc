@@ -1109,15 +1109,18 @@ handlers[qlua.RPC.ProcedureType.DEL_ALL_LABELS] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_LABEL_PARAMS] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.GetLabelParams.Request)
-  local t = GetLabelParams(args.chart_tag, args.label_id) -- returns nil in case of error
-  if t == nil then
+  
+  local res = GetLabelParams(args.chart_tag, args.label_id) -- returns nil in case of error
+  if res == nil then
     error(string.format("Процедура GetLabelParams(%s, %d) возвратила nil.", args.chart_tag, args.label_id), 0)
-  else
-    local result = qlua.GetLabelParams.Result()
-    utils.put_to_string_string_pb_map(t, result.label_params, qlua.GetLabelParams.Result.LabelParamsEntry)
-    return result
   end
+  
+  local result = qlua.GetLabelParams.Result()
+  utils.put_to_string_string_pb_map(res, result.label_params, qlua.GetLabelParams.Result.LabelParamsEntry)
+  
+  return result
 end
 
 handlers[qlua.RPC.ProcedureType.SET_LABEL_PARAMS] = function(request_args) 
