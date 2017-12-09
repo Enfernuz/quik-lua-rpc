@@ -1162,9 +1162,14 @@ handlers[qlua.RPC.ProcedureType.UNSUBSCRIBE_LEVEL_II_QUOTES] = function(request_
 end
 
 handlers[qlua.RPC.ProcedureType.IS_SUBSCRIBED_LEVEL_II_QUOTES] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.IsSubscribed_Level_II_Quotes.Request)
+  
+  local res = IsSubscribed_Level_II_Quotes(args.class_code, args.sec_code) -- returns true or false
+  
   local result = qlua.IsSubscribed_Level_II_Quotes.Result()
-  result.result = IsSubscribed_Level_II_Quotes(args.class_code, args.sec_code) -- returns true or false
+  result.result = res
+  
   return result
 end
 
