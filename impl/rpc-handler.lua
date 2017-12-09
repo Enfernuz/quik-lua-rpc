@@ -1052,9 +1052,18 @@ handlers[qlua.RPC.ProcedureType.HIGHLIGHT] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.SET_SELECTED_ROW] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.SetSelectedRow.Request)
+  
+  local res = SetSelectedRow(args.table_id, args.row) -- returns -1 in case of error
+  
+  if res == -1 then 
+    error(string.format("Процедура SetSelectedRow(%d, %d) возвратила -1.", args.table_id, args.row), 0)
+  end
+  
   local result = qlua.SetSelectedRow.Result()
-  result.result = SetSelectedRow(args.table_id, args.row) -- returns -1 in case of error
+  result.result = res
+  
   return result
 end
 
