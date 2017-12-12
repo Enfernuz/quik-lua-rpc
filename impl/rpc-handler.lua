@@ -975,16 +975,20 @@ handlers[qlua.RPC.ProcedureType.SET_TABLE_NOTIFICATION_CALLBACK] = function(requ
 end
 
 handlers[qlua.RPC.ProcedureType.GET_TABLE_SIZE] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.GetTableSize.Request)
+  
   local rows, col = GetTableSize(args.t_id) -- returns nil in case of error
+  
   if rows == nil or col == nil then
-    error(string.format("Процедура GetTableSize(%s) вернула nil.", args.t_id), 0)
-  else
-    local result = qlua.GetTableSize.Result()
-    result.rows = rows
-    result.col = col
-    return result
+    error(string.format("Процедура GetTableSize(%s) возвратила nil.", args.t_id), 0)
   end
+  
+  local result = qlua.GetTableSize.Result()
+  result.rows = rows
+  result.col = col
+  
+  return result
 end
 
 handlers[qlua.RPC.ProcedureType.GET_WINDOW_CAPTION] = function(request_args) 
