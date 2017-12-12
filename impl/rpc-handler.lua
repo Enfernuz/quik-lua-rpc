@@ -1000,18 +1000,22 @@ handlers[qlua.RPC.ProcedureType.GET_WINDOW_CAPTION] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_WINDOW_RECT] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.GetWindowRect.Request)
+  
   local top, left, bottom, right = GetWindowRect(args.t_id) -- returns nil in case of error
+  
   if top == nil or left == nil or bottom == nil or right == nil then
     error(string.format("Процедура GetWindowRect(%s) возвратила nil.", args.t_id), 0)
-  else
-    local result = qlua.GetWindowRect.Result()
-    result.top = top
-    result.left = left
-    result.bottom = bottom
-    result.right = right
-    return result
   end
+  
+  local result = qlua.GetWindowRect.Result()
+  result.top = top
+  result.left = left
+  result.bottom = bottom
+  result.right = right
+  
+  return result
 end
 
 handlers[qlua.RPC.ProcedureType.RGB] = function(request_args) 
