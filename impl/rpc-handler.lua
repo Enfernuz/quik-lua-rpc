@@ -988,15 +988,19 @@ handlers[qlua.RPC.ProcedureType.GET_TABLE_SIZE] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_WINDOW_CAPTION] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.GetWindowCaption.Request)
-  local caption = GetWindowCaption(args.t_id) -- returns nil in case of error
-  if caption == nil then 
+  
+  local res = GetWindowCaption(args.t_id) -- returns nil in case of error
+  
+  if res == nil then 
     error(string.format("Процедура GetWindowCaption(%s) возвратила nil.", args.t_id), 0)
-  else
-    local result = qlua.GetWindowCaption.Result()
-    result.caption = caption
-    return result
   end
+  
+  local result = qlua.GetWindowCaption.Result()
+  result.caption = utils.Cp2151ToUtf8(res)
+    
+    return result
 end
 
 handlers[qlua.RPC.ProcedureType.GET_WINDOW_RECT] = function(request_args) 
