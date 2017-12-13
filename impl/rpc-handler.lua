@@ -923,18 +923,19 @@ handlers[qlua.RPC.ProcedureType.GET_CELL] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.SET_CELL] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.SetCell.Request)
-  local result = qlua.SetCell.Result()
-  if args.value == "" or args.value == nil then
-    result.result = SetCell(args.t_id, args.key, args.code, args.text) -- returns true or false
+  
+  local res
+  if args.value == 0 then
+    res = SetCell(args.t_id, args.key, args.code, args.text) -- returns true or false
   else
-    local ok, value = pcall(function() return tonumber(args.value) end)
-    if ok then
-      result.result = SetCell(args.t_id, args.key, args.code, args.text, value) -- returns true or false
-    else
-      error(string.format("Не удалось преобразовать value='%s' в число.", args.value), 0)
-    end
+    res = SetCell(args.t_id, args.key, args.code, args.text, args.value) -- returns true or false
   end
+  
+  local result = qlua.SetCell.Result()
+  result.result = res
+  
   return result
 end
 
@@ -963,15 +964,21 @@ handlers[qlua.RPC.ProcedureType.SET_WINDOW_POS] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.SET_TABLE_NOTIFICATION_CALLBACK] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.SetTableNotificationCallback.Request)  
+  
   local f_cb_ctr, error_msg = loadstring("return "..args.f_cb_def)
+  
   if f_cb_ctr == nil then 
-   error(string.format("Не удалось распарсить определение функции из переданной строки. Описание ошибки: [%s].", error_msg), 0)
-  else
-    local result = qlua.SetTableNotificationCallback.Result()
-    result.result = SetTableNotificationCallback(args.t_id, f_cb_ctr()) -- returns 0 or 1
-    return result
+   error( string.format("Не удалось распарсить определение функции из переданной строки. Описание ошибки: [%s].", error_msg) )
   end
+  
+  local res = SetTableNotificationCallback(args.t_id, f_cb_ctr()) -- returns 0 or 1
+  
+  local result = qlua.SetTableNotificationCallback.Result()
+  result.result = res
+  
+  return result
 end
 
 handlers[qlua.RPC.ProcedureType.GET_TABLE_SIZE] = function(request_args) 

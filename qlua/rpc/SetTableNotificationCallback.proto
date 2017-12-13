@@ -8,7 +8,7 @@ option java_package = "qlua.rpc";
 message Request {
 
     int32 t_id = 1;
-    string f_cb_def = 2;
+    string f_cb_def = 2; // формат функции (см. документацию по QLua): FUNCTION (NUMBER t_id, NUMBER msg, NUMBER par1, NUMBER par2)
 }
 
 message Result {

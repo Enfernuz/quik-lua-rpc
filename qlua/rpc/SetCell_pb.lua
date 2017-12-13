@@ -58,9 +58,9 @@ module.REQUEST_VALUE_FIELD.number = 5
 module.REQUEST_VALUE_FIELD.index = 4
 module.REQUEST_VALUE_FIELD.label = 1
 module.REQUEST_VALUE_FIELD.has_default_value = false
-module.REQUEST_VALUE_FIELD.default_value = ''
-module.REQUEST_VALUE_FIELD.type = 9
-module.REQUEST_VALUE_FIELD.cpp_type = 9
+module.REQUEST_VALUE_FIELD.default_value = 0.0
+module.REQUEST_VALUE_FIELD.type = 1
+module.REQUEST_VALUE_FIELD.cpp_type = 5
 
 module.REQUEST.name = 'Request'
 module.REQUEST.full_name = '.qlua.rpc.SetCell.Request'
