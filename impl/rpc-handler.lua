@@ -566,15 +566,20 @@ handlers[qlua.RPC.ProcedureType.SEND_TRANSACTION] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.CALC_BUY_SELL] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.CalcBuySell.Request)
-  local result = qlua.CalcBuySell.Result()
+
   local price = tonumber(args.price)
   if price == nil then
     error(string.format("Не удалось преобразовать в число значение '%s' параметра price", args.price), 0) 
   end
-  local comission
-  result.qty, comission = CalcBuySell(args.class_code, args.sec_code, args.client_code, args.account, price, args.is_buy, args.is_market) -- returns (0; 0) in case of error
+  
+  local qty, comission = CalcBuySell(args.class_code, args.sec_code, args.client_code, args.account, price, args.is_buy, args.is_market) -- returns (0; 0) in case of error
+  
+  local result = qlua.CalcBuySell.Result()
+  result.qty = qty
   result.comission = tostring(comission)
+  
   return result
 end
 
