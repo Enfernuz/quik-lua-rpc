@@ -910,16 +910,20 @@ handlers[qlua.RPC.ProcedureType.IS_WINDOW_CLOSED] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_CELL] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.GetCell.Request)
-  local t_cell = GetCell(args.t_id, args.key, args.code) -- returns nil in case of error
-  if t_cell == nil then
+  
+  local res = GetCell(args.t_id, args.key, args.code) -- returns nil in case of error
+  
+  if res == nil then
     error(string.format("Процедура GetCell(%s, %s, %s) вернула nil.", args.t_id, args.key, args.code), 0)
-  else
-    local result = qlua.GetCell.Result()
-    result.image = t_cell.image
-    if t_cell.value then result.value = tostring(t_cell.value) end
-    return result
   end
+  
+  local result = qlua.GetCell.Result()
+  result.image = res.image
+  if res.value then result.value = tostring(res.value) end
+  
+  return result
 end
 
 handlers[qlua.RPC.ProcedureType.SET_CELL] = function(request_args) 
