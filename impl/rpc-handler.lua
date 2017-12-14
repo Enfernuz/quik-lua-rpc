@@ -552,10 +552,16 @@ handlers[qlua.RPC.ProcedureType.DS_SET_EMPTY_CALLBACK] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.SEND_TRANSACTION] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.sendTransaction.Request)
+  
   local t = utils.create_table(args.transaction)
+  
+  local res = sendTransaction(t) -- returns an empty string (seems to be always)
+  
   local result = qlua.sendTransaction.Result()
-  result.result = sendTransaction(t) -- returns an empty string (seems to be always)
+  result.result = res
+  
   return result
 end
 
