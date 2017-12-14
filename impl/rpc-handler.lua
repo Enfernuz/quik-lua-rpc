@@ -600,18 +600,19 @@ handlers[qlua.RPC.ProcedureType.GET_PARAM_EX] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_PARAM_EX_2] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.getParamEx2.Request)
-  local t = getParamEx2(args.class_code, args.sec_code, args.param_name) -- always returns a table
-  if t == nil then
+  
+  local res = getParamEx2(args.class_code, args.sec_code, args.param_name) -- always returns a table
+  
+  if res == nil then
     error(string.format("Процедура getParamEx2(%s, %s, %s) возвратила nil.", args.class_code, args.sec_code, args.param_name), 0)
-  else
-    local result = qlua.getParamEx2.Result()
-    result.param_ex.param_type = value_or_empty_string(t.param_type)
-    result.param_ex.param_value = value_or_empty_string(t.param_value)
-    result.param_ex.param_image = value_or_empty_string(t.param_image)
-    result.param_ex.result = value_or_empty_string(t.result)
-    return result
   end
+  
+  local result = qlua.getParamEx2.Result()
+  struct_converter.getParamEx2.ParamEx2(res, result.param_ex)
+  
+  return result
 end
 
 handlers[qlua.RPC.ProcedureType.GET_PORTFOLIO_INFO] = function(request_args) 
