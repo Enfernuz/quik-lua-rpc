@@ -14,13 +14,14 @@ local value_to_string_or_empty_string = assert(utils.value_to_string_or_empty_st
 local value_or_empty_string = assert(utils.value_or_empty_string)
 
 local StructConverter = {
-  _VERSION = '0.5.0', 
+  _VERSION = '0.6.0', 
   getMoney = {}, 
   getDepo = {}, 
   getTradeDate = {}, 
   getQuoteLevel2 = {}, 
   getCandlesByIndex = {}, 
-  getParamEx = {}
+  getParamEx = {}, 
+  getParamEx2 = {}
 }
 
 local function copy_datetime(src, dst)
@@ -148,6 +149,20 @@ function StructConverter.getParamEx.ParamEx(param_ex, existing_struct)
   if param_ex == nil then error("No 'param_ex' table provided.", 2) end
 
   local result = (existing_struct == nil and qlua.getParamEx.ParamEx() or existing_struct)
+  
+  result.param_type = value_or_empty_string(param_ex.param_type)
+  result.param_value = value_or_empty_string(param_ex.param_value)
+  result.param_image = value_or_empty_string(param_ex.param_image)
+  result.result = value_or_empty_string(param_ex.result)
+  
+  return result
+end
+
+function StructConverter.getParamEx2.ParamEx2(param_ex, existing_struct)
+  
+  if param_ex == nil then error("No 'param_ex' table provided.", 2) end
+
+  local result = (existing_struct == nil and qlua.getParamEx2.ParamEx2() or existing_struct)
   
   result.param_type = value_or_empty_string(param_ex.param_type)
   result.param_value = value_or_empty_string(param_ex.param_value)
