@@ -23,7 +23,8 @@ local StructConverter = {
   getParamEx = {}, 
   getParamEx2 = {}, 
   getPortfolioInfo = {}, 
-  getPortfolioInfoEx = {}
+  getPortfolioInfoEx = {}, 
+  getBuySellInfo = {}
 }
 
 local function copy_datetime(src, dst)
@@ -254,6 +255,37 @@ function StructConverter.getPortfolioInfoEx.PortfolioInfoEx(portfolio_info_ex, e
   result.cash_leverage = value_or_empty_string(portfolio_info_ex.cash_leverage)
   result.fut_position_type = value_or_empty_string(portfolio_info_ex.fut_position_type)
   result.fut_accured_int = value_or_empty_string(portfolio_info_ex.fut_accured_int)
+  
+  return result
+end
+
+function StructConverter.getBuySellInfo.BuySellInfo(buy_sell_info, existing_struct)
+  
+  if buy_sell_info == nil then error("No 'buy_sell_info' table provided.", 2) end
+
+  local result = (existing_struct == nil and qlua.getBuySellInfo.BuySellInfo() or existing_struct)
+  
+  result.is_margin_sec = value_or_empty_string(buy_sell_info.is_margin_sec)
+  result.is_asset_sec = value_or_empty_string(buy_sell_info.is_asset_sec)
+  result.balance = value_or_empty_string(buy_sell_info.balance)
+  result.can_buy = value_or_empty_string(buy_sell_info.can_buy)
+  result.can_sell = value_or_empty_string(buy_sell_info.can_sell)
+  result.position_valuation = value_or_empty_string(buy_sell_info.position_valuation)
+  result.value = value_or_empty_string(buy_sell_info.value)
+  result.open_value = value_or_empty_string(buy_sell_info.open_value)
+  result.lim_long = value_or_empty_string(buy_sell_info.lim_long)
+  result.long_coef = value_or_empty_string(buy_sell_info.long_coef)
+  result.lim_short = value_or_empty_string(buy_sell_info.lim_short)
+  result.short_coef = value_or_empty_string(buy_sell_info.short_coef)
+  result.value_coef = value_or_empty_string(buy_sell_info.value_coef)
+  result.open_value_coef = value_or_empty_string(buy_sell_info.open_value_coef)
+  result.share = value_or_empty_string(buy_sell_info.share)
+  result.short_wa_price = value_or_empty_string(buy_sell_info.short_wa_price)
+  result.long_wa_price = value_or_empty_string(buy_sell_info.long_wa_price)
+  result.profit_loss = value_or_empty_string(buy_sell_info.profit_loss)
+  result.spread_hc = value_or_empty_string(buy_sell_info.spread_hc)
+  result.can_buy_own = value_or_empty_string(buy_sell_info.can_buy_own)
+  result.can_sell_own = value_or_empty_string(buy_sell_info.can_sell_own)
   
   return result
 end
