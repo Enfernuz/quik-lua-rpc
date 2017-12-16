@@ -14,7 +14,7 @@ local value_to_string_or_empty_string = assert(utils.value_to_string_or_empty_st
 local value_or_empty_string = assert(utils.value_or_empty_string)
 
 local StructConverter = {
-  _VERSION = '0.8.0', 
+  _VERSION = '0.9.0', 
   getMoney = {}, 
   getDepo = {}, 
   getTradeDate = {}, 
@@ -24,7 +24,8 @@ local StructConverter = {
   getParamEx2 = {}, 
   getPortfolioInfo = {}, 
   getPortfolioInfoEx = {}, 
-  getBuySellInfo = {}
+  getBuySellInfo = {}, 
+  getBuySellInfoEx = {}
 }
 
 local function copy_datetime(src, dst)
@@ -286,6 +287,26 @@ function StructConverter.getBuySellInfo.BuySellInfo(buy_sell_info, existing_stru
   result.spread_hc = value_or_empty_string(buy_sell_info.spread_hc)
   result.can_buy_own = value_or_empty_string(buy_sell_info.can_buy_own)
   result.can_sell_own = value_or_empty_string(buy_sell_info.can_sell_own)
+  
+  return result
+end
+
+function StructConverter.getBuySellInfoEx.BuySellInfoEx(buy_sell_info_ex, existing_struct)
+  
+  if buy_sell_info_ex == nil then error("No 'buy_sell_info_ex' table provided.", 2) end
+
+  local result = (existing_struct == nil and qlua.getBuySellInfoEx.BuySellInfoEx() or existing_struct)
+  
+  StructConverter.getBuySellInfo.BuySellInfo(buy_sell_info_ex, result.buy_sell_info)
+  
+  result.limit_kind = value_to_string_or_empty_string(buy_sell_info_ex.limit_kind)
+  result.d_long = value_or_empty_string(buy_sell_info_ex.d_long)
+  result.d_min_long = value_or_empty_string(buy_sell_info_ex.d_min_long)
+  result.d_short = value_or_empty_string(buy_sell_info_ex.d_short)
+  result.d_min_short = value_or_empty_string(buy_sell_info_ex.d_min_short)
+  result.client_type = value_or_empty_string(buy_sell_info_ex.client_type)
+  result.is_long_allowed = value_or_empty_string(buy_sell_info_ex.is_long_allowed)
+  result.is_short_allowed = value_or_empty_string(buy_sell_info_ex.is_short_allowed)
   
   return result
 end
