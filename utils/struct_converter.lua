@@ -14,14 +14,15 @@ local value_to_string_or_empty_string = assert(utils.value_to_string_or_empty_st
 local value_or_empty_string = assert(utils.value_or_empty_string)
 
 local StructConverter = {
-  _VERSION = '0.6.0', 
+  _VERSION = '0.7.0', 
   getMoney = {}, 
   getDepo = {}, 
   getTradeDate = {}, 
   getQuoteLevel2 = {}, 
   getCandlesByIndex = {}, 
   getParamEx = {}, 
-  getParamEx2 = {}
+  getParamEx2 = {}, 
+  getPortfolioInfo = {}
 }
 
 local function copy_datetime(src, dst)
@@ -168,6 +169,56 @@ function StructConverter.getParamEx2.ParamEx2(param_ex, existing_struct)
   result.param_value = value_or_empty_string(param_ex.param_value)
   result.param_image = value_or_empty_string(param_ex.param_image)
   result.result = value_or_empty_string(param_ex.result)
+  
+  return result
+end
+
+function StructConverter.getPortfolioInfo.PortfolioInfo(portfolio_info, existing_struct)
+  
+  if portfolio_info == nil then error("No 'portfolio_info' table provided.", 2) end
+
+  local result = (existing_struct == nil and qlua.getPortfolioInfo.PortfolioInfo() or existing_struct)
+  
+  result.is_leverage = value_or_empty_string(portfolio_info.is_leverage)
+  result.in_assets = value_or_empty_string(portfolio_info.in_assets)
+  result.leverage = value_or_empty_string(portfolio_info.leverage)
+  result.open_limit = value_or_empty_string(portfolio_info.open_limit)
+  result.val_short = value_or_empty_string(portfolio_info.val_short)
+  result.val_long = value_or_empty_string(portfolio_info.val_long)
+  result.val_long_margin = value_or_empty_string(portfolio_info.val_long_margin)
+  result.val_long_asset = value_or_empty_string(portfolio_info.val_long_asset)
+  result.assets = value_or_empty_string(portfolio_info.assets)
+  result.cur_leverage = value_or_empty_string(portfolio_info.cur_leverage)
+  result.margin = value_or_empty_string(portfolio_info.margin)
+  result.lim_all = value_or_empty_string(portfolio_info.lim_all)
+  result.av_lim_all = value_or_empty_string(portfolio_info.av_lim_all)
+  result.locked_buy = value_or_empty_string(portfolio_info.locked_buy)
+  result.locked_buy_margin = value_or_empty_string(portfolio_info.locked_buy_margin)
+  result.locked_buy_asset = value_or_empty_string(portfolio_info.locked_buy_asset)
+  result.locked_sell = value_or_empty_string(portfolio_info.locked_sell)
+  result.locked_value_coef = value_or_empty_string(portfolio_info.locked_value_coef)
+  result.in_all_assets = value_or_empty_string(portfolio_info.in_all_assets)
+  result.all_assets = value_or_empty_string(portfolio_info.all_assets)
+  result.profit_loss = value_or_empty_string(portfolio_info.profit_loss)
+  result.rate_change = value_or_empty_string(portfolio_info.rate_change)
+  result.lim_buy = value_or_empty_string(portfolio_info.lim_buy)
+  result.lim_sell = value_or_empty_string(portfolio_info.lim_sell)
+  result.lim_non_margin = value_or_empty_string(portfolio_info.lim_non_margin)
+  result.lim_buy_asset = value_or_empty_string(portfolio_info.lim_buy_asset)
+  result.val_short_net = value_or_empty_string(portfolio_info.val_short_net)
+  result.val_long_net = value_or_empty_string(portfolio_info.val_long_net)
+  result.total_money_bal = value_or_empty_string(portfolio_info.total_money_bal)
+  result.total_locked_money = value_or_empty_string(portfolio_info.total_locked_money)
+  result.haircuts = value_or_empty_string(portfolio_info.haircuts)
+  result.assets_without_hc = value_or_empty_string(portfolio_info.assets_without_hc)
+  result.status_coef = value_or_empty_string(portfolio_info.status_coef)
+  result.varmargin = value_or_empty_string(portfolio_info.varmargin)
+  result.go_for_positions = value_or_empty_string(portfolio_info.go_for_positions)
+  result.go_for_orders = value_or_empty_string(portfolio_info.go_for_orders)
+  result.rate_futures = value_or_empty_string(portfolio_info.rate_futures)
+  result.is_qual_client = value_or_empty_string(portfolio_info.is_qual_client)
+  result.is_futures = value_or_empty_string(portfolio_info.is_futures)
+  result.curr_tag = value_or_empty_string(portfolio_info.curr_tag)
   
   return result
 end
