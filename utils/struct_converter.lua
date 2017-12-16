@@ -14,7 +14,7 @@ local value_to_string_or_empty_string = assert(utils.value_to_string_or_empty_st
 local value_or_empty_string = assert(utils.value_or_empty_string)
 
 local StructConverter = {
-  _VERSION = '0.7.0', 
+  _VERSION = '0.8.0', 
   getMoney = {}, 
   getDepo = {}, 
   getTradeDate = {}, 
@@ -22,7 +22,8 @@ local StructConverter = {
   getCandlesByIndex = {}, 
   getParamEx = {}, 
   getParamEx2 = {}, 
-  getPortfolioInfo = {}
+  getPortfolioInfo = {}, 
+  getPortfolioInfoEx = {}
 }
 
 local function copy_datetime(src, dst)
@@ -219,6 +220,40 @@ function StructConverter.getPortfolioInfo.PortfolioInfo(portfolio_info, existing
   result.is_qual_client = value_or_empty_string(portfolio_info.is_qual_client)
   result.is_futures = value_or_empty_string(portfolio_info.is_futures)
   result.curr_tag = value_or_empty_string(portfolio_info.curr_tag)
+  
+  return result
+end
+
+function StructConverter.getPortfolioInfoEx.PortfolioInfoEx(portfolio_info_ex, existing_struct)
+  
+  if portfolio_info_ex == nil then error("No 'portfolio_info_ex' table provided.", 2) end
+
+  local result = (existing_struct == nil and qlua.getPortfolioInfoEx.PortfolioInfoEx() or existing_struct)
+  
+  StructConverter.getPortfolioInfo.PortfolioInfo(portfolio_info_ex, result.portfolio_info)
+  
+  result.init_margin = value_or_empty_string(portfolio_info_ex.init_margin)
+  result.min_margin = value_or_empty_string(portfolio_info_ex.min_margin)
+  result.corrected_margin = value_or_empty_string(portfolio_info_ex.corrected_margin)
+  result.client_type = value_or_empty_string(portfolio_info_ex.client_type)
+  result.portfolio_value = value_or_empty_string(portfolio_info_ex.portfolio_value)
+  result.start_limit_open_pos = value_or_empty_string(portfolio_info_ex.start_limit_open_pos)
+  result.total_limit_open_pos = value_or_empty_string(portfolio_info_ex.total_limit_open_pos)
+  result.limit_open_pos = value_or_empty_string(portfolio_info_ex.limit_open_pos)
+  result.used_lim_open_pos = value_or_empty_string(portfolio_info_ex.used_lim_open_pos)
+  result.acc_var_margin = value_or_empty_string(portfolio_info_ex.acc_var_margin)
+  result.cl_var_margin = value_or_empty_string(portfolio_info_ex.cl_var_margin)
+  result.opt_liquid_cost = value_or_empty_string(portfolio_info_ex.opt_liquid_cost)
+  result.fut_asset = value_or_empty_string(portfolio_info_ex.fut_asset)
+  result.fut_total_asset = value_or_empty_string(portfolio_info_ex.fut_total_asset)
+  result.fut_debt = value_or_empty_string(portfolio_info_ex.fut_debt)
+  result.fut_rate_asset = value_or_empty_string(portfolio_info_ex.fut_rate_asset)
+  result.fut_rate_asset_open = value_or_empty_string(portfolio_info_ex.fut_rate_asset_open)
+  result.fut_rate_go = value_or_empty_string(portfolio_info_ex.fut_rate_go)
+  result.planed_rate_go = value_or_empty_string(portfolio_info_ex.planed_rate_go)
+  result.cash_leverage = value_or_empty_string(portfolio_info_ex.cash_leverage)
+  result.fut_position_type = value_or_empty_string(portfolio_info_ex.fut_position_type)
+  result.fut_accured_int = value_or_empty_string(portfolio_info_ex.fut_accured_int)
   
   return result
 end
