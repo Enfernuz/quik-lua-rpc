@@ -668,46 +668,23 @@ handlers[qlua.RPC.ProcedureType.GET_BUY_SELL_INFO] = function(request_args)
 end
 
 handlers[qlua.RPC.ProcedureType.GET_BUY_SELL_INFO_EX] = function(request_args) 
+  
   local args = parse_request_args(request_args, qlua.getBuySellInfoEx.Request)
-  local t = getBuySellInfoEx(args.firm_id, args.client_code, args.class_code, args.sec_code, args.price) -- returns {} in case of error
-  if t == nil then
-    error(string.format("Процедура getBuySellInfoEx(%s, %s, %s, %s, %d) возвратила nil.", args.firm_id, args.client_code, args.class_code, args.sec_code, args.price), 0)
-  else
-    local result = qlua.getBuySellInfoEx.Result()
-    
-    result.buy_sell_info_ex.buy_sell_info.is_margin_sec = value_or_empty_string(t.is_margin_sec)
-    result.buy_sell_info_ex.buy_sell_info.is_asset_sec = value_or_empty_string(t.is_asset_sec)
-    result.buy_sell_info_ex.buy_sell_info.balance = value_or_empty_string(t.balance)
-    result.buy_sell_info_ex.buy_sell_info.can_buy = value_or_empty_string(t.can_buy)
-    result.buy_sell_info_ex.buy_sell_info.can_sell = value_or_empty_string(t.can_sell)
-    result.buy_sell_info_ex.buy_sell_info.position_valuation = value_or_empty_string(t.position_valuation)
-    result.buy_sell_info_ex.buy_sell_info.value = value_or_empty_string(t.value)
-    result.buy_sell_info_ex.buy_sell_info.open_value = value_or_empty_string(t.open_value)
-    result.buy_sell_info_ex.buy_sell_info.lim_long = value_or_empty_string(t.lim_long)
-    result.buy_sell_info_ex.buy_sell_info.long_coef = value_or_empty_string(t.long_coef)
-    result.buy_sell_info_ex.buy_sell_info.lim_short = value_or_empty_string(t.lim_short)
-    result.buy_sell_info_ex.buy_sell_info.short_coef = value_or_empty_string(t.short_coef)
-    result.buy_sell_info_ex.buy_sell_info.value_coef = value_or_empty_string(t.value_coef)
-    result.buy_sell_info_ex.buy_sell_info.open_value_coef = value_or_empty_string(t.open_value_coef)
-    result.buy_sell_info_ex.buy_sell_info.share = value_or_empty_string(t.share)
-    result.buy_sell_info_ex.buy_sell_info.short_wa_price = value_or_empty_string(t.short_wa_price)
-    result.buy_sell_info_ex.buy_sell_info.long_wa_price = value_or_empty_string(t.long_wa_price)
-    result.buy_sell_info_ex.buy_sell_info.profit_loss = value_or_empty_string(t.profit_loss)
-    result.buy_sell_info_ex.buy_sell_info.spread_hc = value_or_empty_string(t.spread_hc)
-    result.buy_sell_info_ex.buy_sell_info.can_buy_own = value_or_empty_string(t.can_buy_own)
-    result.buy_sell_info_ex.buy_sell_info.can_sell_own = value_or_empty_string(t.can_sell_own)
-    
-    result.buy_sell_info_ex.limit_kind = value_to_string_or_empty_string(t.limit_kind)
-    result.buy_sell_info_ex.d_long = value_or_empty_string(t.d_long)
-    result.buy_sell_info_ex.d_min_long = value_or_empty_string(t.d_min_long)
-    result.buy_sell_info_ex.d_short = value_or_empty_string(t.d_short)
-    result.buy_sell_info_ex.d_min_short = value_or_empty_string(t.d_min_short)
-    result.buy_sell_info_ex.client_type = value_or_empty_string(t.client_type)
-    result.buy_sell_info_ex.is_long_allowed = value_or_empty_string(t.is_long_allowed)
-    result.buy_sell_info_ex.is_short_allowed = value_or_empty_string(t.is_short_allowed)
-    
-    return result
+  
+  local price = tonumber(args.price)
+  if price == nil then 
+    error(string.format("Не удалось преобразовать в число значение '%s' параметра price", args.price), 0)
   end
+  
+  local res = getBuySellInfoEx(args.firm_id, args.client_code, args.class_code, args.sec_code, price) -- returns {} in case of error
+  if res == nil then
+    error(string.format("Процедура getBuySellInfoEx(%s, %s, %s, %s, %s) возвратила nil.", args.firm_id, args.client_code, args.class_code, args.sec_code, args.price), 0)
+  end
+  
+  local result = qlua.getBuySellInfoEx.Result()
+  struct_converter.getBuySellInfoEx.BuySellInfoEx(res, result.buy_sell_info_ex)
+  
+  return result
 end
 
 handlers[qlua.RPC.ProcedureType.ADD_COLUMN] = function(request_args) 
