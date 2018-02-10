@@ -1,0 +1,51 @@
+{
+  "endpoints": [
+    {
+      "type": "RPC", 
+      "active": true, 
+      "address": {
+        "host": "127.0.0.1",
+        "port": null
+      },
+      "auth": {
+        "mechanism": "", 
+        "plain": {
+          "users": [
+            {"username": "", "password": ""}
+          ]
+        },
+        "curve": {
+          "server": {
+            "public": "",
+            "secret": ""
+          }, 
+          "clients": []
+        }
+      }
+    }, 
+  
+    {
+      "type": "PUB", 
+      "active": true, 
+      "address": {
+        "host": "127.0.0.1",
+        "port": 5561
+      },
+      "auth": {
+        "mechanism": "CURVE", 
+        "plain": {
+          "users": [
+            {"username": "", "password": ""}
+          ]
+        },
+        "curve": {
+          "server": {
+            "public": "",
+            "secret": ""
+          }, 
+          "clients": []
+        }
+      }
+    }
+  ]
+}

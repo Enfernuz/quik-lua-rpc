@@ -1,230 +1,122 @@
-package.path = getScriptPath() .. '/?.lua;' .. package.path
+local json = require("utils.json")
 
-local qlua = require("qlua.api")
+local module = {}
 
-local qlua_events = require("qlua.rpc.qlua_events_pb")
-local zmq = require("lzmq")
-local zmq_poller = require("lzmq.poller")
-local utils = require("utils.utils")
-local uuid = require("utils.uuid")
-local request_handler = require("impl.request-handler")
-local event_handler = require("impl.event-handler")
+local zap_socket = nil
+local rep_sockets = {}
+local pub_sockets = {}
+local poller = nil
+local is_running = false
+local event_callbacks = {}
 
-local pcall = assert(pcall, "pcall function is missing.")
-local tostring = assert(tostring, "tostring function is missing.")
-
-local QluaService = {
+local function parse_config(filepath)
   
-  ctx = nil, 
-  rep_socket = nil, 
-  pub_socket = nil,
-  poller = nil, 
-  is_running = false
-}
-
-QluaService._VERSION = '0.1.0'
-
-function OnClose()
-  QluaService:publish(qlua_events.EventType.ON_CLOSE)
-  QluaService:terminate()
-end
-
-function OnStop(signal)
-  QluaService:publish(qlua_events.EventType.PUBLISHER_OFFLINE)
-  QluaService:terminate()
-end
-
-function OnInit()
-  QluaService:start("tcp://127.0.0.1:5560", "tcp://127.0.0.1:5561")
-  QluaService:publish(qlua_events.EventType.PUBLISHER_ONLINE)
-end
-
-function OnFirm(firm)
-  QluaService:publish(qlua_events.EventType.ON_FIRM, firm)
-end
-
-function OnAllTrade(alltrade)
-  QluaService:publish(qlua_events.EventType.ON_ALL_TRADE, alltrade)
-end
-
-function OnTrade(trade)
-  QluaService:publish(qlua_events.EventType.ON_TRADE, trade)
-end
-
-function OnOrder(order)
-  QluaService:publish(qlua_events.EventType.ON_ORDER, order)
-end
-
-function OnAccountBalance(acc_bal)
-  QluaService:publish(qlua_events.EventType.ON_ACCOUNT_BALANCE, acc_bal)
-end
-
-function OnFuturesLimitChange(fut_limit)
-  QluaService:publish(qlua_events.EventType.ON_FUTURES_LIMIT_CHANGE, fut_limit)
-end
-
-function OnFuturesLimitDelete(lim_del)
-  QluaService:publish(qlua_events.EventType.ON_FUTURES_LIMIT_DELETE, lim_del)
-end
-
-function OnFuturesClientHolding(fut_pos)
-  QluaService:publish(qlua_events.EventType.ON_FUTURES_CLIENT_HOLDING, fut_pos)
-end
-
-function OnMoneyLimit(mlimit)
-  QluaService:publish(qlua_events.EventType.ON_MONEY_LIMIT, mlimit)
-end
-
-function OnMoneyLimitDelete(mlimit_del)
-  QluaService:publish(qlua_events.EventType.ON_MONEY_LIMIT_DELETE, mlimit_del)
-end
-
-function OnDepoLimit(dlimit)
-  QluaService:publish(qlua_events.EventType.ON_DEPO_LIMIT, dlimit)
-end
-
-function OnDepoLimitDelete(dlimit_del)
-  QluaService:publish(qlua_events.EventType.ON_DEPO_LIMIT_DELETE, dlimit_del)
-end
-
-function OnAccountPosition(acc_pos)
-  QluaService:publish(qlua_events.EventType.ON_ACCOUNT_POSITION, acc_pos)
-end
-
-function OnNegDeal(neg_deal)
-  QluaService:publish(qlua_events.EventType.ON_NEG_DEAL, neg_deal)
-end
-
-function OnNegTrade(neg_trade)
-  QluaService:publish(qlua_events.EventType.ON_NEG_TRADE, neg_trade)
-end
-
-function OnStopOrder(stop_order)
-  QluaService:publish(qlua_events.EventType.ON_STOP_ORDER, stop_order)
-end
-
-function OnTransReply(trans_reply)
-  QluaService:publish(qlua_events.EventType.ON_TRANS_REPLY, trans_reply)
-end
-
-function OnParam(class_code, sec_code)
-  local t = {}
-  t.class_code = class_code
-  t.sec_code = sec_code
-  QluaService:publish(qlua_events.EventType.ON_PARAM, t)
-end
-
-function OnQuote(class_code, sec_code)
-  local t = {}
-  t.class_code = class_code
-  t.sec_code = sec_code
-  QluaService:publish(qlua_events.EventType.ON_QUOTE, t)
-end
-
-function OnDisconnected()
-  QluaService:publish(qlua_events.EventType.ON_DISCONNECTED)
-end
-
-function OnConnected()
-  QluaService:publish(qlua_events.EventType.ON_CONNECTED)
-end
-
-function OnCleanUp()
-  QluaService:publish(qlua_events.EventType.ON_CLEAN_UP)
-end
-
-function QluaService:publish(event_type, event_data) 
+  local cfg_file = io.open("config.json")
+  local content = cfg_file:read("a")
+  cfg_file:close()
   
-  if self.pub_socket ~= nil and self.is_running then 
+  local config = json.decode(content)
+  
+  -- fill in lacking sections
+  if not config.auth then 
+    config.auth = {mechanism = "NULL", plain = {}, curve = {server = {}, clients = {}}} 
+  else
     
-    local pub_data = event_handler:handle(event_type, event_data)
-
-    local ok, err
-    if pub_data == nil then
-      ok, err = pcall(function() self.pub_socket:send(event_type) end) -- send the subscription key
-      -- if not ok then (log error somehow...) end
+    local auth_mechanism = config.auth.mechanism
+    if not auth_mechanism then 
+      error("Не указан механизм аутентификации (секция auth.mechanism). Доступные механизмы: 'NULL', 'PLAIN', 'CURVE'.")
     else
-      ok, err = pcall(function() self.pub_socket:send_more(event_type) end) -- send the subscription key
-      
-      if ok then
-        local msg = zmq.msg_init_data( pub_data:SerializeToString() )
-        ok, err = pcall(function() msg:send(self.pub_socket) end)
-        -- if not ok then (log error somehow...) end
-      else
-        -- (log error somehow...)
+      if auth_mechanism ~= "NULL" or auth_mechanism ~= "PLAIN" or auth_mechanism ~= "CURVE" then
+        error(string.format("Указан неподдерживаемый механизм аутентификации '%s' (секция auth.mechanism). Доступные механизмы: 'NULL', 'PLAIN', 'CURVE'."), auth_mechanism)
+      end
+    end
+    
+    if not config.auth.plain then config.auth.plain = {} end
+    if not config.auth.curve then 
+      config.auth.curve = {server = {}, clients = {}}
+    else
+      if not config.auth.curve.server then config.auth.curve.server = {} end
+      if not config.auth.curve.clients then config.auth.curve.clients = {} end
+    end
+  end
+  
+  return config
+end
+
+local function reg_endpoint_rpc(endpoint_id, endpoint)
+  
+  
+  -- if endpoint.auth
+  -- local zap_domain = tostring(endpoint_id)
+  -- socket.set_zap_domain(zap_domain)
+  -- authenticators[zap_domain] = function() ... end
+end
+
+local function reg_endpoint_pub(endpoint_id, endpoint)
+end
+
+local function create_plain_registry(users)
+  
+  local registry = {}
+  for _i, user in users do
+    registry[user.username] = user.password
+  end
+  
+  return registry
+end
+
+local function create_curve_registry(client_keys)
+  
+  local registry = {}
+  for _i, client_key in client_keys do
+    registry[client_key] = true
+  end
+  
+  return registry
+end
+
+local function create_plain_auth_handler(plain_registry)
+  return function(username, password)
+    return plain_registry[username] == password
+  end
+end
+
+local function create_curve_auth_handler(curve_registry)
+  return function(client_key)
+    return curve_registry[client_key]
+  end
+end
+  
+
+local function init()
+  
+  local config = parse_config("config.json")
+  
+  for i, endpoint in config.endpoints do
+    
+    if endpoint.active then
+      if endpoint.type == "RPC" then
+        reg_endpoint_rpc(i, endpoint)
+      elseif endpoint.type == "PUB" then
+        reg_endpoint_pub(i, endpoint)
+      else 
+        error("TODO")
       end
     end
   end
+  
+  -- if PUB then init callbacks
 end
 
-function QluaService:start(rep_socket_addr, pub_socket_addr)
-  
-  assert(self.is_running == false, "The QluaService is already running.")
 
-  if rep_socket_addr == nil and pub_socket_addr == nil then
-    error("The service cannot be started: nor REP neither PUB socket address is specified.")
-  elseif pub_socket_addr == rep_socket_addr then 
-    error("REP socket addr equals to PUB socket addr.")
-  elseif rep_socket_addr ~= nil and pub_socket_addr ~= nil then
-    self.poller = zmq_poller.new(2)
-  else 
-    self.poller = zmq_poller.new(1)
-  end
-  
-  self.ctx = zmq.context()
-  
-  if rep_socket_addr then
-    self.rep_socket = self.ctx:socket(zmq.REP)
-    self.rep_socket:bind(rep_socket_addr)
-    uuid.seed()
 
-    self.poller:add(self.rep_socket, zmq.POLLIN, function() 
-
-      local msg_request = zmq.msg_init()
-
-      local ok, ret = pcall( function() return msg_request:recv(self.rep_socket) end)
-      if ok and not (ret == nil or ret == -1) then
-        local request = qlua.RPC.Request()
-        request:ParseFromString( ret:data() )
-        
-        local response = request_handler:handle(request)
-        
-        local msg_response = zmq.msg_init_data( response:SerializeToString() )
-        ok = pcall(function() msg_response:send(QluaService.rep_socket) end)
-        -- if not ok then (log error somehow...) end
-      end
-    end)
-  end
-
-  if pub_socket_addr then
-    self.pub_socket = self.ctx:socket(zmq.PUB)
-    self.pub_socket:bind(pub_socket_addr)
-    
-    -- Как координировать PUB и SUB правильно (сложно): http://zguide.zeromq.org/lua:all#Node-Coordination
-    -- Как не совсем правильно (просто): использовать sleep
-    utils.sleep(0.5) -- in seconds
-  end
-
-  self.is_running = true
+function module.start()
 end
 
-function QluaService:terminate()
-  
-  if self.is_running then 
-    self.is_running = false
-  else
-    return
-  end
-  
-  self.poller:stop()
-    
-  -- Set non-negative linger to prevent termination hanging in case if there's a message pending for a disconnected subscriber
-  
-  if self.rep_socket then self.rep_socket:close(1) end
-  if self.pub_socket then self.pub_socket:close(1) end
-  self.ctx:term(1)
+function module.stop()
 end
 
-function main()
-  QluaService.poller:start()
+local function publish(event_type, event_data)
 end
+
+return module
