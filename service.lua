@@ -2,12 +2,14 @@ local json = require("utils.json")
 
 local module = {}
 
+local zmq_ctx = nil
 local zap_socket = nil
 local rep_sockets = {}
 local pub_sockets = {}
 local poller = nil
 local is_running = false
 local event_callbacks = {}
+local auth_handlers = {}
 
 local function parse_config(filepath)
   
@@ -43,16 +45,24 @@ local function parse_config(filepath)
   return config
 end
 
-local function reg_endpoint_rpc(endpoint_id, endpoint)
+local function create_rpc_poll_in_callback(socket)
   
-  
-  -- if endpoint.auth
-  -- local zap_domain = tostring(endpoint_id)
-  -- socket.set_zap_domain(zap_domain)
-  -- authenticators[zap_domain] = function() ... end
-end
+  return function()
+    
+    local msg_request = zmq.msg_init()
 
-local function reg_endpoint_pub(endpoint_id, endpoint)
+    local ok, ret = pcall( function() return msg_request:recv(socket) end)
+    if ok and not (ret == nil or ret == -1) then
+      local request = qlua.RPC.Request()
+      request:ParseFromString( ret:data() )
+        
+      local response = request_handler:handle(request)
+        
+      local msg_response = zmq.msg_init_data( response:SerializeToString() )
+      ok = pcall(function() msg_response:send(socket) end)
+        -- if not ok then (log error somehow...) end
+      end
+  end
 end
 
 local function create_plain_registry(users)
@@ -76,17 +86,67 @@ local function create_curve_registry(client_keys)
 end
 
 local function create_plain_auth_handler(plain_registry)
-  return function(username, password)
-    return plain_registry[username] == password
+  return function(zap_request)
+    return plain_registry[zap_request.username] == zap_request.password
   end
 end
 
 local function create_curve_auth_handler(curve_registry)
-  return function(client_key)
-    return curve_registry[client_key]
+  return function(zap_request)
+    return curve_registry[zap_request.client_key]
   end
 end
+
+local function setup_endpoint_auth(socket, endpoint)
   
+  local auth = endpoint.auth
+  if auth.mechanism == "PLAIN" or auth.mechanism == "CURVE" then
+    
+    local zap_domain = "rpc"..tostring(endpoint.id)
+    socket:set_zap_domain(zap_domain)
+    
+    local auth_handler
+    if auth.mechanism == "PLAIN" then
+      socket:set_plain_server(1)
+      local plain_registry = create_plain_registry(auth.plain.users)
+      auth_handler = create_plain_auth_handler(plain_registry)
+    else
+      socket:set_curve_server(1)
+      socket:set_curve_secretkey(auth.curve.server.secret)
+      socket:set_curve_publickey(auth.curve.server.public)
+      local curve_registry = create_curve_registry(auth.curve.clients)
+      auth_handler = create_plain_auth_handler(curve_registry)
+    end
+    
+    auth_handlers[zap_domain] = auth_handler
+  end
+end
+
+local function create_socket(endpoint)
+  
+  local socket
+  if endpoint.type == "RPC" then
+    socket = zmq_ctx:socket(zmq.REP)
+    poller:add(socket, zmq.POLLIN, create_rpc_poll_in_callback(socket))
+  elseif endpoint.type == "PUB" then
+    socket = zmq_ctx:socket(zmq.PUB)
+  else
+    error("TODO")
+  end
+  
+  socket:bind( string.format("tcp://%s:%d", endpoint.address.host, endpoint.address.port) )
+  if endpoint.type == "PUB" then
+    -- Как координировать PUB и SUB правильно (сложно): http://zguide.zeromq.org/lua:all#Node-Coordination
+    -- Как не совсем правильно (просто): использовать sleep
+    utils.sleep(0.25) -- in seconds
+  end
+end
+
+local function reg_endpoint(endpoint)
+  
+  local socket = create_socket(endpoint)
+  setup_endpoint_auth(socket, endpoint)
+end
 
 local function init()
   
@@ -95,13 +155,8 @@ local function init()
   for i, endpoint in config.endpoints do
     
     if endpoint.active then
-      if endpoint.type == "RPC" then
-        reg_endpoint_rpc(i, endpoint)
-      elseif endpoint.type == "PUB" then
-        reg_endpoint_pub(i, endpoint)
-      else 
-        error("TODO")
-      end
+      endpoint.id = i
+      reg_endpoint(endpoint)
     end
   end
   
