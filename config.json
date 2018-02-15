@@ -5,7 +5,7 @@
       "active": true, 
       "address": {
         "host": "127.0.0.1",
-        "port": null
+        "port": 5560
       },
       "auth": {
         "mechanism": "", 
@@ -26,7 +26,7 @@
   
     {
       "type": "PUB", 
-      "active": true, 
+      "active": false, 
       "address": {
         "host": "127.0.0.1",
         "port": 5561
