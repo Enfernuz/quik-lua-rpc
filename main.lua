@@ -1,18 +1,17 @@
-local service
+package.path = getScriptPath() .. '/?.lua;' .. package.path
 
 -----
-OnInit = function(script_path)
-  service = require(script_path.."/service.lua")
-  service.init(script_path)
-  OnInit = service.event_callbacks.OnInit or service.terminate
-end
+
+local service = require("service")
+
+service.init()
 
 OnClose = service.event_callbacks.OnClose or service.terminate
 OnStop = service.event_callbacks.OnStop or service.terminate
+OnCleanUp = service.event_callbacks.OnCleanUp
 
 OnConnected = service.event_callbacks.OnConnected
 OnDisconnected = service.event_callbacks.OnDisconnected
-OnCleanUp = service.event_callbacks.OnCleanUp
 
 OnFirm = service.event_callbacks.OnFirm
 OnAllTrade = service.event_callbacks.OnAllTrade
@@ -34,9 +33,12 @@ OnTransReply = service.event_callbacks.OnTransReply
 OnParam = service.event_callbacks.OnParam
 OnQuote = service.event_callbacks.OnQuote
 
+OnInit = function(script_path)
+  
+end
+
 -----
 
 function main()
-  message("KEKS")
   service.start()
 end

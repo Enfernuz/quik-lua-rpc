@@ -26,13 +26,13 @@
   
     {
       "type": "PUB", 
-      "active": false, 
+      "active": true, 
       "address": {
         "host": "127.0.0.1",
         "port": 5561
       },
       "auth": {
-        "mechanism": "CURVE", 
+        "mechanism": "", 
         "plain": {
           "users": [
             {"username": "", "password": ""}

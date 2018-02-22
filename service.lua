@@ -116,7 +116,10 @@ local function init_zap()
     end
   end
     
-    poller:add(zap_socket, zmq.POLLIN, zap_handler_func)
+  poller:add(zap_socket, zmq.POLLIN, zap_handler_func)
+end
+
+local function pub_poll_out_callback()
 end
 
 local function create_rpc_poll_in_callback(socket)
@@ -199,7 +202,7 @@ local function setup_endpoint_auth(socket, endpoint)
 end
 
 local function publish(event_type, event_data)
-  
+
   if not is_running then return end
   
   local pub_data = event_handler:handle(event_type, event_data)
@@ -212,7 +215,6 @@ local function publish(event_type, event_data)
       -- if not ok then (log error somehow...) end
     else
       ok, err = pcall(function() pub_socket:send_more(event_type) end) -- send the subscription key
-      
       if ok then
         local msg = zmq.msg_init_data( pub_data:SerializeToString() )
         ok, err = pcall(function() msg:send(pub_socket) end)
@@ -223,6 +225,8 @@ local function publish(event_type, event_data)
     end
     
   end
+  
+  
 end
 
 local function create_event_callbacks()
@@ -235,12 +239,7 @@ local function create_event_callbacks()
     end,
     
     OnStop = function(signal)
-      publish(qlua_events.EventType.PUBLISHER_OFFLINE)
       service.terminate()
-    end,
-    
-    OnInit = function(script_path)
-      publish(qlua_events.EventType.PUBLISHER_ONLINE)
     end,
     
     OnFirm = function(firm)
@@ -323,7 +322,8 @@ local function create_event_callbacks()
       publish(qlua_events.EventType.ON_DISCONNECTED)
     end, 
     
-    OnConnected = function()
+    OnConnected = function(flag)
+      -- TODO: add flag to the ON_CONNECTED event 
       publish(qlua_events.EventType.ON_CONNECTED)
     end,
     
@@ -343,6 +343,7 @@ local function create_socket(endpoint)
     sockets = rpc_sockets
   elseif endpoint.type == "PUB" then
     socket = zmq_ctx:socket(zmq.PUB)
+    poller:add(socket, zmq.POLLOUT, pub_poll_out_callback)
     sockets = pub_sockets
   else
     error("TODO")
@@ -355,11 +356,12 @@ local function create_socket(endpoint)
     -- Как не совсем правильно (просто): использовать sleep
     utils.sleep(0.25) -- in seconds
     
-    if not service.event_callbacks then
+    local next = next
+    if not next(service.event_callbacks) then
       service.event_callbacks = create_event_callbacks()
     end
   end
-  
+
   table.sinsert(sockets, socket)
 end
 
@@ -373,7 +375,7 @@ local function check_if_initialized()
   if not initialized then error("The service is not initialized.") end
 end
 
-function service.init(script_path)
+function service.init()
   
   if initialized then return end
   
@@ -404,6 +406,8 @@ function service.start()
   else
     is_running = true
   end
+  
+  publish(qlua_events.EventType.PUBLISHER_ONLINE)
     
   poller:start()
 end
@@ -412,6 +416,8 @@ function service.stop()
   
   check_if_initialized()
   
+  publish(qlua_events.EventType.PUBLISHER_OFFLINE)
+  
   if is_running then
     poller:stop()
     is_running = false
@@ -419,13 +425,13 @@ function service.stop()
 end
 
 function service.terminate()
-  
+
   check_if_initialized()
   
   if is_running then 
     service.stop()
   end
-  
+
   poller = nil
     
   -- Set non-negative linger to prevent termination hanging in case if there's a message pending for a disconnected subscriber
