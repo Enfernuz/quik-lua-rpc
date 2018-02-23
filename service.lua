@@ -29,7 +29,7 @@ local function parse_zap_request()
 
   local msg, err = zap_socket:recv_all()
   
-  if not msg then error("ZAP-handler error. Errno: "..tostring(err)) end
+  if err then error("ZAP-handler error. Errno: "..tostring(err)) end
   
   local req = {
     version    = msg[1]; -- Version number, must be "1.0"
@@ -97,16 +97,18 @@ local function init_zap()
   zap_socket:bind("inproc://zeromq.zap.01")
 
   local zap_reply = function(zap_request, status, text)
-    return zap_socket:sendx(zap_request.version, zap_request.sequence, status, text)
+    return zap_socket:sendx(zap_request.version, zap_request.sequence, status, text or "", "", "")
   end
     
   local zap_handler_func = function()
     
     local zap_request = zmq.assert( parse_zap_request() )
+    if not zap_request then return end
+    
     local zap_domain = zap_request.domain
     local f_authenticate = auth_handlers[zap_domain]
     if f_authenticate then
-      if f_authenticate() then
+      if f_authenticate(zap_request) then
         zap_reply(zap_request, "200")
       else
         zap_reply(zap_request, "400")
@@ -156,7 +158,7 @@ local function create_curve_registry(client_keys)
   
   local registry = {}
   for _i, client_key in ipairs(client_keys) do
-    registry[client_key] = true
+    registry[zmq.z85_decode(client_key)] = true
   end
   
   return registry
@@ -164,7 +166,7 @@ end
 
 local function create_plain_auth_handler(plain_registry)
   return function(zap_request)
-    return plain_registry[zap_request.username] == zap_request.password
+    return (plain_registry[zap_request.username] == zap_request.password)
   end
 end
 
@@ -194,7 +196,7 @@ local function setup_endpoint_auth(socket, endpoint)
       socket:set_curve_secretkey(auth.curve.server.secret)
       socket:set_curve_publickey(auth.curve.server.public)
       local curve_registry = create_curve_registry(auth.curve.clients)
-      auth_handler = create_plain_auth_handler(curve_registry)
+      auth_handler = create_curve_auth_handler(curve_registry)
     end
     
     auth_handlers[zap_domain] = auth_handler
@@ -225,8 +227,6 @@ local function publish(event_type, event_data)
     end
     
   end
-  
-  
 end
 
 local function create_event_callbacks()
@@ -349,6 +349,8 @@ local function create_socket(endpoint)
     error("TODO")
   end
   
+  setup_endpoint_auth(socket, endpoint)
+  
   socket:bind( string.format("tcp://%s:%d", endpoint.address.host, endpoint.address.port) )
   if endpoint.type == "PUB" then
     
@@ -363,12 +365,12 @@ local function create_socket(endpoint)
   end
 
   table.sinsert(sockets, socket)
+  
+  return socket
 end
 
 local function reg_endpoint(endpoint)
-  
-  local socket = create_socket(endpoint)
-  setup_endpoint_auth(socket, endpoint)
+  create_socket(endpoint)
 end
 
 local function check_if_initialized()

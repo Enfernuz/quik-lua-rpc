@@ -8,7 +8,7 @@
         "port": 5560
       },
       "auth": {
-        "mechanism": "", 
+        "mechanism": "CURVE", 
         "plain": {
           "users": [
             {"username": "", "password": ""}
@@ -16,10 +16,10 @@
         },
         "curve": {
           "server": {
-            "public": "",
-            "secret": ""
+            "public": "rq:rM>}U?@Lns47E1%kR.o@n%FcmmsL/@{H8]yf7",
+            "secret": "JTKVSB%%)wK0E.X)V>+}o?pNmC{O&4W4b!Ni{Lh6"
           }, 
-          "clients": []
+          "clients": ["Yne@$w-vo<fVvi]a<NY6T1ed:M$fCG*[IaLV{hID"]
         }
       }
     }, 
@@ -32,7 +32,7 @@
         "port": 5561
       },
       "auth": {
-        "mechanism": "", 
+        "mechanism": "CURVE", 
         "plain": {
           "users": [
             {"username": "", "password": ""}
@@ -40,10 +40,10 @@
         },
         "curve": {
           "server": {
-            "public": "",
-            "secret": ""
+            "public": "rq:rM>}U?@Lns47E1%kR.o@n%FcmmsL/@{H8]yf7",
+            "secret": "JTKVSB%%)wK0E.X)V>+}o?pNmC{O&4W4b!Ni{Lh6"
           }, 
-          "clients": []
+          "clients": ["Yne@$w-vo<fVvi]a<NY6T1ed:M$fCG*[IaLV{hID"]
         }
       }
     }
