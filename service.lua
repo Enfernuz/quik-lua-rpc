@@ -4,9 +4,10 @@ package.path = scriptPath .. '/?.lua;' .. package.path
 
 local zmq = require("lzmq")
 local zmq_poller = require("lzmq.poller")
+local zap = require("auth.zap")
 local qlua = require("qlua.api")
 local qlua_events = require("qlua.rpc.qlua_events_pb")
-local json = require("utils.json")
+local config_parser = require("utils.config_parser")
 local request_handler = require("impl.request-handler")
 local event_handler = require("impl.event-handler")
 local utils = require("utils.utils")
@@ -17,109 +18,11 @@ service._VERSION = '1.0.0'
 service.event_callbacks = {}
 
 local zmq_ctx = nil
-local zap_socket = nil
 local rpc_sockets = {}
 local pub_sockets = {}
 local poller = nil
 local is_running = false
 local initialized = false
-local auth_handlers = {}
-
-local function parse_zap_request()
-
-  local msg, err = zap_socket:recv_all()
-  
-  if err then error("ZAP-handler error. Errno: "..tostring(err)) end
-  
-  local req = {
-    version    = msg[1]; -- Version number, must be "1.0"
-    sequence   = msg[2]; -- Sequence number of request
-    domain     = msg[3]; -- Server socket domain
-    address    = msg[4]; -- Client IP address
-    identity   = msg[5]; -- Server socket idenntity
-    mechanism  = msg[6]; -- Security mechansim
-  }
-  
-  if req.mechanism == "PLAIN" then
-    req.username = msg[7];   -- PLAIN user name
-    req.password = msg[8];   -- PLAIN password, in clear text
-  elseif req.mechanism == "CURVE" then
-    req.client_key = msg[7]; -- CURVE client public key
-  end
-  
-  return req
-end
-
-local function parse_config(filepath)
-  
-  local cfg_file, err = io.open(scriptPath.."/config.json")
-  if err then 
-    error( string.format("Не удалось открыть файл конфигурации. Подробности: '%s'.", err) ) 
-  end
-  
-  local content = cfg_file:read("*all")
-  cfg_file:close()
-  
-  local config = json.decode(content)
-  
-  -- fill in lacking sections
-  if not config.auth then 
-    config.auth = {mechanism = "NULL", plain = {}, curve = {server = {}, clients = {}}} 
-  else
-    
-    local auth_mechanism = config.auth.mechanism
-    if not auth_mechanism then 
-      error("Не указан механизм аутентификации (секция auth.mechanism). Доступные механизмы: 'NULL', 'PLAIN', 'CURVE'.")
-    else
-      if auth_mechanism ~= "NULL" or auth_mechanism ~= "PLAIN" or auth_mechanism ~= "CURVE" then
-        error(string.format("Указан неподдерживаемый механизм аутентификации '%s' (секция auth.mechanism). Доступные механизмы: 'NULL', 'PLAIN', 'CURVE'."), auth_mechanism)
-      end
-    end
-    
-    if not config.auth.plain then config.auth.plain = {} end
-    if not config.auth.curve then 
-      config.auth.curve = {server = {}, clients = {}}
-    else
-      if not config.auth.curve.server then config.auth.curve.server = {} end
-      if not config.auth.curve.clients then config.auth.curve.clients = {} end
-    end
-  end
-  
-  return config
-end
-
-local function init_zap()
-  
-  -- if already initialized
-  if zap_socket then return end
-  
-  zap_socket = zmq_ctx:socket(zmq.REP)
-  zap_socket:bind("inproc://zeromq.zap.01")
-
-  local zap_reply = function(zap_request, status, text)
-    return zap_socket:sendx(zap_request.version, zap_request.sequence, status, text or "", "", "")
-  end
-    
-  local zap_handler_func = function()
-    
-    local zap_request = zmq.assert( parse_zap_request() )
-    if not zap_request then return end
-    
-    local zap_domain = zap_request.domain
-    local f_authenticate = auth_handlers[zap_domain]
-    if f_authenticate then
-      if f_authenticate(zap_request) then
-        zap_reply(zap_request, "200")
-      else
-        zap_reply(zap_request, "400")
-      end
-    else
-      zap_reply(zap_request, "500", string.format("Cannot find authentication handler for ZAP domain '%s'.", zap_domain))
-    end
-  end
-    
-  poller:add(zap_socket, zmq.POLLIN, zap_handler_func)
-end
 
 local function pub_poll_out_callback()
 end
@@ -141,65 +44,6 @@ local function create_rpc_poll_in_callback(socket)
       ok = pcall(function() msg_response:send(socket) end)
         -- if not ok then (log error somehow...) end
       end
-  end
-end
-
-local function create_plain_registry(users)
-  
-  local registry = {}
-  for _i, user in ipairs(users) do
-    registry[user.username] = user.password
-  end
-  
-  return registry
-end
-
-local function create_curve_registry(client_keys)
-  
-  local registry = {}
-  for _i, client_key in ipairs(client_keys) do
-    registry[zmq.z85_decode(client_key)] = true
-  end
-  
-  return registry
-end
-
-local function create_plain_auth_handler(plain_registry)
-  return function(zap_request)
-    return (plain_registry[zap_request.username] == zap_request.password)
-  end
-end
-
-local function create_curve_auth_handler(curve_registry)
-  return function(zap_request)
-    return curve_registry[zap_request.client_key]
-  end
-end
-
-local function setup_endpoint_auth(socket, endpoint)
-  
-  local auth = endpoint.auth
-  if auth.mechanism == "PLAIN" or auth.mechanism == "CURVE" then
-    
-    init_zap()
-    
-    local zap_domain = endpoint.type..tostring(endpoint.id)
-    socket:set_zap_domain(zap_domain)
-    
-    local auth_handler
-    if auth.mechanism == "PLAIN" then
-      socket:set_plain_server(1)
-      local plain_registry = create_plain_registry(auth.plain.users)
-      auth_handler = create_plain_auth_handler(plain_registry)
-    else
-      socket:set_curve_server(1)
-      socket:set_curve_secretkey(auth.curve.server.secret)
-      socket:set_curve_publickey(auth.curve.server.public)
-      local curve_registry = create_curve_registry(auth.curve.clients)
-      auth_handler = create_curve_auth_handler(curve_registry)
-    end
-    
-    auth_handlers[zap_domain] = auth_handler
   end
 end
 
@@ -346,10 +190,13 @@ local function create_socket(endpoint)
     poller:add(socket, zmq.POLLOUT, pub_poll_out_callback)
     sockets = pub_sockets
   else
-    error("TODO")
+    error( string.format("Указан неподдерживаемый тип '%s' для точки подключения. Поддерживаемые типы: RPC и PUB.", endpoint.type) )
   end
   
-  setup_endpoint_auth(socket, endpoint)
+  if zap.has_auth(endpoint) then
+    if not zap.is_initialized() then zap.init(zmq_ctx, poller) end
+    zap.setup_auth(socket, endpoint)
+  end
   
   socket:bind( string.format("tcp://%s:%d", endpoint.address.host, endpoint.address.port) )
   if endpoint.type == "PUB" then
@@ -381,7 +228,7 @@ function service.init()
   
   if initialized then return end
   
-  local config = parse_config("config.json")
+  local config = config_parser.parse(scriptPath.."/config.json")
   
   zmq_ctx = zmq.context()
   poller = zmq_poller.new()
@@ -447,15 +294,10 @@ function service.terminate()
   end
   pub_sockets = {}
   
-  if zap_socket then
-    zap_socket:close(0)
-    zap_socket = nil
-  end
+  zap.destroy()
   
   zmq_ctx:term(1)
   zmq_ctx = nil
-  
-  auth_handlers = {}
   
   initialized = false
 end

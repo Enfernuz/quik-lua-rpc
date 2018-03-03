@@ -11,7 +11,7 @@
         "mechanism": "CURVE", 
         "plain": {
           "users": [
-            {"username": "", "password": ""}
+            {"username": "test_user", "password": "test_password"}
           ]
         },
         "curve": {
@@ -32,10 +32,10 @@
         "port": 5561
       },
       "auth": {
-        "mechanism": "CURVE", 
+        "mechanism": "", 
         "plain": {
           "users": [
-            {"username": "", "password": ""}
+            {"username": "test_user", "password": "test_password"}
           ]
         },
         "curve": {
