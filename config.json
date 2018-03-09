@@ -1,0 +1,51 @@
+{
+  "endpoints": [
+    {
+      "type": "RPC", 
+      "active": true, 
+      "address": {
+        "host": "127.0.0.1",
+        "port": 5560
+      },
+      "auth": {
+        "mechanism": "CURVE", 
+        "plain": {
+          "users": [
+            {"username": "test_user", "password": "test_password"}
+          ]
+        },
+        "curve": {
+          "server": {
+            "public": "rq:rM>}U?@Lns47E1%kR.o@n%FcmmsL/@{H8]yf7",
+            "secret": "JTKVSB%%)wK0E.X)V>+}o?pNmC{O&4W4b!Ni{Lh6"
+          }, 
+          "clients": ["Yne@$w-vo<fVvi]a<NY6T1ed:M$fCG*[IaLV{hID"]
+        }
+      }
+    }, 
+  
+    {
+      "type": "PUB", 
+      "active": true, 
+      "address": {
+        "host": "127.0.0.1",
+        "port": 5561
+      },
+      "auth": {
+        "mechanism": "", 
+        "plain": {
+          "users": [
+            {"username": "test_user", "password": "test_password"}
+          ]
+        },
+        "curve": {
+          "server": {
+            "public": "rq:rM>}U?@Lns47E1%kR.o@n%FcmmsL/@{H8]yf7",
+            "secret": "JTKVSB%%)wK0E.X)V>+}o?pNmC{O&4W4b!Ni{Lh6"
+          }, 
+          "clients": ["Yne@$w-vo<fVvi]a<NY6T1ed:M$fCG*[IaLV{hID"]
+        }
+      }
+    }
+  ]
+}
