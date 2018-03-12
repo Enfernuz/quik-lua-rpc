@@ -32,10 +32,10 @@
         "port": 5561
       },
       "auth": {
-        "mechanism": "", 
+        "mechanism": "PLAIN", 
         "plain": {
           "users": [
-            {"username": "test_user", "password": "test_password"}
+            {"username": "admin", "password": "letmein"}
           ]
         },
         "curve": {
