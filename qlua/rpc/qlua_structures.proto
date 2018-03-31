@@ -30,7 +30,7 @@ message Firm {
 // Обезличенные сделки
 message AllTrade {
 
-    int64 trade_num = 1; // NUMBER in QLUA
+    uint64 trade_num = 1; // NUMBER in QLUA
     uint32 flags = 2; // NUMBER in QLUA
     string price = 3; // NUMBER in QLUA
     uint32 qty = 4; // NUMBER in QLUA
@@ -53,8 +53,8 @@ message AllTrade {
 // Сделки
 message Trade {
 
-    int64 trade_num = 1; // NUMBER in QLUA
-    int64 order_num = 2; // NUMBER in QLUA
+    uint64 trade_num = 1; // NUMBER in QLUA
+    uint64 order_num = 2; // NUMBER in QLUA
     string brokerref = 3;
     string userid = 4;
     string firmid = 5;
@@ -106,7 +106,7 @@ message Trade {
 // Заявки
 message Order {
 
-    int64 order_num = 1; // NUMBER in QLUA
+    uint64 order_num = 1; // NUMBER in QLUA
     uint32 flags = 2; // NUMBER in QLUA
     string brokerref = 3;
     string userid = 4;
@@ -175,7 +175,7 @@ message AccountBalance {
 // Стоп-заявки
 message StopOrder {
 
-    int64 order_num = 1; // NUMBER in QLUA
+    uint64 order_num = 1; // NUMBER in QLUA
     string ordertime = 2; // NUMBER in QLUA
     int32 flags = 3; // NUMBER in QLUA
     string brokerref = 4;
@@ -349,7 +349,7 @@ message AccountPosition {
 // Заявки на внебиржевые сделки
 message NegDeal {
 
-    int64 neg_deal_num = 1; // NUMBER in QLUA
+    uint64 neg_deal_num = 1; // NUMBER in QLUA
     string neg_deal_time = 2; // NUMBER in QLUA
     int32 flags = 3; // NUMBER in QLUA
     string brokerref = 4;
@@ -402,7 +402,7 @@ message NegDeal {
 // Сделки для исполнения
 message NegTrade {
 
-    int64 trade_num = 1; // NUMBER in QLUA
+    uint64 trade_num = 1; // NUMBER in QLUA
     string trade_date = 2; // NUMBER in QLUA
     string settle_date = 3; // NUMBER in QLUA
     int32 flags = 4; // NUMBER in QLUA
@@ -465,10 +465,6 @@ message NegTrade {
     string confirmreport = 61; // NUMBER in QLUA
 }
 
-//
-
-//
-
 // Инструменты
 message Security {
 
@@ -515,7 +511,7 @@ message DateTimeEntry {
 // Транзакции
 message Transaction {
 
-    int64 trans_id = 1; // NUMBER in QLUA
+    uint64 trans_id = 1; // NUMBER in QLUA
     int32 status = 2; // NUMBER in QLUA
     string result_msg = 3;
     DateTimeEntry date_time = 4; // TABLE in QLUA
@@ -547,4 +543,9 @@ message QuoteEventInfo {
 
     string class_code = 1;
     string sec_code = 2;
+}
+
+// Информация из функции обратного вызова OnConnected
+message ConnectedEventInfo {
+    bool flag = 1;
 }
