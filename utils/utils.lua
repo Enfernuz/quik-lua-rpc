@@ -42,7 +42,18 @@ function module.insert_table(dst, src)
   end
 end
 
-
+function module.copy_datetime(dst, src)
+ 
+  dst.mcs = src.mcs
+  dst.ms = src.ms
+  dst.sec = src.sec
+  dst.min = src.min
+  dst.hour = src.hour
+  dst.day = src.day
+  dst.week_day = src.week_day
+  dst.month = src.month
+  dst.year = src.year
+end
 
 function module.create_table(pb_map)
   
