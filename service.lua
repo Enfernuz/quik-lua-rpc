@@ -255,7 +255,9 @@ function service.start()
     is_running = true
   end
   
-  publish(qlua_events.EventType.PUBLISHER_ONLINE)
+  -- Does nothing useful at the moment, because the polling has not yet been started at the time it executes.
+  -- Issue #13.
+  publish(qlua_events.EventType.PUBLISHER_ONLINE) 
     
   poller:start()
 end
