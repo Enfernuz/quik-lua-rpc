@@ -628,4 +628,12 @@ function StructFactory.create_Klass(class_info, existing_struct)
   return result
 end
 
+function StructFactory.create_ConnectedEventInfo(flag) 
+  
+  local result = qlua_structs.ConnectedEventInfo()
+  result.flag = (flag == nil or flag)
+  
+  return result
+end
+
 return StructFactory

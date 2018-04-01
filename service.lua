@@ -167,8 +167,7 @@ local function create_event_callbacks()
     end, 
     
     OnConnected = function(flag)
-      -- TODO: add flag to the ON_CONNECTED event 
-      publish(qlua_events.EventType.ON_CONNECTED)
+      publish(qlua_events.EventType.ON_CONNECTED, flag)
     end,
     
     OnCleanUp = function()

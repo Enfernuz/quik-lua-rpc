@@ -7,7 +7,7 @@ local error = assert(error, "error function is missing.")
 local pcall = assert(pcall, "pcall function is missing.")
 
 local EventHandler = {}
-EventHandler._VERSION = '0.1.0'
+EventHandler._VERSION = '1.0'
 
 local function return_nil() 
   return nil 
@@ -18,7 +18,7 @@ local event_handlers = {}
 event_handlers[qlua_events.EventType.PUBLISHER_ONLINE] = return_nil
 event_handlers[qlua_events.EventType.PUBLISHER_OFFLINE] = return_nil
 event_handlers[qlua_events.EventType.ON_CLOSE] = return_nil
-event_handlers[qlua_events.EventType.ON_CONNECTED] = return_nil
+event_handlers[qlua_events.EventType.ON_CONNECTED] = struct_factory.create_ConnectedEventInfo
 event_handlers[qlua_events.EventType.ON_DISCONNECTED] = return_nil
 event_handlers[qlua_events.EventType.ON_CLEAN_UP] = return_nil
 

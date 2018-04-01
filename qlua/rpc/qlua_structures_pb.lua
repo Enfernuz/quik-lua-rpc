@@ -446,6 +446,8 @@ module.PARAMEVENTINFO_SEC_CODE_FIELD = protobuf.FieldDescriptor()
 module.QUOTEEVENTINFO = protobuf.Descriptor()
 module.QUOTEEVENTINFO_CLASS_CODE_FIELD = protobuf.FieldDescriptor()
 module.QUOTEEVENTINFO_SEC_CODE_FIELD = protobuf.FieldDescriptor()
+module.CONNECTEDEVENTINFO = protobuf.Descriptor()
+module.CONNECTEDEVENTINFO_FLAG_FIELD = protobuf.FieldDescriptor()
 
 module.KLASS_FIRMID_FIELD.name = 'firmid'
 module.KLASS_FIRMID_FIELD.full_name = '.qlua.structs.Klass.firmid'
@@ -558,8 +560,8 @@ module.ALLTRADE_TRADE_NUM_FIELD.index = 0
 module.ALLTRADE_TRADE_NUM_FIELD.label = 1
 module.ALLTRADE_TRADE_NUM_FIELD.has_default_value = false
 module.ALLTRADE_TRADE_NUM_FIELD.default_value = 0
-module.ALLTRADE_TRADE_NUM_FIELD.type = 3
-module.ALLTRADE_TRADE_NUM_FIELD.cpp_type = 2
+module.ALLTRADE_TRADE_NUM_FIELD.type = 4
+module.ALLTRADE_TRADE_NUM_FIELD.cpp_type = 4
 
 module.ALLTRADE_FLAGS_FIELD.name = 'flags'
 module.ALLTRADE_FLAGS_FIELD.full_name = '.qlua.structs.AllTrade.flags'
@@ -746,8 +748,8 @@ module.TRADE_TRADE_NUM_FIELD.index = 0
 module.TRADE_TRADE_NUM_FIELD.label = 1
 module.TRADE_TRADE_NUM_FIELD.has_default_value = false
 module.TRADE_TRADE_NUM_FIELD.default_value = 0
-module.TRADE_TRADE_NUM_FIELD.type = 3
-module.TRADE_TRADE_NUM_FIELD.cpp_type = 2
+module.TRADE_TRADE_NUM_FIELD.type = 4
+module.TRADE_TRADE_NUM_FIELD.cpp_type = 4
 
 module.TRADE_ORDER_NUM_FIELD.name = 'order_num'
 module.TRADE_ORDER_NUM_FIELD.full_name = '.qlua.structs.Trade.order_num'
@@ -756,8 +758,8 @@ module.TRADE_ORDER_NUM_FIELD.index = 1
 module.TRADE_ORDER_NUM_FIELD.label = 1
 module.TRADE_ORDER_NUM_FIELD.has_default_value = false
 module.TRADE_ORDER_NUM_FIELD.default_value = 0
-module.TRADE_ORDER_NUM_FIELD.type = 3
-module.TRADE_ORDER_NUM_FIELD.cpp_type = 2
+module.TRADE_ORDER_NUM_FIELD.type = 4
+module.TRADE_ORDER_NUM_FIELD.cpp_type = 4
 
 module.TRADE_BROKERREF_FIELD.name = 'brokerref'
 module.TRADE_BROKERREF_FIELD.full_name = '.qlua.structs.Trade.brokerref'
@@ -1235,8 +1237,8 @@ module.ORDER_ORDER_NUM_FIELD.index = 0
 module.ORDER_ORDER_NUM_FIELD.label = 1
 module.ORDER_ORDER_NUM_FIELD.has_default_value = false
 module.ORDER_ORDER_NUM_FIELD.default_value = 0
-module.ORDER_ORDER_NUM_FIELD.type = 3
-module.ORDER_ORDER_NUM_FIELD.cpp_type = 2
+module.ORDER_ORDER_NUM_FIELD.type = 4
+module.ORDER_ORDER_NUM_FIELD.cpp_type = 4
 
 module.ORDER_FLAGS_FIELD.name = 'flags'
 module.ORDER_FLAGS_FIELD.full_name = '.qlua.structs.Order.flags'
@@ -1821,8 +1823,8 @@ module.STOPORDER_ORDER_NUM_FIELD.index = 0
 module.STOPORDER_ORDER_NUM_FIELD.label = 1
 module.STOPORDER_ORDER_NUM_FIELD.has_default_value = false
 module.STOPORDER_ORDER_NUM_FIELD.default_value = 0
-module.STOPORDER_ORDER_NUM_FIELD.type = 3
-module.STOPORDER_ORDER_NUM_FIELD.cpp_type = 2
+module.STOPORDER_ORDER_NUM_FIELD.type = 4
+module.STOPORDER_ORDER_NUM_FIELD.cpp_type = 4
 
 module.STOPORDER_ORDERTIME_FIELD.name = 'ordertime'
 module.STOPORDER_ORDERTIME_FIELD.full_name = '.qlua.structs.StopOrder.ordertime'
@@ -3176,8 +3178,8 @@ module.NEGDEAL_NEG_DEAL_NUM_FIELD.index = 0
 module.NEGDEAL_NEG_DEAL_NUM_FIELD.label = 1
 module.NEGDEAL_NEG_DEAL_NUM_FIELD.has_default_value = false
 module.NEGDEAL_NEG_DEAL_NUM_FIELD.default_value = 0
-module.NEGDEAL_NEG_DEAL_NUM_FIELD.type = 3
-module.NEGDEAL_NEG_DEAL_NUM_FIELD.cpp_type = 2
+module.NEGDEAL_NEG_DEAL_NUM_FIELD.type = 4
+module.NEGDEAL_NEG_DEAL_NUM_FIELD.cpp_type = 4
 
 module.NEGDEAL_NEG_DEAL_TIME_FIELD.name = 'neg_deal_time'
 module.NEGDEAL_NEG_DEAL_TIME_FIELD.full_name = '.qlua.structs.NegDeal.neg_deal_time'
@@ -3666,8 +3668,8 @@ module.NEGTRADE_TRADE_NUM_FIELD.index = 0
 module.NEGTRADE_TRADE_NUM_FIELD.label = 1
 module.NEGTRADE_TRADE_NUM_FIELD.has_default_value = false
 module.NEGTRADE_TRADE_NUM_FIELD.default_value = 0
-module.NEGTRADE_TRADE_NUM_FIELD.type = 3
-module.NEGTRADE_TRADE_NUM_FIELD.cpp_type = 2
+module.NEGTRADE_TRADE_NUM_FIELD.type = 4
+module.NEGTRADE_TRADE_NUM_FIELD.cpp_type = 4
 
 module.NEGTRADE_TRADE_DATE_FIELD.name = 'trade_date'
 module.NEGTRADE_TRADE_DATE_FIELD.full_name = '.qlua.structs.NegTrade.trade_date'
@@ -4585,8 +4587,8 @@ module.TRANSACTION_TRANS_ID_FIELD.index = 0
 module.TRANSACTION_TRANS_ID_FIELD.label = 1
 module.TRANSACTION_TRANS_ID_FIELD.has_default_value = false
 module.TRANSACTION_TRANS_ID_FIELD.default_value = 0
-module.TRANSACTION_TRANS_ID_FIELD.type = 3
-module.TRANSACTION_TRANS_ID_FIELD.cpp_type = 2
+module.TRANSACTION_TRANS_ID_FIELD.type = 4
+module.TRANSACTION_TRANS_ID_FIELD.cpp_type = 4
 
 module.TRANSACTION_STATUS_FIELD.name = 'status'
 module.TRANSACTION_STATUS_FIELD.full_name = '.qlua.structs.Transaction.status'
@@ -4820,11 +4822,29 @@ module.QUOTEEVENTINFO.enum_types = {}
 module.QUOTEEVENTINFO.fields = {module.QUOTEEVENTINFO_CLASS_CODE_FIELD, module.QUOTEEVENTINFO_SEC_CODE_FIELD}
 module.QUOTEEVENTINFO.is_extendable = false
 module.QUOTEEVENTINFO.extensions = {}
+module.CONNECTEDEVENTINFO_FLAG_FIELD.name = 'flag'
+module.CONNECTEDEVENTINFO_FLAG_FIELD.full_name = '.qlua.structs.ConnectedEventInfo.flag'
+module.CONNECTEDEVENTINFO_FLAG_FIELD.number = 1
+module.CONNECTEDEVENTINFO_FLAG_FIELD.index = 0
+module.CONNECTEDEVENTINFO_FLAG_FIELD.label = 1
+module.CONNECTEDEVENTINFO_FLAG_FIELD.has_default_value = false
+module.CONNECTEDEVENTINFO_FLAG_FIELD.default_value = false
+module.CONNECTEDEVENTINFO_FLAG_FIELD.type = 8
+module.CONNECTEDEVENTINFO_FLAG_FIELD.cpp_type = 7
+
+module.CONNECTEDEVENTINFO.name = 'ConnectedEventInfo'
+module.CONNECTEDEVENTINFO.full_name = '.qlua.structs.ConnectedEventInfo'
+module.CONNECTEDEVENTINFO.nested_types = {}
+module.CONNECTEDEVENTINFO.enum_types = {}
+module.CONNECTEDEVENTINFO.fields = {module.CONNECTEDEVENTINFO_FLAG_FIELD}
+module.CONNECTEDEVENTINFO.is_extendable = false
+module.CONNECTEDEVENTINFO.extensions = {}
 
 module.AccountBalance = protobuf.Message(module.ACCOUNTBALANCE)
 module.AccountPosition = protobuf.Message(module.ACCOUNTPOSITION)
 module.AllTrade = protobuf.Message(module.ALLTRADE)
 module.CandleEntry = protobuf.Message(module.CANDLEENTRY)
+module.ConnectedEventInfo = protobuf.Message(module.CONNECTEDEVENTINFO)
 module.DateTimeEntry = protobuf.Message(module.DATETIMEENTRY)
 module.DepoLimit = protobuf.Message(module.DEPOLIMIT)
 module.DepoLimitDelete = protobuf.Message(module.DEPOLIMITDELETE)
@@ -4846,7 +4866,7 @@ module.Trade = protobuf.Message(module.TRADE)
 module.Transaction = protobuf.Message(module.TRANSACTION)
 
 
-module.MESSAGE_TYPES = {'Klass','Firm','AllTrade','Trade','Order','AccountBalance','StopOrder','FuturesLimit','FuturesClientHolding','MoneyLimit','MoneyLimitDelete','DepoLimitDelete','FuturesLimitDelete','DepoLimit','AccountPosition','NegDeal','NegTrade','Security','CandleEntry','DateTimeEntry','Transaction','ParamEventInfo','QuoteEventInfo'}
+module.MESSAGE_TYPES = {'Klass','Firm','AllTrade','Trade','Order','AccountBalance','StopOrder','FuturesLimit','FuturesClientHolding','MoneyLimit','MoneyLimitDelete','DepoLimitDelete','FuturesLimitDelete','DepoLimit','AccountPosition','NegDeal','NegTrade','Security','CandleEntry','DateTimeEntry','Transaction','ParamEventInfo','QuoteEventInfo','ConnectedEventInfo'}
 module.ENUM_TYPES = {}
 
 return module
