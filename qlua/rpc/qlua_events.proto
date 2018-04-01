@@ -10,7 +10,7 @@ enum EventType {
     PUBLISHER_ONLINE = 1; // no data attached
     PUBLISHER_OFFLINE = 2; // no data attached
     ON_CLOSE = 3; // no data attached
-    ON_CONNECTED = 4; // no data attached
+    ON_CONNECTED = 4;
     ON_DISCONNECTED = 5; // no data attached
     ON_FIRM = 6; 
     ON_ALL_TRADE = 7; 
