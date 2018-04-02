@@ -89,7 +89,7 @@ describe("impl.rpc-handler", function()
             
           local result = sut.call_procedure(request.type, request.args)
           
-          assert.are.equal(utils.Cp2151ToUtf8(proc_result), result.caption)
+          assert.are.equal(utils.Cp1251ToUtf8(proc_result), result.caption)
         end)
       end)
     end)

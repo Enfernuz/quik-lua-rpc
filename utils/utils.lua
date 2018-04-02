@@ -18,7 +18,7 @@ local module = {}
 module._VERSION = '2.1.0'
 
 function module.value_or_empty_string(val)
-  return (val == nil and "" or module.Cp2151ToUtf8(val))
+  return (val == nil and "" or module.Cp1251ToUtf8(val))
 end
 
 function module.value_to_string_or_empty_string(val)
@@ -69,8 +69,8 @@ function module.put_to_string_string_pb_map(t, pb_map, pb_map_entry_ctr)
   
   for k, v in pairs(t) do
     local entry = pb_map_entry_ctr()
-    entry.key = module.Cp2151ToUtf8( tostring(k) )
-    entry.value = module.Cp2151ToUtf8( tostring(v) )
+    entry.key = module.Cp1251ToUtf8( tostring(k) )
+    entry.value = module.Cp1251ToUtf8( tostring(v) )
     table.sinsert(pb_map, entry)
   end
 end
@@ -198,7 +198,7 @@ local nmdc = {
   [124] = '|'
 }
 
-function module.Cp2151ToUtf8(s)
+function module.Cp1251ToUtf8(s)
   
   if s == nil then return nil end
   

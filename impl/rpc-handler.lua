@@ -888,7 +888,7 @@ handlers[qlua.RPC.ProcedureType.GET_WINDOW_CAPTION] = function(request_args)
   end
   
   local result = qlua.GetWindowCaption.Result()
-  result.caption = utils.Cp2151ToUtf8(res)
+  result.caption = utils.Cp1251ToUtf8(res)
     
     return result
 end
