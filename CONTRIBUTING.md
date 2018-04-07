@@ -2,19 +2,11 @@
 Содержание
 =================
 
-  * [Установка библиотек](#Установка библиотек)
-  * [Как пользоваться?](#Как-пользоваться)
-    * [Установка программы](#Установка-программы)
-    * [Установка зависимостей](#Установка-зависимостей)
-	    * [Легко](#Легко)
-	    * [Сложно](#Сложно)
-    * [Запуск программы](#Запуск-программы)
-  * [Схемы сообщений](#Схемы-сообщений)
-  * [Примеры](#Примеры)
-  * [Разработчикам](#Разработчикам)
-  * [FAQ](#faq)
+  * [Изменение файлов .proto](#Изменение-файлов-proto)
+    * [Необходимые инструменты](#Необходимые-инструменты)
+    * [Компиляция файлов .proto](#Компиляция-файлов-proto)
   
-Изменение/добавление .proto-файлов
+Изменение файлов .proto
 --------
 ### Необходимые инструменты
   * <b>Python</b>
@@ -38,20 +30,19 @@
     <br/>Скачать и распаковать компилятор `protobuf` отсюда: https://github.com/google/protobuf/releases.
     <br/>Будем считать, что у вас версия для Windows (например, `protoc-3.5.1-win32.zip`).
   
-### Компиляция .proto-файлов
-  Допустим, в директории `D:\my-proto-files` имеется некий файл helloworld.proto следующего содержания:
+### Компиляция файлов .proto
+  Допустим, в директории `D:\my-proto-files` имеется некий файл `facebook.proto` следующего содержания:
   ```
   syntax = "proto3";
   
-  message Human {
+  message Person {
         
     string name = 1;
     int32 age = 2;
-    int32 height = 3;
   }
   
   ```
-  Подробный мануал по синтаксисам protobuf можно найти здесь: <a href='https://developers.google.com/protocol-buffers/docs/proto3'>proto3</a> и <a href='https://developers.google.com/protocol-buffers/docs/proto2'>proto2</a>
+  Подробный мануал по синтаксисам protobuf можно найти здесь: <a href='https://developers.google.com/protocol-buffers/docs/proto3'>proto3</a> и <a href='https://developers.google.com/protocol-buffers/docs/proto2'>proto2</a>.
   
   Чтобы превратить его в соответствующий .lua-файл, нужно сделать следующее:
   1. В командной строке запустить компилятор protobuf (`папка_с_protobuf/bin/protoc.exe`) со следующими параметрами:
@@ -63,10 +54,18 @@
   * `PATH_TO_PROTO_FILE` -- путь до компилируемой .proto-схемы.
   
   Например, полная команда может выглядеть так:
-  `protoc --plugin=protoc-gen-lua="D:\protobuf-lua\protoc-plugin\protoc-gen-lua.bat" --lua_out=./  --proto_path="D:\my-proto-files" D:\my-proto-files\helloworld.proto`
-  Компилировать можно как несколько файлов в одной директории, так и несколько файлов в разных директориях:
-  `protoc --plugin=protoc-gen-lua="D:\protobuf-lua\protoc-plugin\protoc-gen-lua.bat" --lua_out=./  --proto_path="D:\my-proto-files" D:\my-proto-files\*.proto D:\my-other-proto-files\other.proto D:\more-proto-files\*.proto`.
-  Более подробную инструкцию найдёте в мануале к компилятору `protoc`.
+  <br/>`protoc --plugin=protoc-gen-lua="D:\protobuf-lua\protoc-plugin\protoc-gen-lua.bat" --lua_out=./  --proto_path="D:\my-proto-files" D:\my-proto-files\facebook.proto`
+  <br/>Компилировать можно как несколько файлов в одной директории, так и несколько файлов в разных директориях:
+  <br/>`protoc --plugin=protoc-gen-lua="D:\protobuf-lua\protoc-plugin\protoc-gen-lua.bat" --lua_out=./  --proto_path="D:\my-proto-files" D:\my-proto-files\*.proto D:\my-other-proto-files\other.proto D:\more-proto-files\*.proto`
+  <br/>Более подробную инструкцию найдёте в мануале к компилятору `protoc`.
+  <br/>На выходе получится файл `facebook_pb.lua`, который можно подключить и использовать в своём скрипте:
+  ```lua
+  local facebook = require('facebook_pb')
+  local person = facebook.Person()
+  person.name = "Jenny"
+  person.age = 20
   
-  
-  
+  local serialized_person = person:SerializeToString()
+  local deserialized_person = facebook.Person()
+  deserialized_person:ParseFromString(serialized_person)
+  ```
