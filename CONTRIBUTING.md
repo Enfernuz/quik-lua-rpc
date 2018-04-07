@@ -5,12 +5,14 @@
   * [Изменение файлов .proto](#Изменение-файлов-proto)
     * [Необходимые инструменты](#Необходимые-инструменты)
     * [Компиляция файлов .proto](#Компиляция-файлов-proto)
+  * [Юнит-тесты](#Юнит-тесты)
+  * [Сборка lzmq](#Сборка-lzmq)
   
 Изменение файлов .proto
 --------
 ### Необходимые инструменты
-  * <b>Python</b>
-    <br/>Взять интерпретатор Python можно отсюда: https://www.python.org
+  * <b>Python 2.7.x</b>
+    <br/>Взять интерпретатор Python версии `2.7.x` можно отсюда: https://www.python.org.
     
   * <b>protobuf-lua</b>
     <br/>В комплект входит lua-библиотека для сериализации/десериализации и плагин для компилирования .proto-файлов в .lua-файлы.
@@ -69,3 +71,11 @@
   local deserialized_person = facebook.Person()
   deserialized_person:ParseFromString(serialized_person)
   ```
+
+Юнит-тесты
+--------
+TO BE DESCRIBED
+
+Сборка lzmq
+--------
+TO BE DESCRIBED
