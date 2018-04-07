@@ -73,6 +73,7 @@
   local deserialized_person = facebook.Person()
   deserialized_person:ParseFromString(serialized_person)
   ```
+  При этом подразумевается, что директория `protobuf` из инструмента `protobuf-lua` находится в директории подключаемых модулей вашего Lua-интерпретатора. В случае с QUIK это папка `%PATH_TO_QUIK%/lua/`, в случае standalone-интерпретатора это обычно папка, скрывающаяся за переменной окружения `LUA_PATH`.
 
 Юнит-тесты
 --------
