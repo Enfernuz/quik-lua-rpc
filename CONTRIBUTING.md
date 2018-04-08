@@ -58,9 +58,13 @@
   * `PATH_TO_PROTO_FILE` -- путь до компилируемой .proto-схемы.
   
   Например, полная команда может выглядеть так:
-  <br/>`protoc --plugin=protoc-gen-lua="D:\protobuf-lua\protoc-plugin\protoc-gen-lua.bat" --lua_out=./  --proto_path="D:\my-proto-files" D:\my-proto-files\facebook.proto`
+  ```
+  protoc --plugin=protoc-gen-lua="D:\protobuf-lua\protoc-plugin\protoc-gen-lua.bat" --lua_out=./  --proto_path="D:\my-proto-files" D:\my-proto-files\facebook.proto
+  ```
   <br/>Компилировать можно как несколько файлов в одной директории, так и несколько файлов в разных директориях:
-  <br/>`protoc --plugin=protoc-gen-lua="D:\protobuf-lua\protoc-plugin\protoc-gen-lua.bat" --lua_out=./  --proto_path="D:\my-proto-files" D:\my-proto-files\*.proto D:\my-other-proto-files\other.proto D:\more-proto-files\*.proto`
+  ```
+  protoc --plugin=protoc-gen-lua="D:\protobuf-lua\protoc-plugin\protoc-gen-lua.bat" --lua_out=./  --proto_path="D:\my-proto-files" D:\my-proto-files\*.proto D:\my-other-proto-files\other.proto D:\more-proto-files\*.proto
+  ```
   <br/>Более подробную инструкцию найдёте в мануале к компилятору `protoc`.
   <br/>На выходе получится файл `facebook_pb.lua`, который можно подключить и использовать в своём скрипте:
   ```lua
@@ -74,8 +78,8 @@
   deserialized_person:ParseFromString(serialized_person)
   ```
   При этом подразумевается, что `protobuf-lua` установлена в качестве библиотеки в ваш Lua-интерпретатор:
-  1. директория `protobuf` из инструмента `protobuf-lua` находится в директории подключаемых модулей вашего Lua-интерпретатора. В случае с QUIK это папка `%PATH_TO_QUIK%/lua/`, в случае standalone-интерпретатора это обычно папка, скрывающаяся за переменной окружения `LUA_PATH`;
-  2. файл `pb.dll` находится в директории подключаемых библиотек вашего Lua-интерпретатора. В случае с QUIK это папка `%PATH_TO_QUIK%/Include/protobuf/`, в случае standalone-интерпретатора это обычно папка, скрывающаяся за переменной окружения `LUA_CPATH`.
+  1. директория `protobuf` из инструмента `protobuf-lua` находится в директории подключаемых модулей вашего Lua-интерпретатора. В случае с QUIK это папка `%PATH_TO_QUIK%/lua/`, в случае standalone-интерпретатора это обычно директория самого интепретатора.
+  2. файл `pb.dll` находится в директории подключаемых библиотек вашего Lua-интерпретатора. В случае с QUIK это директория `%PATH_TO_QUIK%/Include/protobuf/`, в случае LuaForWindows это директория  `%PATH_TO_LUA%/clibs`.
   <br/>Подробнее об установке `protobuf-lua` в качестве Lua-библиотеки можно прочесть здесь: TO BE DESCRIBED.
 
 Юнит-тесты
@@ -85,6 +89,60 @@ TO BE DESCRIBED
 Самостоятельная сборка библиотек
 --------
 ### protobuf-lua
-TO BE DESCRIBED
+  #### Необходимые инструменты
+  Для того, чтобы определиться со списком необходимых инструментов, нужно понять, что мы будем делать. Конечной задачей всех манипуляций является получение DLL-файла, к которому будет обращаться Lua-интерпретатор при использовании Lua-библиотеки `protobuf-lua`. Исходный код целевого файла находится в файле `protobuf-lua/protobuf/pb.c`. Заглядывая в этот файл, видим, что там подключаются заголовки типа `lua.h`, `lualib.h` -- это заголовочные файлы Lua-интерпретатора.
+  <br/>Соответственно, нам нужен компилятор C и заголовочные файлы Lua-интерпретатора (а лучше сразу весь дистрибутив интерпретатора, на всякий случай).
+  * <b>Компилятор C</b>
+    <br/>Воспользуемся `GCC`. 
+    <br/>Для Windows нужно установить MinGW + MSYS: https://sourceforge.net/projects/mingw/files/ (кнопка Download Latest Version). При установке MinGW не забудьте выбрать пункт установки MSYS. MinGW уже содержит в себе GCC.
+  * <b>Lua-интерпретатор</b>
+    * <b>standalone</b>
+      <br/>Для Windows Lua-интепретатор можно взять, например, отсюда: https://github.com/rjpcomputing/luaforwindows/releases.
+    * <b>embedded</b>
+      <br/>Lua-интерпретатор можно установить в составе менеджера пакетов <b>LuaRocks</b>. Подробнее: TO BE DESCRIBED.
+      
+  #### Компиляция DLL
+  Использовался GCC следующей версии:
+  ```
+  $ gcc --version
+  gcc.exe (MinGW.org GCC-6.3.0-1) 6.3.0
+  ```
+  1. В терминале MSYS переместиться в папку `protobuf-lua/protobuf`, где находится файл `pb.c`;
+  
+  2. Чтобы файл скомпилировался под Windows, нужно убрать/закомментировать строчки 23-33:
+  ```C
+  #if defined(_ALLBSD_SOURCE) || defined(__APPLE__)
+  #include <machine/endian.h>
+  #else
+  #include <endian.h>
+  #endif
+  ```
+    
+  Эти строчки можно убрать безболезненно, т.к. процессоры архитектуры x86 и amd64 имеют little endianness, так что препроцессор не вставит функции из `endian.h`, которые используются далее в файле, в конечный код.
+  
+  3. Получить объектный файл: `gcc -O3 -I%PATH_TO_LUA%/include -с pb.c`, где %PATH_TO_LUA% -- путь до дистрибутива интерпретатора Lua.
+  
+  Пример: `gcc -O3 -ID:/programs/LuaRocks/include -с pb.c`
+  
+  4. Получить DLL: `gcc -shared -o pb.dll pb.o -L%libraries_folder% -l%lua_library%`, где `%libraries_folder%` -- папка с .dll-библиотеками Lua, `%lua_library%` -- имя .dll-библиотеки Lua.
+	
+		Пример:
+		* `%libraries_folder%` -- `D:/QUIK`
+		* `%lua_library%` -- `qlua`
+		* Итого: `gcc -shared -o pb.dll pb.o -LD:/QUIK -lqlua`
+
+		Линковать лучше с прокси-библиотекой Lua (`qlua.dll`), которая поставляется в коробке с QUIK. Не уверен, что если слинковаться с DLL из, например, Lua for Windows, или с той, что поставляется с LuaRocks, то всё будет работать. Линковка с прокси-библиотекой lua5.1.dll, которая находится в корне QUIK, технически осуществима, но на деле при запуске скрипта происходит ошибка из-за того, что pd.dll вызовет загрузку lua5.1.dll, которая не загружается по умолчанию, и чтобы её загрузить, загрузчик начнёт рыться в системных путях. У меня в системных путях никакой lua5.1.dll не было, от того и возникала ошибка. Линковка с qlua.dll не вызывает таких проблем, т.к. эта библиотека на момент загрузки pb.dll уже загружена терминалом.
+  
+  #### Установка в Lua-интерпретатор
+  В сущности, нужно проделать два шага:
+  1. Директорию `protobuf` с .lua-файлами библиотеки поместить в место, откуда Lua-интерпретатор резолвит Lua-модули, загружаемые директивой `require`.
+  2. Файл `pb.dll` обернуть в директорию `protobuf`, и положить эту директорию в место, откуда Lua-интерпретатор резолвит бинарные модули (dll, lib, so, a и т.д), загружаемые директивой `require`.
+  ##### QUIK
+  1. Директорию `protobuf` с .lua-файлами библиотеки, находящуюся в директории `protobuf-lua`, поместить в `%PATH_TO_QUIK%/lua/`;
+  2. Файл `pb.dll` нужно поместить в директорию `%PATH_TO_QUIK%/Include/protobuf/` , где `%PATH_TO_QUIK%` -- путь до терминала QUIK (например, `D:/QUIK`). Если папки `Include` нет, необходимо её создать.
+  ##### LuaForWindows
+  1. Директорию `protobuf` с .lua-файлами библиотеки, находящуюся в директории `protobuf-lua`, поместить в директорию c Lua-интерпретатором.
+  2. Файл `pb.dll` нужно поместить в директорию `%PATH_TO_LUA%/clibs/protobuf`, где `PATH_TO_LUA` -- путь до директории с Lua-интерпретатором.
+  
 ### lzmq
 TO BE DESCRIBED
