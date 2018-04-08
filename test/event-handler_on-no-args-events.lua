@@ -12,7 +12,6 @@ describe("impl.event-handler", function()
     { event = qlua_events.EventType.PUBLISHER_ONLINE, name = "PUBLISHER_ONLINE" },
     { event = qlua_events.EventType.PUBLISHER_OFFLINE, name = "PUBLISHER_OFFLINE" },
     { event = qlua_events.EventType.ON_CLOSE, name = "ON_CLOSE" },
-    { event = qlua_events.EventType.ON_CONNECTED, name = "ON_CONNECTED" },
     { event = qlua_events.EventType.ON_DISCONNECTED, name = "ON_DISCONNECTED" },
     { event = qlua_events.EventType.ON_CLEAN_UP, name = "ON_CLEAN_UP" }
   }

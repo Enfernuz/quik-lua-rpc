@@ -24,7 +24,7 @@ describe("The function impl.event-handler", function()
 
   describe("WHEN unknown event type provided", function()
     
-    local qlua_events = require("messages.qlua_events_pb")  
+    local qlua_events = require("qlua.rpc.qlua_events_pb")  
     
     local known_event_types
     local unknown_event_type
