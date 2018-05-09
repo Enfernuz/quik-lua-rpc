@@ -2,6 +2,8 @@ local scriptPath = getScriptPath()
 
 package.path = scriptPath .. '/?.lua;' .. package.path
 
+local string = string
+
 local zmq = require("lzmq")
 local zmq_poller = require("lzmq.poller")
 local zap = require("auth.zap")
@@ -27,23 +29,35 @@ local initialized = false
 local function pub_poll_out_callback()
 end
 
+local function send_response(response, socket)
+  local ok, err = pcall(function()
+      local msg = zmq.msg_init_data( response:SerializeToString() )
+      msg:send(socket)
+  end)
+  -- if not ok then (log the error somehow, maybe to a file...) end
+end
+
 local function create_rpc_poll_in_callback(socket)
   
   return function()
-    
-    local msg_request = zmq.msg_init()
-
-    local ok, ret = pcall( function() return msg_request:recv(socket) end)
-    if ok and not (ret == nil or ret == -1) then
-      local request = qlua.RPC.Request()
-      request:ParseFromString( ret:data() )
-        
-      local response = request_handler:handle(request)
-        
-      local msg_response = zmq.msg_init_data( response:SerializeToString() )
-      ok = pcall(function() msg_response:send(socket) end)
-        -- if not ok then (log error somehow...) end
+  
+    local ok, err = pcall(function()
+      local msg_request = zmq.msg_init()
+      local recv = msg_request:recv(socket)
+      if not (recv == nil or recv == -1) then
+        local request = qlua.RPC.Request()
+        request:ParseFromString( recv:data() )
+        send_response(request_handler:handle(request), socket)
       end
+    end)
+    
+    if not ok then
+      local response = qlua.RPC.Response()
+      -- TODO: set the response type to ERROR or something like that
+      response.is_error = true
+      response.result = string.format("Ошибка при обработке входящего запроса: '%s'.", err)
+      send_response(response, socket)
+    end
   end
 end
 
