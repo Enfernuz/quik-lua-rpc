@@ -192,57 +192,58 @@ https://github.com/jedisct1/libsodium/releases/download/1.0.16/libsodium-1.0.16.
 
 #### Разбираемся с каждым шагом подробно
 ##### Сборка libsodium
-1. Открываем проект `libsodium` в Visual Studio;
-2. Выбираем желаемую конфигурацию: `Release` для получения статической (.lib) библиотеки или `ReleaseDLL` для динамической (.dll);
-![Выбор конфигурации](https://i.imgur.com/OnSSYRj.png "Выбор конфигурации")
+1. Открываем проект `libsodium` в Visual Studio.
+2. Выбираем желаемую конфигурацию: `Release` для получения статической (.lib) библиотеки или `ReleaseDLL` для динамической (.dll):<br/>
+![Выбор конфигурации](https://i.imgur.com/OnSSYRj.png "Выбор конфигурации")<br/>
 3. Выбираем Runtime Library: `/MT` или `/MD`. Что выбрать -- вопрос философский. В большинстве случаев рекомендуется `/MD` (кстати, именно из-за него нужно будет ставить `VC++ redistributable package` на систему с QUIK).
-Подробнее про эти флаги можно прочитать, например, здесь:
-https://msdn.microsoft.com/en-us/library/2kzt1wy3.aspx
-https://social.msdn.microsoft.com/Forums/en-US/9474efb9-49cd-46e1-8935-ee2bebe95203/difference-in-mt-and-md-run-time-lib-setting?forum=vcgeneral (пост *paercebal*)
-https://stackoverflow.com/questions/757418/should-i-compile-with-md-or-mt
-![Выбор RTL](https://i.imgur.com/feEsCaa.png "Выбор RTL")
-4. Запускаем сборку проекта. Собирается не мгновенно -- потерпите (хотя, при выборе флага Runtime Library `/MD` собирается быстро, так как валятся тесты :) ).
-![Сборка](https://i.imgur.com/pHxlsJd.png "Сборка")
-5. Если всё прошло успешно (так ведь?), то на выходе получится файл библиотеки. Если ничего не настраивали, то искать его нужно в папке проекта. Пример:
-![Расположение файла библиотеки](https://i.imgur.com/Ueu6zEH.png "Расположение файла библиотеки")
+Подробнее про эти флаги можно прочитать, например, здесь:<br/>
+https://msdn.microsoft.com/en-us/library/2kzt1wy3.aspx<br/>
+https://social.msdn.microsoft.com/Forums/en-US/9474efb9-49cd-46e1-8935-ee2bebe95203/difference-in-mt-and-md-run-time-lib-setting?forum=vcgeneral (пост *paercebal*)<br/>
+https://stackoverflow.com/questions/757418/should-i-compile-with-md-or-mt<br/>
+![Выбор RTL](https://i.imgur.com/feEsCaa.png "Выбор RTL")<br/>
+4. Запускаем сборку проекта. Собирается не мгновенно -- потерпите (хотя, при выборе флага Runtime Library `/MD` собирается быстро, так как валятся тесты :) ).<br/>
+![Сборка](https://i.imgur.com/pHxlsJd.png "Сборка")<br/>
+5. Если всё прошло успешно (так ведь?), то на выходе получится файл библиотеки. Если ничего не настраивали, то искать его нужно в папке проекта. Пример:<br/>
+![Расположение файла библиотеки](https://i.imgur.com/Ueu6zEH.png "Расположение файла библиотеки")<br/>
 При сборке .dll (конфигурация `ReleaseDLL`) файл .lib тоже будет валяться неподалёку, однако будет значительно худее того .lib, который собирается в конфигурации `Release`. Это т.н. библиотека импорта (подробнее https://stackoverflow.com/questions/3573475/how-does-the-import-library-work-details).
 
 ##### Сборка libzmq
-1. Открываем проект `libzmq` в Visual Studio. Солюшены для Visual Studio гнездятся по пути `%libzmq_folder%/builds/msvc/`. Выбирайте подходящую для Вашей версии Visual Studio директорию. Более новые версии Visual Studio могут собирать проекты, созданные в более старых. Насчёт наоборот не уверен.
-![Расположение проектов MSVC](https://i.imgur.com/vZlp3rI.png "Расположение проектов MSVC")
+1. Открываем проект `libzmq` в Visual Studio. Солюшены для Visual Studio гнездятся по пути `%libzmq_folder%/builds/msvc/`. Выбирайте подходящую для Вашей версии Visual Studio директорию. Более новые версии Visual Studio могут собирать проекты, созданные в более старых. Насчёт наоборот не уверен.<br/>
+![Расположение проектов MSVC](https://i.imgur.com/vZlp3rI.png "Расположение проектов MSVC")<br/>
 2. Если открыли проект от более старой Visual Studio, то Вам может быть предложено обновить тулсет и платформу проекта до тех, которые используются в Вашей Visual Studio. Обновляйте по своему усмотрению. Однако учтите, что если оставить всё как есть, то в Вашей Visual Studio может не оказаться нужной версии тулсета и SDK (где их взять и как поставить -- отдельная песня). 
-Вот пример того, что предлагает Visual Studio 2017 при открытии проекта из директории `vs2015`:
-![Обновление инструментов](https://i.imgur.com/6VbcTz0.png "Обновление инструментов")
-3. Заходим в свойства модуля `libzmq`.
-![Свойства libzmq](https://i.imgur.com/IuM1uEb.png "Свойства libzmq")
+Вот пример того, что предлагает Visual Studio 2017 при открытии проекта из директории `vs2015`:<br/>
+![Обновление инструментов](https://i.imgur.com/6VbcTz0.png "Обновление инструментов")<br/>
+3. Заходим в свойства модуля `libzmq`.<br/>
+![Свойства libzmq](https://i.imgur.com/IuM1uEb.png "Свойства libzmq")<br/>
 4. Опционально можем выбрать другой тулсет и/или SDK. Если собираем для Windows XP, то выбор тулсета с суффиксом `_xp` <b>обязателен</b>.
-Версия тулсета помимо прочего определяет то, какую версию `VC++ redistributable package` надо будет поставить на систему с QUIK.
-![Выбор тулсета](https://i.imgur.com/aEmv1Tx.png "Выбор тулсета")
-Версия SDK помимо прочего определяет, на какой системе сможет работать собранная библиотека. Версии Windows обратно совместимы, то есть, на Windows 10 пойдут библиотеки, собранные с SDK 7.1 и 8.1, но не наоборот. Windows XP Service Pack 3 может использовать библиотеки, собранные с Windows SDK 7.1, но не выше. Таким образом, для сборки под Windows XP нужно будет поставить Windows SDK 7.1.
-![Выбор платформы](https://i.imgur.com/CpjI2Ql.png "Выбор платформы")
+Версия тулсета помимо прочего определяет то, какую версию `VC++ redistributable package` надо будет поставить на систему с QUIK.<br/>
+![Выбор тулсета](https://i.imgur.com/aEmv1Tx.png "Выбор тулсета")<br/>
+Версия SDK помимо прочего определяет, на какой системе сможет работать собранная библиотека. Версии Windows обратно совместимы, то есть, на Windows 10 пойдут библиотеки, собранные с SDK 7.1 и 8.1, но не наоборот. Windows XP Service Pack 3 может использовать библиотеки, собранные с Windows SDK 7.1, но не выше. Таким образом, для сборки под Windows XP нужно будет поставить Windows SDK 7.1.<br/>
+![Выбор платформы](https://i.imgur.com/CpjI2Ql.png "Выбор платформы")<br/>
 Если интересно, пример обзора кросс-компиляции под различные версии Windows можно посмотреть здесь: 
 https://poweruser.blog/visual-studio-2017-compile-against-older-visual-c-c-runtimes-372519fe1400
-5. Заходим в `ZMQ Options` и отключаем использование `Tweet NaCl` (т.к. вместо него мы будем использовать `sodium`).
-![Отключение NaCl](https://i.imgur.com/yMFf7Co.png "Отключение NaCl")
-![Включение sodium](https://i.imgur.com/TZ6K6Bp.png "Включение sodium")
-6. Следующий шаг: добавить директорию с заголовочными файлами от `libsodium` в пути компилятора.
-![Заголовочные файлы sodium](https://i.imgur.com/3NcLVjN.png "Заголовочные файлы sodium")
-Она находится в проекте `libsodium`: `src/libsodium/include` и `src/libsodium/include/sodium`:
-![Заголовочные файлы sodium](https://i.imgur.com/sAH1RAo.png "Заголовочные файлы sodium")
+5. Заходим в `ZMQ Options` и отключаем использование `Tweet NaCl` (т.к. вместо него мы будем использовать `sodium`).<br/>
+![Отключение NaCl](https://i.imgur.com/yMFf7Co.png "Отключение NaCl")<br/>
+![Включение sodium](https://i.imgur.com/TZ6K6Bp.png "Включение sodium")<br/>
+6. Следующий шаг: добавить директорию с заголовочными файлами от `libsodium` в пути компилятора.<br/>
+![Заголовочные файлы sodium](https://i.imgur.com/3NcLVjN.png "Заголовочные файлы sodium")<br/>
+Она находится в проекте `libsodium`: `src/libsodium/include` и `src/libsodium/include/sodium`:<br/>
+![Заголовочные файлы sodium](https://i.imgur.com/sAH1RAo.png "Заголовочные файлы sodium")<br/>
 7. Теперь добавим саму библиотеку `libsodium` в пути линкера.
-![Линковка sodium](https://i.imgur.com/9G4IQZI.png "Линковка sodium")
-Укажем файл библиотеки (не важно, как Вы собирали `libsodium` -- линковаться мы будем с .lib-файлом):
-![Линковка sodium](https://i.imgur.com/XNthqA9.png "Линковка sodium")
-Укажем линкеру, где искать этот файл:
-![Линковка sodium](https://i.imgur.com/P4nfRyd.png "Линковка sodium")
-Директория с библиотекой находится там, куда мы её (библиотеку) собрали на шаге сборки `libsodium`. Пример со статической библиотекой:
-![Линковка sodium](https://i.imgur.com/D0uLBdc.png "Линковка sodium")
-В случае, если Вы собирали `libsodium` как статическую библиотеку, нужно сообщить об этом препроцессору, 
-![Линковка sodium](https://i.imgur.com/vWIgC8A.png "Линковка sodium")
-добавив директиву `SODIUM_STATIC`:
-![Линковка sodium](https://i.imgur.com/6AP0Yv6.png "Линковка sodium")
-8. Выбираем Runtime Library. Лучше выбрать тот же флаг RTL, который был выбран при сборке `libsodium`.
-![Выбор RTL](https://i.imgur.com/CnlOgp1.png "Выбор RTL")
+![Линковка sodium](https://i.imgur.com/9G4IQZI.png "Линковка sodium")<br/>
+Укажем файл библиотеки (не важно, как Вы собирали `libsodium` -- линковаться мы будем с .lib-файлом):<br/>
+![Линковка sodium](https://i.imgur.com/XNthqA9.png "Линковка sodium")<br/>
+Укажем линкеру, где искать этот файл:<br/>
+![Линковка sodium](https://i.imgur.com/P4nfRyd.png "Линковка sodium")<br/>
+Директория с библиотекой находится там, куда мы её (библиотеку) собрали на шаге сборки `libsodium`. Пример со статической библиотекой:<br/>
+![Линковка sodium](https://i.imgur.com/D0uLBdc.png "Линковка sodium")<br/>
+
+В случае, если Вы собирали `libsodium` как статическую библиотеку, нужно сообщить об этом препроцессору, <br/>
+![Линковка sodium](https://i.imgur.com/vWIgC8A.png "Линковка sodium")<br/>
+добавив директиву `SODIUM_STATIC`:<br/>
+![Линковка sodium](https://i.imgur.com/6AP0Yv6.png "Линковка sodium")<br/>
+8. Выбираем Runtime Library. Лучше выбрать тот же флаг RTL, который был выбран при сборке `libsodium`.<br/>
+![Выбор RTL](https://i.imgur.com/CnlOgp1.png "Выбор RTL")<br/>
 9. Запускаем сборку проекта.
-10. Если сборка прошла успешно, то на выходе получится файл библиотеки. Пример с DLL: 
-![После сборки](https://i.imgur.com/y9GUo90.png "После сборки")
+10. Если сборка прошла успешно, то на выходе получится файл библиотеки. Пример с DLL:<br/>
+![После сборки](https://i.imgur.com/y9GUo90.png "После сборки")<br/>
