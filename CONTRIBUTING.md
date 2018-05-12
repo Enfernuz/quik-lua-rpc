@@ -191,7 +191,7 @@ https://github.com/jedisct1/libsodium/releases/download/1.0.16/libsodium-1.0.16.
 4. Установленную `lzmq` переносим в директорию терминала QUIK.
 
 #### Разбираемся с каждым шагом подробно
-##### Сборка libsodium
+##### Шаг 1: Сборка libsodium
 1. Открываем проект `libsodium` в Visual Studio.
 2. Выбираем желаемую конфигурацию: `Release` для получения статической (.lib) библиотеки или `ReleaseDLL` для динамической (.dll):<br/>
 ![Выбор конфигурации](https://i.imgur.com/OnSSYRj.png "Выбор конфигурации")<br/>
@@ -207,7 +207,7 @@ https://stackoverflow.com/questions/757418/should-i-compile-with-md-or-mt<br/>
 ![Расположение файла библиотеки](https://i.imgur.com/Ueu6zEH.png "Расположение файла библиотеки")<br/>
 При сборке .dll (конфигурация `ReleaseDLL`) файл .lib тоже будет валяться неподалёку, однако будет значительно худее того .lib, который собирается в конфигурации `Release`. Это т.н. библиотека импорта (подробнее https://stackoverflow.com/questions/3573475/how-does-the-import-library-work-details).
 
-##### Сборка libzmq
+##### Шаг 2: Сборка libzmq
 1. Открываем проект `libzmq` в Visual Studio. Солюшены для Visual Studio гнездятся по пути `%libzmq_folder%/builds/msvc/`. Выбирайте подходящую для Вашей версии Visual Studio директорию. Более новые версии Visual Studio могут собирать проекты, созданные в более старых. Насчёт наоборот не уверен.<br/>
 ![Расположение проектов MSVC](https://i.imgur.com/vZlp3rI.png "Расположение проектов MSVC")<br/>
 2. Если открыли проект от более старой Visual Studio, то Вам может быть предложено обновить тулсет и платформу проекта до тех, которые используются в Вашей Visual Studio. Обновляйте по своему усмотрению. Однако учтите, что если оставить всё как есть, то в Вашей Visual Studio может не оказаться нужной версии тулсета и SDK (где их взять и как поставить -- отдельная песня). 
@@ -247,3 +247,9 @@ https://poweruser.blog/visual-studio-2017-compile-against-older-visual-c-c-runti
 9. Запускаем сборку проекта.
 10. Если сборка прошла успешно, то на выходе получится файл библиотеки. Пример с DLL:<br/>
 ![После сборки](https://i.imgur.com/y9GUo90.png "После сборки")<br/>
+
+##### Шаг 3: Установка lzmq с помощью LuaRocks
+TO BE DESCRIBED
+
+##### Шаг 4: Установка lzmq в QUIK
+TO BE DESCRIBED
