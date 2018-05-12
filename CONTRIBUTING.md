@@ -248,7 +248,20 @@ https://poweruser.blog/visual-studio-2017-compile-against-older-visual-c-c-runti
 ![После сборки](https://i.imgur.com/y9GUo90.png "После сборки")<br/>
 
 ##### Шаг 3: Установка lzmq с помощью LuaRocks
-TO BE DESCRIBED
+Необходимые инструменты:<br/>
+1. `LuaRocks`<br/>
+2. `Developer Command Prompt for VS %YOUR_VISUAL_STUDIO_VERSION%` -- командная строка разработки от Visual Studio.
+Можно её не ставить, но тогда нужно убедиться, что директория с компилятором `cl` и линкером `link` от Visual Studio находится в `PATH`.<br/>
+
+Дальнейшие шаги:<br/>
+1. В `Developer Command Prompt` перейти по пути `%PATH_TO_LUAROCKS%` (путь, куда установили LuaRocks).<br/>
+2. Выполнить команду: <br/>
+`luarocks install lzmq %LZMQ_VERSION% ZMQ_INCDIR="%PATH_TO_ZMQ_SOURCES%/include" ZMQ_LIBDIR="%PATH_TO_ZMQ_BINARIES%"`, где `%LZMQ_VERSION%` -- желаемая версия `lzmq` (если не указывать, то будет собираться последняя имеющаяся), `%PATH_TO_ZMQ_SOURCES%` -- директория с исходнными кодами библиотеки ZMQ, `%PATH_TO_ZMQ_BINARIES%` - директория, где находится библиотека импорта `libzmq.lib` (её мы получили на шаге 2).<br/>
+Пример:<br/>
+![lzmq via LuaRocks](https://i.imgur.com/xTdzaSW.png "lzmq via LuaRocks")<br/>
+Список версий `lzmq` можно посмотреть здесь: https://luarocks.org/modules/moteus/lzmq
+
+TO BE CONTINUED
 
 ##### Шаг 4: Установка lzmq в QUIK
 TO BE DESCRIBED
