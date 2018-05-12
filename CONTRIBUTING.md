@@ -259,9 +259,13 @@ https://poweruser.blog/visual-studio-2017-compile-against-older-visual-c-c-runti
 `luarocks install lzmq %LZMQ_VERSION% ZMQ_INCDIR="%PATH_TO_ZMQ_SOURCES%/include" ZMQ_LIBDIR="%PATH_TO_ZMQ_BINARIES%"`, где `%LZMQ_VERSION%` -- желаемая версия `lzmq` (если не указывать, то будет собираться последняя имеющаяся), `%PATH_TO_ZMQ_SOURCES%` -- директория с исходнными кодами библиотеки ZMQ, `%PATH_TO_ZMQ_BINARIES%` - директория, где находится библиотека импорта `libzmq.lib` (её мы получили на шаге 2).<br/>
 Пример:<br/>
 ![lzmq via LuaRocks](https://i.imgur.com/xTdzaSW.png "lzmq via LuaRocks")<br/>
-Список версий `lzmq` можно посмотреть здесь: https://luarocks.org/modules/moteus/lzmq
-
-TO BE CONTINUED
+Список версий `lzmq` можно посмотреть здесь: https://luarocks.org/modules/moteus/lzmq<br/>
+<br/>
+После установки `lzmq` расположится в двух местах:</br>
+1. .dll-файлы в `%PATH_TO_LUAROCKS%/systree/lib/lua/5.1` (путь после `%PATH_TO_LUAROCKS%` у вас может отличаться, если при установке LuaRocks вы использовали опцию `/TREE %dir%`).<br/>
+2. .lua-файлы в `%PATH_TO_LUAROCKS%/systree/share/lua/5.1`.<br/>
 
 ##### Шаг 4: Установка lzmq в QUIK
-TO BE DESCRIBED
+1. Директорию `lzmq` и файл `lzmq.dll` из `%PATH_TO_LUAROCKS%/systree/lib/lua/5.1` скопировать в `%PATH_TO_QUIK%/Include`.<br/>
+2. Директорию `lzmq` из `%PATH_TO_LUAROCKS%/systree/share/lua/5.1` скопировать в `%PATH_TO_QUIK%/lua`.<br/>
+3. Файл `libzmq.dll`, полученный на шаге сборки `libzmq` скопировать в `%PATH_TO_QUIK%`. Если `libzmq.dll` Вы собирали с динамической линковкой к `libsodium`, то файл `libsodium.dll` также нужно скопировать в `%PATH_TO_QUIK%`.<br/>
