@@ -192,7 +192,7 @@ https://github.com/jedisct1/libsodium/releases/download/1.0.16/libsodium-1.0.16.
 
 #### Разбираемся с каждым шагом подробно
 ##### Шаг 1: Сборка libsodium
-1. Открываем проект `libsodium` в Visual Studio.
+1. Открываем проект `libsodium` в Visual Studio.<br/>
 2. Выбираем желаемую конфигурацию: `Release` для получения статической (.lib) библиотеки или `ReleaseDLL` для динамической (.dll):<br/>
 ![Выбор конфигурации](https://i.imgur.com/OnSSYRj.png "Выбор конфигурации")<br/>
 3. Выбираем Runtime Library: `/MT` или `/MD`. Что выбрать -- вопрос философский. В большинстве случаев рекомендуется `/MD` (кстати, именно из-за него нужно будет ставить `VC++ redistributable package` на систему с QUIK).
@@ -221,7 +221,7 @@ https://stackoverflow.com/questions/757418/should-i-compile-with-md-or-mt<br/>
 Версия SDK помимо прочего определяет, на какой системе сможет работать собранная библиотека. Версии Windows обратно совместимы, то есть, на Windows 10 пойдут библиотеки, собранные с SDK 7.1 и 8.1, но не наоборот. Windows XP Service Pack 3 может использовать библиотеки, собранные с Windows SDK 7.1, но не выше. Таким образом, для сборки под Windows XP нужно будет поставить Windows SDK 7.1.<br/>
 ![Выбор платформы](https://i.imgur.com/CpjI2Ql.png "Выбор платформы")<br/>
 Если интересно, пример обзора кросс-компиляции под различные версии Windows можно посмотреть здесь: 
-https://poweruser.blog/visual-studio-2017-compile-against-older-visual-c-c-runtimes-372519fe1400
+https://poweruser.blog/visual-studio-2017-compile-against-older-visual-c-c-runtimes-372519fe1400<br/>
 5. Заходим в `ZMQ Options` и отключаем использование `Tweet NaCl` (т.к. вместо него мы будем использовать `sodium`).<br/>
 ![Отключение NaCl](https://i.imgur.com/yMFf7Co.png "Отключение NaCl")<br/>
 ![Включение sodium](https://i.imgur.com/TZ6K6Bp.png "Включение sodium")<br/>
@@ -229,7 +229,7 @@ https://poweruser.blog/visual-studio-2017-compile-against-older-visual-c-c-runti
 ![Заголовочные файлы sodium](https://i.imgur.com/3NcLVjN.png "Заголовочные файлы sodium")<br/>
 Она находится в проекте `libsodium`: `src/libsodium/include` и `src/libsodium/include/sodium`:<br/>
 ![Заголовочные файлы sodium](https://i.imgur.com/sAH1RAo.png "Заголовочные файлы sodium")<br/>
-7. Теперь добавим саму библиотеку `libsodium` в пути линкера.
+7. Теперь добавим саму библиотеку `libsodium` в пути линкера.<br/>
 ![Линковка sodium](https://i.imgur.com/9G4IQZI.png "Линковка sodium")<br/>
 Укажем файл библиотеки (не важно, как Вы собирали `libsodium` -- линковаться мы будем с .lib-файлом):<br/>
 ![Линковка sodium](https://i.imgur.com/XNthqA9.png "Линковка sodium")<br/>
@@ -237,14 +237,13 @@ https://poweruser.blog/visual-studio-2017-compile-against-older-visual-c-c-runti
 ![Линковка sodium](https://i.imgur.com/P4nfRyd.png "Линковка sodium")<br/>
 Директория с библиотекой находится там, куда мы её (библиотеку) собрали на шаге сборки `libsodium`. Пример со статической библиотекой:<br/>
 ![Линковка sodium](https://i.imgur.com/D0uLBdc.png "Линковка sodium")<br/>
-
 В случае, если Вы собирали `libsodium` как статическую библиотеку, нужно сообщить об этом препроцессору, <br/>
 ![Линковка sodium](https://i.imgur.com/vWIgC8A.png "Линковка sodium")<br/>
 добавив директиву `SODIUM_STATIC`:<br/>
 ![Линковка sodium](https://i.imgur.com/6AP0Yv6.png "Линковка sodium")<br/>
 8. Выбираем Runtime Library. Лучше выбрать тот же флаг RTL, который был выбран при сборке `libsodium`.<br/>
 ![Выбор RTL](https://i.imgur.com/CnlOgp1.png "Выбор RTL")<br/>
-9. Запускаем сборку проекта.
+9. Запускаем сборку проекта.<br/>
 10. Если сборка прошла успешно, то на выходе получится файл библиотеки. Пример с DLL:<br/>
 ![После сборки](https://i.imgur.com/y9GUo90.png "После сборки")<br/>
 
