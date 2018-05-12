@@ -232,7 +232,7 @@ https://poweruser.blog/visual-studio-2017-compile-against-older-visual-c-c-runti
 7. Теперь добавим саму библиотеку `libsodium` в пути линкера.
 ![Линковка sodium](https://i.imgur.com/9G4IQZI.png "Линковка sodium")
 Укажем файл библиотеки (не важно, как Вы собирали `libsodium` -- линковаться мы будем с .lib-файлом):
-![Линковка sodium](https://i.imgur.com/XNthqA9.png"Линковка sodium")
+![Линковка sodium](https://i.imgur.com/XNthqA9.png "Линковка sodium")
 Укажем линкеру, где искать этот файл:
 ![Линковка sodium](https://i.imgur.com/P4nfRyd.png "Линковка sodium")
 Директория с библиотекой находится там, куда мы её (библиотеку) собрали на шаге сборки `libsodium`. Пример со статической библиотекой:
@@ -241,7 +241,7 @@ https://poweruser.blog/visual-studio-2017-compile-against-older-visual-c-c-runti
 ![Линковка sodium](https://i.imgur.com/vWIgC8A.png "Линковка sodium")
 добавив директиву `SODIUM_STATIC`:
 ![Линковка sodium](https://i.imgur.com/6AP0Yv6.png "Линковка sodium")
-8. Выбираем Runtime Library. Лучше выбрать тот же флаг RTL, что была выбрана при сборке `libsodium`.
+8. Выбираем Runtime Library. Лучше выбрать тот же флаг RTL, который был выбран при сборке `libsodium`.
 ![Выбор RTL](https://i.imgur.com/CnlOgp1.png "Выбор RTL")
 9. Запускаем сборку проекта.
 10. Если сборка прошла успешно, то на выходе получится файл библиотеки. Пример с DLL: 
