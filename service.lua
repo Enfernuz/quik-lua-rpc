@@ -55,7 +55,7 @@ local function create_rpc_poll_in_callback(socket)
       local response = qlua.RPC.Response()
       -- TODO: set the response type to ERROR or something like that
       response.is_error = true
-      response.result = string.format("Ошибка при обработке входящего запроса: '%s'.", err)
+      response.result = utils.Cp1251ToUtf8( string.format("Ошибка при обработке входящего запроса: '%s'.", err) )
       send_response(response, socket)
     end
   end
