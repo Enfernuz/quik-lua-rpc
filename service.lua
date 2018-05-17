@@ -10,7 +10,7 @@ local zap = require("auth.zap")
 local qlua = require("qlua.api")
 local qlua_events = require("qlua.rpc.qlua_events_pb")
 local config_parser = require("utils.config_parser")
-local request_handler = require("impl.request-handler")
+local request_handler = require("impl.new-request-handler")
 local event_handler = require("impl.event-handler")
 local utils = require("utils.utils")
 local json = require("utils.json")
@@ -27,57 +27,53 @@ local poller = nil
 local is_running = false
 local initialized = false
 
+local request_handlers = {
+  -- initialized on demand
+  json = nil,
+  protobuf = nil
+}
+
 local function pub_poll_out_callback()
   -- Polling out is not implemented at the moment: messages are being sent regardless of the POLLOUT event.
 end
 
-local function send_response(response, socket)
+local function send_response(data, socket)
   local ok, err = pcall(function()
-      local msg = zmq.msg_init_data( response:SerializeToString() )
+      local msg = zmq.msg_init_data(data)
       msg:send(socket)
   end)
   -- if not ok then (log the error somehow, maybe to a file...) end
 end
 
-local function create_rpc_poll_in_callback(socket, message_protocol)
+local function create_rpc_poll_in_callback(socket, serde_protocol)
   
-  -- we duplicate the code for the sake of not doing the check for message_protocol every time a message comes in
-  if "json" == string.lower(message_protocol) then
+  local handler
+  if "json" == string.lower(serde_protocol) then
+    -- TODO: remove this message
     message("JSON message protocol detected")
-    return function()
-      local ok, err = pcall(function()
-        local msg_request = zmq.msg_init()
-        local recv = msg_request:recv(socket)
-        if not (recv == nil or recv == -1) then
-          local data = recv:data()
-          message(data)
-          --local request = json.decode( recv:data() )
-          --message(request)
-          --request:ParseFromString( recv:data() )
-          local res = zmq.msg_init_data("biba")
-          res:send(socket)
-        else
-          if recv == nil then message("recv is nil") end
-        end
-      end)
-    
-      if not ok then
-        message("not ok: " .. err)
-      end
+    if not request_handlers.json then
+      request_handlers.json = request_handler:new("json")
     end
-  else 
-    return function()
+    handler = request_handlers.json
+  else -- TODO: make explicit check on protobuf
+    -- TODO: remove this message
+    message("PROTOBUF message protocol detected")
+    if not request_handlers.protobuf then
+      request_handlers.protobuf = request_handler:new("protobuf")
+    end
+    handler = request_handlers.protobuf
+  end
   
-      local ok, err = pcall(function()
+  return function ()
+    local ok, err = pcall(function()
         local msg_request = zmq.msg_init()
         local recv = msg_request:recv(socket)
         if not (recv == nil or recv == -1) then
-          local request = qlua.RPC.Request()
-          request:ParseFromString( recv:data() )
-          send_response(request_handler:handle(request), socket)
+          send_response(handler:handle(recv:data()), socket)
         end
       end)
       
+      -- TODO: make the error response depending on the serde protocol being used
       if not ok then
         local response = qlua.RPC.Response()
         -- TODO: set the response type to ERROR or something like that
@@ -85,10 +81,7 @@ local function create_rpc_poll_in_callback(socket, message_protocol)
         response.result = string.format("Ошибка при обработке входящего запроса: '%s'.", err)
         send_response(response, socket)
       end
-    end
   end
-  
-  
 end
 
 local function publish(event_type, event_data)
@@ -117,6 +110,7 @@ local function publish(event_type, event_data)
   end
 end
 
+-- TODO: make the publishing depending on the serde protocol being used
 local function create_event_callbacks()
   
   return {
@@ -226,7 +220,7 @@ local function create_socket(endpoint)
   local sockets
   if endpoint.type == "RPC" then
     socket = zmq_ctx:socket(zmq.REP)
-    poller:add(socket, zmq.POLLIN, create_rpc_poll_in_callback(socket, endpoint.message_protocol))
+    poller:add(socket, zmq.POLLIN, create_rpc_poll_in_callback(socket, endpoint.serde_protocol))
     sockets = rpc_sockets
   elseif endpoint.type == "PUB" then
     socket = zmq_ctx:socket(zmq.PUB)

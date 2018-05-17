@@ -2,7 +2,7 @@
   "endpoints": [
     {
       "type": "RPC", 
-      "message_protocol": "json",
+      "serde_protocol": "protobuf",
       "active": true, 
       "address": {
         "host": "127.0.0.1",
