@@ -1,16 +1,23 @@
 -- Lua functions
-local error = assert(error, "The error function is missing.")
-local string = assert(string, "The string function is missing.")
-local pcall = assert(pcall, "The pcall function is missing.")
-local pairs = assert(pairs, "The pairs function is missing.")
-local tostring = assert(tostring, "The tostring function is missing.")
+local error = assert(error, "Функция 'error' не найдена.")
+local string = assert(string, "Taблица 'string' не найдена.")
+local pcall = assert(pcall, "Функция 'pcall' не найдена.")
+local pairs = assert(pairs, "Функция 'pairs' не найдена.")
+local tostring = assert(tostring, "Функция 'tostring' не найдена.")
+local loadstring = assert(loadstring, "Функция 'loadstring' не найдена.")
 
 -- QLua functions
-local isConnected = assert(isConnected, "The message function is missing.")
-local getScriptPath = assert(getScriptPath, "The getScriptPath function is missing.")
-local getInfoParam = assert(getInfoParam, "The getInfoParam function is missing.")
-local getItem = assert(getItem, "The getItem function is missing.")
-local message = assert(message, "The message function is missing.")
+local isConnected = assert(isConnected, "Функция 'isConnected' не найдена.")
+local getScriptPath = assert(getScriptPath, "Функция 'getScriptPath' не найдена.")
+local getInfoParam = assert(getInfoParam, "Функция 'getInfoParam' не найдена.")
+local getItem = assert(getItem, "Функция 'getItem' не найдена.")
+local message = assert(message, "Функция 'message' не найдена.")
+local sleep = assert(sleep, "Функция 'sleep' не найдена.")
+local getWorkingFolder = assert(getWorkingFolder, "Функция 'getWorkingFolder' не найдена.")
+local PrintDbgStr = assert(PrintDbgStr, "Функция 'PrintDbgStr' не найдена.")
+local getOrderByNumber = assert(getOrderByNumber, "Функция 'getOrderByNumber' не найдена.")
+local getNumberOf = assert(getNumberOf, "Функция 'getNumberOf' не найдена.")
+local SearchItems = assert(SearchItems, "Функция 'SearchItems' не найдена.")
 
 -- Utility modules
 local utils = require("utils.utils")
@@ -67,11 +74,66 @@ module["message"] = function (args)
   return proc_result
 end
 
+module["sleep"] = function (args) 
+  
+  local proc_result = sleep(args.time)
+  
+  if proc_result == nil then
+    error(string.format("Процедура sleep(%d) возвратила nil.", args.time))
+  end
+  
+  return proc_result
+end
+
+module["getWorkingFolder"] = getWorkingFolder
+
+module["PrintDbgStr"] = function (args) 
+  
+  PrintDbgStr(args.s)
+  
+  return nil
+end
+
 module["getItem"] = function (args) 
   
   local proc_result = getItem(args.table_name, args.index)
   
   return to_string_string_table(proc_result)
+end
+
+module["getOrderByNumber"] = function (args) 
+  
+  local t, i = getOrderByNumber(args.class_code, args.order_id)
+  
+  if t == nil then
+    error(string.format("Процедура getOrderByNumber(%s, %d) вернула (nil, nil).", args.class_code, args.order_id))
+  end
+    
+  return {
+    t = t,
+    i = i
+  }
+end
+
+module["getNumberOf"] = function (args) 
+  return getNumberOf(args.table_name) -- returns -1 in case of error
+end
+
+module["SearchItems"] = function (args) 
+  
+  local fn_ctr, error_msg = loadstring("return "..args.fn_def)
+  local result
+  if fn_ctr == nil then 
+    error(string.format("Не удалось распарсить определение функции из переданной строки. Описание ошибки: %s.", error_msg))
+  else
+    if args.params == "" then
+      result = SearchItems(args.table_name, args.start_index, args.end_index == 0 and (getNumberOf(args.table_name) - 1) or args.end_index, fn_ctr()) -- returns nil in case of empty list found or error
+    else 
+      result = SearchItems(args.table_name, args.start_index, args.end_index == 0 and (getNumberOf(args.table_name) - 1) or args.end_index, fn_ctr(), args.params) -- returns nil in case of empty list found or error
+    end
+  end
+  
+  return result
 end
 
 -----
