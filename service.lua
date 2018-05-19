@@ -12,6 +12,7 @@ local qlua_events = require("qlua.rpc.qlua_events_pb")
 local config_parser = require("utils.config_parser")
 local request_handler = require("impl.new-request-handler")
 local event_handler = require("impl.event-handler")
+local procedure_wrappers = require("impl.procedure_wrappers")
 local utils = require("utils.utils")
 local json = require("utils.json")
 local uuid = require("utils.uuid")
@@ -37,7 +38,7 @@ local function pub_poll_out_callback()
   -- Polling out is not implemented at the moment: messages are being sent regardless of the POLLOUT event.
 end
 
-local function send_response(data, socket)
+local function send_data(data, socket)
   local ok, err = pcall(function()
       local msg = zmq.msg_init_data(data)
       msg:send(socket)
@@ -45,19 +46,29 @@ local function send_response(data, socket)
   -- if not ok then (log the error somehow, maybe to a file...) end
 end
 
+local function gen_error_obj (code, msg)
+  
+  local err = {code = code}
+  if msg then 
+    err.message = msg
+  end
+  
+  return err
+end
+
 local function create_rpc_poll_in_callback(socket, serde_protocol)
   
   local handler
   if "json" == string.lower(serde_protocol) then
     -- TODO: remove this message
-    message("JSON message protocol detected")
+    message("DEBUG: JSON message protocol detected")
     if not request_handlers.json then
       request_handlers.json = request_handler:new("json")
     end
     handler = request_handlers.json
   else -- TODO: make explicit check on protobuf
     -- TODO: remove this message
-    message("PROTOBUF message protocol detected")
+    message("DEBUG: PROTOBUF message protocol detected")
     if not request_handlers.protobuf then
       request_handlers.protobuf = request_handler:new("protobuf")
     end
@@ -65,22 +76,51 @@ local function create_rpc_poll_in_callback(socket, serde_protocol)
   end
   
   return function ()
-    local ok, err = pcall(function()
-        local msg_request = zmq.msg_init()
-        local recv = msg_request:recv(socket)
-        if not (recv == nil or recv == -1) then
-          send_response(handler:handle(recv:data()), socket)
+    local ok, res = pcall(function()
+        local recv = zmq.msg_init():recv(socket)
+        local result
+        if recv and recv ~= -1 then
+          
+          -- request deserialization
+          local method, args, id = handler:deserialize_request( recv:data() )
+
+          local response = {id = id}
+          local proc_wrapper = procedure_wrappers[method]
+          if not proc_wrapper then
+            response.error = gen_error_obj(-32601, string.format("QLua-функция с именем '%s' не найдена.", method))
+          else
+            -- procedure call
+            local ok, res = pcall(function() return proc_wrapper(args) end)
+            if ok then
+              response.result = {
+                method = method,
+                data = res
+              }
+            else
+              response.error = gen_error_obj(1, res) -- the err code 1 is for errors inside the QLua functions' wrappers
+            end
+          end
+          
+          result = response
         end
-      end)
-      
-      -- TODO: make the error response depending on the serde protocol being used
-      if not ok then
-        local response = qlua.RPC.Response()
-        -- TODO: set the response type to ERROR or something like that
-        response.is_error = true
-        response.result = string.format("Ошибка при обработке входящего запроса: '%s'.", err)
-        send_response(response, socket)
-      end
+          
+        return result
+    end)
+  
+    local response
+    if ok then
+      if res then response = res end
+    else
+      response = {}
+      response.error = gen_error_obj(-32000, string.format("Ошибка при обработке входящего запроса: '%s'.", res))
+    end
+    
+    if response then
+      -- response serialization
+      local serialized_response = handler:serialize_response(response)
+      -- response sending
+      send_data(serialized_response, socket)
+    end
   end
 end
 

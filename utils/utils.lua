@@ -65,6 +65,16 @@ function module.create_table(pb_map)
   return t
 end
 
+function module.new_put_to_string_string_pb_map(t, pb_map, pb_map_entry_ctr)
+  
+  for k, v in pairs(t) do
+    local entry = pb_map_entry_ctr()
+    entry.key = tostring(k)
+    entry.value = tostring(v)
+    table.sinsert(pb_map, entry)
+  end
+end
+
 function module.put_to_string_string_pb_map(t, pb_map, pb_map_entry_ctr)
   
   for k, v in pairs(t) do

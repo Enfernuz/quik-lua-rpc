@@ -19,7 +19,7 @@ local qlua_procedure_caller = require("impl.qlua-procedure-caller")
 
 local module = {
   
-  _VERSION = '0.2.0'
+  _VERSION = '0.3.0'
 }
 
 local datasources = {}

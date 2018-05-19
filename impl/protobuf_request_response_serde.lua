@@ -6,7 +6,7 @@ local pb_helper = require("impl.protobuf_helper")
 local module = {}
 
 function module.deserialize_request (serialized_request)
-  
+
   local request = qlua.RPC.Request()
   request:ParseFromString(serialized_request)
   
@@ -31,27 +31,25 @@ function module.deserialize_request (serialized_request)
 end
 
 function module.serialize_response (deserialized_response)
-  
+
   local response = qlua.RPC.Response()
-  
-  local proc_type = pb_helper.get_protobuf_procedure_type[deserialized_response.method]
-  if proc_type then
-    response.type = proc_type
-  else
-    error( string.format("There's no protobuf QLua ProcedureType mapped to the function's name  %s", deserialized_response.method) )
-  end
-  
-  if deserialized_response.is_error then
+  local err = deserialized_response.error
+  if err then
     response.is_error = true
-    if deserialized_response.result then
-      response.result = deserialized_response.result
-    else
-      --TODO: maybe set a generic error message
-    end
+    response.result = err.message -- TODO: write the full error object
   else
-    if deserialized_response.result then
-      local object_mapper = pb_helper.get_protobuf_result_object_mapper(deserialized_response.method)
-      response.result = object_mapper(deserialized_response.result):SerializeToString()
+    local result = deserialized_response.result
+    local method = result.method
+    response.type = pb_helper.get_protobuf_procedure_type(method)
+    if not response.type then
+      -- TODO: make the message in Russian
+      error( string.format("Для QLua-функции '%s' не найден соответствующий тип процедуры protobuf.", method) )
+    end
+    
+    local data = result.data
+    if data then
+      local object_mapper = pb_helper.get_protobuf_result_object_mapper(method)
+      response.result = object_mapper(data):SerializeToString()
     end
   end
   
