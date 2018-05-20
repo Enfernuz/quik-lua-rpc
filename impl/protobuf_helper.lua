@@ -4,6 +4,8 @@ local qlua = require("qlua.api")
 local utils = require("utils.utils")
 local struct_factory = require("utils.struct_factory")
 
+local pb = require("pb")
+
 local module = {}
 
 local method_names = {}
@@ -49,14 +51,14 @@ result_object_mappers[method_names[qlua.RPC.ProcedureType.GET_INFO_PARAM]] = fun
 end
 
 -- message
-method_names[qlua.RPC.ProcedureType.MESSAGE] = "message"
-procedure_types[method_names[qlua.RPC.ProcedureType.MESSAGE]] = qlua.RPC.ProcedureType.MESSAGE
-args_prototypes[qlua.RPC.ProcedureType.MESSAGE] = qlua.message.Request
-result_object_mappers[method_names[qlua.RPC.ProcedureType.MESSAGE]] = function (proc_result)
-
-  local result = qlua.message.Result()
+method_names["MESSAGE"] = "message"
+procedure_types[method_names["MESSAGE"]] = "MESSAGE"
+args_prototypes["MESSAGE"] = ".qlua.rpc.message.Request"
+result_object_mappers[method_names["MESSAGE"]] = function (proc_result)
+  
+  local result = pb.defaults(".qlua.rpc.message.Result")
   result.result = proc_result
-  return result
+  return ".qlua.rpc.message.Result", result
 end
 
 -- sleep
@@ -108,8 +110,17 @@ args_prototypes[qlua.RPC.ProcedureType.GET_ORDER_BY_NUMBER] = qlua.getOrderByNum
 result_object_mappers[method_names[qlua.RPC.ProcedureType.GET_ORDER_BY_NUMBER]] = function (proc_result)
 
   local result = qlua.getOrderByNumber.Result()
-  struct_factory.create_Order(proc_result.t, result.order)
-  result.indx = proc_result.i
+  
+  local order = proc_result.order
+  if order then 
+    struct_factory.create_Order(order, result.order)
+  end
+
+  local indx = proc_result.indx
+  if indx then 
+    result.indx = indx
+  end
+  
   return result
 end
 

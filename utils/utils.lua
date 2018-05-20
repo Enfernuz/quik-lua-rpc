@@ -17,12 +17,8 @@ local error = assert(error, "error function is missing")
 local module = {}
 module._VERSION = '2.1.0'
 
-function module.value_or_empty_string(val)
-  return (val == nil and "" or module.Cp1251ToUtf8(val))
-end
-
-function module.value_to_string_or_empty_string(val)
-  return (val == nil and "" or tostring(val))
+function module.value_or_empty_string (val)
+  return (val == nil and "" or val)
 end
 
 function module.copy_pb_struct(dst, src)

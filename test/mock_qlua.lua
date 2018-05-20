@@ -1,0 +1,11 @@
+_G.isConnected = true
+_G.getScriptPath = true
+_G.getInfoParam = true
+_G.getItem = true
+_G.message = true
+_G.sleep = true
+_G.getWorkingFolder = true
+_G.PrintDbgStr = true
+_G.getOrderByNumber = true
+_G.getNumberOf = true
+_G.SearchItems = true
