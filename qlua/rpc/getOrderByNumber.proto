@@ -12,7 +12,7 @@ option java_package = "qlua.rpc";
 message Request {
 
     string class_code = 1;
-    uint32 order_id = 2;
+    int64 order_id = 2;
 }
 
 message Result {

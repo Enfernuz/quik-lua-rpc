@@ -29,8 +29,8 @@ module.REQUEST_ORDER_ID_FIELD.index = 1
 module.REQUEST_ORDER_ID_FIELD.label = 1
 module.REQUEST_ORDER_ID_FIELD.has_default_value = false
 module.REQUEST_ORDER_ID_FIELD.default_value = 0
-module.REQUEST_ORDER_ID_FIELD.type = 13
-module.REQUEST_ORDER_ID_FIELD.cpp_type = 3
+module.REQUEST_ORDER_ID_FIELD.type = 3
+module.REQUEST_ORDER_ID_FIELD.cpp_type = 2
 
 module.REQUEST.name = 'Request'
 module.REQUEST.full_name = '.qlua.rpc.getOrderByNumber.Request'
