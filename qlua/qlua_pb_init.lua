@@ -1,29 +1,32 @@
-local scriptPath = _G.getScriptPath()
+local protoc = require("lua-protobuf.protoc")
 
-package.path = scriptPath .. '/?.lua;' .. package.path
+return function (context_path)
+  
+  local proto_path = context_path .. "/qlua/rpc"
+  
+  local p = protoc.new()
+  p.include_imports = true
 
-local module = {}
-module._VERSION = '0.1.0'
-
--- thanks to https://stackoverflow.com/a/9146653
-local path = (...):match("(.-)[^%.]+$") .. "rpc/"
-
-local pb = require "pb"
-local protoc = require "lua-protobuf.protoc"
-
-local p = protoc.new()
---p.include_imports = true
-
-local proto_path = scriptPath .. "/qlua/rpc"
-
-p.paths[#p.paths+1] = proto_path
-p.paths[#p.paths+1] = proto_path .. "/bit"
-p.paths[#p.paths+1] = proto_path .."/datasource"
-
-
-p:loadfile("RPC.proto")
-p:loadfile("message.proto")
-p:loadfile("getScriptPath.proto")
+  p.paths[#p.paths+1] = proto_path
+  p.paths[#p.paths+1] = context_path
+  p.paths[#p.paths+1] = proto_path .. "/bit"
+  p.paths[#p.paths+1] = proto_path .. "/datasource"
+  
+  p:loadfile("RPC.proto")
+  --p:loadfile("qlua_structures.proto")
+  p:loadfile("qlua_types.proto")
+  p:loadfile("isConnected.proto")
+  p:loadfile("getScriptPath.proto")
+  p:loadfile("getInfoParam.proto")
+  p:loadfile("message.proto")
+  p:loadfile("sleep.proto")
+  p:loadfile("getWorkingFolder.proto")
+  p:loadfile("PrintDbgStr.proto")
+  p:loadfile("getItem.proto")
+  p:loadfile("getOrderByNumber.proto")
+  p:loadfile("getNumberOf.proto")
+  p:loadfile("SearchItems.proto")
+end
 
 --[[
 module.RPC = require(path .. "RPC_pb")
@@ -110,5 +113,3 @@ module.bit.band = require(path .. "bit.band_pb")
 module.bit.bor = require(path .. "bit.bor_pb")
 module.bit.bxor = require(path .. "bit.bxor_pb")
 ]]
-
-return module

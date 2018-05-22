@@ -5,6 +5,7 @@ local utils = require("utils.utils")
 local struct_factory = require("utils.struct_factory")
 
 local pb = require("pb")
+local qlua_pb_types = require("qlua.qlua_pb_types")
 
 local module = {}
 
@@ -53,12 +54,12 @@ end
 -- message
 method_names["MESSAGE"] = "message"
 procedure_types[method_names["MESSAGE"]] = "MESSAGE"
-args_prototypes["MESSAGE"] = ".qlua.rpc.message.Request"
+args_prototypes["MESSAGE"] = qlua_pb_types.message.Request
 result_object_mappers[method_names["MESSAGE"]] = function (proc_result)
   
-  local result = pb.defaults(".qlua.rpc.message.Result")
+  local result = pb.defaults(qlua_pb_types.message.Result)
   result.result = proc_result
-  return ".qlua.rpc.message.Result", result
+  return qlua_pb_types.message.Result, result
 end
 
 -- sleep
@@ -104,24 +105,27 @@ result_object_mappers[method_names[qlua.RPC.ProcedureType.GET_ITEM]] = function 
 end
 
 -- getOrderByNumber
-method_names[qlua.RPC.ProcedureType.GET_ORDER_BY_NUMBER] = "getOrderByNumber"
-procedure_types[method_names[qlua.RPC.ProcedureType.GET_ORDER_BY_NUMBER]] = qlua.RPC.ProcedureType.GET_ORDER_BY_NUMBER
-args_prototypes[qlua.RPC.ProcedureType.GET_ORDER_BY_NUMBER] = qlua.getOrderByNumber.Request
-result_object_mappers[method_names[qlua.RPC.ProcedureType.GET_ORDER_BY_NUMBER]] = function (proc_result)
+method_names["GET_ORDER_BY_NUMBER"] = "getOrderByNumber"
+procedure_types[method_names["GET_ORDER_BY_NUMBER"]] = "GET_ORDER_BY_NUMBER"
+args_prototypes["GET_ORDER_BY_NUMBER"] = qlua_pb_types.getOrderByNumber.Request
+result_object_mappers[method_names["GET_ORDER_BY_NUMBER"]] = function (proc_result)
 
-  local result = qlua.getOrderByNumber.Result()
+  local result = pb.defaults(qlua_pb_types.getOrderByNumber.Result)
   
   local order = proc_result.order
-  if order then 
-    struct_factory.create_Order(order, result.order)
+  if order then
+    result.order = pb.defaults(qlua_pb_types.qlua_structures.Order)
+    for k, v in pairs(order) do
+      result.order[k] = v
+    end
   end
-
+  
   local indx = proc_result.indx
   if indx then 
     result.indx = indx
   end
   
-  return result
+  return qlua_pb_types.getOrderByNumber.Result, result
 end
 
 -- getNumberOf

@@ -63,14 +63,14 @@ local function create_rpc_poll_in_callback(socket, serde_protocol)
     -- TODO: remove this message
     message("DEBUG: JSON message protocol detected")
     if not request_handlers.json then
-      request_handlers.json = request_handler:new("json")
+      request_handlers.json = request_handler:new("json", scriptPath)
     end
     handler = request_handlers.json
   else -- TODO: make explicit check on protobuf
     -- TODO: remove this message
     message("DEBUG: PROTOBUF message protocol detected")
     if not request_handlers.protobuf then
-      request_handlers.protobuf = request_handler:new("protobuf")
+      request_handlers.protobuf = request_handler:new("protobuf", scriptPath)
     end
     handler = request_handlers.protobuf
   end
