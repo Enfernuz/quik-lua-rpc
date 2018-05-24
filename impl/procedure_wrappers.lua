@@ -84,7 +84,7 @@ module["sleep"] = function (args)
   local proc_result = _G.sleep(args.time)
   
   if proc_result == nil then
-    error(string.format("QLua-функция sleep(%d) возвратила nil.", args.time))
+    error( string.format("QLua-функция sleep(%d) возвратила nil.", args.time) )
   end
   
   return proc_result
@@ -186,6 +186,114 @@ module["SearchItems"] = function (args)
     end
   end
   
+  return result
+end
+
+-- TODO: test
+module["getClassesList"] = function () 
+  return _G.getClassesList()
+end
+
+-- TODO: test
+module["getClassInfo"] = function (args) 
+  
+  local result = _G.getClassInfo(args.class_code)
+  
+  if result == nil then
+    error( string.format("QLua-функция getClassInfo(%s) возвратила nil.", args.class_code) )
+  end
+  
+  return result
+end
+
+-- TODO: test
+module["getClassSecurities"] = function (args) 
+  return _G.getClassSecurities(args.class_code) -- returns an empty string if no securities found for the given class_code
+end
+
+-- TODO: test
+module["getMoney"] = function (args) 
+  
+  local result = _G.getMoney(args.client_code, args.firmid, args.tag, args.currcode) -- returns a table with zero'ed values if no info found or in case of error
+  
+  if result.money_open_limit then result.money_open_limit = tostring(result.money_open_limit) end
+  if result.money_limit_locked_nonmarginal_value then result.money_limit_locked_nonmarginal_value = tostring(result.money_limit_locked_nonmarginal_value) end
+  if result.money_limit_locked then result.money_limit_locked = tostring(result.money_limit_locked) end
+  if result.money_open_balance then result.money_open_balance = tostring(result.money_open_balance) end
+  if result.money_current_limit then result.money_current_limit = tostring(result.money_current_limit) end
+  if result.money_current_balance then result.money_current_balance = tostring(result.money_current_balance) end
+  if result.money_limit_available then result.money_limit_available = tostring(result.money_limit_available) end
+
+  return result
+end
+
+-- TODO: test
+module["getMoneyEx"] = function (args) 
+  
+  local result = _G.getMoneyEx(args.firmid, args.client_code, args.tag, args.currcode, args.limit_kind) -- returns nil if no info found or in case of an error
+  
+  if result == nil then 
+    error( string.format("QLua-функция getMoneyEx(%s, %s, %s, %s, %d) возвратила nil.", args.firmid, args.client_code, args.tag, args.currcode, args.limit_kind) )
+  end
+  
+  result.currcode = utils.Cp1251ToUtf8( assert(result.currcode, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'currcode'.") )
+  result.tag = utils.Cp1251ToUtf8( assert(result.tag, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'tag'.") )
+  result.firmid = utils.Cp1251ToUtf8( assert(result.firmid, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'firmid'.") )
+  result.client_code = utils.Cp1251ToUtf8( assert(result.client_code, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'client_code'.") )
+  if result.openbal then result.openbal = tostring(result.openbal) end
+  if result.openlimit then result.openlimit = tostring(result.openlimit) end
+  if result.currentbal then result.currentbal = tostring(result.currentbal) end
+  if result.currentlimit then result.currentlimit = tostring(result.currentlimit) end
+  if result.locked then result.locked = tostring(result.locked) end
+  if result.locked_value_coef then result.locked_value_coef = tostring(result.locked_value_coef) end
+  if result.locked_margin_value then result.locked_margin_value = tostring(result.locked_margin_value) end
+  if result.leverage then result.leverage = tostring(result.leverage) end
+  assert(result.limit_kind, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'limit_kind'.")
+
+  return result
+end
+
+-- TODO: test
+module["getDepo"] = function (args) 
+  
+  local result = _G.getDepo(args.client_code, args.firmid, args.sec_code, args.trdaccid) -- returns a table with zero'ed values if no info found or in case of an error
+
+  if result.depo_limit_locked_buy_value then result.depo_limit_locked_buy_value = tostring(result.depo_limit_locked_buy_value) end
+  if result.depo_current_balance then result.depo_current_balance = tostring(result.depo_current_balance) end
+  if result.depo_limit_locked_buy then result.depo_limit_locked_buy = tostring(result.depo_limit_locked_buy) end
+  if result.depo_limit_locked then result.depo_limit_locked = tostring(result.depo_limit_locked) end
+  if result.depo_limit_available then result.depo_limit_available = tostring(result.depo_limit_available) end
+  if result.depo_current_limit then result.depo_current_limit = tostring(result.depo_current_limit) end
+  if result.depo_open_balance then result.depo_open_balance = tostring(result.depo_open_balance) end
+  if result.depo_open_limit then result.depo_open_limit = tostring(result.depo_open_limit) end
+
+  return result
+end
+
+-- TODO: test
+module["getDepoEx"] = function (args) 
+
+  local result = _G.getDepoEx(args.firmid, args.client_code, args.sec_code, args.trdaccid, args.limit_kind) -- returns nil if no info found or in case of an error
+  
+  if result == nil then
+    error( string.format("QLua-функция getDepoEx(%s, %s, %s, %s, %d) возвратила nil.", args.firmid, args.client_code, args.sec_code, args.trdaccid, args.limit_kind) )
+  end
+  
+  result.sec_code = utils.Cp1251ToUtf8( assert(result.sec_code, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'sec_code'.") )
+  result.trdaccid = utils.Cp1251ToUtf8( assert(result.trdaccid, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'trdaccid'.") )
+  result.firmid = utils.Cp1251ToUtf8( assert(result.firmid, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'firmid'.") )
+  result.client_code = utils.Cp1251ToUtf8( assert(result.client_code, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'client_code'.") )
+  assert(result.openbal, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'openbal'.")
+  assert(result.openlimit, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'openlimit'.")
+  assert(result.currentbal, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'currentbal'.")
+  assert(result.currentlimit, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'currentlimit'.")
+  assert(result.locked_sell, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'locked_sell'.")
+  assert(result.locked_buy, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'locked_buy'.")
+  result.locked_buy_value = tostring( assert(result.locked_buy_value, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'locked_buy_value'.") )
+  result.locked_sell_value = tostring( assert(result.locked_sell_value, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'locked_sell_value'.") )
+  result.awg_position_price = tostring( assert(result.awg_position_price, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'awg_position_price'.") )
+  assert(result.limit_kind, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'limit_kind'.")
+    
   return result
 end
 

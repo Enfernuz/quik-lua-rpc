@@ -26,6 +26,13 @@ return function (context_path)
   p:loadfile("getOrderByNumber.proto")
   p:loadfile("getNumberOf.proto")
   p:loadfile("SearchItems.proto")
+  p:loadfile("getClassesList.proto")
+  p:loadfile("getClassInfo.proto")
+  p:loadfile("getClassSecurities.proto")
+  p:loadfile("getMoney.proto")
+  p:loadfile("getMoneyEx.proto")
+  p:loadfile("getDepo.proto")
+  p:loadfile("getDepoEx.proto")
 end
 
 --[[

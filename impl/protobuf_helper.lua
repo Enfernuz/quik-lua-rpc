@@ -129,29 +129,128 @@ result_object_mappers[method_names["GET_ORDER_BY_NUMBER"]] = function (proc_resu
 end
 
 -- getNumberOf
-method_names[qlua.RPC.ProcedureType.GET_NUMBER_OF] = "getNumberOf"
-procedure_types[method_names[qlua.RPC.ProcedureType.GET_NUMBER_OF]] = qlua.RPC.ProcedureType.GET_NUMBER_OF
-args_prototypes[qlua.RPC.ProcedureType.GET_NUMBER_OF] = qlua.getNumberOf.Request
-result_object_mappers[method_names[qlua.RPC.ProcedureType.GET_NUMBER_OF]] = function (proc_result)
+method_names["GET_NUMBER_OF"] = "getNumberOf"
+procedure_types[method_names["GET_NUMBER_OF"]] = "GET_NUMBER_OF"
+args_prototypes["GET_NUMBER_OF"] = qlua_pb_types.getNumberOf.Request
+result_object_mappers[method_names["GET_NUMBER_OF"]] = function (proc_result)
 
-  local result = qlua.getNumberOf.Result()
+  local result = pb.defaults(qlua_pb_types.getNumberOf.Result)
   result.result = proc_result
-  return result
+  return qlua_pb_types.getNumberOf.Result, result
 end
 
 -- SearchItems
-method_names[qlua.RPC.ProcedureType.SEARCH_ITEMS] = "SearchItems"
-procedure_types[method_names[qlua.RPC.ProcedureType.SEARCH_ITEMS]] = qlua.RPC.ProcedureType.SEARCH_ITEMS
-args_prototypes[qlua.RPC.ProcedureType.SEARCH_ITEMS] = qlua.SearchItems.Request
-result_object_mappers[method_names[qlua.RPC.ProcedureType.SEARCH_ITEMS]] = function (proc_result)
+method_names["SEARCH_ITEMS"] = "SearchItems"
+procedure_types[method_names["SEARCH_ITEMS"]] = "SEARCH_ITEMS"
+args_prototypes["SEARCH_ITEMS"] = qlua_pb_types.SearchItems.Request
+result_object_mappers[method_names["SEARCH_ITEMS"]] = function (proc_result)
 
-  local result = qlua.SearchItems.Result()
+  local result = pb.defaults(qlua_pb_types.SearchItems.Result)
   if proc_result then 
-    for i, item_index in ipairs(proc_result) do
-      table.sinsert(result.items_indices, item_index)
-    end
+    result.items_indices = proc_result
   end
-  return result
+  return qlua_pb_types.SearchItems.Result, result
+end
+
+-- getClassesList
+method_names["GET_CLASSES_LIST"] = "getClassesList"
+procedure_types[method_names["GET_CLASSES_LIST"]] = "GET_CLASSES_LIST"
+args_prototypes["GET_CLASSES_LIST"] = qlua_pb_types.getClassesList.Request
+result_object_mappers[method_names["GET_CLASSES_LIST"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getClassesList.Result)
+  if proc_result then 
+    result.classes_list = proc_result
+  end
+  return qlua_pb_types.getClassesList.Result, result
+end
+
+-- getClassInfo
+method_names["GET_CLASS_INFO"] = "getClassInfo"
+procedure_types[method_names["GET_CLASS_INFO"]] = "GET_CLASS_INFO"
+args_prototypes["GET_CLASS_INFO"] = qlua_pb_types.getClassInfo.Request
+result_object_mappers[method_names["GET_CLASS_INFO"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getClassInfo.Result)
+  result.class_info = pb.defaults(qlua_pb_types.qlua_structures.Klass)
+  for k, v in pairs(proc_result) do
+    result.class_info[k] = v
+  end
+  
+  return qlua_pb_types.getClassInfo.Result, result
+end
+
+-- getClassSecurities
+method_names["GET_CLASS_SECURITIES"] = "getClassSecurities"
+procedure_types[method_names["GET_CLASS_SECURITIES"]] = "GET_CLASS_SECURITIES"
+args_prototypes["GET_CLASS_SECURITIES"] = qlua_pb_types.getClassSecurities.Request
+result_object_mappers[method_names["GET_CLASS_SECURITIES"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getClassSecurities.Result)
+  if proc_result then 
+    result.class_securities = proc_result
+  end
+  return qlua_pb_types.class_securities.Result, result
+end
+
+-- getMoney
+method_names["GET_MONEY"] = "getMoney"
+procedure_types[method_names["GET_MONEY"]] = "GET_MONEY"
+args_prototypes["GET_MONEY"] = qlua_pb_types.getMoney.Request
+result_object_mappers[method_names["GET_MONEY"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getMoney.Result)
+  result.money = pb.defaults(qlua_pb_types.getMoney.Money)
+  for k, v in pairs(proc_result) do
+    result.money[k] = v
+  end
+  
+  return qlua_pb_types.getMoney.Result, result
+end
+
+-- getMoneyEx
+method_names["GET_MONEY_EX"] = "getMoneyEx"
+procedure_types[method_names["GET_MONEY_EX"]] = "GET_MONEY_EX"
+args_prototypes["GET_MONEY_EX"] = qlua_pb_types.getMoneyEx.Request
+result_object_mappers[method_names["GET_MONEY_EX"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getMoneyEx.Result)
+  result.money_ex = pb.defaults(qlua_pb_types.qlua_structures.MoneyLimit)
+  for k, v in pairs(proc_result) do
+    result.money_ex[k] = v
+  end
+  
+  return qlua_pb_types.getMoneyEx.Result, result
+end
+
+-- getDepo
+method_names["GET_DEPO"] = "getDepo"
+procedure_types[method_names["GET_DEPO"]] = "GET_DEPO"
+args_prototypes["GET_DEPO"] = qlua_pb_types.getDepo.Request
+result_object_mappers[method_names["GET_DEPO"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getDepo.Result)
+  result.depo = pb.defaults(qlua_pb_types.getDepo.Depo)
+  for k, v in pairs(proc_result) do
+    result.depo[k] = v
+  end
+  
+  return qlua_pb_types.getDepo.Result, result
+end
+
+-- getDepoEx
+method_names["GET_DEPO_EX"] = "getDepoEx"
+procedure_types[method_names["GET_DEPO_EX"]] = "GET_DEPO_EX"
+args_prototypes["GET_DEPO_EX"] = qlua_pb_types.getDepoEx.Request
+result_object_mappers[method_names["GET_DEPO_EX"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getDepoEx.Result)
+  result.depo_ex = pb.defaults(qlua_pb_types.qlua_structures.DepoLimit)
+  for k, v in pairs(proc_result) do
+    result.depo_ex[k] = v
+  end
+  
+  return qlua_pb_types.getDepoEx.Result, result
 end
 
 -----

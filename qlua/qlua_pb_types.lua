@@ -62,8 +62,48 @@ module.SearchItems = {
   Result = package .. "SearchItems.Result"
 }
 
+module.getClassesList = {
+  Request = package .. "getClassesList.Request",
+  Result = package .. "getClassesList.Result"
+}
+
+module.getClassInfo = {
+  Request = package .. "getClassInfo.Request",
+  Result = package .. "getClassInfo.Result"
+}
+
+module.getClassSecurities = {
+  Request = package .. "getClassSecurities.Request",
+  Result = package .. "getClassSecurities.Result"
+}
+
+module.getMoney = {
+  Request = package .. "getMoney.Request",
+  Result = package .. "getMoney.Result",
+  Money = package .. "getMoney.Money"
+}
+
+module.getMoneyEx = {
+  Request = package .. "getMoneyEx.Request",
+  Result = package .. "getMoneyEx.Result"
+}
+
+module.getDepo = {
+  Request = package .. "getDepo.Request",
+  Result = package .. "getDepo.Result", 
+  Depo = package .. "getDepo.Depo"
+}
+
+module.getDepoEx = {
+  Request = package .. "getDepoEx.Request",
+  Result = package .. "getDepoEx.Result"
+}
+
 module.qlua_structures = {
-  Order = ".qlua.structs.Order"
+  Klass = ".qlua.structs.Klass",
+  Order = ".qlua.structs.Order",
+  MoneyLimit = ".qlua.structs.MoneyLimit", 
+  DepoLimit = ".qlua.structs.DepoLimit"
 }
 
 return module
