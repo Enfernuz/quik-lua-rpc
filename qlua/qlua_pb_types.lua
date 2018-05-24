@@ -99,11 +99,41 @@ module.getDepoEx = {
   Result = package .. "getDepoEx.Result"
 }
 
+module.getFuturesLimit = {
+  Request = package .. "getFuturesLimit.Request",
+  Result = package .. "getFuturesLimit.Result"
+}
+
+module.getFuturesHolding = {
+  Request = package .. "getFuturesHolding.Request",
+  Result = package .. "getFuturesHolding.Result"
+}
+
+module.getSecurityInfo = {
+  Request = package .. "getSecurityInfo.Request",
+  Result = package .. "getSecurityInfo.Result"
+}
+
+module.getTradeDate = {
+  Request = package .. "getTradeDate.Request",
+  Result = package .. "getTradeDate.Result", 
+  TradeDate = package .. "getTradeDate.TradeDate"
+}
+
+module.getQuoteLevel2 = {
+  Request = package .. "getQuoteLevel2.Request",
+  Result = package .. "getQuoteLevel2.Result", 
+  QuoteEntry = package .. "getQuoteLevel2.QuoteEntry"
+}
+
 module.qlua_structures = {
   Klass = ".qlua.structs.Klass",
   Order = ".qlua.structs.Order",
   MoneyLimit = ".qlua.structs.MoneyLimit", 
-  DepoLimit = ".qlua.structs.DepoLimit"
+  DepoLimit = ".qlua.structs.DepoLimit", 
+  FuturesLimit = ".qlua.structs.FuturesLimit", 
+  FuturesClientHolding = ".qlua.structs.FuturesClientHolding", 
+  Security = ".qlua.structs.Security"
 }
 
 return module

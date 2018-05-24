@@ -33,6 +33,11 @@ return function (context_path)
   p:loadfile("getMoneyEx.proto")
   p:loadfile("getDepo.proto")
   p:loadfile("getDepoEx.proto")
+  p:loadfile("getFuturesLimit.proto")
+  p:loadfile("getFuturesHolding.proto")
+  p:loadfile("getSecurityInfo.proto")
+  p:loadfile("getTradeDate.proto")
+  p:loadfile("getQuoteLevel2.proto")
 end
 
 --[[

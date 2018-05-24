@@ -253,6 +253,98 @@ result_object_mappers[method_names["GET_DEPO_EX"]] = function (proc_result)
   return qlua_pb_types.getDepoEx.Result, result
 end
 
+-- getFuturesLimit
+method_names["GET_FUTURES_LIMIT"] = "getFuturesLimit"
+procedure_types[method_names["GET_FUTURES_LIMIT"]] = "GET_FUTURES_LIMIT"
+args_prototypes["GET_FUTURES_LIMIT"] = qlua_pb_types.getFuturesLimit.Request
+result_object_mappers[method_names["GET_FUTURES_LIMIT"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getFuturesLimit.Result)
+  result.futures_limit = pb.defaults(qlua_pb_types.qlua_structures.FuturesLimit)
+  for k, v in pairs(proc_result) do
+    result.futures_limit[k] = v
+  end
+  
+  return qlua_pb_types.getFuturesLimit.Result, result
+end
+
+-- getFuturesHolding
+method_names["GET_FUTURES_HOLDING"] = "getFuturesHolding"
+procedure_types[method_names["GET_FUTURES_HOLDING"]] = "GET_FUTURES_HOLDING"
+args_prototypes["GET_FUTURES_HOLDING"] = qlua_pb_types.getFuturesHolding.Request
+result_object_mappers[method_names["GET_FUTURES_HOLDING"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getFuturesHolding.Result)
+  result.futures_holding = pb.defaults(qlua_pb_types.qlua_structures.FuturesClientHolding)
+  for k, v in pairs(proc_result) do
+    result.futures_holding[k] = v
+  end
+  
+  return qlua_pb_types.getFuturesHolding.Result, result
+end
+
+-- getSecurityInfo
+method_names["GET_SECURITY_INFO"] = "getSecurityInfo"
+procedure_types[method_names["GET_SECURITY_INFO"]] = "GET_SECURITY_INFO"
+args_prototypes["GET_SECURITY_INFO"] = qlua_pb_types.getSecurityInfo.Request
+result_object_mappers[method_names["GET_SECURITY_INFO"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getSecurityInfo.Result)
+  result.security_info = pb.defaults(qlua_pb_types.qlua_structures.Security)
+  for k, v in pairs(proc_result) do
+    result.security_info[k] = v
+  end
+  
+  return qlua_pb_types.getSecurityInfo.Result, result
+end
+
+-- getTradeDate
+method_names["GET_TRADE_DATE"] = "getTradeDate"
+procedure_types[method_names["GET_TRADE_DATE"]] = "GET_TRADE_DATE"
+args_prototypes["GET_TRADE_DATE"] = qlua_pb_types.getTradeDate.Request
+result_object_mappers[method_names["GET_TRADE_DATE"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getTradeDate.Result)
+  result.trade_date = pb.defaults(qlua_pb_types.getTradeDate.TradeDate)
+  for k, v in pairs(proc_result) do
+    result.trade_date[k] = v
+  end
+  
+  return qlua_pb_types.getTradeDate.Result, result
+end
+
+-- getQuoteLevel2
+method_names["GET_QUOTE_LEVEL2"] = "getQuoteLevel2"
+procedure_types[method_names["GET_QUOTE_LEVEL2"]] = "GET_QUOTE_LEVEL2"
+args_prototypes["GET_QUOTE_LEVEL2"] = qlua_pb_types.getQuoteLevel2.Request
+result_object_mappers[method_names["GET_QUOTE_LEVEL2"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getQuoteLevel2.Result)
+  
+  result.bid_count = proc_result.bid_count
+  result.offer_count = proc_result.offer_count
+  
+  local bids = proc_result.bid
+  if bids then
+    for _, v in ipairs(bids) do
+      local bid = pb.defaults(qlua_pb_types.getQuoteLevel2.QuoteEntry)
+      bid.price = v.price
+      bid.quantity = v.quantity
+      table.sinsert(result.bids, bid)
+  end
+  
+  local offers = proc_result.offer
+  if offers then
+    for _, v in ipairs(offers) do
+      local offer = pb.defaults(qlua_pb_types.getQuoteLevel2.QuoteEntry)
+      offer.price = v.price
+      offer.quantity = v.quantity
+      table.sinsert(result.offers, offer)
+  end
+  
+  return qlua_pb_types.getQuoteLevel2.Result, result
+end
+
 -----
 
 function module.get_method_name (pb_procedure_type)
