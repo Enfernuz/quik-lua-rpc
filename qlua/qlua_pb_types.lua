@@ -202,6 +202,23 @@ module.sendTransaction = {
   Result = package .. "sendTransaction.Result"
 }
 
+module.CalcBuySell = {
+  Request = package .. "CalcBuySell.Request",
+  Result = package .. "CalcBuySell.Result"
+}
+
+module.getParamEx = {
+  Request = package .. "getParamEx.Request",
+  Result = package .. "getParamEx.Result",
+  ParamEx = package .. "getParamEx.ParamEx"
+}
+
+module.getParamEx2 = {
+  Request = package .. "getParamEx2.Request",
+  Result = package .. "getParamEx2.Result",
+  ParamEx2 = package .. "getParamEx2.ParamEx2"
+}
+
 module.qlua_structures = {
   Klass = ".qlua.structs.Klass",
   Order = ".qlua.structs.Order",

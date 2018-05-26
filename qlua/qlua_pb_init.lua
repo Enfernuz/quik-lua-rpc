@@ -53,6 +53,9 @@ return function (context_path)
   p:loadfile("Close.proto")
   p:loadfile("SetEmptyCallback.proto")
   p:loadfile("sendTransaction.proto")
+  p:loadfile("CalcBuySell.proto")
+  p:loadfile("getParamEx.proto")
+  p:loadfile("getParamEx2.proto")
 end
 
 --[[

@@ -564,6 +564,46 @@ module["sendTransaction"] = function (args)
   return _G.sendTransaction(args.transaction) -- returns an empty string (seems to be always)
 end
 
+-- TODO: test
+module["CalcBuySell"] = function (args) 
+  
+  local price = tonumber(args.price)
+  if price == nil then
+    error( string.format("Функция CalcBuySell: не удалось преобразовать в число значение '%s' аргумента 'price'.", args.price) ) 
+  end
+  
+  local qty, comission = _G.CalcBuySell(args.class_code, args.sec_code, args.client_code, args.account, price, args.is_buy, args.is_market) -- returns (0; 0) in case of error
+
+  return {
+    qty = qty,
+    comission = tostring(comission)
+  }
+end
+
+-- TODO: test
+module["getParamEx"] = function (args) 
+  
+  local result = _G.getParamEx(args.class_code, args.sec_code, args.param_name) -- always returns a table
+  
+  if result == nil then
+    error( string.format("QLua-функция getParamEx(%s, %s, %s) возвратила nil.", args.class_code, args.sec_code, args.param_name) )
+  end
+    
+  return result
+end
+
+-- TODO: test
+module["getParamEx2"] = function (args) 
+  
+  local result = _G.getParamEx2(args.class_code, args.sec_code, args.param_name) -- always returns a table
+  
+  if result == nil then
+    error(string.format("QLua-функция getParamEx2(%s, %s, %s) возвратила nil.", args.class_code, args.sec_code, args.param_name), 0)
+  end
+
+  return result
+end
+
 -----
 
 return module

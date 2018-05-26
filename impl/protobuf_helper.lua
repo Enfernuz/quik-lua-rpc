@@ -550,6 +550,49 @@ result_object_mappers[method_names["SEND_TRANSACTION"]] = function (proc_result)
   return qlua_pb_types.sendTransaction.Result, result
 end
 
+-- CalcBuySell
+method_names["CALC_BUY_SELL"] = "CalcBuySell"
+procedure_types[method_names["CALC_BUY_SELL"]] = "CALC_BUY_SELL"
+args_prototypes["CALC_BUY_SELL"] = qlua_pb_types.CalcBuySell.Request
+result_object_mappers[method_names["CALC_BUY_SELL"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.CalcBuySell.Result)
+  result.qty = proc_result.qty
+  result.comission = proc_result.comission
+  
+  return qlua_pb_types.sendTransaction.Result, result
+end
+
+-- getParamEx
+method_names["GET_PARAM_EX"] = "getParamEx"
+procedure_types[method_names["GET_PARAM_EX"]] = "GET_PARAM_EX"
+args_prototypes["GET_PARAM_EX"] = qlua_pb_types.getParamEx.Request
+result_object_mappers[method_names["GET_PARAM_EX"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getParamEx.Result)
+  result.param_ex = pb.defaults(qlua_pb_types.getParamEx.ParamEx)
+  for k, v in pairs(proc_result) do
+    result.param_ex[k] = v
+  end
+  
+  return qlua_pb_types.getParamEx.Result, result
+end
+
+-- getParamEx2
+method_names["GET_PARAM_EX_2"] = "getParamEx2"
+procedure_types[method_names["GET_PARAM_EX_2"]] = "GET_PARAM_EX_2"
+args_prototypes["GET_PARAM_EX_2"] = qlua_pb_types.getParamEx2.Request
+result_object_mappers[method_names["GET_PARAM_EX_2"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getParamEx2.Result)
+  result.param_ex = pb.defaults(qlua_pb_types.getParamEx2.ParamEx2)
+  for k, v in pairs(proc_result) do
+    result.param_ex[k] = v
+  end
+  
+  return qlua_pb_types.getParamEx2.Result, result
+end
+
 -----
 
 function module.get_method_name (pb_procedure_type)
