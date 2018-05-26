@@ -38,6 +38,11 @@ return function (context_path)
   p:loadfile("getSecurityInfo.proto")
   p:loadfile("getTradeDate.proto")
   p:loadfile("getQuoteLevel2.proto")
+  p:loadfile("getLinesCount.proto")
+  p:loadfile("getNumCandles.proto")
+  p:loadfile("getCandlesByIndex.proto")
+  p:loadfile("CreateDataSource.proto")
+  p:loadfile("SetUpdateCallback.proto")
 end
 
 --[[

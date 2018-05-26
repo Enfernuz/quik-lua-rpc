@@ -126,6 +126,32 @@ module.getQuoteLevel2 = {
   QuoteEntry = package .. "getQuoteLevel2.QuoteEntry"
 }
 
+module.getLinesCount = {
+  Request = package .. "getLinesCount.Request",
+  Result = package .. "getLinesCount.Result"
+}
+
+module.getNumCandles = {
+  Request = package .. "getNumCandles.Request",
+  Result = package .. "getNumCandles.Result"
+}
+
+module.getCandlesByIndex = {
+  Request = package .. "getCandlesByIndex.Request",
+  Result = package .. "getCandlesByIndex.Result"
+}
+
+module.datasource = {}
+module.datasource.CreateDataSource = {
+  Request = package .. "datasource.CreateDataSource.Request",
+  Result = package .. "datasource.CreateDataSource.Result"
+}
+
+module.datasource.SetUpdateCallback = {
+  Request = package .. "datasource.SetUpdateCallback.Request",
+  Result = package .. "datasource.SetUpdateCallback.Result"
+}
+
 module.qlua_structures = {
   Klass = ".qlua.structs.Klass",
   Order = ".qlua.structs.Order",
@@ -133,7 +159,8 @@ module.qlua_structures = {
   DepoLimit = ".qlua.structs.DepoLimit", 
   FuturesLimit = ".qlua.structs.FuturesLimit", 
   FuturesClientHolding = ".qlua.structs.FuturesClientHolding", 
-  Security = ".qlua.structs.Security"
+  Security = ".qlua.structs.Security", 
+  CandleEntry = ".qlua.structs.CandleEntry"
 }
 
 return module

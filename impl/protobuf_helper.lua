@@ -15,40 +15,40 @@ local args_prototypes = {}
 local result_object_mappers = {}
 
 -- unknown
-method_names[qlua.RPC.ProcedureType.PROCEDURE_TYPE_UNKNOWN] = "unknown"
-procedure_types[method_names[qlua.RPC.ProcedureType.PROCEDURE_TYPE_UNKNOWN]] = qlua.RPC.ProcedureType.PROCEDURE_TYPE_UNKNOWN
+method_names["PROCEDURE_TYPE_UNKNOWN"] = "unknown" -- TODO: maybe set it to nil?
+procedure_types[method_names["PROCEDURE_TYPE_UNKNOWN"]] = "PROCEDURE_TYPE_UNKNOWN"
 
 -- isConnected
-method_names[qlua.RPC.ProcedureType.IS_CONNECTED] = "isConnected"
-procedure_types[method_names[qlua.RPC.ProcedureType.IS_CONNECTED]] = qlua.RPC.ProcedureType.IS_CONNECTED
-args_prototypes[qlua.RPC.ProcedureType.IS_CONNECTED] = nil
-result_object_mappers[method_names[qlua.RPC.ProcedureType.IS_CONNECTED]] = function (proc_result)
-
-  local result = qlua.isConnected.Result()
+method_names["IS_CONNECTED"] = "isConnected"
+procedure_types[method_names["IS_CONNECTED"]] = "IS_CONNECTED"
+args_prototypes["IS_CONNECTED"] = nil
+result_object_mappers[method_names["IS_CONNECTED"]] = function (proc_result)
+  
+  local result = pb.defaults(qlua_pb_types.isConnected.Result)
   result.is_connected = proc_result
-  return result
+  return qlua_pb_types.isConnected.Result, result
 end
 
 -- getScriptPath
-method_names[qlua.RPC.ProcedureType.GET_SCRIPT_PATH] = "getScriptPath"
-procedure_types[method_names[qlua.RPC.ProcedureType.GET_SCRIPT_PATH]] = qlua.RPC.ProcedureType.GET_SCRIPT_PATH
-args_prototypes[qlua.RPC.ProcedureType.GET_SCRIPT_PATH] = nil
-result_object_mappers[method_names[qlua.RPC.ProcedureType.GET_SCRIPT_PATH]] = function (proc_result)
-
-  local result = qlua.getScriptPath.Result()
+method_names["GET_SCRIPT_PATH"] = "getScriptPath"
+procedure_types[method_names["GET_SCRIPT_PATH"]] = "GET_SCRIPT_PATH"
+args_prototypes["GET_SCRIPT_PATH"] = nil
+result_object_mappers[method_names["GET_SCRIPT_PATH"]] = function (proc_result)
+  
+  local result = pb.defaults(qlua_pb_types.getScriptPath.Result)
   result.script_path = proc_result
-  return result
+  return qlua_pb_types.getScriptPath.Result, result
 end
 
 -- getInfoParam
-method_names[qlua.RPC.ProcedureType.GET_INFO_PARAM] = "getInfoParam"
-procedure_types[method_names[qlua.RPC.ProcedureType.GET_INFO_PARAM]] = qlua.RPC.ProcedureType.GET_INFO_PARAM
-args_prototypes[qlua.RPC.ProcedureType.GET_INFO_PARAM] = qlua.getInfoParam.Request
-result_object_mappers[method_names[qlua.RPC.ProcedureType.GET_INFO_PARAM]] = function (proc_result)
+method_names["GET_INFO_PARAM"] = "getInfoParam"
+procedure_types[method_names["GET_INFO_PARAM"]] = "GET_INFO_PARAM"
+args_prototypes["GET_INFO_PARAM"] = qlua_pb_types.getInfoParam.Request
+result_object_mappers[method_names["GET_INFO_PARAM"]] = function (proc_result)
 
-  local result = qlua.getInfoParam.Result()
+  local result = pb.defaults(qlua_pb_types.getInfoParam.Result)
   result.info_param = proc_result
-  return result
+  return qlua_pb_types.getInfoParam.Result, result
 end
 
 -- message
@@ -63,44 +63,44 @@ result_object_mappers[method_names["MESSAGE"]] = function (proc_result)
 end
 
 -- sleep
-method_names[qlua.RPC.ProcedureType.SLEEP] = "sleep"
-procedure_types[method_names[qlua.RPC.ProcedureType.SLEEP]] = qlua.RPC.ProcedureType.SLEEP
-args_prototypes[qlua.RPC.ProcedureType.SLEEP] = qlua.sleep.Request
-result_object_mappers[method_names[qlua.RPC.ProcedureType.SLEEP]] = function (proc_result)
+method_names["SLEEP"] = "sleep"
+procedure_types[method_names["SLEEP"]] = "SLEEP"
+args_prototypes["SLEEP"] = qlua_pb_types.sleep.Request
+result_object_mappers[method_names["SLEEP"]] = function (proc_result)
 
-  local result = qlua.sleep.Result()
+  local result = pb.defaults(qlua_pb_types.sleep.Result)
   result.result = proc_result
-  return result
+  return qlua_pb_types.sleep.Result, result
 end
 
 -- getWorkingFolder
-method_names[qlua.RPC.ProcedureType.GET_WORKING_FOLDER] = "getWorkingFolder"
-procedure_types[method_names[qlua.RPC.ProcedureType.GET_WORKING_FOLDER]] = qlua.RPC.ProcedureType.GET_WORKING_FOLDER
-args_prototypes[qlua.RPC.ProcedureType.GET_WORKING_FOLDER] = nil
-result_object_mappers[method_names[qlua.RPC.ProcedureType.GET_WORKING_FOLDER]] = function (proc_result)
-
-  local result = qlua.getWorkingFolder.Result()
+method_names["GET_WORKING_FOLDER"] = "getWorkingFolder"
+procedure_types[method_names["GET_WORKING_FOLDER"]] = "GET_WORKING_FOLDER"
+args_prototypes["GET_WORKING_FOLDER"] = nil
+result_object_mappers[method_names["GET_WORKING_FOLDER"]] = function (proc_result)
+  
+  local result = pb.defaults(qlua_pb_types.getWorkingFolder.Result)
   result.working_folder = proc_result
-  return result
+  return qlua_pb_types.getWorkingFolder.Result, result
 end
 
 -- PrintDbgStr
-method_names[qlua.RPC.ProcedureType.PRINT_DBG_STR] = "PrintDbgStr"
-procedure_types[method_names[qlua.RPC.ProcedureType.PRINT_DBG_STR]] = qlua.RPC.ProcedureType.PRINT_DBG_STR
-args_prototypes[qlua.RPC.ProcedureType.PRINT_DBG_STR] = qlua.PrintDbgStr.Request
-result_object_mappers[method_names[qlua.RPC.ProcedureType.PRINT_DBG_STR]] = nil
+method_names["PRINT_DBG_STR"] = "PrintDbgStr"
+procedure_types[method_names["PRINT_DBG_STR"]] = "PRINT_DBG_STR"
+args_prototypes["PRINT_DBG_STR"] = qlua_pb_types.PrintDbgStr.Request
+result_object_mappers[method_names["PRINT_DBG_STR"]] = nil
 
 -- getItem
-method_names[qlua.RPC.ProcedureType.GET_ITEM] = "getItem"
-procedure_types[method_names[qlua.RPC.ProcedureType.GET_ITEM]] = qlua.RPC.ProcedureType.GET_ITEM
-args_prototypes[qlua.RPC.ProcedureType.GET_ITEM] = qlua.getItem.Request
-result_object_mappers[method_names[qlua.RPC.ProcedureType.GET_ITEM]] = function (proc_result)
+method_names["GET_ITEM"] = "getItem"
+procedure_types[method_names["GET_ITEM"]] = "GET_ITEM"
+args_prototypes["GET_ITEM"] = qlua_pb_types.getItem.Request
+result_object_mappers[method_names["GET_ITEM"]] = function (proc_result)
 
-  local result = qlua.getItem.Result()
-  if proc_result then
-    utils.new_put_to_string_string_pb_map(proc_result, result.table_row, qlua.getItem.Result.TableRowEntry)
+  local result = pb.defaults(qlua_pb_types.getItem.Result)
+  for k, v in pairs(proc_result) do
+    result.table_row[k] = v
   end
-  
+
   return result
 end
 
@@ -190,7 +190,7 @@ result_object_mappers[method_names["GET_CLASS_SECURITIES"]] = function (proc_res
   if proc_result then 
     result.class_securities = proc_result
   end
-  return qlua_pb_types.class_securities.Result, result
+  return qlua_pb_types.getClassSecurities.Result, result
 end
 
 -- getMoney
@@ -343,6 +343,88 @@ result_object_mappers[method_names["GET_QUOTE_LEVEL2"]] = function (proc_result)
   end
   
   return qlua_pb_types.getQuoteLevel2.Result, result
+end
+
+-- getLinesCount
+method_names["GET_LINES_COUNT"] = "getLinesCount"
+procedure_types[method_names["GET_LINES_COUNT"]] = "GET_LINES_COUNT"
+args_prototypes["GET_LINES_COUNT"] = qlua_pb_types.getLinesCount.Request
+result_object_mappers[method_names["GET_LINES_COUNT"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getLinesCount.Result)
+  if proc_result then 
+    result.lines_count = proc_result
+  end
+  return qlua_pb_types.getLinesCount.Result, result
+end
+
+-- getNumCandles
+method_names["GET_NUM_CANDLES"] = "getNumCandles"
+procedure_types[method_names["GET_NUM_CANDLES"]] = "GET_NUM_CANDLES"
+args_prototypes["GET_NUM_CANDLES"] = qlua_pb_types.getNumCandles.Request
+result_object_mappers[method_names["GET_NUM_CANDLES"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getNumCandles.Result)
+  if proc_result then 
+    result.num_candles = proc_result
+  end
+  return qlua_pb_types.getNumCandles.Result, result
+end
+
+-- getCandlesByIndex
+method_names["GET_CANDLES_BY_INDEX"] = "getCandlesByIndex"
+procedure_types[method_names["GET_CANDLES_BY_INDEX"]] = "GET_CANDLES_BY_INDEX"
+args_prototypes["GET_CANDLES_BY_INDEX"] = qlua_pb_types.getCandlesByIndex.Request
+result_object_mappers[method_names["GET_CANDLES_BY_INDEX"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getCandlesByIndex.Result)
+
+  for _, v in ipairs(proc_result.t) do
+    local candle = pb.defaults(qlua_pb_types.qlua_structures.CandleEntry)
+    candle.open = v.open
+    candle.close = v.close
+    candle.high = v.high
+    candle.low = v.low
+    candle.volume = v.volume
+    candle.does_exist = v.doesExist
+    table.sinsert(result.t, candle)
+  end
+  
+  result.n = proc_result.n
+  result.l = proc_result.l
+  
+  return qlua_pb_types.getCandlesByIndex.Result, result
+end
+
+-- datasource.CreateDataSource
+method_names["CREATE_DATA_SOURCE"] = "datasource.CreateDataSource"
+procedure_types[method_names["CREATE_DATA_SOURCE"]] = "CREATE_DATA_SOURCE"
+args_prototypes["CREATE_DATA_SOURCE"] = qlua_pb_types.datasource.CreateDataSource.Request
+result_object_mappers[method_names["CREATE_DATA_SOURCE"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.datasource.CreateDataSource.Result)
+  
+  if proc_result.is_error then
+    result.is_error = true
+    result.error_desc = proc_result.error_desc
+  else
+    result.is_error = false
+    result.datasource_uuid = proc_result.datasource_uuid
+  end
+
+  return qlua_pb_types.datasource.CreateDataSource.Result, result
+end
+
+-- datasource.SetUpdateCallback
+method_names["DS_SET_UPDATE_CALLBACK"] = "datasource.SetUpdateCallback"
+procedure_types[method_names["DS_SET_UPDATE_CALLBACK"]] = "DS_SET_UPDATE_CALLBACK"
+args_prototypes["DS_SET_UPDATE_CALLBACK"] = qlua_pb_types.datasource.SetUpdateCallback.Request
+result_object_mappers[method_names["DS_SET_UPDATE_CALLBACK"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.datasource.SetUpdateCallback.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.datasource.SetUpdateCallback.Result, result
 end
 
 -----

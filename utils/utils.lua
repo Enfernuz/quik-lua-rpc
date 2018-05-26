@@ -104,23 +104,23 @@ function module.to_qtable_parameter_type(pb_column_parameter_type)
 end
 
 local interval_types = {}
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_TICK] = INTERVAL_TICK
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M1] = INTERVAL_M1
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M2] = INTERVAL_M2
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M3] = INTERVAL_M3
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M4] = INTERVAL_M4
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M5] = INTERVAL_M5
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M6] = INTERVAL_M6
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M10] = INTERVAL_M10
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M15] = INTERVAL_M15
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M20] = INTERVAL_M20
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M30] = INTERVAL_M30
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_H1] = INTERVAL_H1
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_H2] = INTERVAL_H2
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_H4] = INTERVAL_H4
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_D1] = INTERVAL_D1
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_W1] = INTERVAL_W1
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_MN1] = INTERVAL_MN1
+interval_types["INTERVAL_TICK"] = _G.INTERVAL_TICK
+interval_types["INTERVAL_M1"] = _G.INTERVAL_M1
+interval_types["INTERVAL_M2"] = _G.INTERVAL_M2
+interval_types["INTERVAL_M3"] = _G.INTERVAL_M3
+interval_types["INTERVAL_M4"] = _G.INTERVAL_M4
+interval_types["INTERVAL_M5"] = _G.INTERVAL_M5
+interval_types["INTERVAL_M6"] = _G.INTERVAL_M6
+interval_types["INTERVAL_M10"] = _G.INTERVAL_M10
+interval_types["INTERVAL_M15"] = _G.INTERVAL_M15
+interval_types["INTERVAL_M20"] = _G.INTERVAL_M20
+interval_types["INTERVAL_M30"] = _G.INTERVAL_M30
+interval_types["INTERVAL_H1"] = _G.INTERVAL_H1
+interval_types["INTERVAL_H2"] = _G.INTERVAL_H2
+interval_types["INTERVAL_H4"] = _G.INTERVAL_H4
+interval_types["INTERVAL_D1"] = _G.INTERVAL_D1
+interval_types["INTERVAL_W1"] = _G.INTERVAL_W1
+interval_types["INTERVAL_MN1"] = _G.INTERVAL_MN1
 
 function module.to_interval(pb_interval)
 

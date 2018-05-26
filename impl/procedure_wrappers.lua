@@ -22,6 +22,7 @@ assert(_G.SearchItems, "Функция 'SearchItems' не найдена.")
 -- Utility modules and functions
 local utils = require("utils.utils")
 local value_or_empty_string = assert(utils.value_or_empty_string, "Функция 'value_or_empty_string' не найдена в модуле 'utils.utils'.")
+local uuid = require("utils.uuid")
 
 -----
 -- The DataSources in-memory storage. 
@@ -408,6 +409,82 @@ module["getQuoteLevel2"] = function (args)
   if result.offer == "" then result.offer = nil end
   
   return result
+end
+
+-- TODO: test
+module["getLinesCount"] = function (args) 
+  return _G.getLinesCount(args.tag) -- returns 0 if no chart with this tag found
+end
+
+-- TODO: test
+module["getNumCandles"] = function (args) 
+  return _G.getNumCandles(args.tag) -- returns 0 if no chart with this tag found
+end
+
+-- TODO: test
+module["getCandlesByIndex"] = function (args) 
+  
+  -- just to see that there are three variables in the function's output
+  local t, n, l = _G.getCandlesByIndex(args.tag, args.line, args.first_candle, args.count) -- returns ({}, 0, "") if no info found or in case of error
+  
+  for i, candle in ipairs(t) do
+    
+      candle.open = tostring(assert(candle.open, string.format("Функция getCandlesByIndex: свеча с индексом %d не содержит обязательного поля 'open'.", i)))
+      candle.close = tostring(assert(candle.close, string.format("Функция getCandlesByIndex: свеча с индексом %d не содержит обязательного поля 'close'.", i)))
+      candle.high = tostring(assert(candle.high, string.format("Функция getCandlesByIndex: свеча с индексом %d не содержит обязательного поля 'high'.", i)))
+      candle.low = tostring(assert(candle.low, string.format("Функция getCandlesByIndex: свеча с индексом %d не содержит обязательного поля 'low'.", i)))
+      candle.volume = tostring(assert(candle.volume, string.format("Функция getCandlesByIndex: свеча с индексом %d не содержит обязательного поля 'volume'.", i)))
+  end
+  
+  return {
+    t = t,
+    n = n,
+    l = l
+  }
+end
+
+-- TODO: test
+module["datasource.CreateDataSource"] = function (args) 
+  
+  assert(args.interval, "Функция datasource.CreateDataSource: аргумент 'interval' не должен быть nil.")
+  local interval = assert(_G[args.interval], string.format("Функция datasource.CreateDataSource: QLua-интервал не найден для значения '%s'.", args.interval))
+  local ds, error_desc
+  if args.param == nil or args.param == "" then
+    ds, error_desc = _G.CreateDataSource(args.class_code, args.sec_code, interval)
+  else 
+    ds, error_desc = _G.CreateDataSource(args.class_code, args.sec_code, interval, args.param)
+  end
+  
+  local result
+  if ds then
+    local datasource_uuid = assert(uuid(), "Функция datasource.CreateDataSource: не удалось сгенерировать UUID.")
+    datasources[datasource_uuid] = ds
+    result = {
+      datasource_uuid = datasource_uuid,
+      is_error = false
+    }
+  else
+    result = {
+      is_error = true,
+      error_desc = error_desc
+    }
+  end
+  
+  return result
+end
+
+-- TODO: test
+module["datasource.SetUpdateCallback"] = function (args) 
+  
+  local ds = module.get_datasource(args.datasource_uuid)
+  
+  local f_cb_ctr, error_msg = loadstring("return "..args.f_cb_def)
+  if f_cb_ctr == nil then 
+    error( string.format("Функция datasource.SetUpdateCallback: не удалось распарсить определение функции из переданной строки. Описание ошибки: %s.", error_msg) )
+  else
+    local f_cb = f_cb_ctr()
+    return ds:SetUpdateCallback(function(index) f_cb(index, ds) end)
+  end
 end
 
 -----
