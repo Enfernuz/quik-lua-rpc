@@ -152,6 +152,56 @@ module.datasource.SetUpdateCallback = {
   Result = package .. "datasource.SetUpdateCallback.Result"
 }
 
+module.datasource.O = {
+  Request = package .. "datasource.O.Request",
+  Result = package .. "datasource.O.Result"
+}
+
+module.datasource.H = {
+  Request = package .. "datasource.H.Request",
+  Result = package .. "datasource.H.Result"
+}
+
+module.datasource.L = {
+  Request = package .. "datasource.L.Request",
+  Result = package .. "datasource.L.Result"
+}
+
+module.datasource.C = {
+  Request = package .. "datasource.C.Request",
+  Result = package .. "datasource.C.Result"
+}
+
+module.datasource.V = {
+  Request = package .. "datasource.V.Request",
+  Result = package .. "datasource.V.Result"
+}
+
+module.datasource.T = {
+  Request = package .. "datasource.T.Request",
+  Result = package .. "datasource.T.Result"
+}
+
+module.datasource.Size = {
+  Request = package .. "datasource.Size.Request",
+  Result = package .. "datasource.Size.Result"
+}
+
+module.datasource.Close = {
+  Request = package .. "datasource.Close.Request",
+  Result = package .. "datasource.Close.Result"
+}
+
+module.datasource.SetEmptyCallback = {
+  Request = package .. "datasource.SetEmptyCallback.Request",
+  Result = package .. "datasource.SetEmptyCallback.Result"
+}
+
+module.sendTransaction = {
+  Request = package .. "sendTransaction.Request",
+  Result = package .. "sendTransaction.Result"
+}
+
 module.qlua_structures = {
   Klass = ".qlua.structs.Klass",
   Order = ".qlua.structs.Order",

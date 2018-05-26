@@ -427,6 +427,129 @@ result_object_mappers[method_names["DS_SET_UPDATE_CALLBACK"]] = function (proc_r
   return qlua_pb_types.datasource.SetUpdateCallback.Result, result
 end
 
+-- datasource.O
+method_names["DS_O"] = "datasource.O"
+procedure_types[method_names["DS_O"]] = "DS_O"
+args_prototypes["DS_O"] = qlua_pb_types.datasource.O.Request
+result_object_mappers[method_names["DS_O"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.datasource.O.Result)
+  result.value = proc_result
+  
+  return qlua_pb_types.datasource.O.Result, result
+end
+
+-- datasource.H
+method_names["DS_H"] = "datasource.H"
+procedure_types[method_names["DS_H"]] = "DS_H"
+args_prototypes["DS_H"] = qlua_pb_types.datasource.H.Request
+result_object_mappers[method_names["DS_H"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.datasource.H.Result)
+  result.value = proc_result
+  
+  return qlua_pb_types.datasource.H.Result, result
+end
+
+-- datasource.L
+method_names["DS_L"] = "datasource.L"
+procedure_types[method_names["DS_L"]] = "DS_L"
+args_prototypes["DS_L"] = qlua_pb_types.datasource.L.Request
+result_object_mappers[method_names["DS_L"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.datasource.L.Result)
+  result.value = proc_result
+  
+  return qlua_pb_types.datasource.L.Result, result
+end
+
+-- datasource.C
+method_names["DS_C"] = "datasource.C"
+procedure_types[method_names["DS_C"]] = "DS_C"
+args_prototypes["DS_C"] = qlua_pb_types.datasource.C.Request
+result_object_mappers[method_names["DS_C"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.datasource.C.Result)
+  result.value = proc_result
+  
+  return qlua_pb_types.datasource.C.Result, result
+end
+
+-- datasource.V
+method_names["DS_V"] = "datasource.V"
+procedure_types[method_names["DS_V"]] = "DS_V"
+args_prototypes["DS_V"] = qlua_pb_types.datasource.V.Request
+result_object_mappers[method_names["DS_V"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.datasource.V.Result)
+  result.value = proc_result
+  
+  return qlua_pb_types.datasource.V.Result, result
+end
+
+-- datasource.T
+method_names["DS_T"] = "datasource.T"
+procedure_types[method_names["DS_T"]] = "DS_T"
+args_prototypes["DS_T"] = qlua_pb_types.datasource.T.Request
+result_object_mappers[method_names["DS_T"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.datasource.T.Result)
+  
+  for k, v in pairs(proc_result) do
+    result[k] = v
+  end
+  
+  return qlua_pb_types.datasource.T.Result, result
+end
+
+-- datasource.Size
+method_names["DS_SIZE"] = "datasource.Size"
+procedure_types[method_names["DS_SIZE"]] = "DS_SIZE"
+args_prototypes["DS_SIZE"] = qlua_pb_types.datasource.Size.Request
+result_object_mappers[method_names["DS_SIZE"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.datasource.Size.Result)
+  result.value = proc_result
+  
+  return qlua_pb_types.datasource.Size.Result, result
+end
+
+-- datasource.Close
+method_names["DS_CLOSE"] = "datasource.Close"
+procedure_types[method_names["DS_CLOSE"]] = "DS_CLOSE"
+args_prototypes["DS_CLOSE"] = qlua_pb_types.datasource.Close.Request
+result_object_mappers[method_names["DS_CLOSE"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.datasource.Close.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.datasource.Close.Result, result
+end
+
+-- datasource.Close
+method_names["DS_SET_EMPTY_CALLBACK"] = "datasource.SetEmptyCallback"
+procedure_types[method_names["DS_SET_EMPTY_CALLBACK"]] = "DS_SET_EMPTY_CALLBACK"
+args_prototypes["DS_SET_EMPTY_CALLBACK"] = qlua_pb_types.datasource.SetEmptyCallback.Request
+result_object_mappers[method_names["DS_SET_EMPTY_CALLBACK"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.datasource.SetEmptyCallback.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.datasource.SetEmptyCallback.Result, result
+end
+
+-- sendTransaction
+method_names["SEND_TRANSACTION"] = "sendTransaction"
+procedure_types[method_names["SEND_TRANSACTION"]] = "SEND_TRANSACTION"
+args_prototypes["SEND_TRANSACTION"] = qlua_pb_types.sendTransaction.Request
+result_object_mappers[method_names["SEND_TRANSACTION"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.sendTransaction.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.sendTransaction.Result, result
+end
+
 -----
 
 function module.get_method_name (pb_procedure_type)

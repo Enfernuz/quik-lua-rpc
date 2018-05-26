@@ -43,6 +43,16 @@ return function (context_path)
   p:loadfile("getCandlesByIndex.proto")
   p:loadfile("CreateDataSource.proto")
   p:loadfile("SetUpdateCallback.proto")
+  p:loadfile("O.proto")
+  p:loadfile("H.proto")
+  p:loadfile("L.proto")
+  p:loadfile("C.proto")
+  p:loadfile("V.proto")
+  p:loadfile("T.proto")
+  p:loadfile("Size.proto")
+  p:loadfile("Close.proto")
+  p:loadfile("SetEmptyCallback.proto")
+  p:loadfile("sendTransaction.proto")
 end
 
 --[[

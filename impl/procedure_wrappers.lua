@@ -476,7 +476,7 @@ end
 -- TODO: test
 module["datasource.SetUpdateCallback"] = function (args) 
   
-  local ds = module.get_datasource(args.datasource_uuid)
+  local ds = get_datasource(args.datasource_uuid)
   
   local f_cb_ctr, error_msg = loadstring("return "..args.f_cb_def)
   if f_cb_ctr == nil then 
@@ -485,6 +485,83 @@ module["datasource.SetUpdateCallback"] = function (args)
     local f_cb = f_cb_ctr()
     return ds:SetUpdateCallback(function(index) f_cb(index, ds) end)
   end
+end
+
+-- TODO: test
+module["datasource.O"] = function (args) 
+ 
+  local ds = get_datasource(args.datasource_uuid)
+  
+  return tostring( ds:O(args.candle_index) )
+end
+
+-- TODO: test
+module["datasource.H"] = function (args) 
+ 
+  local ds = get_datasource(args.datasource_uuid)
+  
+  return tostring( ds:H(args.candle_index) )
+end
+
+-- TODO: test
+module["datasource.L"] = function (args) 
+ 
+  local ds = get_datasource(args.datasource_uuid)
+  
+  return tostring( ds:L(args.candle_index) )
+end
+
+-- TODO: test
+module["datasource.C"] = function (args) 
+ 
+  local ds = get_datasource(args.datasource_uuid)
+  
+  return tostring( ds:C(args.candle_index) )
+end
+
+-- TODO: test
+module["datasource.V"] = function (args) 
+ 
+  local ds = get_datasource(args.datasource_uuid)
+  
+  return tostring( ds:V(args.candle_index) )
+end
+
+-- TODO: test
+module["datasource.T"] = function (args) 
+  
+  local ds = get_datasource(args.datasource_uuid)
+
+  return ds:T(args.candle_index)
+end
+
+-- TODO: test
+module["datasource.Size"] = function (args) 
+  
+  local ds = get_datasource(args.datasource_uuid)
+
+  return ds:Size()
+end
+
+-- TODO: test
+module["datasource.Close"] = function (args) 
+  
+  local ds = get_datasource(args.datasource_uuid)
+  
+  return ds:Close()
+end
+
+-- TODO: test
+module["datasource.SetEmptyCallback"] = function (args) 
+  
+  local ds = get_datasource(args.datasource_uuid)
+
+  return ds:SetEmptyCallback()
+end
+
+-- TODO: test
+module["sendTransaction"] = function (args) 
+  return _G.sendTransaction(args.transaction) -- returns an empty string (seems to be always)
 end
 
 -----
