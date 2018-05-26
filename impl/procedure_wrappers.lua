@@ -667,6 +667,7 @@ module["getPortfolioInfo"] = function (args)
   return result
 end
 
+-- TODO: test
 module["getPortfolioInfoEx"] = function (args) 
 
   local result = _G.getPortfolioInfoEx(args.firm_id, args.client_code, args.limit_kind) -- returns {} in case of error
@@ -698,6 +699,70 @@ module["getPortfolioInfoEx"] = function (args)
   --result.cash_leverage AS IS
   --result.fut_position_type AS IS
   --result.fut_accured_int AS IS
+  
+  return result
+end
+
+-- TODO: test
+module["getBuySellInfo"] = function (args) 
+
+  local price = tonumber(args.price)
+  if price == nil then 
+    error( string.format("Функция getBuySellInfo: не удалось преобразовать в число значение '%s' аргумента 'price'.", args.price) )
+  end
+  
+  local result = _G.getBuySellInfo(args.firm_id, args.client_code, args.class_code, args.sec_code, price) -- returns {} in case of error
+  if result == nil then
+    error( string.format("QLua-функция getBuySellInfo(%s, %s, %s, %s, %s) возвратила nil.", args.firm_id, args.client_code, args.class_code, args.sec_code, args.price) )
+  end
+  
+  --result.is_margin_sec AS IS
+  --result.is_asset_sec AS IS
+  --result.balance AS IS
+  --result.can_buy AS IS
+  --result.can_sell AS IS
+  --result.position_valuation AS IS
+  --result.value AS IS
+  --result.open_value AS IS
+  --result.lim_long AS IS
+  --result.long_coef AS IS
+  --result.lim_short AS IS
+  --result.short_coef AS IS
+  --result.value_coef AS IS
+  --result.open_value_coef AS IS
+  --result.share AS IS
+  --result.short_wa_price AS IS
+  --result.long_wa_price AS IS
+  --result.profit_loss AS IS
+  --result.spread_hc AS IS
+  --result.can_buy_own AS IS
+  --result.can_sell_own AS IS
+  
+  return result
+end
+
+-- TODO: test
+module["getBuySellInfoEx"] = function (args) 
+  
+  local price = tonumber(args.price)
+  if price == nil then 
+    error( string.format("Функция getBuySellInfoEx: не удалось преобразовать в число значение '%s' аргумента 'price'.", args.price) )
+  end
+  
+  local result = _G.getBuySellInfoEx(args.firm_id, args.client_code, args.class_code, args.sec_code, price) -- returns {} in case of error
+  if result == nil then
+    error( string.format("QLua-функция getBuySellInfoEx(%s, %s, %s, %s, %s) возвратила nil.", args.firm_id, args.client_code, args.class_code, args.sec_code, args.price) )
+  end
+  
+  --params from PortfolioInfo AS IS
+  if result.limit_kind then result.limit_kind = tostring(result.limit_kind) end
+  --result.d_long AS IS
+  --result.d_min_long AS IS
+  --result.d_short AS IS
+  --result.d_min_short AS IS
+  --result.client_type AS IS
+  --result.is_long_allowed AS IS
+  --result.is_short_allowed AS IS
   
   return result
 end

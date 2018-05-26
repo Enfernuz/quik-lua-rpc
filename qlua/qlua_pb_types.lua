@@ -231,6 +231,18 @@ module.getPortfolioInfoEx = {
   PortfolioInfoEx = package .. "getPortfolioInfoEx.PortfolioInfoEx"
 }
 
+module.getBuySellInfo = {
+  Request = package .. "getBuySellInfo.Request",
+  Result = package .. "getBuySellInfo.Result",
+  BuySellInfo = package .. "getBuySellInfo.BuySellInfo"
+}
+
+module.getBuySellInfoEx = {
+  Request = package .. "getBuySellInfoEx.Request",
+  Result = package .. "getBuySellInfoEx.Result",
+  BuySellInfoEx = package .. "getBuySellInfoEx.BuySellInfoEx"
+}
+
 module.qlua_structures = {
   Klass = ".qlua.structs.Klass",
   Order = ".qlua.structs.Order",

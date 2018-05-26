@@ -686,6 +686,66 @@ result_object_mappers[method_names["GET_PORTFOLIO_INFO_EX"]] = function (proc_re
   return qlua_pb_types.getPortfolioInfoEx.Result, result
 end
 
+-- getBuySellInfo
+method_names["GET_BUY_SELL_INFO"] = "getBuySellInfo"
+procedure_types[method_names["GET_BUY_SELL_INFO"]] = "GET_BUY_SELL_INFO"
+args_prototypes["GET_BUY_SELL_INFO"] = qlua_pb_types.getBuySellInfo.Request
+result_object_mappers[method_names["GET_BUY_SELL_INFO"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getBuySellInfo.Result)
+  result.buy_sell_info = pb.defaults(qlua_pb_types.getBuySellInfo.BuySellInfo)
+  for k, v in pairs(proc_result) do
+    result.buy_sell_info[k] = v
+  end
+  
+  return qlua_pb_types.getBuySellInfo.Result, result
+end
+
+-- getBuySellInfoEx
+method_names["GET_BUY_SELL_INFO_EX"] = "getBuySellInfoEx"
+procedure_types[method_names["GET_BUY_SELL_INFO_EX"]] = "GET_BUY_SELL_INFO_EX"
+args_prototypes["GET_BUY_SELL_INFO_EX"] = qlua_pb_types.getBuySellInfoEx.Request
+result_object_mappers[method_names["GET_BUY_SELL_INFO_EX"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getBuySellInfoEx.Result)
+  result.buy_sell_info_ex = pb.defaults(qlua_pb_types.getBuySellInfoEx.BuySellInfoEx)
+  result.buy_sell_info_ex.buy_sell_info = pb.defaults(qlua_pb_types.getBuySellInfoEx.BuySellInfo)
+  
+  local buy_sell_info = result.buy_sell_info_ex.buy_sell_info
+  buy_sell_info.is_margin_sec = proc_result.is_margin_sec
+  buy_sell_info.is_asset_sec = proc_result.is_asset_sec
+  buy_sell_info.balance = proc_result.balance
+  buy_sell_info.can_buy = proc_result.can_buy
+  buy_sell_info.can_sell = proc_result.can_sell
+  buy_sell_info.position_valuation = proc_result.position_valuation
+  buy_sell_info.value = proc_result.value
+  buy_sell_info.open_value = proc_result.open_value
+  buy_sell_info.lim_long = proc_result.lim_long
+  buy_sell_info.long_coef = proc_result.long_coef
+  buy_sell_info.lim_short = proc_result.lim_short
+  buy_sell_info.short_coef = proc_result.short_coef
+  buy_sell_info.value_coef = proc_result.value_coef
+  buy_sell_info.open_value_coef = proc_result.open_value_coef
+  buy_sell_info.share = proc_result.share
+  buy_sell_info.short_wa_price = proc_result.short_wa_price
+  buy_sell_info.long_wa_price = proc_result.long_wa_price
+  buy_sell_info.profit_loss = proc_result.profit_loss
+  buy_sell_info.spread_hc = proc_result.spread_hc
+  buy_sell_info.can_buy_own = proc_result.can_buy_own
+  buy_sell_info.can_sell_own = proc_result.can_sell_own
+  
+  result.buy_sell_info_ex.limit_kind = proc_result.limit_kind
+  result.buy_sell_info_ex.d_long = proc_result.d_long
+  result.buy_sell_info_ex.d_min_long = proc_result.d_min_long
+  result.buy_sell_info_ex.d_short = proc_result.d_short
+  result.buy_sell_info_ex.d_min_short = proc_result.d_min_short
+  result.buy_sell_info_ex.client_type = proc_result.client_type
+  result.buy_sell_info_ex.is_long_allowed = proc_result.is_long_allowed
+  result.buy_sell_info_ex.is_short_allowed = proc_result.is_short_allowed
+
+  return qlua_pb_types.getBuySellInfoEx.Result, result
+end
+
 -----
 
 function module.get_method_name (pb_procedure_type)
