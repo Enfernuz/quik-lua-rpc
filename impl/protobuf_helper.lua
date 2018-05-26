@@ -593,6 +593,99 @@ result_object_mappers[method_names["GET_PARAM_EX_2"]] = function (proc_result)
   return qlua_pb_types.getParamEx2.Result, result
 end
 
+-- getPortfolioInfo
+method_names["GET_PORTFOLIO_INFO"] = "getPortfolioInfo"
+procedure_types[method_names["GET_PORTFOLIO_INFO"]] = "GET_PORTFOLIO_INFO"
+args_prototypes["GET_PORTFOLIO_INFO"] = qlua_pb_types.getPortfolioInfo.Request
+result_object_mappers[method_names["GET_PORTFOLIO_INFO"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getPortfolioInfo.Result)
+  result.portfolio_info = pb.defaults(qlua_pb_types.getPortfolioInfo.PortfolioInfo)
+  for k, v in pairs(proc_result) do
+    result.portfolio_info[k] = v
+  end
+  
+  return qlua_pb_types.getPortfolioInfo.Result, result
+end
+
+-- getPortfolioInfoEx
+method_names["GET_PORTFOLIO_INFO_EX"] = "getPortfolioInfoEx"
+procedure_types[method_names["GET_PORTFOLIO_INFO_EX"]] = "GET_PORTFOLIO_INFO_EX"
+args_prototypes["GET_PORTFOLIO_INFO_EX"] = qlua_pb_types.getPortfolioInfoEx.Request
+result_object_mappers[method_names["GET_PORTFOLIO_INFO_EX"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.getPortfolioInfoEx.Result)
+  result.portfolio_info_ex = pb.defaults(qlua_pb_types.getPortfolioInfoEx.PortfolioInfoEx)
+  result.portfolio_info_ex.portfolio_info = pb.defaults(qlua_pb_types.getPortfolioInfo.PortfolioInfo)
+  
+  local portfolio_info = result.portfolio_info_ex.portfolio_info
+  portfolio_info.is_leverage = proc_result.is_leverage
+  portfolio_info.in_assets = proc_result.in_assets
+  portfolio_info.leverage = proc_result.leverage
+  portfolio_info.open_limit = proc_result.open_limit
+  portfolio_info.val_short = proc_result.val_short
+  portfolio_info.val_long = proc_result.val_long
+  portfolio_info.val_long_margin = proc_result.val_long_margin
+  portfolio_info.val_long_asset = proc_result.val_long_asset
+  portfolio_info.assets = proc_result.assets
+  portfolio_info.cur_leverage = proc_result.cur_leverage
+  portfolio_info.margin = proc_result.margin
+  portfolio_info.lim_all = proc_result.lim_all
+  portfolio_info.av_lim_all = proc_result.av_lim_all
+  portfolio_info.locked_buy = proc_result.locked_buy
+  portfolio_info.locked_buy_margin = proc_result.locked_buy_margin
+  portfolio_info.locked_buy_asset = proc_result.locked_buy_asset
+  portfolio_info.locked_sell = proc_result.locked_sell
+  portfolio_info.locked_value_coef = proc_result.locked_value_coef
+  portfolio_info.in_all_assets = proc_result.in_all_assets
+  portfolio_info.all_assets = proc_result.all_assets
+  portfolio_info.profit_loss = proc_result.profit_loss
+  portfolio_info.rate_change = proc_result.rate_change
+  portfolio_info.lim_buy = proc_result.lim_buy
+  portfolio_info.lim_sell = proc_result.lim_sell
+  portfolio_info.lim_non_margin = proc_result.lim_non_margin
+  portfolio_info.lim_buy_asset = proc_result.lim_buy_asset
+  portfolio_info.val_short_net = proc_result.val_short_net
+  portfolio_info.val_long_net = proc_result.val_long_net
+  portfolio_info.total_money_bal = proc_result.total_money_bal
+  portfolio_info.total_locked_money = proc_result.total_locked_money
+  portfolio_info.haircuts = proc_result.haircuts
+  portfolio_info.assets_without_hc = proc_result.assets_without_hc
+  portfolio_info.status_coef = proc_result.status_coef
+  portfolio_info.varmargin = proc_result.varmargin
+  portfolio_info.go_for_positions = proc_result.go_for_positions
+  portfolio_info.go_for_orders = proc_result.go_for_orders
+  portfolio_info.rate_futures = proc_result.rate_futures
+  portfolio_info.is_qual_client = proc_result.is_qual_client
+  portfolio_info.is_futures = proc_result.is_futures
+  portfolio_info.curr_tag = proc_result.curr_tag
+  
+  result.portfolio_info_ex.init_margin = proc_result.init_margin
+  result.portfolio_info_ex.min_margin = proc_result.min_margin
+  result.portfolio_info_ex.corrected_margin = proc_result.corrected_margin
+  result.portfolio_info_ex.client_type = proc_result.client_type
+  result.portfolio_info_ex.portfolio_value = proc_result.portfolio_value
+  result.portfolio_info_ex.start_limit_open_pos = proc_result.start_limit_open_pos
+  result.portfolio_info_ex.total_limit_open_pos = proc_result.total_limit_open_pos
+  result.portfolio_info_ex.limit_open_pos = proc_result.limit_open_pos
+  result.portfolio_info_ex.used_lim_open_pos = proc_result.used_lim_open_pos
+  result.portfolio_info_ex.acc_var_margin = proc_result.acc_var_margin
+  result.portfolio_info_ex.cl_var_margin = proc_result.cl_var_margin
+  result.portfolio_info_ex.opt_liquid_cost = proc_result.opt_liquid_cost
+  result.portfolio_info_ex.fut_asset = proc_result.fut_asset
+  result.portfolio_info_ex.fut_total_asset = proc_result.fut_total_asset
+  result.portfolio_info_ex.fut_debt = proc_result.fut_debt
+  result.portfolio_info_ex.fut_rate_asset = proc_result.fut_rate_asset
+  result.portfolio_info_ex.fut_rate_asset_open = proc_result.fut_rate_asset_open
+  result.portfolio_info_ex.fut_rate_go = proc_result.fut_rate_go
+  result.portfolio_info_ex.planed_rate_go = proc_result.planed_rate_go
+  result.portfolio_info_ex.cash_leverage = proc_result.cash_leverage
+  result.portfolio_info_ex.fut_position_type = proc_result.fut_position_type
+  result.portfolio_info_ex.fut_accured_int = proc_result.fut_accured_int
+  
+  return qlua_pb_types.getPortfolioInfoEx.Result, result
+end
+
 -----
 
 function module.get_method_name (pb_procedure_type)

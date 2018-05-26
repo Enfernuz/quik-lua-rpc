@@ -219,6 +219,18 @@ module.getParamEx2 = {
   ParamEx2 = package .. "getParamEx2.ParamEx2"
 }
 
+module.getPortfolioInfo = {
+  Request = package .. "getPortfolioInfo.Request",
+  Result = package .. "getPortfolioInfo.Result",
+  PortfolioInfo = package .. "getPortfolioInfo.PortfolioInfo"
+}
+
+module.getPortfolioInfoEx = {
+  Request = package .. "getPortfolioInfoEx.Request",
+  Result = package .. "getPortfolioInfoEx.Result",
+  PortfolioInfoEx = package .. "getPortfolioInfoEx.PortfolioInfoEx"
+}
+
 module.qlua_structures = {
   Klass = ".qlua.structs.Klass",
   Order = ".qlua.structs.Order",

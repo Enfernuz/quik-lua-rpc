@@ -588,6 +588,11 @@ module["getParamEx"] = function (args)
   if result == nil then
     error( string.format("QLua-функция getParamEx(%s, %s, %s) возвратила nil.", args.class_code, args.sec_code, args.param_name) )
   end
+  
+  --result.param_type AS IS
+  --result.param_value AS IS
+  --result.param_image AS IS
+  --result.result AS IS
     
   return result
 end
@@ -600,7 +605,100 @@ module["getParamEx2"] = function (args)
   if result == nil then
     error(string.format("QLua-функция getParamEx2(%s, %s, %s) возвратила nil.", args.class_code, args.sec_code, args.param_name), 0)
   end
+  
+  --result.param_type AS IS
+  --result.param_value AS IS
+  --result.param_image AS IS
+  --result.result AS IS
 
+  return result
+end
+
+-- TODO: test
+module["getPortfolioInfo"] = function (args) 
+
+  local result = _G.getPortfolioInfo(args.firm_id, args.client_code) -- returns {} in case of error
+  
+  if result == nil then
+    error( string.format("QLua-функция getPortfolioInfo(%s, %s) возвратила nil.", args.firm_id, args.client_code) )
+  end
+  
+  --result.is_leverage AS IS
+  --result.in_assets AS IS
+  --result.leverage AS IS
+  --result.open_limit AS IS
+  --result.val_short AS IS
+  --result.val_long AS IS
+  --result.val_long_margin AS IS
+  --result.val_long_asset AS IS
+  --result.assets AS IS
+  --result.cur_leverage AS IS
+  --result.margin AS IS
+  --result.lim_all AS IS
+  --result.av_lim_all AS IS
+  --result.locked_buy AS IS
+  --result.locked_buy_margin AS IS
+  --result.locked_buy_asset AS IS
+  --result.locked_sell AS IS
+  --result.locked_value_coef AS IS
+  --result.in_all_assets AS IS
+  --result.all_assets AS IS
+  --result.profit_loss AS IS
+  --result.rate_change AS IS
+  --result.lim_buy AS IS
+  --result.lim_sell AS IS
+  --result.lim_non_margin AS IS
+  --result.lim_buy_asset AS IS
+  --result.val_short_net AS IS
+  --result.val_long_net AS IS
+  --result.total_money_bal AS IS
+  --result.total_locked_money AS IS
+  --result.haircuts AS IS
+  --result.assets_without_hc AS IS
+  --result.status_coef AS IS
+  --result.varmargin AS IS
+  --result.go_for_positions AS IS
+  --result.go_for_orders AS IS
+  --result.rate_futures AS IS
+  --result.is_qual_client AS IS
+  --result.is_futures AS IS
+  --result.curr_tag AS IS
+
+  return result
+end
+
+module["getPortfolioInfoEx"] = function (args) 
+
+  local result = _G.getPortfolioInfoEx(args.firm_id, args.client_code, args.limit_kind) -- returns {} in case of error
+  
+  if result == nil then
+    error( string.format("QLua-функция getPortfolioInfoEx(%s, %s, %d) возвратила nil.", args.firm_id, args.client_code, args.limit_kind) )
+  end
+  
+  --params from PortfolioInfo AS IS
+  --result.init_margin AS IS
+  --result.min_margin AS IS
+  --result.corrected_margin AS IS
+  --result.client_type AS IS
+  --result.portfolio_value AS IS
+  --result.start_limit_open_pos AS IS
+  --result.total_limit_open_pos AS IS
+  --result.limit_open_pos AS IS
+  --result.used_lim_open_pos AS IS
+  --result.acc_var_margin AS IS
+  --result.cl_var_margin AS IS
+  --result.opt_liquid_cost AS IS
+  --result.fut_asset AS IS
+  --result.fut_total_asset AS IS
+  --result.fut_debt AS IS
+  --result.fut_rate_asset AS IS
+  --result.fut_rate_asset_open AS IS
+  --result.fut_rate_go AS IS
+  --result.planed_rate_go AS IS
+  --result.cash_leverage AS IS
+  --result.fut_position_type AS IS
+  --result.fut_accured_int AS IS
+  
   return result
 end
 

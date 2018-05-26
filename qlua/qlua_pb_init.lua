@@ -56,6 +56,8 @@ return function (context_path)
   p:loadfile("CalcBuySell.proto")
   p:loadfile("getParamEx.proto")
   p:loadfile("getParamEx2.proto")
+  p:loadfile("getPortfolioInfo.proto")
+  p:loadfile("getPortfolioInfoEx.proto")
 end
 
 --[[
