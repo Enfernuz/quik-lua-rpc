@@ -60,6 +60,11 @@ return function (context_path)
   p:loadfile("getPortfolioInfoEx.proto")
   p:loadfile("getBuySellInfo.proto")
   p:loadfile("getBuySellInfoEx.proto")
+  p:loadfile("AddColumn.proto")
+  p:loadfile("AllocTable.proto")
+  p:loadfile("Clear.proto")
+  p:loadfile("CreateWindow.proto")
+  p:loadfile("DeleteRow.proto")
 end
 
 --[[

@@ -337,6 +337,41 @@ module[proto] = {
   BuySellInfoEx = path .. "BuySellInfoEx"
 }
 
+proto = "AddColumn"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "AllocTable"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "Clear"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "CreateWindow"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "DeleteRow"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
 path = ".qlua.structs."
 module.qlua_structures = {
   Klass = path .. "Klass",

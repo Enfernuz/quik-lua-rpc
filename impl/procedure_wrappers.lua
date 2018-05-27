@@ -767,6 +767,31 @@ module["getBuySellInfoEx"] = function (args)
   return result
 end
 
+-- TODO: test
+module["AddColumn"] = function (args) 
+  return _G.AddColumn(args.t_id, args.icode, args.name, args.is_default, utils.to_qtable_parameter_type(args.par_type), args.width) -- returns 0 or 1
+end
+
+-- TODO: test
+module["AllocTable"] = function () 
+  return _G.AllocTable() -- returns a number
+end
+
+-- TODO: test
+module["Clear"] = function (args) 
+  return _G.Clear(args.t_id) -- returns true or false
+end
+
+-- TODO: test
+module["CreateWindow"] = function (args) 
+  return _G.CreateWindow(args.t_id) -- returns 0 or 1
+end
+
+-- TODO: test
+module["DeleteRow"] = function (args) 
+  return _G.DeleteRow(args.t_id, args.key) -- returns true or false
+end
+
 -----
 
 return module

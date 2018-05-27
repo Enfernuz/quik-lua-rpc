@@ -560,7 +560,7 @@ result_object_mappers[method_names["CALC_BUY_SELL"]] = function (proc_result)
   result.qty = proc_result.qty
   result.comission = proc_result.comission
   
-  return qlua_pb_types.sendTransaction.Result, result
+  return qlua_pb_types.CalcBuySell.Result, result
 end
 
 -- getParamEx
@@ -744,6 +744,66 @@ result_object_mappers[method_names["GET_BUY_SELL_INFO_EX"]] = function (proc_res
   result.buy_sell_info_ex.is_short_allowed = proc_result.is_short_allowed
 
   return qlua_pb_types.getBuySellInfoEx.Result, result
+end
+
+-- AddColumn
+method_names["ADD_COLUMN"] = "AddColumn"
+procedure_types[method_names["ADD_COLUMN"]] = "ADD_COLUMN"
+args_prototypes["ADD_COLUMN"] = qlua_pb_types.AddColumn.Request
+result_object_mappers[method_names["ADD_COLUMN"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.AddColumn.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.AddColumn.Result, result
+end
+
+-- AllocTable
+method_names["ALLOC_TABLE"] = "AllocTable"
+procedure_types[method_names["ALLOC_TABLE"]] = "ALLOC_TABLE"
+args_prototypes["ALLOC_TABLE"] = qlua_pb_types.AllocTable.Request
+result_object_mappers[method_names["ALLOC_TABLE"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.AllocTable.Result)
+  result.t_id = proc_result
+  
+  return qlua_pb_types.AllocTable.Result, result
+end
+
+-- Clear
+method_names["CLEAR"] = "Clear"
+procedure_types[method_names["CLEAR"]] = "CLEAR"
+args_prototypes["CLEAR"] = qlua_pb_types.Clear.Request
+result_object_mappers[method_names["CLEAR"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.Clear.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.Clear.Result, result
+end
+
+-- CreateWindow
+method_names["CREATE_WINDOW"] = "CreateWindow"
+procedure_types[method_names["CREATE_WINDOW"]] = "CREATE_WINDOW"
+args_prototypes["CREATE_WINDOW"] = qlua_pb_types.CreateWindow.Request
+result_object_mappers[method_names["CREATE_WINDOW"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.CreateWindow.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.CreateWindow.Result, result
+end
+
+-- DeleteRow
+method_names["DELETE_ROW"] = "DeleteRow"
+procedure_types[method_names["DELETE_ROW"]] = "DELETE_ROW"
+args_prototypes["DELETE_ROW"] = qlua_pb_types.DeleteRow.Request
+result_object_mappers[method_names["DELETE_ROW"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.DeleteRow.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.DeleteRow.Result, result
 end
 
 -----
