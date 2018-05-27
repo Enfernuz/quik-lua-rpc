@@ -2,256 +2,351 @@ local module = {}
 
 local package = ".qlua.rpc."
 
-module.RPC = {
-  Request = package .. "RPC.Request",
-  Response = package .. "RPC.Response"
+local proto = "RPC"
+local path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Response = path .. "Response"
 }
 
-module.isConnected = {
-  Request = package .. "isConnected.Request",
-  Result = package .. "isConnected.Result"
+proto = "isConnected"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.getScriptPath = {
-  Request = package .. "getScriptPath.Request",
-  Result = package .. "getScriptPath.Result"
+proto = "getScriptPath"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.getInfoParam = {
-  Request = package .. "getInfoParam.Request",
-  Result = package .. "getInfoParam.Result"
+proto = "getInfoParam"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.message = {
-  Request = package .. "message.Request",
-  Result = package .. "message.Result"
+proto = "message"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.sleep = {
-  Request = package .. "sleep.Request",
-  Result = package .. "sleep.Result"
+proto = "sleep"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.getWorkingFolder = {
-  Request = package .. "getWorkingFolder.Request",
-  Result = package .. "getWorkingFolder.Result"
+proto = "getWorkingFolder"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.PrintDbgStr = {
-  Request = package .. "PrintDbgStr.Request",
-  Result = package .. "PrintDbgStr.Result"
+proto = "PrintDbgStr"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.getItem = {
-  Request = package .. "getItem.Request",
-  Result = package .. "getItem.Result"
+proto = "getItem"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.getOrderByNumber = {
-  Request = package .. "getOrderByNumber.Request",
-  Result = package .. "getOrderByNumber.Result"
+proto = "getOrderByNumber"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.getNumberOf = {
-  Request = package .. "getNumberOf.Request",
-  Result = package .. "getNumberOf.Result"
+proto = "getNumberOf"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.SearchItems = {
-  Request = package .. "SearchItems.Request",
-  Result = package .. "SearchItems.Result"
+proto = "SearchItems"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.getClassesList = {
-  Request = package .. "getClassesList.Request",
-  Result = package .. "getClassesList.Result"
+proto = "getClassesList"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.getClassInfo = {
-  Request = package .. "getClassInfo.Request",
-  Result = package .. "getClassInfo.Result"
+proto = "getClassInfo"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.getClassSecurities = {
-  Request = package .. "getClassSecurities.Request",
-  Result = package .. "getClassSecurities.Result"
+proto = "getClassSecurities"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.getMoney = {
-  Request = package .. "getMoney.Request",
-  Result = package .. "getMoney.Result",
-  Money = package .. "getMoney.Money"
+proto = "getMoney"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+  Money = path .. "Money"
 }
 
-module.getMoneyEx = {
-  Request = package .. "getMoneyEx.Request",
-  Result = package .. "getMoneyEx.Result"
+proto = "getMoneyEx"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.getDepo = {
-  Request = package .. "getDepo.Request",
-  Result = package .. "getDepo.Result", 
-  Depo = package .. "getDepo.Depo"
+proto = "getDepo"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result" 
+  Depo = path .. "Depo"
 }
 
-module.getDepoEx = {
-  Request = package .. "getDepoEx.Request",
-  Result = package .. "getDepoEx.Result"
+proto = "getDepoEx"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.getFuturesLimit = {
-  Request = package .. "getFuturesLimit.Request",
-  Result = package .. "getFuturesLimit.Result"
+proto = "getFuturesLimit"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.getFuturesHolding = {
-  Request = package .. "getFuturesHolding.Request",
-  Result = package .. "getFuturesHolding.Result"
+proto = "getFuturesHolding"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.getSecurityInfo = {
-  Request = package .. "getSecurityInfo.Request",
-  Result = package .. "getSecurityInfo.Result"
+proto = "getSecurityInfo"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.getTradeDate = {
-  Request = package .. "getTradeDate.Request",
-  Result = package .. "getTradeDate.Result", 
-  TradeDate = package .. "getTradeDate.TradeDate"
+proto = "getTradeDate"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result", 
+  TradeDate = path .. "TradeDate"
 }
 
-module.getQuoteLevel2 = {
-  Request = package .. "getQuoteLevel2.Request",
-  Result = package .. "getQuoteLevel2.Result", 
-  QuoteEntry = package .. "getQuoteLevel2.QuoteEntry"
+proto = "getQuoteLevel2"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result", 
+  QuoteEntry = path .. "QuoteEntry"
 }
 
-module.getLinesCount = {
-  Request = package .. "getLinesCount.Request",
-  Result = package .. "getLinesCount.Result"
+proto = "getLinesCount"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.getNumCandles = {
-  Request = package .. "getNumCandles.Request",
-  Result = package .. "getNumCandles.Result"
+proto = "getNumCandles"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.getCandlesByIndex = {
-  Request = package .. "getCandlesByIndex.Request",
-  Result = package .. "getCandlesByIndex.Result"
+proto = "getCandlesByIndex"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
 module.datasource = {}
-module.datasource.CreateDataSource = {
-  Request = package .. "datasource.CreateDataSource.Request",
-  Result = package .. "datasource.CreateDataSource.Result"
+
+local subpackage = "datasource."
+proto = "CreateDataSource"
+path = package .. subpackage .. proto .. "."
+module.datasource[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.datasource.SetUpdateCallback = {
-  Request = package .. "datasource.SetUpdateCallback.Request",
-  Result = package .. "datasource.SetUpdateCallback.Result"
+proto = "SetUpdateCallback"
+path = package .. subpackage .. proto .. "."
+module.datasource[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.datasource.O = {
-  Request = package .. "datasource.O.Request",
-  Result = package .. "datasource.O.Result"
+proto = "O"
+path = package .. subpackage .. proto .. "."
+module.datasource[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.datasource.H = {
-  Request = package .. "datasource.H.Request",
-  Result = package .. "datasource.H.Result"
+proto = "H"
+path = package .. subpackage .. proto .. "."
+module.datasource[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.datasource.L = {
-  Request = package .. "datasource.L.Request",
-  Result = package .. "datasource.L.Result"
+proto = "L"
+path = package .. subpackage .. proto .. "."
+module.datasource[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.datasource.C = {
-  Request = package .. "datasource.C.Request",
-  Result = package .. "datasource.C.Result"
+proto = "C"
+path = package .. subpackage .. proto .. "."
+module.datasource[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.datasource.V = {
-  Request = package .. "datasource.V.Request",
-  Result = package .. "datasource.V.Result"
+proto = "V"
+path = package .. subpackage .. proto .. "."
+module.datasource[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.datasource.T = {
-  Request = package .. "datasource.T.Request",
-  Result = package .. "datasource.T.Result"
+proto = "T"
+path = package .. subpackage .. proto .. "."
+module.datasource[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.datasource.Size = {
-  Request = package .. "datasource.Size.Request",
-  Result = package .. "datasource.Size.Result"
+proto = "Size"
+path = package .. subpackage .. proto .. "."
+module.datasource[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.datasource.Close = {
-  Request = package .. "datasource.Close.Request",
-  Result = package .. "datasource.Close.Result"
+proto = "Close"
+path = package .. subpackage .. proto .. "."
+module.datasource[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.datasource.SetEmptyCallback = {
-  Request = package .. "datasource.SetEmptyCallback.Request",
-  Result = package .. "datasource.SetEmptyCallback.Result"
+proto = "SetEmptyCallback"
+path = package .. subpackage .. proto .. "."
+module.datasource[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.sendTransaction = {
-  Request = package .. "sendTransaction.Request",
-  Result = package .. "sendTransaction.Result"
+proto = "sendTransaction"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.CalcBuySell = {
-  Request = package .. "CalcBuySell.Request",
-  Result = package .. "CalcBuySell.Result"
+proto = "CalcBuySell"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
 }
 
-module.getParamEx = {
-  Request = package .. "getParamEx.Request",
-  Result = package .. "getParamEx.Result",
-  ParamEx = package .. "getParamEx.ParamEx"
+proto = "getParamEx"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result",
+  ParamEx = path .. "ParamEx"
 }
 
-module.getParamEx2 = {
-  Request = package .. "getParamEx2.Request",
-  Result = package .. "getParamEx2.Result",
-  ParamEx2 = package .. "getParamEx2.ParamEx2"
+proto = "getParamEx2"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result",
+  ParamEx2 = path .. "ParamEx2"
 }
 
-module.getPortfolioInfo = {
-  Request = package .. "getPortfolioInfo.Request",
-  Result = package .. "getPortfolioInfo.Result",
-  PortfolioInfo = package .. "getPortfolioInfo.PortfolioInfo"
+proto = "getPortfolioInfo"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result",
+  PortfolioInfo = path .. "PortfolioInfo"
 }
 
-module.getPortfolioInfoEx = {
-  Request = package .. "getPortfolioInfoEx.Request",
-  Result = package .. "getPortfolioInfoEx.Result",
-  PortfolioInfoEx = package .. "getPortfolioInfoEx.PortfolioInfoEx"
+proto = "getPortfolioInfoEx"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result",
+  PortfolioInfoEx = path .. "PortfolioInfoEx"
 }
 
-module.getBuySellInfo = {
-  Request = package .. "getBuySellInfo.Request",
-  Result = package .. "getBuySellInfo.Result",
-  BuySellInfo = package .. "getBuySellInfo.BuySellInfo"
+proto = "getBuySellInfo"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result",
+  BuySellInfo = path .. "BuySellInfo"
 }
 
-module.getBuySellInfoEx = {
-  Request = package .. "getBuySellInfoEx.Request",
-  Result = package .. "getBuySellInfoEx.Result",
-  BuySellInfoEx = package .. "getBuySellInfoEx.BuySellInfoEx"
+proto = "getBuySellInfoEx"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result",
+  BuySellInfoEx = path .. "BuySellInfoEx"
 }
 
+path = ".qlua.structs."
 module.qlua_structures = {
-  Klass = ".qlua.structs.Klass",
-  Order = ".qlua.structs.Order",
-  MoneyLimit = ".qlua.structs.MoneyLimit", 
-  DepoLimit = ".qlua.structs.DepoLimit", 
-  FuturesLimit = ".qlua.structs.FuturesLimit", 
-  FuturesClientHolding = ".qlua.structs.FuturesClientHolding", 
-  Security = ".qlua.structs.Security", 
-  CandleEntry = ".qlua.structs.CandleEntry"
+  Klass = path .. "Klass",
+  Order = path .. "Order",
+  MoneyLimit = path .. "MoneyLimit", 
+  DepoLimit = path .. "DepoLimit", 
+  FuturesLimit = path .. "FuturesLimit", 
+  FuturesClientHolding = path .. "FuturesClientHolding", 
+  Security = path .. "Security", 
+  CandleEntry = path .. "CandleEntry"
 }
 
 return module
