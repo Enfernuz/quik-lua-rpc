@@ -372,6 +372,111 @@ module[proto] = {
   Result = path .. "Result"
 }
 
+proto = "DestroyTable"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "InsertRow"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "IsWindowClosed"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "GetCell"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "GetTableSize"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "GetWindowCaption"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "GetWindowRect"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "SetCell"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "SetWindowCaption"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "SetWindowPos"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "SetTableNotificationCallback"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "RGB"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "SetColor"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "Highlight"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "SetSelectedRow"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
 path = ".qlua.structs."
 module.qlua_structures = {
   Klass = path .. "Klass",

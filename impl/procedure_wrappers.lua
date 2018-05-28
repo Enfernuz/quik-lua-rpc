@@ -178,7 +178,7 @@ module["SearchItems"] = function (args)
   local fn_ctr, error_msg = loadstring("return "..args.fn_def)
   local result
   if fn_ctr == nil then 
-    error(string.format("Не удалось распарсить определение функции из переданной строки. Описание ошибки: %s.", error_msg))
+    error(string.format("Функция SearchItems: не удалось распарсить определение функции из переданной строки. Описание ошибки: [%s].", error_msg))
   else
     if not args.params or args.params == "" then
       result = _G.SearchItems(args.table_name, args.start_index, args.end_index == 0 and (_G.getNumberOf(args.table_name) - 1) or args.end_index, fn_ctr()) -- returns nil in case of empty list found or error
@@ -480,7 +480,7 @@ module["datasource.SetUpdateCallback"] = function (args)
   
   local f_cb_ctr, error_msg = loadstring("return "..args.f_cb_def)
   if f_cb_ctr == nil then 
-    error( string.format("Функция datasource.SetUpdateCallback: не удалось распарсить определение функции из переданной строки. Описание ошибки: %s.", error_msg) )
+    error( string.format("Функция datasource.SetUpdateCallback: не удалось распарсить определение функции из переданной строки. Описание ошибки: [%s].", error_msg) )
   else
     local f_cb = f_cb_ctr()
     return ds:SetUpdateCallback(function(index) f_cb(index, ds) end)
@@ -790,6 +790,154 @@ end
 -- TODO: test
 module["DeleteRow"] = function (args) 
   return _G.DeleteRow(args.t_id, args.key) -- returns true or false
+end
+
+-- TODO: test
+module["DestroyTable"] = function (args) 
+  return _G.DestroyTable(args.t_id) -- returns true or false
+end
+
+-- TODO: test
+module["InsertRow"] = function (args) 
+  return _G.InsertRow(args.t_id, args.key) -- returns a number
+end
+
+-- TODO: test
+module["IsWindowClosed"] = function (args) 
+  
+  local result = _G.IsWindowClosed(args.t_id) -- returns nil in case of error
+  
+  if result == nil then
+    error( string.format("QLua-функция IsWindowClosed(%s) возвратила nil.", args.t_id) )
+  end
+  
+  return result
+end
+
+-- TODO: test
+module["GetCell"] = function (args) 
+
+  local result = _G.GetCell(args.t_id, args.key, args.code) -- returns nil in case of error
+  
+  if result == nil then
+    error( string.format("QLua-функция GetCell(%s, %s, %s) возвратила nil.", args.t_id, args.key, args.code) )
+  end
+  
+  if result.value then result.value = tostring(result.value) end
+  
+  return result
+end
+
+-- TODO: test
+module["GetTableSize"] = function (args) 
+
+  local rows, col = _G.GetTableSize(args.t_id) -- returns nil in case of error
+  
+  if rows == nil or col == nil then
+    error( string.format("QLua-функция GetTableSize(%s) возвратила nil.", args.t_id) )
+  end
+  
+  return {
+    rows = rows,
+    col = col
+  }
+end
+
+-- TODO: test
+module["GetWindowCaption"] = function (args) 
+
+  local result = _G.GetWindowCaption(args.t_id) -- returns nil in case of error
+  
+  if result == nil then 
+    error( string.format("QLua-функция GetWindowCaption(%s) возвратила nil.", args.t_id) )
+  end
+  
+  return utils.Cp1251ToUtf8(result)
+end
+
+-- TODO: test
+module["GetWindowRect"] = function (args) 
+
+  local top, left, bottom, right = _G.GetWindowRect(args.t_id) -- returns nil in case of error
+  
+  if top == nil then
+    error( string.format("QLua-функция GetWindowRect(%s) возвратила nil вместо параметра 'top'.", args.t_id) )
+  end
+  
+  if left == nil then
+    error( string.format("QLua-функция GetWindowRect(%s) возвратила nil вместо параметра 'left'.", args.t_id) )
+  end
+  
+  if bottom == nil then
+    error( string.format("QLua-функция GetWindowRect(%s) возвратила nil вместо параметра 'bottom'.", args.t_id) )
+  end
+  
+  if right == nil then
+    error( string.format("QLua-функция GetWindowRect(%s) возвратила nil вместо параметра 'right'.", args.t_id) )
+  end
+
+  return {
+    top = top, 
+    left = left, 
+    bottom = bottom, 
+    right = right
+  }
+end
+
+-- TODO: test
+module["SetCell"] = function (args) 
+  
+  local result
+  if args.value == 0 then
+    result = _G.SetCell(args.t_id, args.key, args.code, args.text) -- returns true or false
+  else
+    result = _G.SetCell(args.t_id, args.key, args.code, args.text, args.value) -- returns true or false
+  end
+  
+  return result
+end
+
+-- TODO: test
+module["SetWindowCaption"] = function (args) 
+  return _G.SetWindowCaption(args.t_id, args.str) -- returns true or false
+end
+
+-- TODO: test
+module["SetWindowPos"] = function (args) 
+  return _G.SetWindowPos(args.t_id, args.x, args.y, args.dx, args.dy) -- returns true or false
+end
+
+-- TODO: test
+module["SetTableNotificationCallback"] = function (args) 
+  
+  local f_cb_ctr, error_msg = loadstring("return "..args.f_cb_def)
+  
+  if f_cb_ctr == nil then 
+    error( string.format("Функция SetTableNotificationCallback: не удалось распарсить определение функции из переданной строки. Описание ошибки: [%s].", error_msg) )
+  end
+  
+  return _G.SetTableNotificationCallback(args.t_id, f_cb_ctr()) -- returns 0 or 1
+end
+
+-- TODO: test
+module["RGB"] = function (args) 
+  -- NB: на самом деле, библиотечная функция RGB должна называться BGR, ибо она выдаёт числа именно в этом формате. В SetColor, однако, тоже ожидается цвет в формате BGR, так что это не баг, а фича.
+  return _G.RGB(args.red, args.green, args.blue) -- returns a number
+end
+
+-- TODO: test
+module["SetColor"] = function (args) 
+  return _G.SetColor(args.t_id, args.row, args.col, args.b_color, args.f_color, args.sel_b_color, args.sel_f_color) -- what does it return in case of error ?
+end
+
+-- TODO: test
+module["Highlight"] = function (args) 
+  return _G.Highlight(args.t_id, args.row, args.col, args.b_color, args.f_color, args.timeout) -- what does it return in case of error ?
+end
+
+-- TODO: test
+module["SetSelectedRow"] = function (args) 
+  return _G.SetSelectedRow(args.table_id, args.row) -- returns -1 in case of error
 end
 
 -----

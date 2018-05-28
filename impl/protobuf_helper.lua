@@ -806,6 +806,191 @@ result_object_mappers[method_names["DELETE_ROW"]] = function (proc_result)
   return qlua_pb_types.DeleteRow.Result, result
 end
 
+-- DestroyTable
+method_names["DESTROY_TABLE"] = "DestroyTable"
+procedure_types[method_names["DESTROY_TABLE"]] = "DESTROY_TABLE"
+args_prototypes["DESTROY_TABLE"] = qlua_pb_types.DestroyTable.Request
+result_object_mappers[method_names["DESTROY_TABLE"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.DestroyTable.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.DestroyTable.Result, result
+end
+
+-- InsertRow
+method_names["INSERT_ROW"] = "InsertRow"
+procedure_types[method_names["INSERT_ROW"]] = "INSERT_ROW"
+args_prototypes["INSERT_ROW"] = qlua_pb_types.InsertRow.Request
+result_object_mappers[method_names["INSERT_ROW"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.InsertRow.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.InsertRow.Result, result
+end
+
+-- IsWindowClosed
+method_names["IS_WINDOW_CLOSED"] = "IsWindowClosed"
+procedure_types[method_names["IS_WINDOW_CLOSED"]] = "IS_WINDOW_CLOSED"
+args_prototypes["IS_WINDOW_CLOSED"] = qlua_pb_types.IsWindowClosed.Request
+result_object_mappers[method_names["IS_WINDOW_CLOSED"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.IsWindowClosed.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.IsWindowClosed.Result, result
+end
+
+-- GetCell
+method_names["GET_CELL"] = "GetCell"
+procedure_types[method_names["GET_CELL"]] = "GET_CELL"
+args_prototypes["GET_CELL"] = qlua_pb_types.GetCell.Request
+result_object_mappers[method_names["GET_CELL"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.GetCell.Result)
+  result.image = proc_result.image
+  result.value = proc_result.value
+  
+  return qlua_pb_types.GetCell.Result, result
+end
+
+-- GetTableSize
+method_names["GET_TABLE_SIZE"] = "GetTableSize"
+procedure_types[method_names["GET_TABLE_SIZE"]] = "GET_TABLE_SIZE"
+args_prototypes["GET_TABLE_SIZE"] = qlua_pb_types.GetTableSize.Request
+result_object_mappers[method_names["GET_TABLE_SIZE"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.GetTableSize.Result)
+  result.rows = proc_result.rows
+  result.col = proc_result.col
+  
+  return qlua_pb_types.GetTableSize.Result, result
+end
+
+-- GetWindowCaption
+method_names["GET_WINDOW_CAPTION"] = "GetWindowCaption"
+procedure_types[method_names["GET_WINDOW_CAPTION"]] = "GET_WINDOW_CAPTION"
+args_prototypes["GET_WINDOW_CAPTION"] = qlua_pb_types.GetWindowCaption.Request
+result_object_mappers[method_names["GET_WINDOW_CAPTION"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.GetWindowCaption.Result)
+  result.caption = proc_result
+  
+  return qlua_pb_types.GetWindowCaption.Result, result
+end
+
+-- GetWindowRect
+method_names["GET_WINDOW_RECT"] = "GetWindowRect"
+procedure_types[method_names["GET_WINDOW_RECT"]] = "GET_WINDOW_RECT"
+args_prototypes["GET_WINDOW_RECT"] = qlua_pb_types.GetWindowRect.Request
+result_object_mappers[method_names["GET_WINDOW_RECT"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.GetWindowRect.Result)
+  result.top = proc_result.top
+  result.left = proc_result.left
+  result.bottom = proc_result.bottom
+  result.right = proc_result.right
+  
+  return qlua_pb_types.GetWindowRect.Result, result
+end
+
+-- SetCell
+method_names["SET_CELL"] = "SetCell"
+procedure_types[method_names["SET_CELL"]] = "SET_CELL"
+args_prototypes["SET_CELL"] = qlua_pb_types.SetCell.Request
+result_object_mappers[method_names["SET_CELL"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.SetCell.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.SetCell.Result, result
+end
+
+-- SetWindowCaption
+method_names["SET_WINDOW_CAPTION"] = "SetWindowCaption"
+procedure_types[method_names["SET_WINDOW_CAPTION"]] = "SET_WINDOW_CAPTION"
+args_prototypes["SET_WINDOW_CAPTION"] = qlua_pb_types.SetWindowCaption.Request
+result_object_mappers[method_names["SET_WINDOW_CAPTION"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.SetWindowCaption.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.SetWindowCaption.Result, result
+end
+
+-- SetWindowPos
+method_names["SET_WINDOW_POS"] = "SetWindowPos"
+procedure_types[method_names["SET_WINDOW_POS"]] = "SET_WINDOW_POS"
+args_prototypes["SET_WINDOW_POS"] = qlua_pb_types.SetWindowPos.Request
+result_object_mappers[method_names["SET_WINDOW_POS"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.SetWindowPos.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.SetWindowPos.Result, result
+end
+
+-- SetTableNotificationCallback
+method_names["SET_TABLE_NOTIFICATION_CALLBACK"] = "SetTableNotificationCallback"
+procedure_types[method_names["SET_TABLE_NOTIFICATION_CALLBACK"]] = "SET_TABLE_NOTIFICATION_CALLBACK"
+args_prototypes["SET_TABLE_NOTIFICATION_CALLBACK"] = qlua_pb_types.SetTableNotificationCallback.Request
+result_object_mappers[method_names["SET_TABLE_NOTIFICATION_CALLBACK"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.SetTableNotificationCallback.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.SetTableNotificationCallback.Result, result
+end
+
+-- RGB
+method_names["RGB"] = "RGB"
+procedure_types[method_names["RGB"]] = "RGB"
+args_prototypes["RGB"] = qlua_pb_types.RGB.Request
+result_object_mappers[method_names["RGB"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.RGB.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.RGB.Result, result
+end
+
+-- SetColor
+method_names["SET_COLOR"] = "SetColor"
+procedure_types[method_names["SET_COLOR"]] = "SET_COLOR"
+args_prototypes["SET_COLOR"] = qlua_pb_types.SetColor.Request
+result_object_mappers[method_names["SET_COLOR"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.SetColor.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.SetColor.Result, result
+end
+
+-- Highlight
+method_names["HIGHLIGHT"] = "Highlight"
+procedure_types[method_names["HIGHLIGHT"]] = "HIGHLIGHT"
+args_prototypes["HIGHLIGHT"] = qlua_pb_types.Highlight.Request
+result_object_mappers[method_names["HIGHLIGHT"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.Highlight.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.Highlight.Result, result
+end
+
+-- SetSelectedRow
+method_names["SET_SELECTED_ROW"] = "SetSelectedRow"
+procedure_types[method_names["SET_SELECTED_ROW"]] = "SET_SELECTED_ROW"
+args_prototypes["SET_SELECTED_ROW"] = qlua_pb_types.SetSelectedRow.Request
+result_object_mappers[method_names["SET_SELECTED_ROW"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.SetSelectedRow.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.SetSelectedRow.Result, result
+end
+
 -----
 
 function module.get_method_name (pb_procedure_type)
