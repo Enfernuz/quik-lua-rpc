@@ -991,6 +991,66 @@ result_object_mappers[method_names["SET_SELECTED_ROW"]] = function (proc_result)
   return qlua_pb_types.SetSelectedRow.Result, result
 end
 
+-- AddLabel
+method_names["ADD_LABEL"] = "AddLabel"
+procedure_types[method_names["ADD_LABEL"]] = "ADD_LABEL"
+args_prototypes["ADD_LABEL"] = qlua_pb_types.AddLabel.Request
+result_object_mappers[method_names["ADD_LABEL"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.AddLabel.Result)
+  result.label_id = proc_result
+  
+  return qlua_pb_types.AddLabel.Result, result
+end
+
+-- DelLabel
+method_names["DEL_LABEL"] = "DelLabel"
+procedure_types[method_names["DEL_LABEL"]] = "DEL_LABEL"
+args_prototypes["DEL_LABEL"] = qlua_pb_types.DelLabel.Request
+result_object_mappers[method_names["DEL_LABEL"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.DelLabel.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.DelLabel.Result, result
+end
+
+-- DelAllLabels
+method_names["DEL_ALL_LABELS"] = "DelAllLabels"
+procedure_types[method_names["DEL_ALL_LABELS"]] = "DEL_ALL_LABELS"
+args_prototypes["DEL_ALL_LABELS"] = qlua_pb_types.DelAllLabels.Request
+result_object_mappers[method_names["DEL_ALL_LABELS"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.DelAllLabels.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.DelAllLabels.Result, result
+end
+
+-- GetLabelParams
+method_names["GET_LABEL_PARAMS"] = "GetLabelParams"
+procedure_types[method_names["GET_LABEL_PARAMS"]] = "GET_LABEL_PARAMS"
+args_prototypes["GET_LABEL_PARAMS"] = qlua_pb_types.GetLabelParams.Request
+result_object_mappers[method_names["GET_LABEL_PARAMS"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.GetLabelParams.Result)
+  result.label_params = proc_result
+  
+  return qlua_pb_types.GetLabelParams.Result, result
+end
+
+-- SetLabelParams
+method_names["SET_LABEL_PARAMS"] = "SetLabelParams"
+procedure_types[method_names["SET_LABEL_PARAMS"]] = "SET_LABEL_PARAMS"
+args_prototypes["SET_LABEL_PARAMS"] = qlua_pb_types.SetLabelParams.Request
+result_object_mappers[method_names["SET_LABEL_PARAMS"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.SetLabelParams.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.SetLabelParams.Result, result
+end
+
 -----
 
 function module.get_method_name (pb_procedure_type)

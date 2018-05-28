@@ -940,6 +940,49 @@ module["SetSelectedRow"] = function (args)
   return _G.SetSelectedRow(args.table_id, args.row) -- returns -1 in case of error
 end
 
+-- TODO: test
+module["AddLabel"] = function (args) 
+
+  local result = _G.AddLabel(args.chart_tag, args.label_params) -- returns nil in case of error
+  
+  if result == nil then
+    error( string.format("QLua-функция AddLabel(%s, %s) возвратила nil.", args.chart_tag, utils.table.tostring(args.label_params)))
+  end
+
+  return result
+end
+
+-- TODO: test
+module["DelLabel"] = function (args) 
+  return _G.DelLabel(args.chart_tag, args.label_id) -- returns true or false
+end
+
+-- TODO: test
+module["DelAllLabels"] = function (args) 
+  return _G.DelAllLabels(args.chart_tag) -- returns true or false
+end
+
+-- TODO: test
+module["GetLabelParams"] = function (args) 
+  
+  local label_params = _G.GetLabelParams(args.chart_tag, args.label_id) -- returns nil in case of error
+  if label_params == nil then
+    error( string.format("QLua-функция GetLabelParams(%s, %d) возвратила nil.", args.chart_tag, args.label_id) )
+  end
+  
+  local result = {}
+  for k, v in pairs(label_params) do
+    result[utils.Cp1251ToUtf8( tostring(k) )] = utils.Cp1251ToUtf8( tostring(v) )
+  end
+  
+  return result
+end
+
+-- TODO: test
+module["SetLabelParams"] = function (args) 
+  return _G.SetLabelParams(args.chart_tag, args.label_id, args.label_params) -- returns true or false
+end
+
 -----
 
 return module

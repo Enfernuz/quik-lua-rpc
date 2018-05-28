@@ -80,6 +80,11 @@ return function (context_path)
   p:loadfile("SetColor.proto")
   p:loadfile("Highlight.proto")
   p:loadfile("SetSelectedRow.proto")
+  p:loadfile("AddLabel.proto")
+  p:loadfile("DelLabel.proto")
+  p:loadfile("DelAllLabels.proto")
+  p:loadfile("GetLabelParams.proto")
+  p:loadfile("SetLabelParams.proto")
 end
 
 --[[

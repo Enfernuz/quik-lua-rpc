@@ -477,6 +477,41 @@ module[proto] = {
   Result = path .. "Result"
 }
 
+proto = "AddLabel"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "DelLabel"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "DelAllLabels"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "GetLabelParams"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "SetLabelParams"
+path = package .. proto .. "."
+module[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
 path = ".qlua.structs."
 module.qlua_structures = {
   Klass = path .. "Klass",
