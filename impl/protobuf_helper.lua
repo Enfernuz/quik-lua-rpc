@@ -1051,6 +1051,66 @@ result_object_mappers[method_names["SET_LABEL_PARAMS"]] = function (proc_result)
   return qlua_pb_types.SetLabelParams.Result, result
 end
 
+-- Subscribe_Level_II_Quotes
+method_names["SUBSCRIBE_LEVEL_II_QUOTES"] = "Subscribe_Level_II_Quotes"
+procedure_types[method_names["SUBSCRIBE_LEVEL_II_QUOTES"]] = "SUBSCRIBE_LEVEL_II_QUOTES"
+args_prototypes["SUBSCRIBE_LEVEL_II_QUOTES"] = qlua_pb_types.Subscribe_Level_II_Quotes.Request
+result_object_mappers[method_names["SUBSCRIBE_LEVEL_II_QUOTES"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.Subscribe_Level_II_Quotes.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.Subscribe_Level_II_Quotes.Result, result
+end
+
+-- Unsubscribe_Level_II_Quotes
+method_names["UNSUBSCRIBE_LEVEL_II_QUOTES"] = "Unsubscribe_Level_II_Quotes"
+procedure_types[method_names["UNSUBSCRIBE_LEVEL_II_QUOTES"]] = "UNSUBSCRIBE_LEVEL_II_QUOTES"
+args_prototypes["UNSUBSCRIBE_LEVEL_II_QUOTES"] = qlua_pb_types.Unsubscribe_Level_II_Quotes.Request
+result_object_mappers[method_names["UNSUBSCRIBE_LEVEL_II_QUOTES"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.Unsubscribe_Level_II_Quotes.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.Unsubscribe_Level_II_Quotes.Result, result
+end
+
+-- IsSubscribed_Level_II_Quotes
+method_names["IS_SUBSCRIBED_LEVEL_II_QUOTES"] = "IsSubscribed_Level_II_Quotes"
+procedure_types[method_names["IS_SUBSCRIBED_LEVEL_II_QUOTES"]] = "IS_SUBSCRIBED_LEVEL_II_QUOTES"
+args_prototypes["IS_SUBSCRIBED_LEVEL_II_QUOTES"] = qlua_pb_types.IsSubscribed_Level_II_Quotes.Request
+result_object_mappers[method_names["IS_SUBSCRIBED_LEVEL_II_QUOTES"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.IsSubscribed_Level_II_Quotes.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.IsSubscribed_Level_II_Quotes.Result, result
+end
+
+-- ParamRequest
+method_names["PARAM_REQUEST"] = "ParamRequest"
+procedure_types[method_names["PARAM_REQUEST"]] = "PARAM_REQUEST"
+args_prototypes["PARAM_REQUEST"] = qlua_pb_types.ParamRequest.Request
+result_object_mappers[method_names["PARAM_REQUEST"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.ParamRequest.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.ParamRequest.Result, result
+end
+
+-- CancelParamRequest
+method_names["CANCEL_PARAM_REQUEST"] = "CancelParamRequest"
+procedure_types[method_names["CANCEL_PARAM_REQUEST"]] = "CANCEL_PARAM_REQUEST"
+args_prototypes["CANCEL_PARAM_REQUEST"] = qlua_pb_types.CancelParamRequest.Request
+result_object_mappers[method_names["CANCEL_PARAM_REQUEST"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.CancelParamRequest.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.CancelParamRequest.Result, result
+end
+
 -----
 
 function module.get_method_name (pb_procedure_type)

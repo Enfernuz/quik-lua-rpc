@@ -85,6 +85,11 @@ return function (context_path)
   p:loadfile("DelAllLabels.proto")
   p:loadfile("GetLabelParams.proto")
   p:loadfile("SetLabelParams.proto")
+  p:loadfile("Subscribe_Level_II_Quotes.proto")
+  p:loadfile("Unsubscribe_Level_II_Quotes.proto")
+  p:loadfile("IsSubscribed_Level_II_Quotes.proto")
+  p:loadfile("ParamRequest.proto")
+  p:loadfile("CancelParamRequest.proto")
 end
 
 --[[

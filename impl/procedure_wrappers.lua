@@ -983,6 +983,31 @@ module["SetLabelParams"] = function (args)
   return _G.SetLabelParams(args.chart_tag, args.label_id, args.label_params) -- returns true or false
 end
 
+-- TODO: test
+module["Subscribe_Level_II_Quotes"] = function (args) 
+  return _G.Subscribe_Level_II_Quotes(args.class_code, args.sec_code) -- returns true or false
+end
+
+-- TODO: test
+module["Unsubscribe_Level_II_Quotes"] = function (args) 
+  return _G.Unsubscribe_Level_II_Quotes(args.class_code, args.sec_code) -- returns true or false
+end
+
+-- TODO: test
+module["IsSubscribed_Level_II_Quotes"] = function (args) 
+  return _G.IsSubscribed_Level_II_Quotes(args.class_code, args.sec_code) -- returns true or false
+end
+
+-- TODO: test
+module["ParamRequest"] = function (args) 
+  return _G.ParamRequest(args.class_code, args.sec_code, args.db_name) -- returns true or false
+end
+
+-- TODO: test
+module["CancelParamRequest"] = function (args) 
+  return _G.CancelParamRequest(args.class_code, args.sec_code, args.db_name) -- returns true or false
+end
+
 -----
 
 return module
