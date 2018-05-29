@@ -90,6 +90,11 @@ return function (context_path)
   p:loadfile("IsSubscribed_Level_II_Quotes.proto")
   p:loadfile("ParamRequest.proto")
   p:loadfile("CancelParamRequest.proto")
+  p:loadfile("tohex.proto")
+  p:loadfile("bnot.proto")
+  p:loadfile("band.proto")
+  p:loadfile("bor.proto")
+  p:loadfile("bxor.proto")
 end
 
 --[[

@@ -1111,6 +1111,66 @@ result_object_mappers[method_names["CANCEL_PARAM_REQUEST"]] = function (proc_res
   return qlua_pb_types.CancelParamRequest.Result, result
 end
 
+-- bit.tohex
+method_names["BIT_TOHEX"] = "bit.tohex"
+procedure_types[method_names["BIT_TOHEX"]] = "BIT_TOHEX"
+args_prototypes["BIT_TOHEX"] = qlua_pb_types.bit.tohex.Request
+result_object_mappers[method_names["BIT_TOHEX"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.bit.tohex.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.bit.tohex.Result, result
+end
+
+-- bit.bnot
+method_names["BIT_BNOT"] = "bit.bnot"
+procedure_types[method_names["BIT_BNOT"]] = "BIT_BNOT"
+args_prototypes["BIT_BNOT"] = qlua_pb_types.bit.bnot.Request
+result_object_mappers[method_names["BIT_BNOT"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.bit.bnot.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.bit.bnot.Result, result
+end
+
+-- bit.band
+method_names["BIT_BAND"] = "bit.band"
+procedure_types[method_names["BIT_BAND"]] = "BIT_BAND"
+args_prototypes["BIT_BAND"] = qlua_pb_types.bit.band.Request
+result_object_mappers[method_names["BIT_BAND"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.bit.band.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.bit.band.Result, result
+end
+
+-- bit.bor
+method_names["BIT_BOR"] = "bit.bor"
+procedure_types[method_names["BIT_BOR"]] = "BIT_BOR"
+args_prototypes["BIT_BOR"] = qlua_pb_types.bit.bor.Request
+result_object_mappers[method_names["BIT_BOR"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.bit.bor.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.bit.bor.Result, result
+end
+
+-- bit.bxor
+method_names["BIT_BXOR"] = "bit.bxor"
+procedure_types[method_names["BIT_BXOR"]] = "BIT_BXOR"
+args_prototypes["BIT_BXOR"] = qlua_pb_types.bit.bxor.Request
+result_object_mappers[method_names["BIT_BXOR"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.bit.bxor.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.bit.bxor.Result, result
+end
+
 -----
 
 function module.get_method_name (pb_procedure_type)

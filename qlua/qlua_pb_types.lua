@@ -547,6 +547,44 @@ module[proto] = {
   Result = path .. "Result"
 }
 
+module.bit = {}
+subpackage = "bit."
+
+proto = "tohex"
+path = package .. subpackage .. proto .. "."
+module.bit[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "bnot"
+path = package .. subpackage .. proto .. "."
+module.bit[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "band"
+path = package .. subpackage .. proto .. "."
+module.bit[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "bor"
+path = package .. subpackage .. proto .. "."
+module.bit[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+proto = "bxor"
+path = package .. subpackage .. proto .. "."
+module.bit[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
 path = ".qlua.structs."
 module.qlua_structures = {
   Klass = path .. "Klass",

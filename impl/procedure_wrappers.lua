@@ -5,6 +5,8 @@ local pcall = assert(pcall, "Функция 'pcall' не найдена.")
 local pairs = assert(pairs, "Функция 'pairs' не найдена.")
 local tostring = assert(tostring, "Функция 'tostring' не найдена.")
 local loadstring = assert(loadstring, "Функция 'loadstring' не найдена.")
+local table = assert(table, "Таблица 'table' не найдена.")
+local bit = assert(bit, "Таблица 'bit' не найдена.")
 
 -- QLua functions
 assert(_G.isConnected, "Функция 'isConnected' не найдена.")
@@ -1006,6 +1008,57 @@ end
 -- TODO: test
 module["CancelParamRequest"] = function (args) 
   return _G.CancelParamRequest(args.class_code, args.sec_code, args.db_name) -- returns true or false
+end
+
+-- TODO: test
+module["bit.tohex"] = function (args) 
+  
+  local result
+  if args.n == 0 then
+    result = bit.tohex(args.x)
+  else
+    result = bit.tohex(args.x, args.n)
+  end
+  
+  return result
+end
+
+-- TODO: test
+module["bit.bnot"] = function (args) 
+  return bit.bnot(args.x)
+end
+
+-- TODO: test
+module["bit.band"] = function (args) 
+
+  local xs = {args.x1, args.x2}
+  for _, e in ipairs(args.xi) do
+    table.sinsert(xs, e)
+  end
+
+  return bit.band( unpack(xs) )
+end
+
+-- TODO: test
+module["bit.bor"] = function (args) 
+
+  local xs = {args.x1, args.x2}
+  for _, e in ipairs(args.xi) do
+    table.sinsert(xs, e)
+  end
+  
+  return bit.bor( unpack(xs) )
+end
+
+-- TODO: test
+module["bit.bxor"] = function (args) 
+
+  local xs = {args.x1, args.x2}
+  for _, e in ipairs(args.xi) do
+    table.sinsert(xs, e)
+  end
+
+  return bit.bxor( unpack(xs) )
 end
 
 -----
