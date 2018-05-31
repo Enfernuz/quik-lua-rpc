@@ -13,7 +13,7 @@ return function (context_path)
   p.paths[#p.paths+1] = proto_path .. "/datasource"
   
   p:loadfile("RPC.proto")
-  --p:loadfile("qlua_structures.proto")
+  --p:loadfile("qlua_structures.proto") -- gets auto-imported by other protos
   p:loadfile("qlua_types.proto")
   p:loadfile("isConnected.proto")
   p:loadfile("getScriptPath.proto")
@@ -56,10 +56,10 @@ return function (context_path)
   p:loadfile("CalcBuySell.proto")
   p:loadfile("getParamEx.proto")
   p:loadfile("getParamEx2.proto")
-  p:loadfile("getPortfolioInfo.proto")
-  p:loadfile("getPortfolioInfoEx.proto")
-  p:loadfile("getBuySellInfo.proto")
+  p:loadfile("getPortfolioInfoEx.proto") 
+  --p:loadfile("getPortfolioInfo.proto") -- gets auto-imported by getPortfolioInfoEx.proto
   p:loadfile("getBuySellInfoEx.proto")
+  --p:loadfile("getBuySellInfo.proto") -- gets auto-imported by getBuySellInfoEx.proto
   p:loadfile("AddColumn.proto")
   p:loadfile("AllocTable.proto")
   p:loadfile("Clear.proto")

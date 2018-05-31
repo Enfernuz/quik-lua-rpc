@@ -10,7 +10,6 @@ local zap = require("auth.zap")
 local qlua = require("qlua.api")
 local qlua_events = require("qlua.rpc.qlua_events_pb")
 local config_parser = require("utils.config_parser")
-local request_handler = require("impl.new-request-handler")
 local event_handler = require("impl.event-handler")
 local procedure_wrappers = require("impl.procedure_wrappers")
 local utils = require("utils.utils")
@@ -28,11 +27,20 @@ local poller = nil
 local is_running = false
 local initialized = false
 
-local request_handlers = {
+local request_response_serde = {
   -- initialized on demand
   json = nil,
   protobuf = nil
 }
+
+local protobuf_context = {
+  is_initialized = false
+}
+
+function protobuf_context:init (context_path)
+  require("qlua.qlua_pb_init")(context_path)
+  self.is_initialized = true
+end
 
 local function pub_poll_out_callback()
   -- Polling out is not implemented at the moment: messages are being sent regardless of the POLLOUT event.
@@ -62,17 +70,20 @@ local function create_rpc_poll_in_callback(socket, serde_protocol)
   if "json" == string.lower(serde_protocol) then
     -- TODO: remove this message
     message("DEBUG: JSON message protocol detected")
-    if not request_handlers.json then
-      request_handlers.json = request_handler:new("json", scriptPath)
+    if not request_response_serde.json then
+      request_response_serde.json = require("impl.json_request_response_serde"):new()
     end
-    handler = request_handlers.json
+    handler = request_response_serde.json
   else -- TODO: make explicit check on protobuf
     -- TODO: remove this message
     message("DEBUG: PROTOBUF message protocol detected")
-    if not request_handlers.protobuf then
-      request_handlers.protobuf = request_handler:new("protobuf", scriptPath)
+    if not request_response_serde.protobuf then
+      if not protobuf_context.is_initialized then
+        protobuf_context:init(scriptPath)
+      end
+      request_response_serde.protobuf = require("impl.protobuf_request_response_serde"):new()
     end
-    handler = request_handlers.protobuf
+    handler = request_response_serde.protobuf
   end
   
   return function ()

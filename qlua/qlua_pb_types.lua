@@ -111,7 +111,7 @@ proto = "getMoney"
 path = package .. proto .. "."
 module[proto] = {
   Request = path .. "Request",
-  Result = path .. "Result"
+  Result = path .. "Result",
   Money = path .. "Money"
 }
 
@@ -126,7 +126,7 @@ proto = "getDepo"
 path = package .. proto .. "."
 module[proto] = {
   Request = path .. "Request",
-  Result = path .. "Result" 
+  Result = path .. "Result", 
   Depo = path .. "Depo"
 }
 

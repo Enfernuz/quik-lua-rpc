@@ -331,6 +331,7 @@ result_object_mappers[method_names["GET_QUOTE_LEVEL2"]] = function (proc_result)
       bid.price = v.price
       bid.quantity = v.quantity
       table.sinsert(result.bids, bid)
+    end
   end
   
   local offers = proc_result.offer
@@ -340,6 +341,7 @@ result_object_mappers[method_names["GET_QUOTE_LEVEL2"]] = function (proc_result)
       offer.price = v.price
       offer.quantity = v.quantity
       table.sinsert(result.offers, offer)
+    end
   end
   
   return qlua_pb_types.getQuoteLevel2.Result, result
