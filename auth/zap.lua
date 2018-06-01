@@ -112,8 +112,8 @@ end
 function zap.setup_auth(socket, endpoint)
   
   if not initialized then error("Модуль ZAP не инициализирован. Сперва вызовите функцию 'init'.") end
-  if not socket then error("Аргумент 'socket' не должен быть nil.") end
-  if not endpoint then error("Аргумент 'endpoint' не должен быть nil.") end
+  if not socket then error("Аргумент #0 'socket' не должен быть nil.") end
+  if not endpoint then error("Аргумент #1 'endpoint' не должен быть nil.") end
   
   local auth = endpoint.auth
   if auth.mechanism == "PLAIN" or auth.mechanism == "CURVE" then

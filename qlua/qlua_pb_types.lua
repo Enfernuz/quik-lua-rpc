@@ -587,14 +587,29 @@ module.bit[proto] = {
 
 path = ".qlua.structs."
 module.qlua_structures = {
+  AccountBalance = path .. "AccountBalance",
+  AccountPosition = path .. "AccountPosition",
+  AllTrade = path .. "AllTrade",
+  CandleEntry = path .. "CandleEntry",
+  ConnectedEventInfo = path .. "ConnectedEventInfo",
+  DepoLimit = path .. "DepoLimit",
+  DepoLimitDelete = path .. "DepoLimitDelete",
+  Firm = path .. "Firm",
+  FuturesClientHolding = path .. "FuturesClientHolding",
+  FuturesLimit = path .. "FuturesLimit",
+  FuturesLimitDelete = path .. "FuturesLimitDelete",
   Klass = path .. "Klass",
+  MoneyLimit = path .. "MoneyLimit",
+  MoneyLimitDelete = path .. "MoneyLimitDelete",
+  NegDeal = path .. "NegDeal",
+  NegTrade = path .. "NegTrade",
   Order = path .. "Order",
-  MoneyLimit = path .. "MoneyLimit", 
-  DepoLimit = path .. "DepoLimit", 
-  FuturesLimit = path .. "FuturesLimit", 
-  FuturesClientHolding = path .. "FuturesClientHolding", 
-  Security = path .. "Security", 
-  CandleEntry = path .. "CandleEntry"
+  ParamEventInfo = path .. "ParamEventInfo",
+  QuoteEventInfo = path .. "QuoteEventInfo",
+  Security = path .. "Security",
+  StopOrder = path .. "StopOrder",
+  Trade = path .. "Trade",
+  Transaction = path .. "Transaction"
 }
 
 return module

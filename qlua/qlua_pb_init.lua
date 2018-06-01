@@ -13,6 +13,7 @@ return function (context_path)
   p.paths[#p.paths+1] = proto_path .. "/datasource"
   
   p:loadfile("RPC.proto")
+  p:loadfile("qlua_events.proto")
   --p:loadfile("qlua_structures.proto") -- gets auto-imported by other protos
   p:loadfile("qlua_types.proto")
   p:loadfile("isConnected.proto")

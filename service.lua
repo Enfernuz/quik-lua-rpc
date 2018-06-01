@@ -42,6 +42,11 @@ function protobuf_context:init (context_path)
   self.is_initialized = true
 end
 
+-----
+
+local pb_event_publisher = require("impl.protobuf_event_publisher"):new()
+-----
+
 local function pub_poll_out_callback()
   -- Polling out is not implemented at the moment: messages are being sent regardless of the POLLOUT event.
 end
@@ -167,100 +172,106 @@ local function create_event_callbacks()
   return {
     
     OnClose = function()
-      publish(qlua_events.EventType.ON_CLOSE)
+      pb_event_publisher:publish("OnClose")
+      --publish(qlua_events.EventType.ON_CLOSE)
       service.terminate()
     end,
     
     OnStop = function(signal)
+      pb_event_publisher:publish("PublisherOffline")
       service.terminate()
     end,
     
     OnFirm = function(firm)
-      publish(qlua_events.EventType.ON_FIRM, firm)
+      --publish(qlua_events.EventType.ON_FIRM, firm)
     end,
     
     OnAllTrade = function(alltrade)
-      publish(qlua_events.EventType.ON_ALL_TRADE, alltrade)
+      --publish(qlua_events.EventType.ON_ALL_TRADE, alltrade)
     end,
     
     OnTrade = function(trade)
-      publish(qlua_events.EventType.ON_TRADE, trade)
+      --publish(qlua_events.EventType.ON_TRADE, trade)
     end,
     
     OnOrder = function(order)
-      publish(qlua_events.EventType.ON_ORDER, order)
+      --publish(qlua_events.EventType.ON_ORDER, order)
     end,
     
     OnAccountBalance = function(acc_bal)
-      publish(qlua_events.EventType.ON_ACCOUNT_BALANCE, acc_bal)
+      --publish(qlua_events.EventType.ON_ACCOUNT_BALANCE, acc_bal)
     end, 
     
     OnFuturesLimitChange = function(fut_limit)
-      publish(qlua_events.EventType.ON_FUTURES_LIMIT_CHANGE, fut_limit)
+      --publish(qlua_events.EventType.ON_FUTURES_LIMIT_CHANGE, fut_limit)
     end, 
     
     OnFuturesLimitDelete = function(lim_del)
-      publish(qlua_events.EventType.ON_FUTURES_LIMIT_DELETE, lim_del)
+      --publish(qlua_events.EventType.ON_FUTURES_LIMIT_DELETE, lim_del)
     end,
     
     OnFuturesClientHolding = function(fut_pos)
-      publish(qlua_events.EventType.ON_FUTURES_CLIENT_HOLDING, fut_pos)
+      --publish(qlua_events.EventType.ON_FUTURES_CLIENT_HOLDING, fut_pos)
     end, 
     
     OnMoneyLimit = function(mlimit)
-      publish(qlua_events.EventType.ON_MONEY_LIMIT, mlimit)
+      --publish(qlua_events.EventType.ON_MONEY_LIMIT, mlimit)
     end, 
     
     OnMoneyLimitDelete = function(mlimit_del)
-      publish(qlua_events.EventType.ON_MONEY_LIMIT_DELETE, mlimit_del)
+      --publish(qlua_events.EventType.ON_MONEY_LIMIT_DELETE, mlimit_del)
     end, 
     
     OnDepoLimit = function(dlimit)
-      publish(qlua_events.EventType.ON_DEPO_LIMIT, dlimit)
+      --publish(qlua_events.EventType.ON_DEPO_LIMIT, dlimit)
     end,
     
     OnDepoLimitDelete = function(dlimit_del)
-      publish(qlua_events.EventType.ON_DEPO_LIMIT_DELETE, dlimit_del)
+      --publish(qlua_events.EventType.ON_DEPO_LIMIT_DELETE, dlimit_del)
     end, 
     
     OnAccountPosition = function(acc_pos)
-      publish(qlua_events.EventType.ON_ACCOUNT_POSITION, acc_pos)
+      --publish(qlua_events.EventType.ON_ACCOUNT_POSITION, acc_pos)
     end, 
     
     OnNegDeal = function(neg_deal)
-      publish(qlua_events.EventType.ON_NEG_DEAL, neg_deal)
+      --publish(qlua_events.EventType.ON_NEG_DEAL, neg_deal)
     end, 
     
     OnNegTrade = function(neg_trade)
-      publish(qlua_events.EventType.ON_NEG_TRADE, neg_trade)
+      --publish(qlua_events.EventType.ON_NEG_TRADE, neg_trade)
     end,
     
     OnStopOrder = function(stop_order)
-      publish(qlua_events.EventType.ON_STOP_ORDER, stop_order)
+      --publish(qlua_events.EventType.ON_STOP_ORDER, stop_order)
     end, 
     
     OnTransReply = function(trans_reply)
-      publish(qlua_events.EventType.ON_TRANS_REPLY, trans_reply)
+      --publish(qlua_events.EventType.ON_TRANS_REPLY, trans_reply)
     end, 
     
     OnParam = function(class_code, sec_code)
-      publish(qlua_events.EventType.ON_PARAM, {class_code = class_code, sec_code = sec_code})
+      --publish(qlua_events.EventType.ON_PARAM, {class_code = class_code, sec_code = sec_code})
     end,
     
     OnQuote = function(class_code, sec_code)
-      publish(qlua_events.EventType.ON_QUOTE, {class_code = class_code, sec_code = sec_code})
+      pb_event_publisher:publish("OnQuote", {class_code = class_code, sec_code = sec_code})
+      --publish(qlua_events.EventType.ON_QUOTE, {class_code = class_code, sec_code = sec_code})
     end, 
     
     OnDisconnected = function()
-      publish(qlua_events.EventType.ON_DISCONNECTED)
+      pb_event_publisher:publish("OnDisconnected")
+      --publish(qlua_events.EventType.ON_DISCONNECTED)
     end, 
     
     OnConnected = function(flag)
-      publish(qlua_events.EventType.ON_CONNECTED, flag)
+      pb_event_publisher:publish("OnConnected", {flag = flag})
+      --publish(qlua_events.EventType.ON_CONNECTED, flag)
     end,
     
     OnCleanUp = function()
-      publish(qlua_events.EventType.ON_CLEAN_UP)
+      pb_event_publisher:publish("OnCleanUp")
+      --publish(qlua_events.EventType.ON_CLEAN_UP)
     end
   }
 end
@@ -288,6 +299,10 @@ local function create_socket(endpoint)
   
   socket:bind( string.format("tcp://%s:%d", endpoint.address.host, endpoint.address.port) )
   if endpoint.type == "PUB" then
+    
+    if endpoint.serde_protocol == "protobuf" then
+      pb_event_publisher:add_pub_socket(socket)
+    end
     
     -- Как координировать PUB и SUB правильно (сложно): http://zguide.zeromq.org/lua:all#Node-Coordination
     -- Как не совсем правильно (просто): использовать sleep
@@ -346,7 +361,8 @@ function service.start()
   
   -- Does nothing useful at the moment, because the polling has not yet been started at the time it executes.
   -- Issue #13.
-  publish(qlua_events.EventType.PUBLISHER_ONLINE) 
+  pb_event_publisher:publish("PublisherOnline")
+  --publish(qlua_events.EventType.PUBLISHER_ONLINE) 
     
   poller:start()
 end
@@ -354,9 +370,7 @@ end
 function service.stop()
   
   check_if_initialized()
-  
-  publish(qlua_events.EventType.PUBLISHER_OFFLINE)
-  
+
   if is_running then
     poller:stop()
     is_running = false
