@@ -7,10 +7,9 @@ local string = string
 local zmq = require("lzmq")
 local zmq_poller = require("lzmq.poller")
 local zap = require("auth.zap")
-local qlua = require("qlua.api")
-local qlua_events = require("qlua.rpc.qlua_events_pb")
 local config_parser = require("utils.config_parser")
 local event_handler = require("impl.event-handler")
+local event_data_converter = require("impl.event_data_converter")
 local procedure_wrappers = require("impl.procedure_wrappers")
 local utils = require("utils.utils")
 local json = require("utils.json")
@@ -33,6 +32,14 @@ local request_response_serde = {
   protobuf = nil
 }
 
+local publishing = {
+  publishers = {
+    json = nil,
+    protobuf = nil
+  }, 
+  on = false
+}
+
 local protobuf_context = {
   is_initialized = false
 }
@@ -41,11 +48,6 @@ function protobuf_context:init (context_path)
   require("qlua.qlua_pb_init")(context_path)
   self.is_initialized = true
 end
-
------
-
-local pb_event_publisher = require("impl.protobuf_event_publisher"):new()
------
 
 local function pub_poll_out_callback()
   -- Polling out is not implemented at the moment: messages are being sent regardless of the POLLOUT event.
@@ -69,7 +71,7 @@ local function gen_error_obj (code, msg)
   return err
 end
 
-local function create_rpc_poll_in_callback(socket, serde_protocol)
+local function create_rpc_poll_in_callback (socket, serde_protocol)
   
   local handler
   if "json" == string.lower(serde_protocol) then
@@ -140,29 +142,14 @@ local function create_rpc_poll_in_callback(socket, serde_protocol)
   end
 end
 
-local function publish(event_type, event_data)
+local function publish (event_type, event_data)
 
   if not is_running then return end
   
-  local pub_data = event_handler:handle(event_type, event_data)
+  local converted_event_data = event_data_converter.convert(event_type, event_data)
   
-  for _i, pub_socket in ipairs(pub_sockets) do
-    
-    local ok, err
-    if pub_data == nil then
-      ok, err = pcall(function() pub_socket:send(event_type) end) -- send the subscription key
-      -- if not ok then (log error somehow...) end
-    else
-      ok, err = pcall(function() pub_socket:send_more(event_type) end) -- send the subscription key
-      if ok then
-        local msg = zmq.msg_init_data( pub_data:SerializeToString() )
-        ok, err = pcall(function() msg:send(pub_socket) end)
-        -- if not ok then (log error somehow...) end
-      else
-        -- (log error somehow...)
-      end
-    end
-    
+  for _, publisher in pairs(publishing.publishers) do
+    publisher:publish(event_type, converted_event_data)
   end
 end
 
@@ -172,105 +159,124 @@ local function create_event_callbacks()
   return {
     
     OnClose = function()
-      pb_event_publisher:publish("OnClose")
+      if publishing.on then
+        publish("OnClose")
+      end
       --publish(qlua_events.EventType.ON_CLOSE)
       service.terminate()
     end,
     
-    OnStop = function(signal)
-      pb_event_publisher:publish("PublisherOffline")
+    OnStop = function (signal)
+      if publishing.on then
+        publish("PublisherOffline")
+      end
       service.terminate()
     end,
     
-    OnFirm = function(firm)
+    OnFirm = function (firm)
+      message("DEBUG: ONFIRM")
+      if publishing.on then
+        publish("OnFirm", firm)
+      end
       --publish(qlua_events.EventType.ON_FIRM, firm)
     end,
     
-    OnAllTrade = function(alltrade)
+    OnAllTrade = function (alltrade)
       --publish(qlua_events.EventType.ON_ALL_TRADE, alltrade)
     end,
     
-    OnTrade = function(trade)
+    OnTrade = function (trade)
       --publish(qlua_events.EventType.ON_TRADE, trade)
     end,
     
-    OnOrder = function(order)
+    OnOrder = function (order)
       --publish(qlua_events.EventType.ON_ORDER, order)
     end,
     
-    OnAccountBalance = function(acc_bal)
+    OnAccountBalance = function (acc_bal)
       --publish(qlua_events.EventType.ON_ACCOUNT_BALANCE, acc_bal)
     end, 
     
-    OnFuturesLimitChange = function(fut_limit)
+    OnFuturesLimitChange = function (fut_limit)
       --publish(qlua_events.EventType.ON_FUTURES_LIMIT_CHANGE, fut_limit)
     end, 
     
-    OnFuturesLimitDelete = function(lim_del)
+    OnFuturesLimitDelete = function (lim_del)
       --publish(qlua_events.EventType.ON_FUTURES_LIMIT_DELETE, lim_del)
     end,
     
-    OnFuturesClientHolding = function(fut_pos)
+    OnFuturesClientHolding = function (fut_pos)
       --publish(qlua_events.EventType.ON_FUTURES_CLIENT_HOLDING, fut_pos)
     end, 
     
-    OnMoneyLimit = function(mlimit)
+    OnMoneyLimit = function (mlimit)
       --publish(qlua_events.EventType.ON_MONEY_LIMIT, mlimit)
     end, 
     
-    OnMoneyLimitDelete = function(mlimit_del)
+    OnMoneyLimitDelete = function (mlimit_del)
       --publish(qlua_events.EventType.ON_MONEY_LIMIT_DELETE, mlimit_del)
     end, 
     
-    OnDepoLimit = function(dlimit)
+    OnDepoLimit = function (dlimit)
       --publish(qlua_events.EventType.ON_DEPO_LIMIT, dlimit)
     end,
     
-    OnDepoLimitDelete = function(dlimit_del)
+    OnDepoLimitDelete = function (dlimit_del)
       --publish(qlua_events.EventType.ON_DEPO_LIMIT_DELETE, dlimit_del)
     end, 
     
-    OnAccountPosition = function(acc_pos)
+    OnAccountPosition = function (acc_pos)
       --publish(qlua_events.EventType.ON_ACCOUNT_POSITION, acc_pos)
     end, 
     
-    OnNegDeal = function(neg_deal)
+    OnNegDeal = function (neg_deal)
       --publish(qlua_events.EventType.ON_NEG_DEAL, neg_deal)
     end, 
     
-    OnNegTrade = function(neg_trade)
+    OnNegTrade = function (neg_trade)
       --publish(qlua_events.EventType.ON_NEG_TRADE, neg_trade)
     end,
     
-    OnStopOrder = function(stop_order)
+    OnStopOrder = function (stop_order)
+      if publishing.on then
+        publish("OnStopOrder", stop_order)
+      end
       --publish(qlua_events.EventType.ON_STOP_ORDER, stop_order)
     end, 
     
-    OnTransReply = function(trans_reply)
+    OnTransReply = function (trans_reply)
       --publish(qlua_events.EventType.ON_TRANS_REPLY, trans_reply)
     end, 
     
-    OnParam = function(class_code, sec_code)
+    OnParam = function (class_code, sec_code)
       --publish(qlua_events.EventType.ON_PARAM, {class_code = class_code, sec_code = sec_code})
     end,
     
-    OnQuote = function(class_code, sec_code)
-      pb_event_publisher:publish("OnQuote", {class_code = class_code, sec_code = sec_code})
+    OnQuote = function (class_code, sec_code)
+      if publishing.on then
+        publish("OnQuote", {class_code = class_code, sec_code = sec_code})
+      end
       --publish(qlua_events.EventType.ON_QUOTE, {class_code = class_code, sec_code = sec_code})
     end, 
     
-    OnDisconnected = function()
-      pb_event_publisher:publish("OnDisconnected")
+    OnDisconnected = function ()
+      if publishing.on then
+        publish("OnDisconnected")
+      end
       --publish(qlua_events.EventType.ON_DISCONNECTED)
     end, 
     
-    OnConnected = function(flag)
-      pb_event_publisher:publish("OnConnected", {flag = flag})
+    OnConnected = function (flag)
+      if publishing.on then
+        publish("OnConnected", {flag = flag})
+      end
       --publish(qlua_events.EventType.ON_CONNECTED, flag)
     end,
     
-    OnCleanUp = function()
-      pb_event_publisher:publish("OnCleanUp")
+    OnCleanUp = function ()
+      if publishing.on then
+        publish("OnCleanUp")
+      end
       --publish(qlua_events.EventType.ON_CLEAN_UP)
     end
   }
@@ -300,9 +306,21 @@ local function create_socket(endpoint)
   socket:bind( string.format("tcp://%s:%d", endpoint.address.host, endpoint.address.port) )
   if endpoint.type == "PUB" then
     
-    if endpoint.serde_protocol == "protobuf" then
-      pb_event_publisher:add_pub_socket(socket)
+    local serde_protocol = string.lower(endpoint.serde_protocol)
+    local publisher
+    if "protobuf" == serde_protocol then
+      if not publishing.publishers.protobuf then
+        publishing.publishers.protobuf = require("impl.protobuf_event_publisher"):new()
+      end
+      publisher = publishing.publishers.protobuf
+    elseif "json" == serde_protocol then
+      if not publishing.publishers.json then
+        publishing.publishers.json = require("impl.json_event_publisher"):new()
+      end
+      publisher = publishing.publishers.json
     end
+    
+    publisher:add_pub_socket(socket)
     
     -- Как координировать PUB и SUB правильно (сложно): http://zguide.zeromq.org/lua:all#Node-Coordination
     -- Как не совсем правильно (просто): использовать sleep
@@ -310,6 +328,7 @@ local function create_socket(endpoint)
     
     local next = next
     if not next(service.event_callbacks) then
+      publishing.on = true
       service.event_callbacks = create_event_callbacks()
     end
   end
@@ -361,7 +380,7 @@ function service.start()
   
   -- Does nothing useful at the moment, because the polling has not yet been started at the time it executes.
   -- Issue #13.
-  pb_event_publisher:publish("PublisherOnline")
+  publish("PublisherOnline")
   --publish(qlua_events.EventType.PUBLISHER_ONLINE) 
     
   poller:start()

@@ -11,14 +11,18 @@ setmetatable(ProtobufEventDataSerializer, {__index = EventDataSerializer})
 
 -- The following functions need the module "qlua.qlua_pb_init.lua" being already loaded
 
-local function encode (pb_type, obj)
+local function to_pb_obj (pb_type, obj)
   
   local result = pb.defaults(pb_type)
   for k, v in pairs(obj) do
     result[k] = v
   end
   
-  return pb.encode(pb_type, result)
+  return result
+end
+
+local function encode (pb_type, obj)
+  return pb.encode(pb_type, to_pb_obj(pb_type, obj))
 end
 
 local function event_value (event_type)
@@ -98,6 +102,15 @@ function ProtobufEventDataSerializer:OnNegTrade (neg_trade)
 end
 
 function ProtobufEventDataSerializer:OnStopOrder (stop_order)
+  
+  if stop_order.order_date_time then
+    stop_order.order_date_time = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, stop_order.order_date_time)
+  end
+  
+  if stop_order.withdraw_datetime then
+    stop_order.withdraw_datetime = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, stop_order.withdraw_datetime)
+  end
+  
   return event_value("ON_STOP_ORDER"), encode(qlua_pb_types.qlua_structures.StopOrder, stop_order)
 end
 

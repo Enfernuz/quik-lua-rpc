@@ -592,6 +592,7 @@ module.qlua_structures = {
   AllTrade = path .. "AllTrade",
   CandleEntry = path .. "CandleEntry",
   ConnectedEventInfo = path .. "ConnectedEventInfo",
+  DateTimeEntry = path .. "DateTimeEntry",
   DepoLimit = path .. "DepoLimit",
   DepoLimitDelete = path .. "DepoLimitDelete",
   Firm = path .. "Firm",
