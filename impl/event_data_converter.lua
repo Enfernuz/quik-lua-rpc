@@ -48,6 +48,62 @@ converters["OnAllTrade"] = function (alltrade)
   return result
 end
 
+converters["OnTrade"] = function (trade)
+  
+  local result = {}
+  
+  result.trade_num = assert(trade.trade_num, "Таблица 'trade' не содержит обязательного поля 'trade_num'.")
+  result.order_num = assert(trade.order_num, "Таблица 'trade' не содержит обязательного поля 'order_num'.")
+  result.brokerref = trade.brokerref
+  result.userid = trade.userid
+  result.firmid = trade.firmid
+  if trade.canceled_uid then result.canceled_uid = tostring(trade.canceled_uid) end
+  result.account = trade.account
+  result.price = tostring( assert(trade.price, "Таблица 'trade' не содержит обязательного поля 'price'.") )
+  result.qty = assert(trade.qty, "Таблица 'trade' не содержит обязательного поля 'qty'.")
+  result.value = tostring( assert(trade.value, "Таблица 'trade' не содержит обязательного поля 'value'.") )
+  if trade.accruedint then result.accruedint = tostring(trade.accruedint) end
+  if trade.yield then result.yield = tostring(trade.yield) end
+  result.settlecode = trade.settlecode
+  result.cpfirmid = trade.cpfirmid
+  result.flags = assert(trade.flags, "Таблица 'trade' не содержит обязательного поля 'flags'.")
+  if trade.price2 then result.price2 = tostring(trade.price2) end
+  if trade.reporate then result.reporate = tostring(trade.reporate) end
+  result.client_code = trade.client_code
+  if trade.accrued2 then result.accrued2 = tostring(trade.accrued2) end
+  if trade.repoterm then result.repoterm = tostring(trade.repoterm) end
+  if trade.repovalue then result.repovalue = tostring(trade.repovalue) end
+  if trade.repo2value then result.repo2value = tostring(trade.repo2value) end
+  if trade.start_discount then result.start_discount = tostring(trade.start_discount) end
+  if trade.lower_discount then result.lower_discount = tostring(trade.lower_discount) end
+  if trade.upper_discount then result.upper_discount = tostring(trade.upper_discount) end
+  if trade.block_securities then result.block_securities = tostring(trade.block_securities) end
+  if trade.clearing_comission then result.clearing_comission = tostring(trade.clearing_comission) end
+  if trade.exchange_comission then result.exchange_comission = tostring(trade.exchange_comission) end
+  if trade.tech_center_comission then result.tech_center_comission = tostring(trade.tech_center_comission) end
+  if trade.settle_date then result.settle_date = tostring(trade.settle_date) end
+  result.settle_currency = trade.settle_currency
+  result.trade_currency = trade.trade_currency
+  result.exchange_code = trade.exchange_code
+  result.station_id = trade.station_id
+  result.sec_code = trade.sec_code
+  result.class_code = trade.class_code
+  result.datetime = assert(trade.datetime, "Таблица 'trade' не содержит обязательного поля 'datetime'.")
+  result.bank_acc_id = trade.bank_acc_id
+  if trade.broker_comission then result.broker_comission = tostring(trade.broker_comission) end
+  if trade.linked_trade then result.linked_trade = tostring(trade.linked_trade) end
+  result.period = assert(trade.period, "Таблица 'trade' не содержит обязательного поля 'period'.")
+  if trade.trans_id then result.trans_id = tostring(trade.trans_id) end
+  result.kind = assert(trade.kind, "Таблица 'trade' не содержит обязательного поля 'kind'.")
+  result.clearing_bank_accid = trade.clearing_bank_accid
+  result.canceled_datetime = trade.canceled_datetime
+  result.clearing_firmid = trade.clearing_firmid
+  result.system_ref = trade.system_ref
+  result.uid = trade.uid
+  
+  return result
+end
+
 converters["OnStopOrder"] = function (stop_order)
   
   local result = {}

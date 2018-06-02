@@ -54,6 +54,13 @@ function ProtobufEventDataSerializer:OnAllTrade (alltrade)
 end
 
 function ProtobufEventDataSerializer:OnTrade (trade)
+  
+  trade.datetime = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, trade.datetime)
+  
+  if trade.canceled_datetime then
+    trade.canceled_datetime = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, trade.canceled_datetime)
+  end
+  
   return event_value("ON_TRADE"), encode(qlua_pb_types.qlua_structures.Trade, trade)
 end
 

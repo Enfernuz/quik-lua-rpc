@@ -179,6 +179,8 @@ local function create_event_callbacks()
     end,
     
     OnTrade = function (trade)
+      message("DEBUG: OnTrade")
+      if publishing.on then publish("OnTrade", trade) end
       --publish(qlua_events.EventType.ON_TRADE, trade)
     end,
     
