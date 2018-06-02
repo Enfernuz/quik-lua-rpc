@@ -585,6 +585,22 @@ module.bit[proto] = {
   Result = path .. "Result"
 }
 
+proto = "test"
+path = package .. subpackage .. proto .. "."
+module.bit[proto] = {
+  Request = path .. "Request",
+  Result = path .. "Result"
+}
+
+module.os = {}
+subpackage = "os."
+
+proto = "sysdate"
+path = package .. subpackage .. proto .. "."
+module.os[proto] = {
+  Result = path .. "Result"
+}
+
 path = ".qlua.structs."
 module.qlua_structures = {
   AccountBalance = path .. "AccountBalance",
@@ -608,6 +624,7 @@ module.qlua_structures = {
   ParamEventInfo = path .. "ParamEventInfo",
   QuoteEventInfo = path .. "QuoteEventInfo",
   Security = path .. "Security",
+  StopEventInfo = path .. "StopEventInfo",
   StopOrder = path .. "StopOrder",
   Trade = path .. "Trade",
   Transaction = path .. "Transaction"

@@ -164,9 +164,18 @@ module["PrintDbgStr"] = function (args)
 end
 
 -- TODO: test
+module["os.sysdate"] = function () 
+  return os.sysdate()
+end
+
+-- TODO: test
 module["getItem"] = function (args) 
   
   local proc_result = _G.getItem(args.table_name, args.index)
+  
+  if proc_result == nil then
+    error( string.format("QLua-функция getItem(%s, %d) возвратила nil.", args.table_name, args.index) )
+  end
   
   return to_string_string_table(proc_result)
 end
@@ -234,6 +243,7 @@ module["getNumberOf"] = function (args)
 end
 
 -- TODO: test
+-- TODO: thorough testing
 module["SearchItems"] = function (args) 
   
   local fn_ctr, error_msg = loadstring("return "..args.fn_def)
@@ -1118,6 +1128,11 @@ module["bit.bxor"] = function (args)
   end
 
   return bit.bxor( unpack(xs) )
+end
+
+-- TODO: test
+module["bit.test"] = function (args) 
+  return bit.test(args.x, args.n)
 end
 
 -----

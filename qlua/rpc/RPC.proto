@@ -101,6 +101,9 @@ enum ProcedureType {
     BIT_BAND = 78;
     BIT_BOR = 79;
     BIT_BXOR = 80;
+    BIT_TEST = 81;
+    
+    OS_SYSDATE = 82;
 }
 
 message Request {

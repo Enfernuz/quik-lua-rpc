@@ -90,6 +90,21 @@ procedure_types[method_names["PRINT_DBG_STR"]] = "PRINT_DBG_STR"
 args_prototypes["PRINT_DBG_STR"] = qlua_pb_types.PrintDbgStr.Request
 result_object_mappers[method_names["PRINT_DBG_STR"]] = nil
 
+-- os.sysdate
+method_names["OS_SYSDATE"] = "os.sysdate"
+procedure_types[method_names["OS_SYSDATE"]] = "OS_SYSDATE"
+args_prototypes["OS_SYSDATE"] = nil
+result_object_mappers[method_names["OS_SYSDATE"]] = function (proc_result)
+  
+  local result = pb.defaults(qlua_pb_types.os.sysdate.Result)
+  result.result = pb.defaults(qlua_pb_types.qlua_structures.DateTimeEntry)
+  for k, v in pairs(proc_result) do
+    result.result[k] = v
+  end
+  
+  return qlua_pb_types.os.sysdate.Result, result
+end
+
 -- getItem
 method_names["GET_ITEM"] = "getItem"
 procedure_types[method_names["GET_ITEM"]] = "GET_ITEM"
@@ -1171,6 +1186,18 @@ result_object_mappers[method_names["BIT_BXOR"]] = function (proc_result)
   result.result = proc_result
   
   return qlua_pb_types.bit.bxor.Result, result
+end
+
+-- bit.test
+method_names["BIT_TEST"] = "bit.test"
+procedure_types[method_names["BIT_TEST"]] = "BIT_TEST"
+args_prototypes["BIT_TEST"] = qlua_pb_types.bit.test.Request
+result_object_mappers[method_names["BIT_TEST"]] = function (proc_result)
+
+  local result = pb.defaults(qlua_pb_types.bit.test.Result)
+  result.result = proc_result
+  
+  return qlua_pb_types.bit.test.Result, result
 end
 
 -----

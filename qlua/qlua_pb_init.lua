@@ -11,6 +11,7 @@ return function (context_path)
   p.paths[#p.paths+1] = context_path
   p.paths[#p.paths+1] = proto_path .. "/bit"
   p.paths[#p.paths+1] = proto_path .. "/datasource"
+  p.paths[#p.paths+1] = proto_path .. "/os"
   
   p:loadfile("RPC.proto")
   p:loadfile("qlua_events.proto")
@@ -23,6 +24,7 @@ return function (context_path)
   p:loadfile("sleep.proto")
   p:loadfile("getWorkingFolder.proto")
   p:loadfile("PrintDbgStr.proto")
+  p:loadfile("sysdate.proto")
   p:loadfile("getItem.proto")
   p:loadfile("getOrderByNumber.proto")
   p:loadfile("getNumberOf.proto")
@@ -96,4 +98,5 @@ return function (context_path)
   p:loadfile("band.proto")
   p:loadfile("bor.proto")
   p:loadfile("bxor.proto")
+  p:loadfile("btest.proto")
 end

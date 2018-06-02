@@ -551,3 +551,8 @@ message QuoteEventInfo {
 message ConnectedEventInfo {
     bool flag = 1;
 }
+
+// Информация из функций обратного вызова OnClose и OnStop
+message StopEventInfo {
+    int32 flag = 1;
+}
