@@ -22,6 +22,32 @@ converters["OnFirm"] = function (firm)
   }
 end
 
+converters["OnAllTrade"] = function (alltrade)
+  
+  local result = {}
+  
+  result.trade_num = assert(alltrade.trade_num, "Таблица 'alltrade' не содержит обязательного поля 'trade_num'.")
+  result.flags = assert(alltrade.flags, "Таблица 'alltrade' не содержит обязательного поля 'flags'.")
+  result.price = tostring( assert(alltrade.price, "Таблица 'alltrade' не содержит обязательного поля 'price'.") )
+  result.qty = assert(alltrade.qty, "Таблица 'alltrade' не содержит обязательного поля 'qty'.")
+  if alltrade.value then result.value = tostring(alltrade.value) end
+  if alltrade.accruedint then result.accruedint = tostring(alltrade.accruedint) end
+  if alltrade.yield then result.yield = tostring(alltrade.yield) end
+  result.settlecode = alltrade.settlecode
+  if alltrade.reporate then result.reporate = tostring(alltrade.reporate) end
+  if alltrade.repovalue then result.repovalue = tostring(alltrade.repovalue) end
+  if alltrade.repo2value then result.repo2value = tostring(alltrade.repo2value) end
+  if alltrade.repoterm then result.repoterm = tostring(alltrade.repoterm) end
+  result.sec_code = alltrade.sec_code
+  result.class_code = alltrade.class_code
+  result.datetime = assert(alltrade.datetime, "Таблица 'alltrade' не содержит обязательного поля 'datetime'.")
+  result.period = assert(alltrade.period, "Таблица 'alltrade' не содержит обязательного поля 'period'.")
+  if alltrade.open_interest then result.open_interest = tostring(alltrade.open_interest) end
+  result.exchange_code = alltrade.exchange_code
+  
+  return result
+end
+
 converters["OnStopOrder"] = function (stop_order)
   
   local result = {}
@@ -60,7 +86,7 @@ converters["OnStopOrder"] = function (stop_order)
   result.condition_sec_code = stop_order.condition_sec_code
   result.condition_class_code = stop_order.condition_class_code
   if stop_order.canceled_uid then result.canceled_uid = tostring(stop_order.canceled_uid) end
-  result.order_date_time = stop_order.order_date_time
+  result.order_date_time = assert(stop_order.order_date_time, "Таблица 'stop_order' не содержит обязательного поля 'order_date_time'.")
   result.withdraw_datetime = stop_order.withdraw_datetime
   
   return result

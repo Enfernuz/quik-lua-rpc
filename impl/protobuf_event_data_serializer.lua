@@ -45,7 +45,11 @@ function ProtobufEventDataSerializer:OnFirm (firm)
   return event_value("ON_FIRM"), encode(qlua_pb_types.qlua_structures.Firm, firm)
 end
 
+-- TODO: test
 function ProtobufEventDataSerializer:OnAllTrade (alltrade)
+  
+  alltrade.datetime = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, alltrade.datetime)
+  
   return event_value("ON_ALL_TRADE"), encode(qlua_pb_types.qlua_structures.AllTrade, alltrade)
 end
 
@@ -103,9 +107,7 @@ end
 
 function ProtobufEventDataSerializer:OnStopOrder (stop_order)
   
-  if stop_order.order_date_time then
-    stop_order.order_date_time = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, stop_order.order_date_time)
-  end
+  stop_order.order_date_time = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, stop_order.order_date_time)
   
   if stop_order.withdraw_datetime then
     stop_order.withdraw_datetime = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, stop_order.withdraw_datetime)

@@ -159,30 +159,23 @@ local function create_event_callbacks()
   return {
     
     OnClose = function()
-      if publishing.on then
-        publish("OnClose")
-      end
-      --publish(qlua_events.EventType.ON_CLOSE)
+      if publishing.on then publish("OnClose") end
       service.terminate()
     end,
     
     OnStop = function (signal)
-      if publishing.on then
-        publish("PublisherOffline")
-      end
+      if publishing.on then publish("PublisherOffline") end
       service.terminate()
     end,
     
     OnFirm = function (firm)
-      message("DEBUG: ONFIRM")
-      if publishing.on then
-        publish("OnFirm", firm)
-      end
-      --publish(qlua_events.EventType.ON_FIRM, firm)
+      message("DEBUG: OnFirm")
+      if publishing.on then publish("OnFirm", firm) end
     end,
     
     OnAllTrade = function (alltrade)
-      --publish(qlua_events.EventType.ON_ALL_TRADE, alltrade)
+      message("DEBUG: OnAllTrade")
+      if publishing.on then publish("OnAllTrade", alltrade) end
     end,
     
     OnTrade = function (trade)
