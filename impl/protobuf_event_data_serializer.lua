@@ -29,16 +29,16 @@ local function event_value (event_type)
   return pb.enum(".qlua.events.EventType", event_type)
 end
 
-function ProtobufEventDataSerializer:OnClose ()
-  return event_value("ON_CLOSE"), nil
-end
-
 function ProtobufEventDataSerializer:PublisherOnline ()
   return event_value("PUBLISHER_ONLINE"), nil
 end
 
-function ProtobufEventDataSerializer:PublisherOffline ()
-  return event_value("PUBLISHER_OFFLINE"), nil
+function ProtobufEventDataSerializer:OnClose ()
+  return event_value("ON_CLOSE"), nil
+end
+
+function ProtobufEventDataSerializer:OnStop (stop_event_data)
+  return event_value("ON_STOP"), encode(qlua_pb_types.qlua_structures.StopEventInfo, stop_event_data)
 end
 
 function ProtobufEventDataSerializer:OnFirm (firm)

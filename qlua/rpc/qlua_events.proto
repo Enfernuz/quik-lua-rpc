@@ -8,7 +8,7 @@ enum EventType {
 
     EVENT_TYPE_UNKNOWN = 0;
     PUBLISHER_ONLINE = 1; // no data attached
-    PUBLISHER_OFFLINE = 2; // no data attached
+    ON_STOP = 2;
     ON_CLOSE = 3; // no data attached
     ON_CONNECTED = 4;
     ON_DISCONNECTED = 5; // no data attached

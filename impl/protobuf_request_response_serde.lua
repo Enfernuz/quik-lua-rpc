@@ -41,7 +41,7 @@ function ProtobufRequestResponseSerde:serialize_response (deserialized_response)
   
   if err then
     response.is_error = true
-    response.result = err.message -- TODO: write the full error object
+    response.result = err.message -- TODO: write a full error object
   else
     local result = deserialized_response.result
     local method = result.method

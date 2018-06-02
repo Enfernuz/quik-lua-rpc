@@ -9,9 +9,7 @@ local identity = function (x) return x end
 
 converters["OnClose"] = noop
 
-converters["PublisherOnline"] = noop
-
-converters["PublisherOffline"] = noop
+converters["OnStop"] = identity
 
 converters["OnFirm"] = function (firm)
   return {
@@ -150,6 +148,54 @@ converters["OnOrder"] = function (order)
   result.capacity = assert(order.acnt_type, "Таблица 'order' не содержит обязательного поля 'capacity'.")
   result.passive_only_order = assert(order.passive_only_order, "Таблица 'order' не содержит обязательного поля 'passive_only_order'.")
   result.visible = assert(order.visible, "Таблица 'order' не содержит обязательного поля 'visible'.")
+  
+  return result
+end
+
+converters["OnAccountBalance"] = function (acc_bal)
+  
+  local result = {}
+  
+  result.firmid = acc_bal.firmid
+  result.sec_code = acc_bal.sec_code
+  result.trdaccid = acc_bal.trdaccid
+  result.depaccid = acc_bal.depaccid
+  if acc_bal.openbal then result.openbal = tostring(acc_bal.openbal) end
+  if acc_bal.currentpos then result.currentpos = tostring(acc_bal.currentpos) end
+  if acc_bal.plannedpossell then result.plannedpossell = tostring(acc_bal.plannedpossell) end
+  if acc_bal.plannedposbuy then result.plannedposbuy = tostring(acc_bal.plannedposbuy) end
+  if acc_bal.planbal then result.planbal = tostring(acc_bal.planbal) end
+  if acc_bal.usqtyb then result.usqtyb = tostring(acc_bal.usqtyb) end
+  if acc_bal.usqtys then result.usqtys = tostring(acc_bal.usqtys) end
+  if acc_bal.planned then result.planned = tostring(acc_bal.planned) end
+  if acc_bal.settlebal then result.settlebal = tostring(acc_bal.settlebal) end
+  result.bank_acc_id = acc_bal.bank_acc_id
+  result.firmuse = assert(acc_bal.firmuse, "Таблица 'acc_bal' не содержит обязательного поля 'firmuse'.")
+  
+  return result
+end
+
+converters["OnFuturesLimitChange"] = function (fut_limit)
+  
+  local result = {}
+  
+  result.firmid = fut_limit.firmid
+  result.trdaccid = fut_limit.trdaccid
+  result.limit_type = assert(fut_limit.limit_type, "Таблица 'fut_limit' не содержит обязательного поля 'limit_type'.")
+  if fut_limit.liquidity_coef then result.liquidity_coef = tostring(fut_limit.liquidity_coef) end
+  if fut_limit.cbp_prev_limit then result.cbp_prev_limit = tostring(fut_limit.cbp_prev_limit) end
+  if fut_limit.cbplimit then result.cbplimit = tostring(fut_limit.cbplimit) end
+  if fut_limit.cbplused then result.cbplused = tostring(fut_limit.cbplused) end
+  if fut_limit.cbplplanned then result.cbplplanned = tostring(fut_limit.cbplplanned) end
+  if fut_limit.varmargin then result.varmargin = tostring(fut_limit.varmargin) end
+  if fut_limit.accruedint then result.accruedint = tostring(fut_limit.accruedint) end
+  if fut_limit.cbplused_for_orders then result.cbplused_for_orders = tostring(fut_limit.cbplused_for_orders) end
+  if fut_limit.cbplused_for_positions then result.cbplused_for_positions = tostring(fut_limit.cbplused_for_positions) end
+  if fut_limit.options_premium then result.options_premium = tostring(fut_limit.options_premium) end
+  if fut_limit.ts_comission then result.ts_comission = tostring(fut_limit.ts_comission) end
+  if fut_limit.kgo then result.kgo = tostring(fut_limit.kgo) end
+  result.currcode = fut_limit.currcode
+  if fut_limit.real_varmargin then result.real_varmargin = tostring(fut_limit.real_varmargin) end
   
   return result
 end

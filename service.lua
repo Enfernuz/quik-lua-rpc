@@ -16,7 +16,8 @@ local json = require("utils.json")
 local uuid = require("utils.uuid")
 
 local service = {}
-service._VERSION = '1.0.0'
+service._VERSION = "1.0.0"
+service.QLUA_VERSION = "7.16"
 service.event_callbacks = {}
 
 local zmq_ctx = nil
@@ -163,8 +164,8 @@ local function create_event_callbacks()
       service.terminate()
     end,
     
-    OnStop = function (signal)
-      if publishing.on then publish("PublisherOffline") end
+    OnStop = function (flag)
+      if publishing.on then publish("OnStop", {flag = flag}) end
       service.terminate()
     end,
     
@@ -189,11 +190,13 @@ local function create_event_callbacks()
     end,
     
     OnAccountBalance = function (acc_bal)
-      --publish(qlua_events.EventType.ON_ACCOUNT_BALANCE, acc_bal)
+      message("DEBUG: OnAccountBalance")
+      if publishing.on then publish("OnAccountBalance", acc_bal) end
     end, 
     
     OnFuturesLimitChange = function (fut_limit)
-      --publish(qlua_events.EventType.ON_FUTURES_LIMIT_CHANGE, fut_limit)
+      message("DEBUG: OnFuturesLimitChange")
+      if publishing.on then publish("OnFuturesLimitChange", fut_limit) end
     end, 
     
     OnFuturesLimitDelete = function (lim_del)
