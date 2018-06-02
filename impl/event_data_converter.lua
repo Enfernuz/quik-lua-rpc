@@ -104,6 +104,56 @@ converters["OnTrade"] = function (trade)
   return result
 end
 
+converters["OnOrder"] = function (order)
+  
+  local result = {}
+  
+  result.order_num = assert(order.order_num, "Таблица 'order' не содержит обязательного поля 'order_num'.")
+  result.flags = assert(order.flags, "Таблица 'order' не содержит обязательного поля 'flags'.")
+  result.brokerref = order.brokerref
+  result.userid = order.userid
+  result.firmid = order.firmid
+  result.account = order.account
+  result.price = tostring( assert(order.price, "Таблица 'order' не содержит обязательного поля 'price'.") )
+  result.qty = assert(order.qty, "Таблица 'order' не содержит обязательного поля 'qty'.")
+  if order.balance then result.balance = tostring(order.balance) end
+  if order.value then result.value = tostring(order.value) end
+  if order.accruedint then result.accruedint = tostring(order.accruedint) end
+  if order.yield then result.yield = tostring(order.yield) end
+  if order.trans_id then result.trans_id = tostring(order.trans_id) end
+  result.client_code = order.client_code
+  if order.price2 then result.price2 = tostring(order.price2) end
+  result.settlecode = order.settlecode
+  if order.uid then result.uid = tostring(order.uid) end
+  if order.canceled_uid then result.canceled_uid = tostring(order.canceled_uid) end
+  result.exchange_code = order.exchange_code
+  if order.activation_time then result.activation_time = tostring(order.activation_time) end
+  if order.linkedorder then result.linkedorder = tostring(order.linkedorder) end
+  if order.expiry then result.expiry = tostring(order.expiry) end
+  result.sec_code = order.sec_code
+  result.class_code = order.class_code
+  result.datetime = assert(order.datetime, "Таблица 'order' не содержит обязательного поля 'datetime'.")
+  result.withdraw_datetime = order.withdraw_datetime
+  result.bank_acc_id = order.bank_acc_id
+  result.value_entry_type = assert(order.value_entry_type, "Таблица 'order' не содержит обязательного поля 'value_entry_type'.")
+  if order.repoterm then result.repoterm = tostring(order.repoterm) end
+  if order.repovalue then result.repovalue = tostring(order.repovalue) end
+  if order.repo2value then result.repo2value = tostring(order.repo2value) end
+  if order.repo_value_balance then result.repo_value_balance = tostring(order.repo_value_balance) end
+  if order.start_discount then result.start_discount = tostring(order.start_discount) end
+  result.reject_reason = order.reject_reason
+  if order.ext_order_flags then result.ext_order_flags = tostring(order.ext_order_flags) end
+  result.min_qty = assert(order.min_qty, "Таблица 'order' не содержит обязательного поля 'min_qty'.")
+  result.exec_type = assert(order.exec_type, "Таблица 'order' не содержит обязательного поля 'exec_type'.")
+  result.side_qualifier = assert(order.side_qualifier, "Таблица 'order' не содержит обязательного поля 'side_qualifier'.")
+  result.acnt_type = assert(order.acnt_type, "Таблица 'order' не содержит обязательного поля 'acnt_type'.")
+  result.capacity = assert(order.acnt_type, "Таблица 'order' не содержит обязательного поля 'capacity'.")
+  result.passive_only_order = assert(order.passive_only_order, "Таблица 'order' не содержит обязательного поля 'passive_only_order'.")
+  result.visible = assert(order.visible, "Таблица 'order' не содержит обязательного поля 'visible'.")
+  
+  return result
+end
+
 converters["OnStopOrder"] = function (stop_order)
   
   local result = {}

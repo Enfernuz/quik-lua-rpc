@@ -53,6 +53,7 @@ function ProtobufEventDataSerializer:OnAllTrade (alltrade)
   return event_value("ON_ALL_TRADE"), encode(qlua_pb_types.qlua_structures.AllTrade, alltrade)
 end
 
+-- TODO: test
 function ProtobufEventDataSerializer:OnTrade (trade)
   
   trade.datetime = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, trade.datetime)
@@ -64,7 +65,15 @@ function ProtobufEventDataSerializer:OnTrade (trade)
   return event_value("ON_TRADE"), encode(qlua_pb_types.qlua_structures.Trade, trade)
 end
 
+-- TODO: test
 function ProtobufEventDataSerializer:OnOrder (order)
+  
+  order.datetime = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, order.datetime)
+  
+  if order.withdraw_datetime then
+    order.withdraw_datetime = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, order.withdraw_datetime)
+  end
+  
   return event_value("ON_ORDER"), encode(qlua_pb_types.qlua_structures.Order, order)
 end
 

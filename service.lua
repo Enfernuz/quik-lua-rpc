@@ -181,11 +181,11 @@ local function create_event_callbacks()
     OnTrade = function (trade)
       message("DEBUG: OnTrade")
       if publishing.on then publish("OnTrade", trade) end
-      --publish(qlua_events.EventType.ON_TRADE, trade)
     end,
     
     OnOrder = function (order)
-      --publish(qlua_events.EventType.ON_ORDER, order)
+      message("DEBUG: OnOrder")
+      if publishing.on then publish("OnOrder", order) end
     end,
     
     OnAccountBalance = function (acc_bal)
