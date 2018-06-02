@@ -77,26 +77,32 @@ function ProtobufEventDataSerializer:OnOrder (order)
   return event_value("ON_ORDER"), encode(qlua_pb_types.qlua_structures.Order, order)
 end
 
+-- TODO: test
 function ProtobufEventDataSerializer:OnAccountBalance (acc_bal)
   return event_value("ON_ACCOUNT_BALANCE"), encode(qlua_pb_types.qlua_structures.AccountBalance, acc_bal)
 end
 
+-- TODO: test
 function ProtobufEventDataSerializer:OnFuturesLimitChange (fut_limit)
   return event_value("ON_FUTURES_LIMIT_CHANGE"), encode(qlua_pb_types.qlua_structures.FuturesLimit, fut_limit)
 end
 
+-- TODO: test
 function ProtobufEventDataSerializer:OnFuturesLimitDelete (lim_del)
   return event_value("ON_FUTURES_LIMIT_DELETE"), encode(qlua_pb_types.qlua_structures.FuturesLimitDelete, lim_del)
 end
 
+-- TODO: test
 function ProtobufEventDataSerializer:OnFuturesClientHolding (fut_pos)
   return event_value("ON_FUTURES_CLIENT_HOLDING"), encode(qlua_pb_types.qlua_structures.FuturesClientHolding, fut_pos)
 end
 
+-- TODO: test
 function ProtobufEventDataSerializer:OnMoneyLimit (mlimit)
   return event_value("ON_MONEY_LIMIT"), encode(qlua_pb_types.qlua_structures.MoneyLimit, mlimit)
 end
 
+-- TODO: test
 function ProtobufEventDataSerializer:OnMoneyLimitDelete (mlimit_del)
   return event_value("ON_MONEY_LIMIT_DELETE"), encode(qlua_pb_types.qlua_structures.MoneyLimitDelete, mlimit_del)
 end

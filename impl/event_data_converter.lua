@@ -200,6 +200,77 @@ converters["OnFuturesLimitChange"] = function (fut_limit)
   return result
 end
 
+converters["OnFuturesLimitDelete"] = function (lim_del)
+  
+  local result = {}
+  
+  result.firmid = lim_del.firmid
+  result.limit_type = assert(lim_del.limit_type, "Таблица 'lim_del' не содержит обязательного поля 'limit_type'.")
+  
+  return result
+end
+
+converters["OnFuturesClientHolding"] = function (fut_pos)
+  
+  local result = {}
+  
+  result.firmid = fut_pos.firmid
+  result.trdaccid = fut_pos.trdaccid
+  result.sec_code = fut_pos.sec_code
+  result.type = assert(fut_pos.type, "Таблица 'fut_pos' не содержит обязательного поля 'type'.")
+  if fut_pos.startbuy then result.startbuy = tostring(fut_pos.startbuy) end
+  if fut_pos.startsell then result.startsell = tostring(fut_pos.startsell) end
+  if fut_pos.todaybuy then result.todaybuy = tostring(fut_pos.todaybuy) end
+  if fut_pos.todaysell then result.todaysell = tostring(fut_pos.todaysell) end
+  if fut_pos.totalnet then result.totalnet = tostring(fut_pos.totalnet) end
+  result.openbuys = assert(fut_pos.openbuys, "Таблица 'fut_pos' не содержит обязательного поля 'openbuys'.")
+  result.opensells = assert(fut_pos.opensells, "Таблица 'fut_pos' не содержит обязательного поля 'opensells'.")
+  if fut_pos.cbplused then result.cbplused = tostring(fut_pos.cbplused) end
+  if fut_pos.cbplplanned then result.cbplplanned = tostring(fut_pos.cbplplanned) end
+  if fut_pos.varmargin then result.varmargin = tostring(fut_pos.varmargin) end
+  if fut_pos.avrposnprice then result.avrposnprice = tostring(fut_pos.avrposnprice) end
+  if fut_pos.positionvalue then result.positionvalue = tostring(fut_pos.positionvalue) end
+  if fut_pos.real_varmargin then result.real_varmargin = tostring(fut_pos.real_varmargin) end
+  if fut_pos.total_varmargin then result.total_varmargin = tostring(fut_pos.total_varmargin) end
+  result.session_status = assert(fut_pos.session_status, "Таблица 'fut_pos' не содержит обязательного поля 'session_status'.")
+  
+  return result
+end
+
+converters["OnMoneyLimit"] = function (mlimit)
+  
+  local result = {}
+  
+  result.currcode = mlimit.currcode
+  result.tag = mlimit.tag
+  result.firmid = mlimit.firmid
+  result.client_code = mlimit.client_code
+  if mlimit.openbal then result.openbal = tostring(mlimit.openbal) end
+  if mlimit.openlimit then result.openlimit = tostring(mlimit.openlimit) end
+  if mlimit.currentbal then result.currentbal = tostring(mlimit.currentbal) end
+  if mlimit.currentlimit then result.currentlimit = tostring(mlimit.currentlimit) end
+  if mlimit.locked then result.locked = tostring(mlimit.locked) end
+  if mlimit.locked_value_coef then result.locked_value_coef = tostring(mlimit.locked_value_coef) end
+  if mlimit.locked_margin_value then result.locked_margin_value = tostring(mlimit.locked_margin_value) end
+  if mlimit.leverage then result.leverage = tostring(mlimit.leverage) end
+  result.limit_kind = assert(mlimit.limit_kind, "Таблица 'mlimit' не содержит обязательного поля 'limit_kind'.")
+
+  return result
+end
+
+converters["OnMoneyLimitDelete"] = function (mlimit_del)
+  
+  local result = {}
+  
+  result.currcode = mlimit_del.currcode
+  result.tag = mlimit_del.tag
+  result.client_code = mlimit_del.client_code
+  result.firmid = mlimit_del.firmid
+  result.limit_kind = assert(mlimit_del.limit_kind, "Таблица 'mlimit_del' не содержит обязательного поля 'limit_kind'.")
+  
+  return result
+end
+
 converters["OnStopOrder"] = function (stop_order)
   
   local result = {}

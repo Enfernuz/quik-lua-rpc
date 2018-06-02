@@ -200,19 +200,23 @@ local function create_event_callbacks()
     end, 
     
     OnFuturesLimitDelete = function (lim_del)
-      --publish(qlua_events.EventType.ON_FUTURES_LIMIT_DELETE, lim_del)
+      message("DEBUG: OnFuturesLimitDelete")
+      if publishing.on then publish("OnFuturesLimitDelete", lim_del) end
     end,
     
     OnFuturesClientHolding = function (fut_pos)
-      --publish(qlua_events.EventType.ON_FUTURES_CLIENT_HOLDING, fut_pos)
+      message("DEBUG: OnFuturesClientHolding")
+      if publishing.on then publish("OnFuturesClientHolding", fut_pos) end
     end, 
     
     OnMoneyLimit = function (mlimit)
-      --publish(qlua_events.EventType.ON_MONEY_LIMIT, mlimit)
+      message("DEBUG: OnMoneyLimit")
+      if publishing.on then publish("OnMoneyLimit", mlimit) end
     end, 
     
     OnMoneyLimitDelete = function (mlimit_del)
-      --publish(qlua_events.EventType.ON_MONEY_LIMIT_DELETE, mlimit_del)
+      message("DEBUG: OnMoneyLimitDelete")
+      if publishing.on then publish("OnMoneyLimitDelete", mlimit_del) end
     end, 
     
     OnDepoLimit = function (dlimit)
