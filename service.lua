@@ -33,12 +33,9 @@ local request_response_serde = {
   protobuf = nil
 }
 
-local publishing = {
-  publishers = {
-    json = nil,
-    protobuf = nil
-  }, 
-  on = false
+local publishers = {
+  json = nil,
+  protobuf = nil
 }
 
 local protobuf_context = {
@@ -149,7 +146,7 @@ local function publish (event_type, event_data)
   
   local converted_event_data = event_data_converter.convert(event_type, event_data)
   
-  for _, publisher in pairs(publishing.publishers) do
+  for _, publisher in pairs(publishers) do
     publisher:publish(event_type, converted_event_data)
   end
 end
@@ -160,63 +157,63 @@ local function create_event_callbacks()
   return {
     
     OnClose = function()
-      if publishing.on then publish("OnClose") end
+      publish("OnClose")
       service.terminate()
     end,
     
     OnStop = function (flag)
-      if publishing.on then publish("OnStop", {flag = flag}) end
+      publish("OnStop", {flag = flag})
       service.terminate()
     end,
     
     OnFirm = function (firm)
       message("DEBUG: OnFirm")
-      if publishing.on then publish("OnFirm", firm) end
+      publish("OnFirm", firm)
     end,
     
     OnAllTrade = function (alltrade)
       message("DEBUG: OnAllTrade")
-      if publishing.on then publish("OnAllTrade", alltrade) end
+      publish("OnAllTrade", alltrade)
     end,
     
     OnTrade = function (trade)
       message("DEBUG: OnTrade")
-      if publishing.on then publish("OnTrade", trade) end
+      publish("OnTrade", trade)
     end,
     
     OnOrder = function (order)
       message("DEBUG: OnOrder")
-      if publishing.on then publish("OnOrder", order) end
+      publish("OnOrder", order)
     end,
     
     OnAccountBalance = function (acc_bal)
       message("DEBUG: OnAccountBalance")
-      if publishing.on then publish("OnAccountBalance", acc_bal) end
+      publish("OnAccountBalance", acc_bal)
     end, 
     
     OnFuturesLimitChange = function (fut_limit)
       message("DEBUG: OnFuturesLimitChange")
-      if publishing.on then publish("OnFuturesLimitChange", fut_limit) end
+      publish("OnFuturesLimitChange", fut_limit)
     end, 
     
     OnFuturesLimitDelete = function (lim_del)
       message("DEBUG: OnFuturesLimitDelete")
-      if publishing.on then publish("OnFuturesLimitDelete", lim_del) end
+      publish("OnFuturesLimitDelete", lim_del)
     end,
     
     OnFuturesClientHolding = function (fut_pos)
       message("DEBUG: OnFuturesClientHolding")
-      if publishing.on then publish("OnFuturesClientHolding", fut_pos) end
+      publish("OnFuturesClientHolding", fut_pos)
     end, 
     
     OnMoneyLimit = function (mlimit)
       message("DEBUG: OnMoneyLimit")
-      if publishing.on then publish("OnMoneyLimit", mlimit) end
+      publish("OnMoneyLimit", mlimit)
     end, 
     
     OnMoneyLimitDelete = function (mlimit_del)
       message("DEBUG: OnMoneyLimitDelete")
-      if publishing.on then publish("OnMoneyLimitDelete", mlimit_del) end
+      publish("OnMoneyLimitDelete", mlimit_del)
     end, 
     
     OnDepoLimit = function (dlimit)
@@ -240,10 +237,7 @@ local function create_event_callbacks()
     end,
     
     OnStopOrder = function (stop_order)
-      if publishing.on then
-        publish("OnStopOrder", stop_order)
-      end
-      --publish(qlua_events.EventType.ON_STOP_ORDER, stop_order)
+      publish("OnStopOrder", stop_order)
     end, 
     
     OnTransReply = function (trans_reply)
@@ -255,31 +249,19 @@ local function create_event_callbacks()
     end,
     
     OnQuote = function (class_code, sec_code)
-      if publishing.on then
-        publish("OnQuote", {class_code = class_code, sec_code = sec_code})
-      end
-      --publish(qlua_events.EventType.ON_QUOTE, {class_code = class_code, sec_code = sec_code})
+      publish("OnQuote", {class_code = class_code, sec_code = sec_code})
     end, 
     
     OnDisconnected = function ()
-      if publishing.on then
-        publish("OnDisconnected")
-      end
-      --publish(qlua_events.EventType.ON_DISCONNECTED)
+      publish("OnDisconnected")
     end, 
     
     OnConnected = function (flag)
-      if publishing.on then
-        publish("OnConnected", {flag = flag})
-      end
-      --publish(qlua_events.EventType.ON_CONNECTED, flag)
+      publish("OnConnected", {flag = flag})
     end,
     
     OnCleanUp = function ()
-      if publishing.on then
-        publish("OnCleanUp")
-      end
-      --publish(qlua_events.EventType.ON_CLEAN_UP)
+      publish("OnCleanUp")
     end
   }
 end
@@ -311,15 +293,15 @@ local function create_socket(endpoint)
     local serde_protocol = string.lower(endpoint.serde_protocol)
     local publisher
     if "protobuf" == serde_protocol then
-      if not publishing.publishers.protobuf then
-        publishing.publishers.protobuf = require("impl.protobuf_event_publisher"):new()
+      if not publishers.protobuf then
+        publishers.protobuf = require("impl.protobuf_event_publisher"):new()
       end
-      publisher = publishing.publishers.protobuf
+      publisher = publishers.protobuf
     elseif "json" == serde_protocol then
-      if not publishing.publishers.json then
-        publishing.publishers.json = require("impl.json_event_publisher"):new()
+      if not publishers.json then
+        publishers.json = require("impl.json_event_publisher"):new()
       end
-      publisher = publishing.publishers.json
+      publisher = publishers.json
     end
     
     publisher:add_pub_socket(socket)
@@ -330,7 +312,6 @@ local function create_socket(endpoint)
     
     local next = next
     if not next(service.event_callbacks) then
-      publishing.on = true
       service.event_callbacks = create_event_callbacks()
     end
   end
