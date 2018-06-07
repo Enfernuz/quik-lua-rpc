@@ -20,7 +20,7 @@ script:
   - busted --coverage test/*.lua
 
 after_success:
-  - luacov-coveralls -v
+  - luacov-coveralls --exclude test --exclude ./install --verbose
 
 notifications:
   email:
