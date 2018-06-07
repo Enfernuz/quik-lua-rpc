@@ -12,10 +12,15 @@ before_install:
   - source .travis/setenv_lua.sh
   - luarocks install protobuf
   - luarocks install luabitop
+  - luarocks install luacov
+  - luarocks install luacov-coveralls
   - luarocks install busted
 
 script:
-  - busted test/*.lua
+  - busted --coverage test/*.lua
+
+after_success:
+  - luacov-coveralls -v
 
 notifications:
   email:

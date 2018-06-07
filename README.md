@@ -1,6 +1,7 @@
 # quik-lua-rpc
 
 [![Build Status](https://travis-ci.com/Enfernuz/quik-lua-rpc.svg?branch=master)](https://travis-ci.com/Enfernuz/quik-lua-rpc)
+[![Coverage Status](https://coveralls.io/repos/github/Enfernuz/quik-lua-rpc/badge.svg)](https://coveralls.io/github/Enfernuz/quik-lua-rpc)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 RPC-сервис для вызова процедур из QLUA -- Lua-библиотеки торгового терминала QUIK (ARQA Technologies).
