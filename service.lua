@@ -246,7 +246,8 @@ local function create_event_callbacks()
     end, 
     
     OnTransReply = function (trans_reply)
-      --publish(qlua_events.EventType.ON_TRANS_REPLY, trans_reply)
+      message("DEBUG: OnTransReply")
+      publish("OnTransReply", trans_reply)
     end, 
     
     OnParam = function (class_code, sec_code)

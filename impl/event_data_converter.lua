@@ -501,6 +501,32 @@ converters["OnStopOrder"] = function (stop_order)
   return result
 end
 
+converters["OnTransReply"] = function (trans_reply)
+  
+  local result = {}
+  
+  result.trans_id = assert(trans_reply.trans_id, "Таблица 'trans_reply' не содержит обязательного поля 'trans_id'.")
+  result.status = assert(trans_reply.status, "Таблица 'trans_reply' не содержит обязательного поля 'status'.")
+  result.result_msg = trans_reply.result_msg
+  result.date_time = assert(trans_reply.date_time, "Таблица 'trans_reply' не содержит обязательного поля 'date_time'.")
+  result.uid = tostring( assert(trans_reply.uid, "Таблица 'trans_reply' не содержит обязательного поля 'uid'.") )
+  result.flags = assert(trans_reply.flags, "Таблица 'trans_reply' не содержит обязательного поля 'flags'.")
+  if trans_reply.server_trans_id then result.server_trans_id = tostring(trans_reply.server_trans_id) end
+  if trans_reply.order_num then result.order_num = tostring(trans_reply.order_num) end
+  if trans_reply.price then result.price = tostring(trans_reply.price) end
+  if trans_reply.quantity then result.quantity = tostring(trans_reply.quantity) end
+  if trans_reply.balance then result.balance = tostring(trans_reply.balance) end
+  result.firm_id = trans_reply.firm_id
+  result.account = trans_reply.account
+  result.client_code = trans_reply.client_code
+  result.brokerref = trans_reply.brokerref
+  result.class_code = trans_reply.class_code
+  result.sec_code = trans_reply.sec_code
+  result.exchange_code = trans_reply.exchange_code
+  
+  return result
+end
+
 converters["OnQuote"] = identity
 
 converters["OnDisconnected"] = noop

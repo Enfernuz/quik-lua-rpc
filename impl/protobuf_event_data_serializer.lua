@@ -138,6 +138,7 @@ function ProtobufEventDataSerializer:OnNegDeal (neg_deal)
   return event_value("ON_NEG_DEAL"), encode(qlua_pb_types.qlua_structures.NegDeal, neg_deal)
 end
 
+-- TODO: test
 function ProtobufEventDataSerializer:OnNegTrade (neg_trade)
   return event_value("ON_NEG_TRADE"), encode(qlua_pb_types.qlua_structures.NegTrade, neg_trade)
 end
@@ -153,16 +154,22 @@ function ProtobufEventDataSerializer:OnStopOrder (stop_order)
   return event_value("ON_STOP_ORDER"), encode(qlua_pb_types.qlua_structures.StopOrder, stop_order)
 end
 
+-- TODO: test
 function ProtobufEventDataSerializer:OnTransReply (trans_reply)
+  
+  trans_reply.date_time = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, trans_reply.date_time)
+  
   return event_value("ON_TRANS_REPLY"), encode(qlua_pb_types.qlua_structures.Transaction, trans_reply)
 end
 
+-- TODO: test
 function ProtobufEventDataSerializer:OnParam (param_event_data)
   return event_value("ON_PARAM"), encode(qlua_pb_types.qlua_structures.ParamEventInfo, param_event_data)
 end
 
+-- TODO: test
 function ProtobufEventDataSerializer:OnQuote (quote_event_data)
-  return event_value("ON_PARAM"), encode(qlua_pb_types.qlua_structures.QuoteEventInfo, quote_event_data)
+  return event_value("ON_QUOTE"), encode(qlua_pb_types.qlua_structures.QuoteEventInfo, quote_event_data)
 end
 
 function ProtobufEventDataSerializer:OnConnected (connected_event_data)
