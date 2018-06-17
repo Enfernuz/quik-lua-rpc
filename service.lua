@@ -251,7 +251,7 @@ local function create_event_callbacks()
     end, 
     
     OnParam = function (class_code, sec_code)
-      --publish(qlua_events.EventType.ON_PARAM, {class_code = class_code, sec_code = sec_code})
+      publish("OnParam", {class_code = class_code, sec_code = sec_code})
     end,
     
     OnQuote = function (class_code, sec_code)
