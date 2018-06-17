@@ -4,8 +4,6 @@ require 'busted.runner'()
 
 local match = require("luassert.match")
 
-require("test.mock_qlua")
-
 describe("impl.procedure_wrappers", function()
   
   local sut = require("impl.procedure_wrappers")

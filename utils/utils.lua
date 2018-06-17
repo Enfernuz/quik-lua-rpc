@@ -17,40 +17,7 @@ local error = assert(error, "error function is missing")
 local module = {}
 module._VERSION = '2.1.0'
 
-function module.value_or_empty_string (val)
-  return (val == nil and "" or val)
-end
-
-function module.copy_pb_struct(dst, src)
-  
-  for k, v in pairs(src) do
-    dst[k] = v
-  end
-end
-
-function module.insert_table(dst, src)
-  
-  for k, v in pairs(src) do
-      local table_entry = qlua_types.TableEntry() 
-      table_entry.k = tostring(k)
-      table_entry.v = tostring(v)
-      table.sinsert(dst, table_entry)
-  end
-end
-
-function module.copy_datetime(dst, src)
- 
-  dst.mcs = src.mcs
-  dst.ms = src.ms
-  dst.sec = src.sec
-  dst.min = src.min
-  dst.hour = src.hour
-  dst.day = src.day
-  dst.week_day = src.week_day
-  dst.month = src.month
-  dst.year = src.year
-end
-
+-- TODO: consider to remove
 function module.create_table(pb_map)
   
   local t = {}
@@ -61,16 +28,7 @@ function module.create_table(pb_map)
   return t
 end
 
-function module.new_put_to_string_string_pb_map(t, pb_map, pb_map_entry_ctr)
-  
-  for k, v in pairs(t) do
-    local entry = pb_map_entry_ctr()
-    entry.key = tostring(k)
-    entry.value = tostring(v)
-    table.sinsert(pb_map, entry)
-  end
-end
-
+-- TODO: consider to remove
 function module.put_to_string_string_pb_map(t, pb_map, pb_map_entry_ctr)
   
   for k, v in pairs(t) do
@@ -87,13 +45,13 @@ function module.sleep(s)
 end
 
 local qtable_parameter_types = {}
-qtable_parameter_types[qlua.AddColumn.ColumnParameterType.QTABLE_INT_TYPE] = QTABLE_INT_TYPE
-qtable_parameter_types[qlua.AddColumn.ColumnParameterType.QTABLE_DOUBLE_TYPE] = QTABLE_DOUBLE_TYPE
-qtable_parameter_types[qlua.AddColumn.ColumnParameterType.QTABLE_INT64_TYPE] = QTABLE_INT64_TYPE
-qtable_parameter_types[qlua.AddColumn.ColumnParameterType.QTABLE_CACHED_STRING_TYPE] = QTABLE_CACHED_STRING_TYPE
-qtable_parameter_types[qlua.AddColumn.ColumnParameterType.QTABLE_TIME_TYPE] = QTABLE_TIME_TYPE
-qtable_parameter_types[qlua.AddColumn.ColumnParameterType.QTABLE_DATE_TYPE] = QTABLE_DATE_TYPE
-qtable_parameter_types[qlua.AddColumn.ColumnParameterType.QTABLE_STRING_TYPE] = QTABLE_STRING_TYPE
+qtable_parameter_types["QTABLE_INT_TYPE"] = _G.QTABLE_INT_TYPE
+qtable_parameter_types["QTABLE_DOUBLE_TYPE"] = _G.QTABLE_DOUBLE_TYPE
+qtable_parameter_types["QTABLE_INT64_TYPE"] = _G.QTABLE_INT64_TYPE
+qtable_parameter_types["QTABLE_CACHED_STRING_TYPE"] = _G.QTABLE_CACHED_STRING_TYPE
+qtable_parameter_types["QTABLE_TIME_TYPE"] = _G.QTABLE_TIME_TYPE
+qtable_parameter_types["QTABLE_DATE_TYPE"] = _G.QTABLE_DATE_TYPE
+qtable_parameter_types["QTABLE_STRING_TYPE"] = _G.QTABLE_STRING_TYPE
 
 function module.to_qtable_parameter_type(pb_column_parameter_type)
   
