@@ -9,7 +9,7 @@ local ProtobufEventDataSerializer = {}
 
 setmetatable(ProtobufEventDataSerializer, {__index = EventDataSerializer})
 
--- The following functions need the module "qlua.qlua_pb_init.lua" being already loaded
+-- The following functions need the module "qlua.qlua_pb_init.lua" to be already loaded
 
 local function to_pb_obj (pb_type, obj)
   
