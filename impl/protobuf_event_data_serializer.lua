@@ -107,19 +107,34 @@ function ProtobufEventDataSerializer:OnMoneyLimitDelete (mlimit_del)
   return event_value("ON_MONEY_LIMIT_DELETE"), encode(qlua_pb_types.qlua_structures.MoneyLimitDelete, mlimit_del)
 end
 
+-- TODO: test
 function ProtobufEventDataSerializer:OnDepoLimit (dlimit)
   return event_value("ON_DEPO_LIMIT"), encode(qlua_pb_types.qlua_structures.DepoLimit, dlimit)
 end
 
+-- TODO: test
 function ProtobufEventDataSerializer:OnDepoLimitDelete (dlimit_del)
   return event_value("ON_DEPO_LIMIT_DELETE"), encode(qlua_pb_types.qlua_structures.DepoLimitDelete, dlimit_del)
 end
 
+-- TODO: test
 function ProtobufEventDataSerializer:OnAccountPosition (acc_pos)
   return event_value("ON_ACCOUNT_POSITION"), encode(qlua_pb_types.qlua_structures.AccountPosition, acc_pos)
 end
 
+-- TODO: test
 function ProtobufEventDataSerializer:OnNegDeal (neg_deal)
+  
+  neg_deal.date_time = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, neg_deal.date_time)
+  
+  if neg_deal.withdraw_date_time then
+    neg_deal.withdraw_date_time = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, neg_deal.withdraw_date_time)
+  end
+  
+  if neg_deal.activation_date_time then
+    neg_deal.activation_date_time = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, neg_deal.activation_date_time)
+  end
+  
   return event_value("ON_NEG_DEAL"), encode(qlua_pb_types.qlua_structures.NegDeal, neg_deal)
 end
 

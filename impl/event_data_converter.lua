@@ -271,6 +271,192 @@ converters["OnMoneyLimitDelete"] = function (mlimit_del)
   return result
 end
 
+converters["OnDepoLimit"] = function (dlimit)
+  
+  local result = {}
+  
+  result.sec_code = dlimit.sec_code
+  result.trdaccid = dlimit.trdaccid
+  result.firmid = dlimit.firmid
+  result.client_code = dlimit.client_code
+  result.openbal = assert(dlimit.openbal, "Таблица 'dlimit' не содержит обязательного поля 'openbal'.")
+  result.openlimit = assert(dlimit.openlimit, "Таблица 'dlimit' не содержит обязательного поля 'openlimit'.")
+  result.currentbal = assert(dlimit.currentbal, "Таблица 'dlimit' не содержит обязательного поля 'currentbal'.")
+  result.currentlimit = assert(dlimit.currentlimit, "Таблица 'dlimit' не содержит обязательного поля 'currentlimit'.")
+  result.locked_sell = assert(dlimit.locked_sell, "Таблица 'dlimit' не содержит обязательного поля 'locked_sell'.")
+  result.locked_buy = assert(dlimit.locked_buy, "Таблица 'dlimit' не содержит обязательного поля 'locked_buy'.")
+  result.locked_buy_value = assert(dlimit.locked_buy_value, "Таблица 'dlimit' не содержит обязательного поля 'locked_buy_value'.")
+  result.locked_sell_value = assert(dlimit.locked_sell_value, "Таблица 'dlimit' не содержит обязательного поля 'locked_sell_value'.")
+  result.awg_position_price = assert(dlimit.awg_position_price, "Таблица 'dlimit' не содержит обязательного поля 'awg_position_price'.")
+  result.limit_kind = assert(dlimit.limit_kind, "Таблица 'dlimit' не содержит обязательного поля 'limit_kind'.")
+  
+  return result
+end
+
+converters["OnDepoLimitDelete"] = function (dlimit_del)
+  
+  local result = {}
+  
+  result.sec_code = dlimit_del.sec_code
+  result.trdaccid = dlimit_del.trdaccid
+  result.firmid = dlimit_del.firmid
+  result.client_code = dlimit_del.client_code
+  result.limit_kind = assert(dlimit.limit_kind, "Таблица 'dlimit_del' не содержит обязательного поля 'limit_kind'.")
+  
+  return result
+end
+
+converters["OnAccountPosition"] = function (acc_pos)
+  
+  local result = {}
+  
+  result.firmid = acc_pos.firmid
+  result.currcode = acc_pos.currcode
+  result.tag = acc_pos.tag
+  result.description = acc_pos.description
+  if acc_pos.openbal then result.openbal = tostring(acc_pos.openbal) end
+  if acc_pos.currentpos then result.currentpos = tostring(acc_pos.currentpos) end
+  if acc_pos.plannedpos then result.plannedpos = tostring(acc_pos.plannedpos) end
+  if acc_pos.limit1 then result.limit1 = tostring(acc_pos.limit1) end
+  if acc_pos.limit2 then result.limit2 = tostring(acc_pos.limit2) end
+  if acc_pos.orderbuy then result.orderbuy = tostring(acc_pos.orderbuy) end
+  if acc_pos.ordersell then result.ordersell = tostring(acc_pos.ordersell) end
+  if acc_pos.netto then result.netto = tostring(acc_pos.netto) end
+  if acc_pos.plannedbal then result.plannedbal = tostring(acc_pos.plannedbal) end
+  if acc_pos.debit then result.debit = tostring(acc_pos.debit) end
+  if acc_pos.credit then result.credit = tostring(acc_pos.credit) end
+  result.bank_acc_id = acc_pos.bank_acc_id
+  if acc_pos.margincall then result.margincall = tostring(acc_pos.margincall) end
+  if acc_pos.settlebal then result.settlebal = tostring(acc_pos.settlebal) end
+  
+  return result
+end
+
+converters["OnNegDeal"] = function (neg_deal)
+  
+  local result = {}
+  
+  result.neg_deal_num = assert(neg_deal.neg_deal_num, "Таблица 'neg_deal' не содержит обязательного поля 'neg_deal_num'.")
+  if neg_deal.neg_deal_time then result.neg_deal_time = tostring(neg_deal.neg_deal_time) end
+  result.flags = assert(neg_deal.flags, "Таблица 'neg_deal' не содержит обязательного поля 'flags'.")
+  result.brokerref = neg_deal.brokerref
+  result.userid = neg_deal.userid
+  result.firmid = neg_deal.firmid
+  result.cpuserid = neg_deal.cpuserid
+  result.cpfirmid = neg_deal.cpfirmid
+  result.account = neg_deal.account
+  result.price = tostring( assert(neg_deal.price, "Таблица 'neg_deal' не содержит обязательного поля 'price'.") )
+  result.qty = assert(neg_deal.qty, "Таблица 'neg_deal' не содержит обязательного поля 'qty'.")
+  result.matchref = neg_deal.matchref
+  result.settlecode = neg_deal.settlecode
+  if neg_deal.yield then result.yield = tostring(neg_deal.yield) end
+  if neg_deal.accruedint then result.accruedint = tostring(neg_deal.accruedint) end
+  if neg_deal.value then result.value = tostring(neg_deal.value) end
+  if neg_deal.price2 then result.price2 = tostring(neg_deal.price2) end
+  if neg_deal.reporate then result.reporate = tostring(neg_deal.reporate) end
+  if neg_deal.refundrate then result.refundrate = tostring(neg_deal.refundrate) end
+  if neg_deal.trans_id then result.trans_id = tostring(neg_deal.trans_id) end
+  result.client_code = neg_deal.client_code
+  result.repoentry = assert(neg_deal.repoentry, "Таблица 'neg_deal' не содержит обязательного поля 'repoentry'.")
+  if neg_deal.repovalue then result.repovalue = tostring(neg_deal.repovalue) end
+  if neg_deal.repo2value then result.repo2value = tostring(neg_deal.repo2value) end
+  if neg_deal.repoterm then result.repoterm = tostring(neg_deal.repoterm) end
+  if neg_deal.start_discount then result.start_discount = tostring(neg_deal.start_discount) end
+  if neg_deal.lower_discount then result.lower_discount = tostring(neg_deal.lower_discount) end
+  if neg_deal.upper_discount then result.upper_discount = tostring(neg_deal.upper_discount) end
+  if neg_deal.block_securities then result.block_securities = tostring(neg_deal.block_securities) end
+  if neg_deal.uid then result.uid = tostring(neg_deal.uid) end
+  if neg_deal.withdraw_time then result.withdraw_time = tostring(neg_deal.withdraw_time) end
+  if neg_deal.neg_deal_date then result.neg_deal_date = tostring(neg_deal.neg_deal_date) end
+  if neg_deal.balance then result.balance = tostring(neg_deal.balance) end
+  if neg_deal.origin_repovalue then result.origin_repovalue = tostring(neg_deal.origin_repovalue) end
+  if neg_deal.origin_qty then result.origin_qty = tostring(neg_deal.origin_qty) end
+  if neg_deal.origin_discount then result.origin_discount = tostring(neg_deal.origin_discount) end
+  if neg_deal.neg_deal_activation_date then result.neg_deal_activation_date = tostring(neg_deal.neg_deal_activation_date) end
+  if neg_deal.neg_deal_activation_time then result.neg_deal_activation_time = tostring(neg_deal.neg_deal_activation_time) end
+  if neg_deal.quoteno then result.quoteno = tostring(neg_deal.quoteno) end
+  result.settle_currency = neg_deal.settle_currency
+  result.sec_code = neg_deal.sec_code
+  result.class_code = neg_deal.class_code
+  result.bank_acc_id = neg_deal.bank_acc_id
+  if neg_deal.withdraw_date then result.withdraw_date = tostring(neg_deal.withdraw_date) end
+  if neg_deal.linkedorder then result.linkedorder = tostring(neg_deal.linkedorder) end
+  result.activation_date_time = neg_deal.activation_date_time
+  result.withdraw_date_time = neg_deal.withdraw_date_time
+  result.date_time = assert(neg_deal.date_time, "Таблица 'neg_deal' не содержит обязательного поля 'date_time'.")
+  
+  return result
+end
+
+converters["OnNegTrade"] = function (neg_trade)
+  
+  local result = {}
+  
+  result.trade_num = assert(neg_trade.trade_num, "Таблица 'neg_trade' не содержит обязательного поля 'trade_num'.")
+  if neg_trade.trade_date then result.trade_date = tostring(neg_trade.trade_date) end
+  if neg_trade.settle_date then result.settle_date = tostring(neg_trade.settle_date) end
+  result.flags = assert(neg_trade.flags, "Таблица 'neg_trade' не содержит обязательного поля 'flags'.")
+  result.brokerref = neg_trade.brokerref
+  result.firmid = neg_trade.firmid
+  result.account = neg_trade.account
+  result.cpfirmid = neg_trade.cpfirmid
+  result.cpaccount = neg_trade.cpaccount
+  result.price = tostring( assert(neg_trade.price, "Таблица 'neg_trade' не содержит обязательного поля 'price'.") )
+  result.qty = assert(neg_trade.qty, "Таблица 'neg_trade' не содержит обязательного поля 'qty'.")
+  if neg_trade.value then result.value = tostring(neg_trade.value) end
+  result.settlecode = neg_trade.settlecode
+  if neg_trade.report_num then result.report_num = tostring(neg_trade.report_num) end
+  if neg_trade.cpreport_num then result.cpreport_num = tostring(neg_trade.cpreport_num) end
+  if neg_trade.accruedint then result.accruedint = tostring(neg_trade.accruedint) end
+  if neg_trade.repotradeno then result.repotradeno = tostring(neg_trade.repotradeno) end
+  if neg_trade.price1 then result.price1 = tostring(neg_trade.price1) end
+  if neg_trade.reporate then result.reporate = tostring(neg_trade.reporate) end
+  if neg_trade.price2 then result.price2 = tostring(neg_trade.price2) end
+  result.client_code = neg_trade.client_code
+  if neg_trade.ts_comission then result.ts_comission = tostring(neg_trade.ts_comission) end
+  if neg_trade.balance then result.balance = tostring(neg_trade.balance) end
+  if neg_trade.settle_time then result.settle_time = tostring(neg_trade.settle_time) end
+  if neg_trade.amount then result.amount = tostring(neg_trade.amount) end
+  if neg_trade.repovalue then result.repovalue = tostring(neg_trade.repovalue) end
+  if neg_trade.repoterm then result.repoterm = tostring(neg_trade.repoterm) end
+  if neg_trade.repo2value then result.repo2value = tostring(neg_trade.repo2value) end
+  if neg_trade.return_value then result.return_value = tostring(neg_trade.return_value) end
+  if neg_trade.discount then result.discount = tostring(neg_trade.discount) end
+  if neg_trade.lower_discount then result.lower_discount = tostring(neg_trade.lower_discount) end
+  if neg_trade.upper_discount then result.upper_discount = tostring(neg_trade.upper_discount) end
+  if neg_trade.block_securities then result.block_securities = tostring(neg_trade.block_securities) end
+  if neg_trade.urgency_flag then result.urgency_flag = tostring(neg_trade.urgency_flag) end
+  result.type = assert(neg_trade.type, "Таблица 'neg_trade' не содержит обязательного поля 'type'.")
+  result.operation_type = assert(neg_trade.operation_type, "Таблица 'neg_trade' не содержит обязательного поля 'operation_type'.")
+  if neg_trade.expected_discount then result.expected_discount = tostring(neg_trade.expected_discount) end
+  if neg_trade.expected_quantity then result.expected_quantity = tostring(neg_trade.expected_quantity) end
+  if neg_trade.expected_repovalue then result.expected_repovalue = tostring(neg_trade.expected_repovalue) end
+  if neg_trade.expected_repo2value then result.expected_repo2value = tostring(neg_trade.expected_repo2value) end
+  if neg_trade.expected_return_value then result.expected_return_value = tostring(neg_trade.expected_return_value) end
+  if neg_trade.order_num then result.order_num = tostring(neg_trade.order_num) end
+  if neg_trade.report_trade_date then result.report_trade_date = tostring(neg_trade.report_trade_date) end
+  result.settled = assert(neg_trade.settled, "Таблица 'neg_trade' не содержит обязательного поля 'settled'.")
+  result.clearing_type = assert(neg_trade.clearing_type, "Таблица 'neg_trade' не содержит обязательного поля 'clearing_type'.")
+  if neg_trade.report_comission then result.report_comission = tostring(neg_trade.report_comission) end
+  if neg_trade.coupon_payment then result.coupon_payment = tostring(neg_trade.coupon_payment) end
+  if neg_trade.principal_payment then result.principal_payment = tostring(neg_trade.principal_payment) end
+  if neg_trade.principal_payment_date then result.principal_payment_date = tostring(neg_trade.principal_payment_date) end
+  if neg_trade.nextdaysettle then result.nextdaysettle = tostring(neg_trade.nextdaysettle) end
+  result.settle_currency = neg_trade.settle_currency
+  result.sec_code = neg_trade.sec_code
+  result.class_code = neg_trade.class_code
+  if neg_trade.compval then result.compval = tostring(neg_trade.compval) end
+  if neg_trade.parenttradeno then result.parenttradeno = tostring(neg_trade.parenttradeno) end
+  result.bankid = neg_trade.bankid
+  result.bankaccid = neg_trade.bankaccid
+  if neg_trade.precisebalance then result.precisebalance = tostring(neg_trade.precisebalance) end
+  if neg_trade.confirmtime then result.confirmtime = tostring(neg_trade.confirmtime) end
+  result.ex_flags = assert(neg_trade.ex_flags, "Таблица 'neg_trade' не содержит обязательного поля 'ex_flags'.")
+  if neg_trade.confirmreport then result.confirmreport = tostring(neg_trade.confirmreport) end
+  
+  return end
+end
+
 converters["OnStopOrder"] = function (stop_order)
   
   local result = {}

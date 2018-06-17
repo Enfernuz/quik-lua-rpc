@@ -217,23 +217,28 @@ local function create_event_callbacks()
     end, 
     
     OnDepoLimit = function (dlimit)
-      --publish(qlua_events.EventType.ON_DEPO_LIMIT, dlimit)
+      message("DEBUG: OnDepoLimit")
+      publish("OnDepoLimit", dlimit)
     end,
     
     OnDepoLimitDelete = function (dlimit_del)
-      --publish(qlua_events.EventType.ON_DEPO_LIMIT_DELETE, dlimit_del)
+      message("DEBUG: OnDepoLimitDelete")
+      publish("OnDepoLimitDelete", dlimit_del)
     end, 
     
     OnAccountPosition = function (acc_pos)
-      --publish(qlua_events.EventType.ON_ACCOUNT_POSITION, acc_pos)
+      message("DEBUG: OnAccountPosition")
+      publish("OnAccountPosition", acc_pos)
     end, 
     
     OnNegDeal = function (neg_deal)
-      --publish(qlua_events.EventType.ON_NEG_DEAL, neg_deal)
+      message("DEBUG: OnNegDeal")
+      publish("OnNegDeal", neg_deal)
     end, 
     
     OnNegTrade = function (neg_trade)
-      --publish(qlua_events.EventType.ON_NEG_TRADE, neg_trade)
+      message("DEBUG: OnNegTrade")
+      publish("OnNegTrade", neg_trade)
     end,
     
     OnStopOrder = function (stop_order)
