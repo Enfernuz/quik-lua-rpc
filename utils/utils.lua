@@ -1,8 +1,5 @@
 package.path = "../?.lua;" .. package.path
 
-local qlua_types = require("qlua.rpc.qlua_types_pb")
-local qlua_structs = require("qlua.rpc.qlua_structures_pb")
-
 local table = require('table')
 local os = require('os')
 local string = require('string')
