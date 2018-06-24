@@ -4,9 +4,11 @@ syntax = "proto3";
 
 package qlua.rpc.os.sysdate;
 
+import "qlua/rpc/qlua_structures.proto";
+
 option optimize_for = SPEED;
 option java_package = "qlua.rpc.os";
 
 message Result {
-    DateTimeEntry result = 1;
+    qlua.structs.DateTimeEntry result = 1;
 }

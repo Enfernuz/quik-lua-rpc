@@ -1,8 +1,6 @@
 package.path = "../?.lua;" .. package.path
 
-local qlua = require("qlua.api")
 local utils = require("utils.utils")
-local struct_factory = require("utils.struct_factory")
 
 local pb = require("pb")
 local qlua_pb_types = require("qlua.qlua_pb_types")

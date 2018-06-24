@@ -7,6 +7,8 @@ local converters = {}
 local noop = function () end
 local identity = function (x) return x end
 
+converters["PublisherOnline"] = noop
+
 converters["OnClose"] = noop
 
 converters["OnStop"] = identity
@@ -285,9 +287,9 @@ converters["OnDepoLimit"] = function (dlimit)
   result.currentlimit = assert(dlimit.currentlimit, "Таблица 'dlimit' не содержит обязательного поля 'currentlimit'.")
   result.locked_sell = assert(dlimit.locked_sell, "Таблица 'dlimit' не содержит обязательного поля 'locked_sell'.")
   result.locked_buy = assert(dlimit.locked_buy, "Таблица 'dlimit' не содержит обязательного поля 'locked_buy'.")
-  result.locked_buy_value = assert(dlimit.locked_buy_value, "Таблица 'dlimit' не содержит обязательного поля 'locked_buy_value'.")
-  result.locked_sell_value = assert(dlimit.locked_sell_value, "Таблица 'dlimit' не содержит обязательного поля 'locked_sell_value'.")
-  result.awg_position_price = assert(dlimit.awg_position_price, "Таблица 'dlimit' не содержит обязательного поля 'awg_position_price'.")
+  result.locked_buy_value = tostring( assert(dlimit.locked_buy_value, "Таблица 'dlimit' не содержит обязательного поля 'locked_buy_value'.") )
+  result.locked_sell_value = tostring( assert(dlimit.locked_sell_value, "Таблица 'dlimit' не содержит обязательного поля 'locked_sell_value'.") )
+  result.awg_position_price = tostring( assert(dlimit.awg_position_price, "Таблица 'dlimit' не содержит обязательного поля 'awg_position_price'.") )
   result.limit_kind = assert(dlimit.limit_kind, "Таблица 'dlimit' не содержит обязательного поля 'limit_kind'.")
   
   return result
@@ -454,7 +456,7 @@ converters["OnNegTrade"] = function (neg_trade)
   result.ex_flags = assert(neg_trade.ex_flags, "Таблица 'neg_trade' не содержит обязательного поля 'ex_flags'.")
   if neg_trade.confirmreport then result.confirmreport = tostring(neg_trade.confirmreport) end
   
-  return end
+  return result
 end
 
 converters["OnStopOrder"] = function (stop_order)
@@ -528,6 +530,8 @@ converters["OnTransReply"] = function (trans_reply)
 end
 
 converters["OnQuote"] = identity
+
+converters["OnParam"] = identity
 
 converters["OnDisconnected"] = noop
 
