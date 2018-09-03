@@ -554,5 +554,5 @@ message ConnectedEventInfo {
 
 // Информация из функций обратного вызова OnClose и OnStop
 message StopEventInfo {
-    int32 flag = 1;
+    int32 signal = 1;
 }

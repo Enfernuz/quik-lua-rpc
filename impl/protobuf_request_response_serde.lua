@@ -43,17 +43,17 @@ function ProtobufRequestResponseSerde:serialize_response (deserialized_response)
     response.is_error = true
     response.result = err.message -- TODO: write a full error object
   else
-    local result = deserialized_response.result
-    local method = result.method
+    
+    local method = deserialized_response.method
     response.type = pb_helper.get_protobuf_procedure_type(method)
     if not response.type then
       error( string.format("Для QLua-функции '%s' не найден соответствующий тип процедуры protobuf.", method) )
     end
     
-    local data = result.data
-    if data then
-      local object_mapper = pb_helper.get_protobuf_result_object_mapper(method)
-      response.result = pb.encode( object_mapper(data) )
+    local proc_result = deserialized_response.proc_result
+    if proc_result then
+      local object_mapper_func = pb_helper.get_protobuf_result_object_mapper(method)
+      response.result = pb.encode( object_mapper_func(proc_result) )
     end
   end
   

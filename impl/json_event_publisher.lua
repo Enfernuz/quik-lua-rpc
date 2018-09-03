@@ -8,7 +8,12 @@ local JsonEventPublisher = {}
 setmetatable(JsonEventPublisher, {__index = EventPublisher})
 
 function JsonEventPublisher:serialize (event_type, event_data)
-  return event_type, json.encode(event_data)
+  
+  if event_data then
+    return event_type, json.encode(event_data)
+  else
+    return event_type, nil
+  end
 end
 
 return JsonEventPublisher

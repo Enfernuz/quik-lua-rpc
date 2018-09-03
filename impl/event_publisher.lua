@@ -28,6 +28,7 @@ function EventPublisher:new ()
           local msg = zmq.msg_init_data(pub_data)
           ok, err = pcall(function() msg:send(pub_socket) end)
           -- if not ok then (log error somehow...) end
+          msg:close()
         else
           -- (log error somehow...)
         end

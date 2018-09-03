@@ -114,7 +114,6 @@ message Request {
 
 message Response {
 
-    ProcedureType type = 1;
     bool is_error = 2;
     bytes result = 3;
 }

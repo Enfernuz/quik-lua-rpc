@@ -16,7 +16,7 @@ local uuid = require("utils.uuid")
 
 local service = {}
 service._VERSION = "1.0.0"
-service.QLUA_VERSION = "7.16"
+service.QUIK_VERSION = "7.16.1.36"
 service.event_callbacks = {}
 
 local zmq_ctx = nil
@@ -47,6 +47,7 @@ function protobuf_context:init (context_path)
 end
 
 local function pub_poll_out_callback()
+  -- TODO: add reading from a message queue
   -- Polling out is not implemented at the moment: messages are being sent regardless of the POLLOUT event.
 end
 
@@ -54,6 +55,7 @@ local function send_data(data, socket)
   local ok, err = pcall(function()
       local msg = zmq.msg_init_data(data)
       msg:send(socket)
+      msg:close()
   end)
   -- if not ok then (log the error somehow, maybe to a file...) end
 end
@@ -70,15 +72,16 @@ end
 
 local function create_rpc_poll_in_callback (socket, serde_protocol)
   
+  local sd_proto = string.lower(serde_protocol)
   local handler
-  if "json" == string.lower(serde_protocol) then
+  if "json" == sd_proto then
     -- TODO: remove this message
     message("DEBUG: JSON message protocol detected")
     if not request_response_serde.json then
       request_response_serde.json = require("impl.json_request_response_serde"):new()
     end
     handler = request_response_serde.json
-  else -- TODO: make explicit check on protobuf
+  elseif "protobuf" == sd_proto then -- TODO: make explicit check on protobuf
     -- TODO: remove this message
     message("DEBUG: PROTOBUF message protocol detected")
     if not request_response_serde.protobuf then
@@ -88,29 +91,32 @@ local function create_rpc_poll_in_callback (socket, serde_protocol)
       request_response_serde.protobuf = require("impl.protobuf_request_response_serde"):new()
     end
     handler = request_response_serde.protobuf
+  else
+    error( string.format("Неподдерживаемый протокол сериализации/десериализации: %s. Поддерживаемые протоколы: json, protobuf.", serde_protocol) )
   end
   
-  return function ()
+  local callback = function ()
+    
     local ok, res = pcall(function()
         local recv = zmq.msg_init():recv(socket)
         local result
         if recv and recv ~= -1 then
           
           -- request deserialization
-          local method, args, id = handler:deserialize_request( recv:data() )
+          local method, args = handler:deserialize_request( recv:data() )
+          recv:close()
 
-          local response = {id = id}
+          local response = {
+            method = method
+          }
           local proc_wrapper = procedure_wrappers[method]
           if not proc_wrapper then
-            response.error = gen_error_obj(-32601, string.format("QLua-функция с именем '%s' не найдена.", method))
+            response.error = gen_error_obj(404, string.format("QLua-функция с именем '%s' не найдена.", method))
           else
             -- procedure call
-            local ok, res = pcall(function() return proc_wrapper(args) end)
+            local ok, proc_result = pcall(function() return proc_wrapper(args) end)
             if ok then
-              response.result = {
-                method = method,
-                data = res
-              }
+              response.proc_result = proc_result
             else
               response.error = gen_error_obj(1, res) -- the err code 1 is for errors inside the QLua functions' wrappers
             end
@@ -127,7 +133,7 @@ local function create_rpc_poll_in_callback (socket, serde_protocol)
       if res then response = res end
     else
       response = {}
-      response.error = gen_error_obj(-32000, string.format("Ошибка при обработке входящего запроса: '%s'.", res))
+      response.error = gen_error_obj(500, string.format("Ошибка при обработке входящего запроса: '%s'.", res))
     end
     
     if response then
@@ -137,6 +143,8 @@ local function create_rpc_poll_in_callback (socket, serde_protocol)
       send_data(serialized_response, socket)
     end
   end
+
+  return callback
 end
 
 local function publish (event_type, event_data)
@@ -160,83 +168,68 @@ local function create_event_callbacks()
       service.terminate()
     end,
     
-    OnStop = function (flag)
-      publish("OnStop", {flag = flag})
+    OnStop = function (signal)
+      publish("OnStop", {signal = signal})
       service.terminate()
     end,
     
     OnFirm = function (firm)
-      message("DEBUG: OnFirm")
       publish("OnFirm", firm)
     end,
     
     OnAllTrade = function (alltrade)
-      message("DEBUG: OnAllTrade")
       publish("OnAllTrade", alltrade)
     end,
     
     OnTrade = function (trade)
-      message("DEBUG: OnTrade")
       publish("OnTrade", trade)
     end,
     
     OnOrder = function (order)
-      message("DEBUG: OnOrder")
       publish("OnOrder", order)
     end,
     
     OnAccountBalance = function (acc_bal)
-      message("DEBUG: OnAccountBalance")
       publish("OnAccountBalance", acc_bal)
     end, 
     
     OnFuturesLimitChange = function (fut_limit)
-      message("DEBUG: OnFuturesLimitChange")
       publish("OnFuturesLimitChange", fut_limit)
     end, 
     
     OnFuturesLimitDelete = function (lim_del)
-      message("DEBUG: OnFuturesLimitDelete")
       publish("OnFuturesLimitDelete", lim_del)
     end,
     
     OnFuturesClientHolding = function (fut_pos)
-      message("DEBUG: OnFuturesClientHolding")
       publish("OnFuturesClientHolding", fut_pos)
     end, 
     
     OnMoneyLimit = function (mlimit)
-      message("DEBUG: OnMoneyLimit")
       publish("OnMoneyLimit", mlimit)
     end, 
     
     OnMoneyLimitDelete = function (mlimit_del)
-      message("DEBUG: OnMoneyLimitDelete")
       publish("OnMoneyLimitDelete", mlimit_del)
     end, 
     
     OnDepoLimit = function (dlimit)
-      message("DEBUG: OnDepoLimit")
       publish("OnDepoLimit", dlimit)
     end,
     
     OnDepoLimitDelete = function (dlimit_del)
-      message("DEBUG: OnDepoLimitDelete")
       publish("OnDepoLimitDelete", dlimit_del)
     end, 
     
     OnAccountPosition = function (acc_pos)
-      message("DEBUG: OnAccountPosition")
       publish("OnAccountPosition", acc_pos)
     end, 
     
     OnNegDeal = function (neg_deal)
-      message("DEBUG: OnNegDeal")
       publish("OnNegDeal", neg_deal)
     end, 
     
     OnNegTrade = function (neg_trade)
-      message("DEBUG: OnNegTrade")
       publish("OnNegTrade", neg_trade)
     end,
     
@@ -245,7 +238,6 @@ local function create_event_callbacks()
     end, 
     
     OnTransReply = function (trans_reply)
-      message("DEBUG: OnTransReply")
       publish("OnTransReply", trans_reply)
     end, 
     
@@ -369,9 +361,15 @@ function service.start()
   -- Does nothing useful at the moment, because the polling has not yet been started at the time it executes.
   -- Issue #13.
   publish("PublisherOnline")
-  --publish(qlua_events.EventType.PUBLISHER_ONLINE) 
     
-  poller:start()
+  xpcall(
+    function() 
+      return poller:start() 
+    end,
+    function()
+      message("Ошибка в poller:start. Стек вызовов:\n"..debug.traceback())
+    end
+  )
 end
 
 function service.stop()
