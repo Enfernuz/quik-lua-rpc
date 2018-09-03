@@ -15,9 +15,9 @@ converters["OnStop"] = identity
 
 converters["OnFirm"] = function (firm)
   return {
-    firmid = utils.Cp1251ToUtf8(firm.firmid),
-    firm_name = firm.firm_name, 
-    status = firm.status, 
+    firmid = assert(utils.Cp1251ToUtf8(firm.firmid), "Таблица 'firm' не содержит обязательного поля 'firmid'."),
+    firm_name = utils.Cp1251ToUtf8(firm.firm_name), 
+    status = assert(firm.status, "Таблица 'firm' не содержит обязательного поля 'status'."), 
     exchange = firm.exchange
   }
 end
@@ -141,7 +141,7 @@ converters["OnOrder"] = function (order)
   if order.repo2value then result.repo2value = tostring(order.repo2value) end
   if order.repo_value_balance then result.repo_value_balance = tostring(order.repo_value_balance) end
   if order.start_discount then result.start_discount = tostring(order.start_discount) end
-  result.reject_reason = order.reject_reason
+  result.reject_reason = utils.Cp1251ToUtf8(order.reject_reason)
   if order.ext_order_flags then result.ext_order_flags = tostring(order.ext_order_flags) end
   result.min_qty = assert(order.min_qty, "Таблица 'order' не содержит обязательного поля 'min_qty'.")
   result.exec_type = assert(order.exec_type, "Таблица 'order' не содержит обязательного поля 'exec_type'.")
@@ -467,7 +467,7 @@ converters["OnStopOrder"] = function (stop_order)
   if stop_order.ordertime then result.ordertime = tostring(stop_order.ordertime) end
   result.flags = assert(stop_order.flags, "Таблица 'stop_order' не содержит обязательного поля 'flags'.")
   result.brokerref = stop_order.brokerref
-  result.firmid = stop_order.firmid
+  result.firmid = utils.Cp1251ToUtf8(stop_order.firmid)
   result.account = utils.Cp1251ToUtf8(stop_order.account)
   result.condition = assert(stop_order.condition, "Таблица 'stop_order' не содержит обязательного поля 'condition'.")
   result.condition_price = tostring( assert(stop_order.condition_price, "Таблица 'stop_order' не содержит обязательного поля 'condition_price'.") )
@@ -509,7 +509,7 @@ converters["OnTransReply"] = function (trans_reply)
   
   result.trans_id = assert(trans_reply.trans_id, "Таблица 'trans_reply' не содержит обязательного поля 'trans_id'.")
   result.status = assert(trans_reply.status, "Таблица 'trans_reply' не содержит обязательного поля 'status'.")
-  result.result_msg = trans_reply.result_msg
+  result.result_msg = utils.Cp1251ToUtf8(trans_reply.result_msg)
   result.date_time = assert(trans_reply.date_time, "Таблица 'trans_reply' не содержит обязательного поля 'date_time'.")
   result.uid = tostring( assert(trans_reply.uid, "Таблица 'trans_reply' не содержит обязательного поля 'uid'.") )
   result.flags = assert(trans_reply.flags, "Таблица 'trans_reply' не содержит обязательного поля 'flags'.")
@@ -518,8 +518,8 @@ converters["OnTransReply"] = function (trans_reply)
   if trans_reply.price then result.price = tostring(trans_reply.price) end
   if trans_reply.quantity then result.quantity = tostring(trans_reply.quantity) end
   if trans_reply.balance then result.balance = tostring(trans_reply.balance) end
-  result.firm_id = trans_reply.firm_id
-  result.account = trans_reply.account
+  result.firm_id = utils.Cp1251ToUtf8(trans_reply.firm_id)
+  result.account = utils.Cp1251ToUtf8(trans_reply.account)
   result.client_code = trans_reply.client_code
   result.brokerref = trans_reply.brokerref
   result.class_code = trans_reply.class_code
