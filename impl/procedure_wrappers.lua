@@ -18,13 +18,19 @@ local uuid = require("utils.uuid")
 -----
 -- The DataSources in-memory storage. 
 -- Warning: the storage may cause memory leaks if the datasources that aren't needed anymore have not been explicitly closed by the clients, 
--- because the datasources' objects would never be eligible for garbage collection (whereas in a local script they are as soon as the script exits the main function).
+-- because the datasources' objects would never be eligible for garbage collection (whereas in a local script they become so as soon as the script exits the main function).
 local datasources = {}
 local function get_datasource (datasource_uid)
   return assert(datasources[datasource_uid], string.format("DataSource c uuid='%s' не найден.", datasource_uid))
 end
 
 -----
+
+local function requireNonNil (x)
+  
+  if x == nil then error("Целевая QLua-функция возвратила nil.") end
+  return x 
+end
 
 local function to_string_string_table (t)
   
@@ -52,7 +58,7 @@ end
 
 -- TODO: test
 module["getInfoParam"] = function (args)
-  return _G.getInfoParam(args.param_name)
+  return requireNonNil(_G.getInfoParam(args.param_name))
 end
 
 module["message"] = function (args)
@@ -192,31 +198,29 @@ module["SearchItems"] = function (args)
 end
 
 -- TODO: test
-module["getClassesList"] = function () 
-  return _G.getClassesList()
+module["getClassesList"] = function ()
+  return requireNonNil(_G.getClassesList())
 end
 
 -- TODO: test
 module["getClassInfo"] = function (args) 
-  
-  local result = _G.getClassInfo(args.class_code)
-  
-  if result == nil then
-    error( string.format("QLua-функция getClassInfo(%s) возвратила nil.", args.class_code) )
-  end
-  
-  return result
+  return _G.getClassInfo(args.class_code)
 end
 
 -- TODO: test
 module["getClassSecurities"] = function (args) 
-  return _G.getClassSecurities(args.class_code) -- returns an empty string if no securities found for the given class_code
+  -- returns an empty string if no securities found for the given class_code
+  return requireNonNil(_G.getClassSecurities(args.class_code))
 end
 
 -- TODO: test
 module["getMoney"] = function (args) 
   
   local result = _G.getMoney(args.client_code, args.firmid, args.tag, args.currcode) -- returns a table with zero'ed values if no info found or in case of error
+  
+  if result == nil then 
+    error( string.format("QLua-функция getMoney(%s, %s, %s, %s) возвратила nil.", args.client_code, args.firmid, args.tag, args.currcode) )
+  end
   
   if result.money_open_limit then result.money_open_limit = tostring(result.money_open_limit) end
   if result.money_limit_locked_nonmarginal_value then result.money_limit_locked_nonmarginal_value = tostring(result.money_limit_locked_nonmarginal_value) end
@@ -233,24 +237,22 @@ end
 module["getMoneyEx"] = function (args) 
   
   local result = _G.getMoneyEx(args.firmid, args.client_code, args.tag, args.currcode, args.limit_kind) -- returns nil if no info found or in case of an error
-  
-  if result == nil then 
-    error( string.format("QLua-функция getMoneyEx(%s, %s, %s, %s, %d) возвратила nil.", args.firmid, args.client_code, args.tag, args.currcode, args.limit_kind) )
+
+  if result then
+    result.currcode = utils.Cp1251ToUtf8( assert(result.currcode, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'currcode'.") )
+    result.tag = utils.Cp1251ToUtf8( assert(result.tag, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'tag'.") )
+    result.firmid = utils.Cp1251ToUtf8( assert(result.firmid, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'firmid'.") )
+    result.client_code = utils.Cp1251ToUtf8( assert(result.client_code, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'client_code'.") )
+    if result.openbal then result.openbal = tostring(result.openbal) end
+    if result.openlimit then result.openlimit = tostring(result.openlimit) end
+    if result.currentbal then result.currentbal = tostring(result.currentbal) end
+    if result.currentlimit then result.currentlimit = tostring(result.currentlimit) end
+    if result.locked then result.locked = tostring(result.locked) end
+    if result.locked_value_coef then result.locked_value_coef = tostring(result.locked_value_coef) end
+    if result.locked_margin_value then result.locked_margin_value = tostring(result.locked_margin_value) end
+    if result.leverage then result.leverage = tostring(result.leverage) end
+    assert(result.limit_kind, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'limit_kind'.")
   end
-  
-  result.currcode = utils.Cp1251ToUtf8( assert(result.currcode, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'currcode'.") )
-  result.tag = utils.Cp1251ToUtf8( assert(result.tag, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'tag'.") )
-  result.firmid = utils.Cp1251ToUtf8( assert(result.firmid, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'firmid'.") )
-  result.client_code = utils.Cp1251ToUtf8( assert(result.client_code, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'client_code'.") )
-  if result.openbal then result.openbal = tostring(result.openbal) end
-  if result.openlimit then result.openlimit = tostring(result.openlimit) end
-  if result.currentbal then result.currentbal = tostring(result.currentbal) end
-  if result.currentlimit then result.currentlimit = tostring(result.currentlimit) end
-  if result.locked then result.locked = tostring(result.locked) end
-  if result.locked_value_coef then result.locked_value_coef = tostring(result.locked_value_coef) end
-  if result.locked_margin_value then result.locked_margin_value = tostring(result.locked_margin_value) end
-  if result.leverage then result.leverage = tostring(result.leverage) end
-  assert(result.limit_kind, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'limit_kind'.")
 
   return result
 end
@@ -258,8 +260,10 @@ end
 -- TODO: test
 module["getDepo"] = function (args) 
   
-  local result = _G.getDepo(args.client_code, args.firmid, args.sec_code, args.trdaccid) -- returns a table with zero'ed values if no info found or in case of an error
+  -- returns a table with zero'ed values if no info found or in case of an error
+  local result = requireNonNil(_G.getDepo(args.client_code, args.firmid, args.sec_code, args.trdaccid))
 
+  -- post-processing: stringification of decimal numbers
   if result.depo_limit_locked_buy_value then result.depo_limit_locked_buy_value = tostring(result.depo_limit_locked_buy_value) end
   if result.depo_current_balance then result.depo_current_balance = tostring(result.depo_current_balance) end
   if result.depo_limit_locked_buy then result.depo_limit_locked_buy = tostring(result.depo_limit_locked_buy) end
@@ -275,26 +279,26 @@ end
 -- TODO: test
 module["getDepoEx"] = function (args) 
 
-  local result = _G.getDepoEx(args.firmid, args.client_code, args.sec_code, args.trdaccid, args.limit_kind) -- returns nil if no info found or in case of an error
+  -- returns nil if no info found or in case of an error
+  local result = _G.getDepoEx(args.firmid, args.client_code, args.sec_code, args.trdaccid, args.limit_kind)
   
-  if result == nil then
-    error( string.format("QLua-функция getDepoEx(%s, %s, %s, %s, %d) возвратила nil.", args.firmid, args.client_code, args.sec_code, args.trdaccid, args.limit_kind) )
+  -- post-processing: stringification of decimal numbers, encoding conversion, field presence checks
+  if result then
+    result.sec_code = utils.Cp1251ToUtf8( assert(result.sec_code, "Результирующая таблица не содержит обязательного поля 'sec_code'.") )
+    result.trdaccid = utils.Cp1251ToUtf8( assert(result.trdaccid, "Результирующая таблица не содержит обязательного поля 'trdaccid'.") )
+    result.firmid = utils.Cp1251ToUtf8( assert(result.firmid, "Результирующая таблица не содержит обязательного поля 'firmid'.") )
+    result.client_code = utils.Cp1251ToUtf8( assert(result.client_code, "Результирующая таблица не содержит обязательного поля 'client_code'.") )
+    assert(result.openbal, "Результирующая таблица не содержит обязательного поля 'openbal'.")
+    assert(result.openlimit, "Результирующая таблица не содержит обязательного поля 'openlimit'.")
+    assert(result.currentbal, "Результирующая таблица не содержит обязательного поля 'currentbal'.")
+    assert(result.currentlimit, "Результирующая таблица не содержит обязательного поля 'currentlimit'.")
+    assert(result.locked_sell, "Результирующая таблица не содержит обязательного поля 'locked_sell'.")
+    assert(result.locked_buy, "Результирующая таблица не содержит обязательного поля 'locked_buy'.")
+    result.locked_buy_value = tostring( assert(result.locked_buy_value, "Результирующая таблица не содержит обязательного поля 'locked_buy_value'.") )
+    result.locked_sell_value = tostring( assert(result.locked_sell_value, "Результирующая таблица не содержит обязательного поля 'locked_sell_value'.") )
+    result.awg_position_price = tostring( assert(result.awg_position_price, "Результирующая таблица не содержит обязательного поля 'awg_position_price'.") )
+    assert(result.limit_kind, "Результирующая таблица не содержит обязательного поля 'limit_kind'.")
   end
-  
-  result.sec_code = utils.Cp1251ToUtf8( assert(result.sec_code, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'sec_code'.") )
-  result.trdaccid = utils.Cp1251ToUtf8( assert(result.trdaccid, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'trdaccid'.") )
-  result.firmid = utils.Cp1251ToUtf8( assert(result.firmid, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'firmid'.") )
-  result.client_code = utils.Cp1251ToUtf8( assert(result.client_code, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'client_code'.") )
-  assert(result.openbal, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'openbal'.")
-  assert(result.openlimit, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'openlimit'.")
-  assert(result.currentbal, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'currentbal'.")
-  assert(result.currentlimit, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'currentlimit'.")
-  assert(result.locked_sell, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'locked_sell'.")
-  assert(result.locked_buy, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'locked_buy'.")
-  result.locked_buy_value = tostring( assert(result.locked_buy_value, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'locked_buy_value'.") )
-  result.locked_sell_value = tostring( assert(result.locked_sell_value, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'locked_sell_value'.") )
-  result.awg_position_price = tostring( assert(result.awg_position_price, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'awg_position_price'.") )
-  assert(result.limit_kind, "Функция getDepoEx: результирующая таблица не содержит обязательного поля 'limit_kind'.")
     
   return result
 end
@@ -302,29 +306,29 @@ end
 -- TODO: test
 module["getFuturesLimit"] = function (args) 
 
-  local result = _G.getFuturesLimit(args.firmid, args.trdaccid, args.limit_type, args.currcode) -- returns nil if no info found or in case of an error
+  -- returns nil if no info found or in case of an error
+  local result = _G.getFuturesLimit(args.firmid, args.trdaccid, args.limit_type, args.currcode)
   
-  if result == nil then
-    error( string.format("QLua-функция getFuturesLimit(%s, %s, %d, %s) возвратила nil.", args.firmid, args.trdaccid, args.limit_type, args.currcode) )
+  -- post-processing: stringification of decimal numbers, encoding conversion, field presence checks
+  if result then
+    result.firmid = utils.Cp1251ToUtf8( assert(result.firmid, "Результирующая таблица не содержит обязательного поля 'firmid'.") )
+    result.trdaccid = utils.Cp1251ToUtf8( assert(result.trdaccid, "Результирующая таблица не содержит обязательного поля 'trdaccid'.") )
+    assert(result.limit_type, "Результирующая таблица не содержит обязательного поля 'limit_type'.")
+    if result.liquidity_coef then result.liquidity_coef = tostring(result.liquidity_coef) end
+    if result.cbp_prev_limit then result.cbp_prev_limit = tostring(result.cbp_prev_limit) end
+    if result.cbplimit then result.cbplimit = tostring(result.cbplimit) end
+    if result.cbplused then result.cbplused = tostring(result.cbplused) end
+    if result.cbplplanned then result.cbplplanned = tostring(result.cbplplanned) end
+    if result.varmargin then result.varmargin = tostring(result.varmargin) end
+    if result.accruedint then result.accruedint = tostring(result.accruedint) end
+    if result.cbplused_for_orders then result.cbplused_for_orders = tostring(result.cbplused_for_orders) end
+    if result.cbplused_for_positions then result.cbplused_for_positions = tostring(result.cbplused_for_positions) end
+    if result.options_premium then result.options_premium = tostring(result.options_premium) end
+    if result.ts_comission then result.ts_comission = tostring(result.ts_comission) end
+    if result.kgo then result.kgo = tostring(result.kgo) end
+    result.currcode = utils.Cp1251ToUtf8( assert(result.currcode, "Результирующая таблица не содержит обязательного поля 'currcode'.") )
+    if result.real_varmargin then result.real_varmargin = tostring(result.real_varmargin) end
   end
-  
-  result.firmid = utils.Cp1251ToUtf8( assert(result.firmid, "Функция getFuturesLimit: результирующая таблица не содержит обязательного поля 'firmid'.") )
-  result.trdaccid = utils.Cp1251ToUtf8( assert(result.trdaccid, "Функция getFuturesLimit: результирующая таблица не содержит обязательного поля 'trdaccid'.") )
-  assert(result.limit_type, "Функция getFuturesLimit: результирующая таблица не содержит обязательного поля 'limit_type'.")
-  if result.liquidity_coef then result.liquidity_coef = tostring(result.liquidity_coef) end
-  if result.cbp_prev_limit then result.cbp_prev_limit = tostring(result.cbp_prev_limit) end
-  if result.cbplimit then result.cbplimit = tostring(result.cbplimit) end
-  if result.cbplused then result.cbplused = tostring(result.cbplused) end
-  if result.cbplplanned then result.cbplplanned = tostring(result.cbplplanned) end
-  if result.varmargin then result.varmargin = tostring(result.varmargin) end
-  if result.accruedint then result.accruedint = tostring(result.accruedint) end
-  if result.cbplused_for_orders then result.cbplused_for_orders = tostring(result.cbplused_for_orders) end
-  if result.cbplused_for_positions then result.cbplused_for_positions = tostring(result.cbplused_for_positions) end
-  if result.options_premium then result.options_premium = tostring(result.options_premium) end
-  if result.ts_comission then result.ts_comission = tostring(result.ts_comission) end
-  if result.kgo then result.kgo = tostring(result.kgo) end
-  result.currcode = utils.Cp1251ToUtf8( assert(result.currcode, "Функция getFuturesLimit: результирующая таблица не содержит обязательного поля 'currcode'.") )
-  if result.real_varmargin then result.real_varmargin = tostring(result.real_varmargin) end
 
   return result
 end
@@ -332,31 +336,31 @@ end
 -- TODO: test
 module["getFuturesHolding"] = function (args) 
 
-  local result = _G.getFuturesHolding(args.firmid, args.trdaccid, args.sec_code, args.type) -- returns nil if no info found or in case of an error
-   
-  if result == nil then
-    error( string.format("QLua-функция getFuturesHolding(%s, %s, %s, %d) возвратила nil.", args.firmid, args.trdaccid, args.sec_code, args.type) )
-  end
+  -- returns nil if no info found or in case of an error
+  local result = _G.getFuturesHolding(args.firmid, args.trdaccid, args.sec_code, args.type)
   
-  result.firmid = utils.Cp1251ToUtf8( assert(result.firmid, "Функция getFuturesHolding: результирующая таблица не содержит обязательного поля 'firmid'.") )
-  result.trdaccid = utils.Cp1251ToUtf8( assert(result.trdaccid, "Функция getFuturesHolding: результирующая таблица не содержит обязательного поля 'trdaccid'.") )
-  assert(result.sec_code, "Функция getFuturesHolding: результирующая таблица не содержит обязательного поля 'sec_code'.")
-  assert(result.type, "Функция getFuturesHolding: результирующая таблица не содержит обязательного поля 'type'.")
-  if result.startbuy then result.startbuy = tostring(result.startbuy) end
-  if result.startsell then result.startsell = tostring(result.startsell) end
-  if result.todaybuy then result.todaybuy = tostring(result.todaybuy) end
-  if result.todaysell then result.todaysell = tostring(result.todaysell) end
-  if result.totalnet then result.totalnet = tostring(result.totalnet) end
-  assert(result.openbuys, "Функция getFuturesHolding: результирующая таблица не содержит обязательного поля 'openbuys'.")
-  assert(result.opensells, "Функция getFuturesHolding: результирующая таблица не содержит обязательного поля 'opensells'.")
-  if result.cbplused then result.cbplused = tostring(result.cbplused) end
-  if result.cbplplanned then result.cbplplanned = tostring(result.cbplplanned) end
-  if result.varmargin then result.varmargin = tostring(result.varmargin) end
-  if result.avrposnprice then result.avrposnprice = tostring(result.avrposnprice) end
-  if result.positionvalue then result.positionvalue = tostring(result.positionvalue) end
-  if result.real_varmargin then result.real_varmargin = tostring(result.real_varmargin) end
-  if result.total_varmargin then result.total_varmargin = tostring(result.total_varmargin) end
-  assert(result.session_status, "Функция getFuturesHolding: результирующая таблица не содержит обязательного поля 'session_status'.")
+  -- post-processing: stringification of decimal numbers, encoding conversion, field presence checks
+  if result then
+    result.firmid = utils.Cp1251ToUtf8( assert(result.firmid, "Результирующая таблица не содержит обязательного поля 'firmid'.") )
+    result.trdaccid = utils.Cp1251ToUtf8( assert(result.trdaccid, "Результирующая таблица не содержит обязательного поля 'trdaccid'.") )
+    assert(result.sec_code, "Результирующая таблица не содержит обязательного поля 'sec_code'.")
+    assert(result.type, "Результирующая таблица не содержит обязательного поля 'type'.")
+    if result.startbuy then result.startbuy = tostring(result.startbuy) end
+    if result.startsell then result.startsell = tostring(result.startsell) end
+    if result.todaybuy then result.todaybuy = tostring(result.todaybuy) end
+    if result.todaysell then result.todaysell = tostring(result.todaysell) end
+    if result.totalnet then result.totalnet = tostring(result.totalnet) end
+    assert(result.openbuys, "Результирующая таблица не содержит обязательного поля 'openbuys'.")
+    assert(result.opensells, "Результирующая таблица не содержит обязательного поля 'opensells'.")
+    if result.cbplused then result.cbplused = tostring(result.cbplused) end
+    if result.cbplplanned then result.cbplplanned = tostring(result.cbplplanned) end
+    if result.varmargin then result.varmargin = tostring(result.varmargin) end
+    if result.avrposnprice then result.avrposnprice = tostring(result.avrposnprice) end
+    if result.positionvalue then result.positionvalue = tostring(result.positionvalue) end
+    if result.real_varmargin then result.real_varmargin = tostring(result.real_varmargin) end
+    if result.total_varmargin then result.total_varmargin = tostring(result.total_varmargin) end
+    assert(result.session_status, "Результирующая таблица не содержит обязательного поля 'session_status'.")
+  end
 
   return result
 end
@@ -366,22 +370,20 @@ module["getSecurityInfo"] = function (args)
 
   local result = _G.getSecurityInfo(args.class_code, args.sec_code) -- returns nil if no info found or in case of an error
   
-  if result == nil then
-    error( string.format("QLua-функция getSecurityInfo(%s, %s) возвратила nil.", args.class_code, args.sec_code) )
+  if result then
+    assert(result.code, "Функция getSecurityInfo: результирующая таблица не содержит обязательного поля 'code'.")
+    result.name = utils.Cp1251ToUtf8(result.name)
+    result.short_name = utils.Cp1251ToUtf8(result.short_name)
+    result.class_code = utils.Cp1251ToUtf8( assert(result.class_code, "Функция getSecurityInfo: результирующая таблица не содержит обязательного поля 'class_code'.") )
+    result.class_name = utils.Cp1251ToUtf8(result.class_name)
+    if result.face_value then result.face_value = tostring(result.face_value) end
+    result.face_unit = utils.Cp1251ToUtf8(result.face_unit)
+    if result.scale then result.scale = tostring(result.scale) end
+    if result.mat_date then result.mat_date = tostring(result.mat_date) end
+    if result.lot_size then result.lot_size = tostring(result.lot_size) end
+    result.isin_code = utils.Cp1251ToUtf8(result.isin_code)
+    if result.min_price_step then result.min_price_step = tostring(result.min_price_step) end
   end
-  
-  assert(result.code, "Функция getSecurityInfo: результирующая таблица не содержит обязательного поля 'code'.")
-  result.name = utils.Cp1251ToUtf8(result.name)
-  result.short_name = utils.Cp1251ToUtf8(result.short_name)
-  result.class_code = utils.Cp1251ToUtf8( assert(result.class_code, "Функция getSecurityInfo: результирующая таблица не содержит обязательного поля 'class_code'.") )
-  result.class_name = utils.Cp1251ToUtf8(result.class_name)
-  if result.face_value then result.face_value = tostring(result.face_value) end
-  result.face_unit = utils.Cp1251ToUtf8(result.face_unit)
-  if result.scale then result.scale = tostring(result.scale) end
-  if result.mat_date then result.mat_date = tostring(result.mat_date) end
-  if result.lot_size then result.lot_size = tostring(result.lot_size) end
-  result.isin_code = utils.Cp1251ToUtf8(result.isin_code)
-  if result.min_price_step then result.min_price_step = tostring(result.min_price_step) end
 
   return result
 end
@@ -425,16 +427,27 @@ end
 -- TODO: test
 module["getCandlesByIndex"] = function (args) 
   
-  -- just to see that there are three variables in the function's output
   local t, n, l = _G.getCandlesByIndex(args.tag, args.line, args.first_candle, args.count) -- returns ({}, 0, "") if no info found or in case of error
   
+  if t == nil then 
+    error("Целевая QLua-функция возвратила nil вместо значения 't'.")
+  end
+  
+  if i == nil then
+    error("Целевая QLua-функция возвратила nil вместо значения 'i'.")
+  end
+  
+  if l == nil then
+    error("Целевая QLua-функция возвратила nil вместо значения 'l'.")
+  end
+
   for i, candle in ipairs(t) do
-    
-      candle.open = tostring(assert(candle.open, string.format("Функция getCandlesByIndex: свеча с индексом %d не содержит обязательного поля 'open'.", i)))
-      candle.close = tostring(assert(candle.close, string.format("Функция getCandlesByIndex: свеча с индексом %d не содержит обязательного поля 'close'.", i)))
-      candle.high = tostring(assert(candle.high, string.format("Функция getCandlesByIndex: свеча с индексом %d не содержит обязательного поля 'high'.", i)))
-      candle.low = tostring(assert(candle.low, string.format("Функция getCandlesByIndex: свеча с индексом %d не содержит обязательного поля 'low'.", i)))
-      candle.volume = tostring(assert(candle.volume, string.format("Функция getCandlesByIndex: свеча с индексом %d не содержит обязательного поля 'volume'.", i)))
+      -- post-processing: stringification of decimal numbers
+      candle.open = tostring(assert(candle.open, string.format("Свеча с индексом %d не содержит обязательного поля 'open'.", i)))
+      candle.close = tostring(assert(candle.close, string.format("Свеча с индексом %d не содержит обязательного поля 'close'.", i)))
+      candle.high = tostring(assert(candle.high, string.format("Свеча с индексом %d не содержит обязательного поля 'high'.", i)))
+      candle.low = tostring(assert(candle.low, string.format("Свеча с индексом %d не содержит обязательного поля 'low'.", i)))
+      candle.volume = tostring(assert(candle.volume, string.format("Свеча с индексом %d не содержит обязательного поля 'volume'.", i)))
   end
   
   return {
@@ -574,6 +587,14 @@ module["CalcBuySell"] = function (args)
   end
   
   local qty, comission = _G.CalcBuySell(args.class_code, args.sec_code, args.client_code, args.account, price, args.is_buy, args.is_market) -- returns (0; 0) in case of error
+  
+  if qty == nil then
+    error("Целевая QLua-функция возвратила nil вместо значения 'qty'.")
+  end
+  
+  if comission == nil then
+    error("Целевая QLua-функция возвратила nil вместо значения 'comission'.")
+  end
 
   return {
     qty = qty,
@@ -709,14 +730,13 @@ module["getBuySellInfo"] = function (args)
 
   local price = tonumber(args.price)
   if price == nil then 
-    error( string.format("Функция getBuySellInfo: не удалось преобразовать в число значение '%s' аргумента 'price'.", args.price) )
+    error( string.format("Не удалось преобразовать в число значение '%s' аргумента 'price'.", args.price) )
   end
   
-  local result = _G.getBuySellInfo(args.firm_id, args.client_code, args.class_code, args.sec_code, price) -- returns {} in case of error
-  if result == nil then
-    error( string.format("QLua-функция getBuySellInfo(%s, %s, %s, %s, %s) возвратила nil.", args.firm_id, args.client_code, args.class_code, args.sec_code, args.price) )
-  end
-  
+  -- returns {} in case of error
+  return requireNonNil(_G.getBuySellInfo(args.firm_id, args.client_code, args.class_code, args.sec_code, price))
+
+  --post-processing of properties:
   --result.is_margin_sec AS IS
   --result.is_asset_sec AS IS
   --result.balance AS IS
@@ -738,8 +758,6 @@ module["getBuySellInfo"] = function (args)
   --result.spread_hc AS IS
   --result.can_buy_own AS IS
   --result.can_sell_own AS IS
-  
-  return result
 end
 
 -- TODO: test
@@ -747,15 +765,14 @@ module["getBuySellInfoEx"] = function (args)
   
   local price = tonumber(args.price)
   if price == nil then 
-    error( string.format("Функция getBuySellInfoEx: не удалось преобразовать в число значение '%s' аргумента 'price'.", args.price) )
+    error( string.format("Не удалось преобразовать в число значение '%s' аргумента 'price'.", args.price) )
   end
   
-  local result = _G.getBuySellInfoEx(args.firm_id, args.client_code, args.class_code, args.sec_code, price) -- returns {} in case of error
-  if result == nil then
-    error( string.format("QLua-функция getBuySellInfoEx(%s, %s, %s, %s, %s) возвратила nil.", args.firm_id, args.client_code, args.class_code, args.sec_code, args.price) )
-  end
-  
-  --params from PortfolioInfo AS IS
+  -- returns {} in case of error
+  local result = requireNonNil(_G.getBuySellInfoEx(args.firm_id, args.client_code, args.class_code, args.sec_code, price))
+
+  --post-processing of properties:
+  --params from BuySellInfo AS IS
   if result.limit_kind then result.limit_kind = tostring(result.limit_kind) end
   --result.d_long AS IS
   --result.d_min_long AS IS
@@ -770,32 +787,38 @@ end
 
 -- TODO: test
 module["AddColumn"] = function (args) 
-  return _G.AddColumn(args.t_id, args.icode, args.name, args.is_default, utils.to_qtable_parameter_type(args.par_type), args.width) -- returns 0 or 1
+  -- returns 0 or 1
+  return requireNonNil(_G.AddColumn(args.t_id, args.icode, args.name, args.is_default, utils.to_qtable_parameter_type(args.par_type), args.width)) 
 end
 
 -- TODO: test
-module["AllocTable"] = function () 
-  return _G.AllocTable() -- returns a number
+module["AllocTable"] = function ()
+  -- returns a number
+  return requireNonNil(_G.AllocTable())
 end
 
 -- TODO: test
-module["Clear"] = function (args) 
-  return _G.Clear(args.t_id) -- returns true or false
+module["Clear"] = function (args)
+  -- returns true or false
+  return requireNonNil(_G.Clear(args.t_id))
 end
 
 -- TODO: test
-module["CreateWindow"] = function (args) 
-  return _G.CreateWindow(args.t_id) -- returns 0 or 1
+module["CreateWindow"] = function (args)
+  -- returns 0 or 1
+  return requireNonNil(_G.CreateWindow(args.t_id))
 end
 
 -- TODO: test
-module["DeleteRow"] = function (args) 
-  return _G.DeleteRow(args.t_id, args.key) -- returns true or false
+module["DeleteRow"] = function (args)
+  -- returns true or false
+  return requireNonNil(_G.DeleteRow(args.t_id, args.key))
 end
 
 -- TODO: test
-module["DestroyTable"] = function (args) 
-  return _G.DestroyTable(args.t_id) -- returns true or false
+module["DestroyTable"] = function (args)
+  -- returns true or false
+  return requireNonNil(_G.DestroyTable(args.t_id))
 end
 
 -- TODO: test
@@ -818,13 +841,13 @@ end
 -- TODO: test
 module["GetCell"] = function (args) 
 
-  local result = _G.GetCell(args.t_id, args.key, args.code) -- returns nil in case of error
+  -- returns nil in case of error
+  local result = _G.GetCell(args.t_id, args.key, args.code)
   
-  if result == nil then
-    error( string.format("QLua-функция GetCell(%s, %s, %s) возвратила nil.", args.t_id, args.key, args.code) )
+  -- post-processing: stringification of decimal numbers
+  if result and result.value then
+    result.value = tostring(result.value) end
   end
-  
-  if result.value then result.value = tostring(result.value) end
   
   return result
 end
@@ -954,13 +977,15 @@ module["AddLabel"] = function (args)
 end
 
 -- TODO: test
-module["DelLabel"] = function (args) 
-  return _G.DelLabel(args.chart_tag, args.label_id) -- returns true or false
+module["DelLabel"] = function (args)
+  -- returns true or false
+  return requireNonNil(_G.DelLabel(args.chart_tag, args.label_id))
 end
 
 -- TODO: test
-module["DelAllLabels"] = function (args) 
-  return _G.DelAllLabels(args.chart_tag) -- returns true or false
+module["DelAllLabels"] = function (args)
+  -- returns true or false
+  return requireNonNil(_G.DelAllLabels(args.chart_tag))
 end
 
 -- TODO: test
@@ -1005,8 +1030,9 @@ module["ParamRequest"] = function (args)
 end
 
 -- TODO: test
-module["CancelParamRequest"] = function (args) 
-  return _G.CancelParamRequest(args.class_code, args.sec_code, args.db_name) -- returns true or false
+module["CancelParamRequest"] = function (args)
+  -- returns true or false
+  return requireNonNil(_G.CancelParamRequest(args.class_code, args.sec_code, args.db_name))
 end
 
 -- TODO: test

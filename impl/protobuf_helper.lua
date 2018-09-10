@@ -46,6 +46,7 @@ result_object_mappers[method_names["GET_INFO_PARAM"]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getInfoParam.Result)
   result.info_param = proc_result
+  
   return qlua_pb_types.getInfoParam.Result, result
 end
 
@@ -172,9 +173,8 @@ args_prototypes["GET_CLASSES_LIST"] = qlua_pb_types.getClassesList.Request
 result_object_mappers[method_names["GET_CLASSES_LIST"]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getClassesList.Result)
-  if proc_result then 
-    result.classes_list = proc_result
-  end
+  result.classes_list = proc_result
+  
   return qlua_pb_types.getClassesList.Result, result
 end
 
@@ -186,10 +186,12 @@ result_object_mappers[method_names["GET_CLASS_INFO"]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getClassInfo.Result)
   result.class_info = pb.defaults(qlua_pb_types.qlua_structures.Klass)
-  for k, v in pairs(proc_result) do
-    result.class_info[k] = v
+  if proc_result then
+    for k, v in pairs(proc_result) do
+      result.class_info[k] = v
+    end
   end
-  
+    
   return qlua_pb_types.getClassInfo.Result, result
 end
 
@@ -200,9 +202,8 @@ args_prototypes["GET_CLASS_SECURITIES"] = qlua_pb_types.getClassSecurities.Reque
 result_object_mappers[method_names["GET_CLASS_SECURITIES"]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getClassSecurities.Result)
-  if proc_result then 
-    result.class_securities = proc_result
-  end
+  result.class_securities = proc_result
+  
   return qlua_pb_types.getClassSecurities.Result, result
 end
 
@@ -229,10 +230,12 @@ result_object_mappers[method_names["GET_MONEY_EX"]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getMoneyEx.Result)
   result.money_ex = pb.defaults(qlua_pb_types.qlua_structures.MoneyLimit)
-  for k, v in pairs(proc_result) do
-    result.money_ex[k] = v
+  if proc_result then
+    for k, v in pairs(proc_result) do
+      result.money_ex[k] = v
+    end
   end
-  
+
   return qlua_pb_types.getMoneyEx.Result, result
 end
 
@@ -259,8 +262,10 @@ result_object_mappers[method_names["GET_DEPO_EX"]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getDepoEx.Result)
   result.depo_ex = pb.defaults(qlua_pb_types.qlua_structures.DepoLimit)
-  for k, v in pairs(proc_result) do
-    result.depo_ex[k] = v
+  if proc_result then
+    for k, v in pairs(proc_result) do
+      result.depo_ex[k] = v
+    end
   end
   
   return qlua_pb_types.getDepoEx.Result, result
@@ -274,8 +279,10 @@ result_object_mappers[method_names["GET_FUTURES_LIMIT"]] = function (proc_result
 
   local result = pb.defaults(qlua_pb_types.getFuturesLimit.Result)
   result.futures_limit = pb.defaults(qlua_pb_types.qlua_structures.FuturesLimit)
-  for k, v in pairs(proc_result) do
-    result.futures_limit[k] = v
+  if proc_result then
+    for k, v in pairs(proc_result) do
+      result.futures_limit[k] = v
+    end
   end
   
   return qlua_pb_types.getFuturesLimit.Result, result
@@ -289,8 +296,10 @@ result_object_mappers[method_names["GET_FUTURES_HOLDING"]] = function (proc_resu
 
   local result = pb.defaults(qlua_pb_types.getFuturesHolding.Result)
   result.futures_holding = pb.defaults(qlua_pb_types.qlua_structures.FuturesClientHolding)
-  for k, v in pairs(proc_result) do
-    result.futures_holding[k] = v
+  if proc_result then
+    for k, v in pairs(proc_result) do
+      result.futures_holding[k] = v
+    end
   end
   
   return qlua_pb_types.getFuturesHolding.Result, result
@@ -304,8 +313,10 @@ result_object_mappers[method_names["GET_SECURITY_INFO"]] = function (proc_result
 
   local result = pb.defaults(qlua_pb_types.getSecurityInfo.Result)
   result.security_info = pb.defaults(qlua_pb_types.qlua_structures.Security)
-  for k, v in pairs(proc_result) do
-    result.security_info[k] = v
+  if proc_result then
+    for k, v in pairs(proc_result) do
+      result.security_info[k] = v
+    end
   end
   
   return qlua_pb_types.getSecurityInfo.Result, result
@@ -864,8 +875,10 @@ args_prototypes["GET_CELL"] = qlua_pb_types.GetCell.Request
 result_object_mappers[method_names["GET_CELL"]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.GetCell.Result)
-  result.image = proc_result.image
-  result.value = proc_result.value
+  if proc_result then
+    result.image = proc_result.image
+    result.value = proc_result.value
+  end
   
   return qlua_pb_types.GetCell.Result, result
 end
