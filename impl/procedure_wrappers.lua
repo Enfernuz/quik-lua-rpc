@@ -89,7 +89,9 @@ module["sleep"] = function (args)
 end
 
 -- TODO: test
-module["getWorkingFolder"] = _G.getWorkingFolder
+module["getWorkingFolder"] = function ()
+  return requireNonNil(_G.getWorkingFolder())
+end
 
 -- TODO: test
 module["PrintDbgStr"] = function (args) 
@@ -846,14 +848,7 @@ end
 
 -- TODO: test
 module["GetWindowCaption"] = function (args) 
-
-  local result = _G.GetWindowCaption(args.t_id) -- returns nil in case of error
-  
-  if result == nil then 
-    error( string.format("QLua-функция GetWindowCaption(%s) возвратила nil.", args.t_id) )
-  end
-  
-  return utils.Cp1251ToUtf8(result)
+  return utils.Cp1251ToUtf8(_G.GetWindowCaption(args.t_id))
 end
 
 -- TODO: test
@@ -861,20 +856,8 @@ module["GetWindowRect"] = function (args)
 
   local top, left, bottom, right = _G.GetWindowRect(args.t_id) -- returns nil in case of error
   
-  if top == nil then
-    error( string.format("QLua-функция GetWindowRect(%s) возвратила nil вместо параметра 'top'.", args.t_id) )
-  end
-  
-  if left == nil then
-    error( string.format("QLua-функция GetWindowRect(%s) возвратила nil вместо параметра 'left'.", args.t_id) )
-  end
-  
-  if bottom == nil then
-    error( string.format("QLua-функция GetWindowRect(%s) возвратила nil вместо параметра 'bottom'.", args.t_id) )
-  end
-  
-  if right == nil then
-    error( string.format("QLua-функция GetWindowRect(%s) возвратила nil вместо параметра 'right'.", args.t_id) )
+  if top == nil or left == nil or bottom == nil or right == nil then
+    return nil
   end
 
   return {
@@ -933,7 +916,7 @@ end
 
 -- TODO: test
 module["Highlight"] = function (args) 
-  return _G.Highlight(args.t_id, args.row, args.col, args.b_color, args.f_color, args.timeout) -- what does it return in case of error ?
+  return requireNonNil(_G.Highlight(args.t_id, args.row, args.col, args.b_color, args.f_color, args.timeout)) -- what does it return in case of error ?
 end
 
 -- TODO: test

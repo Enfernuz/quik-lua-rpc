@@ -900,7 +900,9 @@ args_prototypes["GET_WINDOW_CAPTION"] = qlua_pb_types.GetWindowCaption.Request
 result_object_mappers[method_names["GET_WINDOW_CAPTION"]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.GetWindowCaption.Result)
-  result.caption = proc_result
+  if proc_result then
+    result.caption = proc_result
+  end
   
   return qlua_pb_types.GetWindowCaption.Result, result
 end
@@ -912,10 +914,13 @@ args_prototypes["GET_WINDOW_RECT"] = qlua_pb_types.GetWindowRect.Request
 result_object_mappers[method_names["GET_WINDOW_RECT"]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.GetWindowRect.Result)
-  result.top = proc_result.top
-  result.left = proc_result.left
-  result.bottom = proc_result.bottom
-  result.right = proc_result.right
+  if proc_result then
+    result.window_rect = pb.defaults(qlua_pb_types.GetWindowRect.WindowRect)
+    result.window_rect.top = proc_result.top
+    result.window_rect.left = proc_result.left
+    result.window_rect.bottom = proc_result.bottom
+    result.window_rect.right = proc_result.right
+  end
   
   return qlua_pb_types.GetWindowRect.Result, result
 end

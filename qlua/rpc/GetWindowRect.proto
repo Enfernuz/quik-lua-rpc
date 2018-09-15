@@ -7,14 +7,19 @@ package qlua.rpc.GetWindowRect;
 option optimize_for = SPEED;
 option java_package = "qlua.rpc";
 
+message WindowRect {
+
+    int32 top = 1;
+    int32 left = 2;
+    int32 bottom = 3;
+    int32 right = 4;
+}
+
 message Request {
     int32 t_id = 1;
 }
 
 message Result {
 
-    int32 top = 1;
-    int32 left = 2;
-    int32 bottom = 3;
-    int32 right = 4;
+    WindowRect window_rect = 1;
 }
