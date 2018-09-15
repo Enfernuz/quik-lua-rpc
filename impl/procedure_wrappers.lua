@@ -53,7 +53,7 @@ end
 
 -- TODO: test
 module["getScriptPath"] = function ()
-  return _G.getScriptPath()
+  return requireNonNil(_G.getScriptPath())
 end
 
 -- TODO: test
@@ -107,13 +107,14 @@ end
 -- TODO: test
 module["getItem"] = function (args) 
   
-  local proc_result = _G.getItem(args.table_name, args.index)
+  -- returns nil in case of error
+  local result = _G.getItem(args.table_name, args.index)
   
-  if proc_result == nil then
-    error( string.format("QLua-функция getItem(%s, %d) возвратила nil.", args.table_name, args.index) )
+  if result then
+    return to_string_string_table(result)
+  else
+    return nil
   end
-  
-  return to_string_string_table(proc_result)
 end
 
 -- TODO: test
@@ -122,16 +123,16 @@ module["getOrderByNumber"] = function (args)
   local order, indx = _G.getOrderByNumber(args.class_code, args.order_id)
   
   if order then
-    assert(order.order_num, "Функция getOrderByNumber: таблица 'order' не содержит обязательного поля 'order_num'.")
-    assert(order.flags, "Функция getOrderByNumber: таблица 'order' не содержит обязательного поля 'flags'.")
+    assert(order.order_num, "Таблица 'order' не содержит обязательного поля 'order_num'.")
+    assert(order.flags, "Таблица 'order' не содержит обязательного поля 'flags'.")
     order.brokerref = utils.Cp1251ToUtf8(order.brokerref)
     order.userid = utils.Cp1251ToUtf8(order.userid)
     order.firmid = utils.Cp1251ToUtf8(order.firmid)
     order.account = utils.Cp1251ToUtf8(order.account)
-    order.price = tostring( assert(order.price, "Функция getOrderByNumber: таблица 'order' не содержит обязательного поля 'price'.") )
-    assert(order.qty, "Функция getOrderByNumber: таблица 'order' не содержит обязательного поля 'qty'.")
+    order.price = tostring( assert(order.price, "Таблица 'order' не содержит обязательного поля 'price'.") )
+    assert(order.qty, "Таблица 'order' не содержит обязательного поля 'qty'.")
     if order.balance then order.balance = tostring(order.balance) end
-    order.value = tostring( assert(order.value, "Функция getOrderByNumber: таблица 'order' не содержит обязательного поля 'value'.") )
+    order.value = tostring( assert(order.value, "Таблица 'order' не содержит обязательного поля 'value'.") )
     if order.accruedint then order.accruedint = tostring(order.accruedint) end
     if order.yield then order.yield = tostring(order.yield) end
     if order.trans_id then order.trans_id = tostring(order.trans_id) end
@@ -144,11 +145,11 @@ module["getOrderByNumber"] = function (args)
     if order.activation_time then order.activation_time = tostring(order.activation_time) end
     if order.linkedorder then order.linkedorder = tostring(order.linkedorder) end
     if order.expiry then order.expiry = tostring(order.expiry) end
-    assert(order.sec_code, "Функция getOrderByNumber: таблица 'order' не содержит обязательного поля 'sec_code'.")
-    assert(order.class_code, "Функция getOrderByNumber: таблица 'order' не содержит обязательного поля 'class_code'.")
-    assert(order.datetime, "Функция getOrderByNumber: таблица 'order' не содержит обязательного поля 'datetime'.")
+    assert(order.sec_code, "Таблица 'order' не содержит обязательного поля 'sec_code'.")
+    assert(order.class_code, "Таблица 'order' не содержит обязательного поля 'class_code'.")
+    assert(order.datetime, "Таблица 'order' не содержит обязательного поля 'datetime'.")
     order.bank_acc_id = utils.Cp1251ToUtf8(order.bank_acc_id)
-    assert(order.value_entry_type, "Функция getOrderByNumber: таблица 'order' не содержит обязательного поля 'value_entry_type'.")
+    assert(order.value_entry_type, "Таблица 'order' не содержит обязательного поля 'value_entry_type'.")
     if order.repoterm then order.repoterm = tostring(order.repoterm) end
     if order.repovalue then order.repovalue = tostring(order.repovalue) end
     if order.repo2value then order.repo2value = tostring(order.repo2value) end
@@ -156,26 +157,26 @@ module["getOrderByNumber"] = function (args)
     if order.start_discount then order.start_discount = tostring(order.start_discount) end
     order.reject_reason = utils.Cp1251ToUtf8(order.reject_reason)
     if order.ext_order_flags then order.ext_order_flags = tostring(order.ext_order_flags) end
-    assert(order.min_qty, "Функция getOrderByNumber: таблица 'order' не содержит обязательного поля 'min_qty'.")
-    assert(order.exec_type, "Функция getOrderByNumber: таблица 'order' не содержит обязательного поля 'exec_type'.")
-    assert(order.side_qualifier, "Функция getOrderByNumber: таблица 'order' не содержит обязательного поля 'side_qualifier'.")
-    assert(order.acnt_type, "Функция getOrderByNumber: таблица 'order' не содержит обязательного поля 'acnt_type'.")
-    assert(order.capacity, "Функция getOrderByNumber: таблица 'order' не содержит обязательного поля 'capacity'.")
-    assert(order.passive_only_order, "Функция getOrderByNumber: таблица 'order' не содержит обязательного поля 'passive_only_order'.")
-    assert(order.visible, "Функция getOrderByNumber: таблица 'order' не содержит обязательного поля 'visible'.")
+    assert(order.min_qty, "Таблица 'order' не содержит обязательного поля 'min_qty'.")
+    assert(order.exec_type, "Таблица 'order' не содержит обязательного поля 'exec_type'.")
+    assert(order.side_qualifier, "Таблица 'order' не содержит обязательного поля 'side_qualifier'.")
+    assert(order.acnt_type, "Таблица 'order' не содержит обязательного поля 'acnt_type'.")
+    assert(order.capacity, "Таблица 'order' не содержит обязательного поля 'capacity'.")
+    assert(order.passive_only_order, "Таблица 'order' не содержит обязательного поля 'passive_only_order'.")
+    assert(order.visible, "Таблица 'order' не содержит обязательного поля 'visible'.")
     
     return {
       order = order,
       indx = indx
     }
-  else
-    return nil
   end
+  
+  return nil
 end
 
 -- TODO: test
 module["getNumberOf"] = function (args) 
-  return _G.getNumberOf(args.table_name) -- returns -1 in case of error
+  return requireNonNil(_G.getNumberOf(args.table_name)) -- returns -1 in case of error
 end
 
 -- TODO: test
@@ -204,7 +205,7 @@ end
 
 -- TODO: test
 module["getClassInfo"] = function (args) 
-  return _G.getClassInfo(args.class_code)
+  return requireNonNil(_G.getClassInfo(args.class_code))
 end
 
 -- TODO: test
@@ -216,11 +217,7 @@ end
 -- TODO: test
 module["getMoney"] = function (args) 
   
-  local result = _G.getMoney(args.client_code, args.firmid, args.tag, args.currcode) -- returns a table with zero'ed values if no info found or in case of error
-  
-  if result == nil then 
-    error( string.format("QLua-функция getMoney(%s, %s, %s, %s) возвратила nil.", args.client_code, args.firmid, args.tag, args.currcode) )
-  end
+  local result = requireNonNil(_G.getMoney(args.client_code, args.firmid, args.tag, args.currcode)) -- returns a table with zero'ed values if no info found or in case of error
   
   if result.money_open_limit then result.money_open_limit = tostring(result.money_open_limit) end
   if result.money_limit_locked_nonmarginal_value then result.money_limit_locked_nonmarginal_value = tostring(result.money_limit_locked_nonmarginal_value) end
@@ -239,10 +236,10 @@ module["getMoneyEx"] = function (args)
   local result = _G.getMoneyEx(args.firmid, args.client_code, args.tag, args.currcode, args.limit_kind) -- returns nil if no info found or in case of an error
 
   if result then
-    result.currcode = utils.Cp1251ToUtf8( assert(result.currcode, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'currcode'.") )
-    result.tag = utils.Cp1251ToUtf8( assert(result.tag, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'tag'.") )
-    result.firmid = utils.Cp1251ToUtf8( assert(result.firmid, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'firmid'.") )
-    result.client_code = utils.Cp1251ToUtf8( assert(result.client_code, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'client_code'.") )
+    result.currcode = utils.Cp1251ToUtf8( assert(result.currcode, "Результирующая таблица не содержит обязательного поля 'currcode'.") )
+    result.tag = utils.Cp1251ToUtf8( assert(result.tag, "Результирующая таблица не содержит обязательного поля 'tag'.") )
+    result.firmid = utils.Cp1251ToUtf8( assert(result.firmid, "Результирующая таблица не содержит обязательного поля 'firmid'.") )
+    result.client_code = utils.Cp1251ToUtf8( assert(result.client_code, "Результирующая таблица не содержит обязательного поля 'client_code'.") )
     if result.openbal then result.openbal = tostring(result.openbal) end
     if result.openlimit then result.openlimit = tostring(result.openlimit) end
     if result.currentbal then result.currentbal = tostring(result.currentbal) end
@@ -251,7 +248,7 @@ module["getMoneyEx"] = function (args)
     if result.locked_value_coef then result.locked_value_coef = tostring(result.locked_value_coef) end
     if result.locked_margin_value then result.locked_margin_value = tostring(result.locked_margin_value) end
     if result.leverage then result.leverage = tostring(result.leverage) end
-    assert(result.limit_kind, "Функция getMoneyEx: результирующая таблица не содержит обязательного поля 'limit_kind'.")
+    assert(result.limit_kind, "Результирующая таблица не содержит обязательного поля 'limit_kind'.")
   end
 
   return result
@@ -371,7 +368,7 @@ module["getSecurityInfo"] = function (args)
   local result = _G.getSecurityInfo(args.class_code, args.sec_code) -- returns nil if no info found or in case of an error
   
   if result then
-    assert(result.code, "Функция getSecurityInfo: результирующая таблица не содержит обязательного поля 'code'.")
+    assert(result.code, "Результирующая таблица не содержит обязательного поля 'code'.")
     result.name = utils.Cp1251ToUtf8(result.name)
     result.short_name = utils.Cp1251ToUtf8(result.short_name)
     result.class_code = utils.Cp1251ToUtf8( assert(result.class_code, "Функция getSecurityInfo: результирующая таблица не содержит обязательного поля 'class_code'.") )
@@ -391,12 +388,12 @@ end
 -- TODO: test
 module["getTradeDate"] = function () 
   
-  local result = _G.getTradeDate()
+  local result = requireNonNil(_G.getTradeDate())
   
-  assert(result.date, "Функция getTradeDate: результирующая таблица не содержит обязательного поля 'date'.")
-  assert(result.year, "Функция getTradeDate: результирующая таблица не содержит обязательного поля 'year'.")
-  assert(result.month, "Функция getTradeDate: результирующая таблица не содержит обязательного поля 'month'.")
-  assert(result.day, "Функция getTradeDate: результирующая таблица не содержит обязательного поля 'day'.") 
+  assert(result.date, "Результирующая таблица не содержит обязательного поля 'date'.")
+  assert(result.year, "Результирующая таблица не содержит обязательного поля 'year'.")
+  assert(result.month, "Результирующая таблица не содержит обязательного поля 'month'.")
+  assert(result.day, "Результирующая таблица не содержит обязательного поля 'day'.") 
   
   return result
 end
@@ -404,10 +401,10 @@ end
 -- TODO: test
 module["getQuoteLevel2"] = function (args) 
   
-  local result = _G.getQuoteLevel2(args.class_code, args.sec_code)
+  local result = requireNonNil(_G.getQuoteLevel2(args.class_code, args.sec_code))
   
-  assert(result.bid_count, "Функция getQuoteLevel2: результирующая таблица не содержит обязательного поля 'bid_count'.")
-  assert(result.offer_count, "Функция getQuoteLevel2: результирующая таблица не содержит обязательного поля 'offer_count'.")
+  assert(result.bid_count, "Результирующая таблица не содержит обязательного поля 'bid_count'.")
+  assert(result.offer_count, "Результирующая таблица не содержит обязательного поля 'offer_count'.")
   if result.bid == "" then result.bid = nil end
   if result.offer == "" then result.offer = nil end
   
@@ -416,12 +413,12 @@ end
 
 -- TODO: test
 module["getLinesCount"] = function (args) 
-  return _G.getLinesCount(args.tag) -- returns 0 if no chart with this tag found
+  return requireNonNil(_G.getLinesCount(args.tag)) -- returns 0 if no chart with this tag found
 end
 
 -- TODO: test
 module["getNumCandles"] = function (args) 
-  return _G.getNumCandles(args.tag) -- returns 0 if no chart with this tag found
+  return requireNonNil(_G.getNumCandles(args.tag)) -- returns 0 if no chart with this tag found
 end
 
 -- TODO: test
@@ -605,46 +602,31 @@ end
 -- TODO: test
 module["getParamEx"] = function (args) 
   
-  local result = _G.getParamEx(args.class_code, args.sec_code, args.param_name) -- always returns a table
-  
-  if result == nil then
-    error( string.format("QLua-функция getParamEx(%s, %s, %s) возвратила nil.", args.class_code, args.sec_code, args.param_name) )
-  end
-  
+  --no post-processing ?
   --result.param_type AS IS
   --result.param_value AS IS
   --result.param_image AS IS
   --result.result AS IS
     
-  return result
+  return requireNonNil(_G.getParamEx(args.class_code, args.sec_code, args.param_name)) -- always returns a table
 end
 
 -- TODO: test
 module["getParamEx2"] = function (args) 
   
-  local result = _G.getParamEx2(args.class_code, args.sec_code, args.param_name) -- always returns a table
-  
-  if result == nil then
-    error(string.format("QLua-функция getParamEx2(%s, %s, %s) возвратила nil.", args.class_code, args.sec_code, args.param_name), 0)
-  end
-  
+  --no post-processing ?
   --result.param_type AS IS
   --result.param_value AS IS
   --result.param_image AS IS
   --result.result AS IS
 
-  return result
+  return requireNonNil(_G.getParamEx2(args.class_code, args.sec_code, args.param_name)) -- always returns a table
 end
 
 -- TODO: test
 module["getPortfolioInfo"] = function (args) 
 
-  local result = _G.getPortfolioInfo(args.firm_id, args.client_code) -- returns {} in case of error
-  
-  if result == nil then
-    error( string.format("QLua-функция getPortfolioInfo(%s, %s) возвратила nil.", args.firm_id, args.client_code) )
-  end
-  
+  --no post-processing ?
   --result.is_leverage AS IS
   --result.in_assets AS IS
   --result.leverage AS IS
@@ -686,18 +668,13 @@ module["getPortfolioInfo"] = function (args)
   --result.is_futures AS IS
   --result.curr_tag AS IS
 
-  return result
+  return requireNonNil(_G.getPortfolioInfo(args.firm_id, args.client_code)) -- returns {} in case of error
 end
 
 -- TODO: test
 module["getPortfolioInfoEx"] = function (args) 
 
-  local result = _G.getPortfolioInfoEx(args.firm_id, args.client_code, args.limit_kind) -- returns {} in case of error
-  
-  if result == nil then
-    error( string.format("QLua-функция getPortfolioInfoEx(%s, %s, %d) возвратила nil.", args.firm_id, args.client_code, args.limit_kind) )
-  end
-  
+  --no post-processing ?
   --params from PortfolioInfo AS IS
   --result.init_margin AS IS
   --result.min_margin AS IS
@@ -722,7 +699,7 @@ module["getPortfolioInfoEx"] = function (args)
   --result.fut_position_type AS IS
   --result.fut_accured_int AS IS
   
-  return result
+  return requireNonNil(_G.getPortfolioInfoEx(args.firm_id, args.client_code, args.limit_kind)) -- returns {} in case of error
 end
 
 -- TODO: test
@@ -858,7 +835,7 @@ module["GetTableSize"] = function (args)
   local rows, col = _G.GetTableSize(args.t_id) -- returns nil in case of error
   
   if rows == nil or col == nil then
-    error( string.format("QLua-функция GetTableSize(%s) возвратила nil.", args.t_id) )
+    return nil
   end
   
   return {
@@ -992,16 +969,15 @@ end
 module["GetLabelParams"] = function (args) 
   
   local label_params = _G.GetLabelParams(args.chart_tag, args.label_id) -- returns nil in case of error
-  if label_params == nil then
-    error( string.format("QLua-функция GetLabelParams(%s, %d) возвратила nil.", args.chart_tag, args.label_id) )
+  if label_params then
+    local result = {}
+    for k, v in pairs(label_params) do
+      result[utils.Cp1251ToUtf8( tostring(k) )] = utils.Cp1251ToUtf8( tostring(v) )
+    end
+    return result
   end
   
-  local result = {}
-  for k, v in pairs(label_params) do
-    result[utils.Cp1251ToUtf8( tostring(k) )] = utils.Cp1251ToUtf8( tostring(v) )
-  end
-  
-  return result
+  return nil
 end
 
 -- TODO: test

@@ -7,12 +7,16 @@ package qlua.rpc.GetTableSize;
 option optimize_for = SPEED;
 option java_package = "qlua.rpc";
 
+message TableSize {
+
+    int32 rows = 1;
+    int32 col = 2;
+}
+
 message Request {
     int32 t_id = 1;
 }
 
 message Result {
-
-    int32 rows = 1;
-    int32 col = 2;
+    TableSize table_size = 1;
 }

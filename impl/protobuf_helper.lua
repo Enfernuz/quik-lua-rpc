@@ -111,8 +111,10 @@ args_prototypes["GET_ITEM"] = qlua_pb_types.getItem.Request
 result_object_mappers[method_names["GET_ITEM"]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getItem.Result)
-  for k, v in pairs(proc_result) do
-    result.table_row[k] = v
+  if proc_result then
+    for k, v in pairs(proc_result) do
+      result.table_row[k] = v
+    end
   end
 
   return result
@@ -126,19 +128,14 @@ result_object_mappers[method_names["GET_ORDER_BY_NUMBER"]] = function (proc_resu
 
   local result = pb.defaults(qlua_pb_types.getOrderByNumber.Result)
   
-  local order = proc_result.order
-  if order then
-    result.order = pb.defaults(qlua_pb_types.qlua_structures.Order)
-    for k, v in pairs(order) do
-      result.order[k] = v
-    end
+  if proc_result then
+      result.order = pb.defaults(qlua_pb_types.qlua_structures.Order)
+      for k, v in pairs(proc_result.order) do
+        result.order[k] = v
+      end  
+      result.indx = proc_result.indx
   end
-  
-  local indx = proc_result.indx
-  if indx then 
-    result.indx = indx
-  end
-  
+
   return qlua_pb_types.getOrderByNumber.Result, result
 end
 
@@ -229,8 +226,8 @@ args_prototypes["GET_MONEY_EX"] = qlua_pb_types.getMoneyEx.Request
 result_object_mappers[method_names["GET_MONEY_EX"]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getMoneyEx.Result)
-  result.money_ex = pb.defaults(qlua_pb_types.qlua_structures.MoneyLimit)
   if proc_result then
+    result.money_ex = pb.defaults(qlua_pb_types.qlua_structures.MoneyLimit)
     for k, v in pairs(proc_result) do
       result.money_ex[k] = v
     end
@@ -261,8 +258,9 @@ args_prototypes["GET_DEPO_EX"] = qlua_pb_types.getDepoEx.Request
 result_object_mappers[method_names["GET_DEPO_EX"]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getDepoEx.Result)
-  result.depo_ex = pb.defaults(qlua_pb_types.qlua_structures.DepoLimit)
   if proc_result then
+    -- TODO: check if the initialization is neccessary
+    result.depo_ex = pb.defaults(qlua_pb_types.qlua_structures.DepoLimit)
     for k, v in pairs(proc_result) do
       result.depo_ex[k] = v
     end
@@ -378,9 +376,7 @@ args_prototypes["GET_LINES_COUNT"] = qlua_pb_types.getLinesCount.Request
 result_object_mappers[method_names["GET_LINES_COUNT"]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getLinesCount.Result)
-  if proc_result then 
-    result.lines_count = proc_result
-  end
+  result.lines_count = proc_result
   return qlua_pb_types.getLinesCount.Result, result
 end
 
@@ -391,9 +387,7 @@ args_prototypes["GET_NUM_CANDLES"] = qlua_pb_types.getNumCandles.Request
 result_object_mappers[method_names["GET_NUM_CANDLES"]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getNumCandles.Result)
-  if proc_result then 
-    result.num_candles = proc_result
-  end
+  result.num_candles = proc_result
   return qlua_pb_types.getNumCandles.Result, result
 end
 
@@ -890,8 +884,11 @@ args_prototypes["GET_TABLE_SIZE"] = qlua_pb_types.GetTableSize.Request
 result_object_mappers[method_names["GET_TABLE_SIZE"]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.GetTableSize.Result)
-  result.rows = proc_result.rows
-  result.col = proc_result.col
+  if proc_result then
+    result.table_size = pb.defaults(qlua_pb_types.GetTableSize.TableSize)
+    result.table_size.rows = proc_result.rows
+    result.table_size.col = proc_result.col
+  end
   
   return qlua_pb_types.GetTableSize.Result, result
 end
@@ -1062,7 +1059,9 @@ args_prototypes["GET_LABEL_PARAMS"] = qlua_pb_types.GetLabelParams.Request
 result_object_mappers[method_names["GET_LABEL_PARAMS"]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.GetLabelParams.Result)
-  result.label_params = proc_result
+  if proc_result then
+    result.label_params = proc_result
+  end
   
   return qlua_pb_types.GetLabelParams.Result, result
 end
