@@ -12,5 +12,9 @@ message Request {
 }
 
 message Result {
-    bool result = 1;
+
+    oneof window_closed {
+      bool null_window_closed = 1;
+      bool value_window_closed = 2;
+    }
 }

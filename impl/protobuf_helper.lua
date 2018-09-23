@@ -8,19 +8,19 @@ local qlua_pb_types = require("qlua.qlua_pb_types")
 local module = {}
 
 local method_names = {}
-local procedure_types = {}
-local args_prototypes = {}
-local result_object_mappers = {}
+local args_decoders = {}
+local result_encoders = {}
 
 -- unknown
 method_names["PROCEDURE_TYPE_UNKNOWN"] = "unknown" -- TODO: maybe set it to nil?
-procedure_types[method_names["PROCEDURE_TYPE_UNKNOWN"]] = "PROCEDURE_TYPE_UNKNOWN"
+
+local proc_name
 
 -- isConnected
-method_names["IS_CONNECTED"] = "isConnected"
-procedure_types[method_names["IS_CONNECTED"]] = "IS_CONNECTED"
-args_prototypes["IS_CONNECTED"] = nil
-result_object_mappers[method_names["IS_CONNECTED"]] = function (proc_result)
+proc_name = "IS_CONNECTED"
+method_names[proc_name] = "isConnected"
+args_decoders[proc_name] = nil
+result_encoders[proc_name] = function (proc_result)
   
   local result = pb.defaults(qlua_pb_types.isConnected.Result)
   result.is_connected = proc_result
@@ -28,10 +28,10 @@ result_object_mappers[method_names["IS_CONNECTED"]] = function (proc_result)
 end
 
 -- getScriptPath
-method_names["GET_SCRIPT_PATH"] = "getScriptPath"
-procedure_types[method_names["GET_SCRIPT_PATH"]] = "GET_SCRIPT_PATH"
-args_prototypes["GET_SCRIPT_PATH"] = nil
-result_object_mappers[method_names["GET_SCRIPT_PATH"]] = function (proc_result)
+proc_name = "GET_SCRIPT_PATH"
+method_names[proc_name] = "getScriptPath"
+args_decoders[proc_name] = nil
+result_encoders[proc_name] = function (proc_result)
   
   local result = pb.defaults(qlua_pb_types.getScriptPath.Result)
   result.script_path = proc_result
@@ -39,10 +39,10 @@ result_object_mappers[method_names["GET_SCRIPT_PATH"]] = function (proc_result)
 end
 
 -- getInfoParam
-method_names["GET_INFO_PARAM"] = "getInfoParam"
-procedure_types[method_names["GET_INFO_PARAM"]] = "GET_INFO_PARAM"
-args_prototypes["GET_INFO_PARAM"] = qlua_pb_types.getInfoParam.Request
-result_object_mappers[method_names["GET_INFO_PARAM"]] = function (proc_result)
+proc_name = "GET_INFO_PARAM"
+method_names[proc_name] = "getInfoParam"
+args_decoders[proc_name] = qlua_pb_types.getInfoParam.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getInfoParam.Result)
   result.info_param = proc_result
@@ -51,21 +51,26 @@ result_object_mappers[method_names["GET_INFO_PARAM"]] = function (proc_result)
 end
 
 -- message
-method_names["MESSAGE"] = "message"
-procedure_types[method_names["MESSAGE"]] = "MESSAGE"
-args_prototypes["MESSAGE"] = qlua_pb_types.message.Request
-result_object_mappers[method_names["MESSAGE"]] = function (proc_result)
+proc_name = "MESSAGE"
+method_names[proc_name] = "message"
+args_decoders[proc_name] = qlua_pb_types.message.Request
+result_encoders[proc_name] = function (proc_result)
   
   local result = pb.defaults(qlua_pb_types.message.Result)
-  result.result = proc_result
+  if proc_result then
+    result.value_result = proc_result
+  else
+    result.null_result = true
+  end
+  
   return qlua_pb_types.message.Result, result
 end
 
 -- sleep
-method_names["SLEEP"] = "sleep"
-procedure_types[method_names["SLEEP"]] = "SLEEP"
-args_prototypes["SLEEP"] = qlua_pb_types.sleep.Request
-result_object_mappers[method_names["SLEEP"]] = function (proc_result)
+proc_name = "SLEEP"
+method_names[proc_name] = "sleep"
+args_decoders[proc_name] = qlua_pb_types.sleep.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.sleep.Result)
   result.result = proc_result
@@ -73,10 +78,10 @@ result_object_mappers[method_names["SLEEP"]] = function (proc_result)
 end
 
 -- getWorkingFolder
-method_names["GET_WORKING_FOLDER"] = "getWorkingFolder"
-procedure_types[method_names["GET_WORKING_FOLDER"]] = "GET_WORKING_FOLDER"
-args_prototypes["GET_WORKING_FOLDER"] = nil
-result_object_mappers[method_names["GET_WORKING_FOLDER"]] = function (proc_result)
+proc_name = "GET_WORKING_FOLDER"
+method_names[proc_name] = "getWorkingFolder"
+args_decoders[proc_name] = nil
+result_encoders[proc_name] = function (proc_result)
   
   local result = pb.defaults(qlua_pb_types.getWorkingFolder.Result)
   result.working_folder = proc_result
@@ -84,16 +89,16 @@ result_object_mappers[method_names["GET_WORKING_FOLDER"]] = function (proc_resul
 end
 
 -- PrintDbgStr
-method_names["PRINT_DBG_STR"] = "PrintDbgStr"
-procedure_types[method_names["PRINT_DBG_STR"]] = "PRINT_DBG_STR"
-args_prototypes["PRINT_DBG_STR"] = qlua_pb_types.PrintDbgStr.Request
-result_object_mappers[method_names["PRINT_DBG_STR"]] = nil
+proc_name = "PRINT_DBG_STR"
+method_names[proc_name] = "PrintDbgStr"
+args_decoders[proc_name] = qlua_pb_types.PrintDbgStr.Request
+result_encoders[proc_name] = function () return nil end
 
 -- os.sysdate
-method_names["OS_SYSDATE"] = "os.sysdate"
-procedure_types[method_names["OS_SYSDATE"]] = "OS_SYSDATE"
-args_prototypes["OS_SYSDATE"] = nil
-result_object_mappers[method_names["OS_SYSDATE"]] = function (proc_result)
+proc_name = "OS_SYSDATE"
+method_names[proc_name] = "os.sysdate"
+args_decoders[proc_name] = nil
+result_encoders[proc_name] = function (proc_result)
   
   local result = pb.defaults(qlua_pb_types.os.sysdate.Result)
   result.result = pb.defaults(qlua_pb_types.qlua_structures.DateTimeEntry)
@@ -105,45 +110,52 @@ result_object_mappers[method_names["OS_SYSDATE"]] = function (proc_result)
 end
 
 -- getItem
-method_names["GET_ITEM"] = "getItem"
-procedure_types[method_names["GET_ITEM"]] = "GET_ITEM"
-args_prototypes["GET_ITEM"] = qlua_pb_types.getItem.Request
-result_object_mappers[method_names["GET_ITEM"]] = function (proc_result)
+proc_name = "GET_ITEM"
+method_names[proc_name] = "getItem"
+args_decoders[proc_name] = qlua_pb_types.getItem.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getItem.Result)
   if proc_result then
     for k, v in pairs(proc_result) do
-      result.table_row[k] = v
+      result.value_table_row[k] = v
     end
+  else
+    result.null_table_row = true
   end
 
   return result
 end
 
 -- getOrderByNumber
-method_names["GET_ORDER_BY_NUMBER"] = "getOrderByNumber"
-procedure_types[method_names["GET_ORDER_BY_NUMBER"]] = "GET_ORDER_BY_NUMBER"
-args_prototypes["GET_ORDER_BY_NUMBER"] = qlua_pb_types.getOrderByNumber.Request
-result_object_mappers[method_names["GET_ORDER_BY_NUMBER"]] = function (proc_result)
+proc_name = "GET_ORDER_BY_NUMBER"
+method_names[proc_name] = "getOrderByNumber"
+args_decoders[proc_name] = qlua_pb_types.getOrderByNumber.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getOrderByNumber.Result)
   
-  if proc_result then
+  if proc_result.order then
       result.order = pb.defaults(qlua_pb_types.qlua_structures.Order)
       for k, v in pairs(proc_result.order) do
         result.order[k] = v
       end  
-      result.indx = proc_result.indx
+  end
+  
+  if proc_result.indx then
+    result.value_indx = proc_result.indx
+  else
+    result.null_indx = true
   end
 
   return qlua_pb_types.getOrderByNumber.Result, result
 end
 
 -- getNumberOf
-method_names["GET_NUMBER_OF"] = "getNumberOf"
-procedure_types[method_names["GET_NUMBER_OF"]] = "GET_NUMBER_OF"
-args_prototypes["GET_NUMBER_OF"] = qlua_pb_types.getNumberOf.Request
-result_object_mappers[method_names["GET_NUMBER_OF"]] = function (proc_result)
+proc_name = "GET_NUMBER_OF"
+method_names[proc_name] = "getNumberOf"
+args_decoders[proc_name] = qlua_pb_types.getNumberOf.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getNumberOf.Result)
   result.result = proc_result
@@ -151,23 +163,34 @@ result_object_mappers[method_names["GET_NUMBER_OF"]] = function (proc_result)
 end
 
 -- SearchItems
-method_names["SEARCH_ITEMS"] = "SearchItems"
-procedure_types[method_names["SEARCH_ITEMS"]] = "SEARCH_ITEMS"
-args_prototypes["SEARCH_ITEMS"] = qlua_pb_types.SearchItems.Request
-result_object_mappers[method_names["SEARCH_ITEMS"]] = function (proc_result)
+proc_name = "SEARCH_ITEMS"
+method_names[proc_name] = "SearchItems"
+args_decoders[proc_name] = function (encoded_args) 
+  
+  local args = pb.decode(qlua_pb_types.SearchItems.Request, encoded_args)
+  
+  if args.null_end_index then
+    args.end_index = nil
+  else
+    args.end_index = args.value_end_index
+  end
+  
+  return args
+end
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.SearchItems.Result)
   if proc_result then 
     result.items_indices = proc_result
   end
-  return qlua_pb_types.SearchItems.Result, result
+  return pb.encode(qlua_pb_types.SearchItems.Result, result)
 end
 
 -- getClassesList
-method_names["GET_CLASSES_LIST"] = "getClassesList"
-procedure_types[method_names["GET_CLASSES_LIST"]] = "GET_CLASSES_LIST"
-args_prototypes["GET_CLASSES_LIST"] = qlua_pb_types.getClassesList.Request
-result_object_mappers[method_names["GET_CLASSES_LIST"]] = function (proc_result)
+proc_name = "GET_CLASSES_LIST"
+method_names[proc_name] = "getClassesList"
+args_decoders[proc_name] = qlua_pb_types.getClassesList.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getClassesList.Result)
   result.classes_list = proc_result
@@ -176,10 +199,10 @@ result_object_mappers[method_names["GET_CLASSES_LIST"]] = function (proc_result)
 end
 
 -- getClassInfo
-method_names["GET_CLASS_INFO"] = "getClassInfo"
-procedure_types[method_names["GET_CLASS_INFO"]] = "GET_CLASS_INFO"
-args_prototypes["GET_CLASS_INFO"] = qlua_pb_types.getClassInfo.Request
-result_object_mappers[method_names["GET_CLASS_INFO"]] = function (proc_result)
+proc_name = "GET_CLASS_INFO"
+method_names[proc_name] = "getClassInfo"
+args_decoders[proc_name] = qlua_pb_types.getClassInfo.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getClassInfo.Result)
   result.class_info = pb.defaults(qlua_pb_types.qlua_structures.Klass)
@@ -193,10 +216,10 @@ result_object_mappers[method_names["GET_CLASS_INFO"]] = function (proc_result)
 end
 
 -- getClassSecurities
-method_names["GET_CLASS_SECURITIES"] = "getClassSecurities"
-procedure_types[method_names["GET_CLASS_SECURITIES"]] = "GET_CLASS_SECURITIES"
-args_prototypes["GET_CLASS_SECURITIES"] = qlua_pb_types.getClassSecurities.Request
-result_object_mappers[method_names["GET_CLASS_SECURITIES"]] = function (proc_result)
+proc_name = "GET_CLASS_SECURITIES"
+method_names[proc_name] = "getClassSecurities"
+args_decoders[proc_name] = qlua_pb_types.getClassSecurities.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getClassSecurities.Result)
   result.class_securities = proc_result
@@ -205,10 +228,10 @@ result_object_mappers[method_names["GET_CLASS_SECURITIES"]] = function (proc_res
 end
 
 -- getMoney
-method_names["GET_MONEY"] = "getMoney"
-procedure_types[method_names["GET_MONEY"]] = "GET_MONEY"
-args_prototypes["GET_MONEY"] = qlua_pb_types.getMoney.Request
-result_object_mappers[method_names["GET_MONEY"]] = function (proc_result)
+proc_name = "GET_MONEY"
+method_names[proc_name] = "getMoney"
+args_decoders[proc_name] = qlua_pb_types.getMoney.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getMoney.Result)
   result.money = pb.defaults(qlua_pb_types.getMoney.Money)
@@ -220,10 +243,10 @@ result_object_mappers[method_names["GET_MONEY"]] = function (proc_result)
 end
 
 -- getMoneyEx
-method_names["GET_MONEY_EX"] = "getMoneyEx"
-procedure_types[method_names["GET_MONEY_EX"]] = "GET_MONEY_EX"
-args_prototypes["GET_MONEY_EX"] = qlua_pb_types.getMoneyEx.Request
-result_object_mappers[method_names["GET_MONEY_EX"]] = function (proc_result)
+proc_name = "GET_MONEY_EX"
+method_names[proc_name] = "getMoneyEx"
+args_decoders[proc_name] = qlua_pb_types.getMoneyEx.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getMoneyEx.Result)
   if proc_result then
@@ -237,10 +260,10 @@ result_object_mappers[method_names["GET_MONEY_EX"]] = function (proc_result)
 end
 
 -- getDepo
-method_names["GET_DEPO"] = "getDepo"
-procedure_types[method_names["GET_DEPO"]] = "GET_DEPO"
-args_prototypes["GET_DEPO"] = qlua_pb_types.getDepo.Request
-result_object_mappers[method_names["GET_DEPO"]] = function (proc_result)
+proc_name = "GET_DEPO"
+method_names[proc_name] = "getDepo"
+args_decoders[proc_name] = qlua_pb_types.getDepo.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getDepo.Result)
   result.depo = pb.defaults(qlua_pb_types.getDepo.Depo)
@@ -252,10 +275,10 @@ result_object_mappers[method_names["GET_DEPO"]] = function (proc_result)
 end
 
 -- getDepoEx
-method_names["GET_DEPO_EX"] = "getDepoEx"
-procedure_types[method_names["GET_DEPO_EX"]] = "GET_DEPO_EX"
-args_prototypes["GET_DEPO_EX"] = qlua_pb_types.getDepoEx.Request
-result_object_mappers[method_names["GET_DEPO_EX"]] = function (proc_result)
+proc_name = "GET_DEPO_EX"
+method_names[proc_name] = "getDepoEx"
+args_decoders[proc_name] = qlua_pb_types.getDepoEx.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getDepoEx.Result)
   if proc_result then
@@ -270,10 +293,10 @@ result_object_mappers[method_names["GET_DEPO_EX"]] = function (proc_result)
 end
 
 -- getFuturesLimit
-method_names["GET_FUTURES_LIMIT"] = "getFuturesLimit"
-procedure_types[method_names["GET_FUTURES_LIMIT"]] = "GET_FUTURES_LIMIT"
-args_prototypes["GET_FUTURES_LIMIT"] = qlua_pb_types.getFuturesLimit.Request
-result_object_mappers[method_names["GET_FUTURES_LIMIT"]] = function (proc_result)
+proc_name = "GET_FUTURES_LIMIT"
+method_names[proc_name] = "getFuturesLimit"
+args_decoders[proc_name] = qlua_pb_types.getFuturesLimit.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getFuturesLimit.Result)
   result.futures_limit = pb.defaults(qlua_pb_types.qlua_structures.FuturesLimit)
@@ -287,10 +310,10 @@ result_object_mappers[method_names["GET_FUTURES_LIMIT"]] = function (proc_result
 end
 
 -- getFuturesHolding
-method_names["GET_FUTURES_HOLDING"] = "getFuturesHolding"
-procedure_types[method_names["GET_FUTURES_HOLDING"]] = "GET_FUTURES_HOLDING"
-args_prototypes["GET_FUTURES_HOLDING"] = qlua_pb_types.getFuturesHolding.Request
-result_object_mappers[method_names["GET_FUTURES_HOLDING"]] = function (proc_result)
+proc_name = "GET_FUTURES_HOLDING"
+method_names[proc_name] = "getFuturesHolding"
+args_decoders[proc_name] = qlua_pb_types.getFuturesHolding.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getFuturesHolding.Result)
   result.futures_holding = pb.defaults(qlua_pb_types.qlua_structures.FuturesClientHolding)
@@ -304,10 +327,10 @@ result_object_mappers[method_names["GET_FUTURES_HOLDING"]] = function (proc_resu
 end
 
 -- getSecurityInfo
-method_names["GET_SECURITY_INFO"] = "getSecurityInfo"
-procedure_types[method_names["GET_SECURITY_INFO"]] = "GET_SECURITY_INFO"
-args_prototypes["GET_SECURITY_INFO"] = qlua_pb_types.getSecurityInfo.Request
-result_object_mappers[method_names["GET_SECURITY_INFO"]] = function (proc_result)
+proc_name = "GET_SECURITY_INFO"
+method_names[proc_name] = "getSecurityInfo"
+args_decoders[proc_name] = qlua_pb_types.getSecurityInfo.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getSecurityInfo.Result)
   result.security_info = pb.defaults(qlua_pb_types.qlua_structures.Security)
@@ -321,10 +344,10 @@ result_object_mappers[method_names["GET_SECURITY_INFO"]] = function (proc_result
 end
 
 -- getTradeDate
-method_names["GET_TRADE_DATE"] = "getTradeDate"
-procedure_types[method_names["GET_TRADE_DATE"]] = "GET_TRADE_DATE"
-args_prototypes["GET_TRADE_DATE"] = qlua_pb_types.getTradeDate.Request
-result_object_mappers[method_names["GET_TRADE_DATE"]] = function (proc_result)
+proc_name = "GET_TRADE_DATE"
+method_names[proc_name] = "getTradeDate"
+args_decoders[proc_name] = qlua_pb_types.getTradeDate.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getTradeDate.Result)
   result.trade_date = pb.defaults(qlua_pb_types.getTradeDate.TradeDate)
@@ -336,10 +359,10 @@ result_object_mappers[method_names["GET_TRADE_DATE"]] = function (proc_result)
 end
 
 -- getQuoteLevel2
-method_names["GET_QUOTE_LEVEL2"] = "getQuoteLevel2"
-procedure_types[method_names["GET_QUOTE_LEVEL2"]] = "GET_QUOTE_LEVEL2"
-args_prototypes["GET_QUOTE_LEVEL2"] = qlua_pb_types.getQuoteLevel2.Request
-result_object_mappers[method_names["GET_QUOTE_LEVEL2"]] = function (proc_result)
+proc_name = "GET_QUOTE_LEVEL2"
+method_names[proc_name] = "getQuoteLevel2"
+args_decoders[proc_name] = qlua_pb_types.getQuoteLevel2.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getQuoteLevel2.Result)
   
@@ -370,10 +393,10 @@ result_object_mappers[method_names["GET_QUOTE_LEVEL2"]] = function (proc_result)
 end
 
 -- getLinesCount
-method_names["GET_LINES_COUNT"] = "getLinesCount"
-procedure_types[method_names["GET_LINES_COUNT"]] = "GET_LINES_COUNT"
-args_prototypes["GET_LINES_COUNT"] = qlua_pb_types.getLinesCount.Request
-result_object_mappers[method_names["GET_LINES_COUNT"]] = function (proc_result)
+proc_name = "GET_LINES_COUNT"
+method_names[proc_name] = "getLinesCount"
+args_decoders[proc_name] = qlua_pb_types.getLinesCount.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getLinesCount.Result)
   result.lines_count = proc_result
@@ -381,10 +404,10 @@ result_object_mappers[method_names["GET_LINES_COUNT"]] = function (proc_result)
 end
 
 -- getNumCandles
-method_names["GET_NUM_CANDLES"] = "getNumCandles"
-procedure_types[method_names["GET_NUM_CANDLES"]] = "GET_NUM_CANDLES"
-args_prototypes["GET_NUM_CANDLES"] = qlua_pb_types.getNumCandles.Request
-result_object_mappers[method_names["GET_NUM_CANDLES"]] = function (proc_result)
+proc_name = "GET_NUM_CANDLES"
+method_names[proc_name] = "getNumCandles"
+args_decoders[proc_name] = qlua_pb_types.getNumCandles.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getNumCandles.Result)
   result.num_candles = proc_result
@@ -392,10 +415,10 @@ result_object_mappers[method_names["GET_NUM_CANDLES"]] = function (proc_result)
 end
 
 -- getCandlesByIndex
-method_names["GET_CANDLES_BY_INDEX"] = "getCandlesByIndex"
-procedure_types[method_names["GET_CANDLES_BY_INDEX"]] = "GET_CANDLES_BY_INDEX"
-args_prototypes["GET_CANDLES_BY_INDEX"] = qlua_pb_types.getCandlesByIndex.Request
-result_object_mappers[method_names["GET_CANDLES_BY_INDEX"]] = function (proc_result)
+proc_name = "GET_CANDLES_BY_INDEX"
+method_names[proc_name] = "getCandlesByIndex"
+args_decoders[proc_name] = qlua_pb_types.getCandlesByIndex.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getCandlesByIndex.Result)
 
@@ -417,10 +440,10 @@ result_object_mappers[method_names["GET_CANDLES_BY_INDEX"]] = function (proc_res
 end
 
 -- datasource.CreateDataSource
-method_names["CREATE_DATA_SOURCE"] = "datasource.CreateDataSource"
-procedure_types[method_names["CREATE_DATA_SOURCE"]] = "CREATE_DATA_SOURCE"
-args_prototypes["CREATE_DATA_SOURCE"] = qlua_pb_types.datasource.CreateDataSource.Request
-result_object_mappers[method_names["CREATE_DATA_SOURCE"]] = function (proc_result)
+proc_name = "CREATE_DATA_SOURCE"
+method_names[proc_name] = "datasource.CreateDataSource"
+args_decoders[proc_name] = qlua_pb_types.datasource.CreateDataSource.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.CreateDataSource.Result)
   
@@ -436,10 +459,10 @@ result_object_mappers[method_names["CREATE_DATA_SOURCE"]] = function (proc_resul
 end
 
 -- datasource.SetUpdateCallback
-method_names["DS_SET_UPDATE_CALLBACK"] = "datasource.SetUpdateCallback"
-procedure_types[method_names["DS_SET_UPDATE_CALLBACK"]] = "DS_SET_UPDATE_CALLBACK"
-args_prototypes["DS_SET_UPDATE_CALLBACK"] = qlua_pb_types.datasource.SetUpdateCallback.Request
-result_object_mappers[method_names["DS_SET_UPDATE_CALLBACK"]] = function (proc_result)
+proc_name = "DS_SET_UPDATE_CALLBACK"
+method_names[proc_name] = "datasource.SetUpdateCallback"
+args_decoders[proc_name] = qlua_pb_types.datasource.SetUpdateCallback.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.SetUpdateCallback.Result)
   result.result = proc_result
@@ -448,10 +471,10 @@ result_object_mappers[method_names["DS_SET_UPDATE_CALLBACK"]] = function (proc_r
 end
 
 -- datasource.O
-method_names["DS_O"] = "datasource.O"
-procedure_types[method_names["DS_O"]] = "DS_O"
-args_prototypes["DS_O"] = qlua_pb_types.datasource.O.Request
-result_object_mappers[method_names["DS_O"]] = function (proc_result)
+proc_name = "DS_O"
+method_names[proc_name] = "datasource.O"
+args_decoders[proc_name] = qlua_pb_types.datasource.O.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.O.Result)
   result.value = proc_result
@@ -460,10 +483,10 @@ result_object_mappers[method_names["DS_O"]] = function (proc_result)
 end
 
 -- datasource.H
-method_names["DS_H"] = "datasource.H"
-procedure_types[method_names["DS_H"]] = "DS_H"
-args_prototypes["DS_H"] = qlua_pb_types.datasource.H.Request
-result_object_mappers[method_names["DS_H"]] = function (proc_result)
+proc_name = "DS_H"
+method_names[proc_name] = "datasource.H"
+args_decoders[proc_name] = qlua_pb_types.datasource.H.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.H.Result)
   result.value = proc_result
@@ -472,10 +495,10 @@ result_object_mappers[method_names["DS_H"]] = function (proc_result)
 end
 
 -- datasource.L
-method_names["DS_L"] = "datasource.L"
-procedure_types[method_names["DS_L"]] = "DS_L"
-args_prototypes["DS_L"] = qlua_pb_types.datasource.L.Request
-result_object_mappers[method_names["DS_L"]] = function (proc_result)
+proc_name = "DS_L"
+method_names[proc_name] = "datasource.L"
+args_decoders[proc_name] = qlua_pb_types.datasource.L.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.L.Result)
   result.value = proc_result
@@ -484,10 +507,10 @@ result_object_mappers[method_names["DS_L"]] = function (proc_result)
 end
 
 -- datasource.C
-method_names["DS_C"] = "datasource.C"
-procedure_types[method_names["DS_C"]] = "DS_C"
-args_prototypes["DS_C"] = qlua_pb_types.datasource.C.Request
-result_object_mappers[method_names["DS_C"]] = function (proc_result)
+proc_name = "DS_C"
+method_names[proc_name] = "datasource.C"
+args_decoders[proc_name] = qlua_pb_types.datasource.C.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.C.Result)
   result.value = proc_result
@@ -496,10 +519,10 @@ result_object_mappers[method_names["DS_C"]] = function (proc_result)
 end
 
 -- datasource.V
-method_names["DS_V"] = "datasource.V"
-procedure_types[method_names["DS_V"]] = "DS_V"
-args_prototypes["DS_V"] = qlua_pb_types.datasource.V.Request
-result_object_mappers[method_names["DS_V"]] = function (proc_result)
+proc_name = "DS_V"
+method_names[proc_name] = "datasource.V"
+args_decoders[proc_name] = qlua_pb_types.datasource.V.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.V.Result)
   result.value = proc_result
@@ -508,10 +531,10 @@ result_object_mappers[method_names["DS_V"]] = function (proc_result)
 end
 
 -- datasource.T
-method_names["DS_T"] = "datasource.T"
-procedure_types[method_names["DS_T"]] = "DS_T"
-args_prototypes["DS_T"] = qlua_pb_types.datasource.T.Request
-result_object_mappers[method_names["DS_T"]] = function (proc_result)
+proc_name = "DS_T"
+method_names[proc_name] = "datasource.T"
+args_decoders[proc_name] = qlua_pb_types.datasource.T.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.T.Result)
   
@@ -523,10 +546,10 @@ result_object_mappers[method_names["DS_T"]] = function (proc_result)
 end
 
 -- datasource.Size
-method_names["DS_SIZE"] = "datasource.Size"
-procedure_types[method_names["DS_SIZE"]] = "DS_SIZE"
-args_prototypes["DS_SIZE"] = qlua_pb_types.datasource.Size.Request
-result_object_mappers[method_names["DS_SIZE"]] = function (proc_result)
+proc_name = "DS_SIZE"
+method_names[proc_name] = "datasource.Size"
+args_decoders[proc_name] = qlua_pb_types.datasource.Size.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.Size.Result)
   result.value = proc_result
@@ -535,10 +558,10 @@ result_object_mappers[method_names["DS_SIZE"]] = function (proc_result)
 end
 
 -- datasource.Close
-method_names["DS_CLOSE"] = "datasource.Close"
-procedure_types[method_names["DS_CLOSE"]] = "DS_CLOSE"
-args_prototypes["DS_CLOSE"] = qlua_pb_types.datasource.Close.Request
-result_object_mappers[method_names["DS_CLOSE"]] = function (proc_result)
+proc_name = "DS_CLOSE"
+method_names[proc_name] = "datasource.Close"
+args_decoders[proc_name] = qlua_pb_types.datasource.Close.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.Close.Result)
   result.result = proc_result
@@ -547,10 +570,10 @@ result_object_mappers[method_names["DS_CLOSE"]] = function (proc_result)
 end
 
 -- datasource.Close
-method_names["DS_SET_EMPTY_CALLBACK"] = "datasource.SetEmptyCallback"
-procedure_types[method_names["DS_SET_EMPTY_CALLBACK"]] = "DS_SET_EMPTY_CALLBACK"
-args_prototypes["DS_SET_EMPTY_CALLBACK"] = qlua_pb_types.datasource.SetEmptyCallback.Request
-result_object_mappers[method_names["DS_SET_EMPTY_CALLBACK"]] = function (proc_result)
+proc_name = "DS_SET_EMPTY_CALLBACK"
+method_names[proc_name] = "datasource.SetEmptyCallback"
+args_decoders[proc_name] = qlua_pb_types.datasource.SetEmptyCallback.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.SetEmptyCallback.Result)
   result.result = proc_result
@@ -559,10 +582,10 @@ result_object_mappers[method_names["DS_SET_EMPTY_CALLBACK"]] = function (proc_re
 end
 
 -- sendTransaction
-method_names["SEND_TRANSACTION"] = "sendTransaction"
-procedure_types[method_names["SEND_TRANSACTION"]] = "SEND_TRANSACTION"
-args_prototypes["SEND_TRANSACTION"] = qlua_pb_types.sendTransaction.Request
-result_object_mappers[method_names["SEND_TRANSACTION"]] = function (proc_result)
+proc_name = "SEND_TRANSACTION"
+method_names[proc_name] = "sendTransaction"
+args_decoders[proc_name] = qlua_pb_types.sendTransaction.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.sendTransaction.Result)
   result.result = proc_result
@@ -571,10 +594,10 @@ result_object_mappers[method_names["SEND_TRANSACTION"]] = function (proc_result)
 end
 
 -- CalcBuySell
-method_names["CALC_BUY_SELL"] = "CalcBuySell"
-procedure_types[method_names["CALC_BUY_SELL"]] = "CALC_BUY_SELL"
-args_prototypes["CALC_BUY_SELL"] = qlua_pb_types.CalcBuySell.Request
-result_object_mappers[method_names["CALC_BUY_SELL"]] = function (proc_result)
+proc_name = "CALC_BUY_SELL"
+method_names[proc_name] = "CalcBuySell"
+args_decoders[proc_name] = qlua_pb_types.CalcBuySell.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.CalcBuySell.Result)
   result.qty = proc_result.qty
@@ -584,10 +607,10 @@ result_object_mappers[method_names["CALC_BUY_SELL"]] = function (proc_result)
 end
 
 -- getParamEx
-method_names["GET_PARAM_EX"] = "getParamEx"
-procedure_types[method_names["GET_PARAM_EX"]] = "GET_PARAM_EX"
-args_prototypes["GET_PARAM_EX"] = qlua_pb_types.getParamEx.Request
-result_object_mappers[method_names["GET_PARAM_EX"]] = function (proc_result)
+proc_name = "GET_PARAM_EX"
+method_names[proc_name] = "getParamEx"
+args_decoders[proc_name] = qlua_pb_types.getParamEx.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getParamEx.Result)
   result.param_ex = pb.defaults(qlua_pb_types.getParamEx.ParamEx)
@@ -599,10 +622,10 @@ result_object_mappers[method_names["GET_PARAM_EX"]] = function (proc_result)
 end
 
 -- getParamEx2
-method_names["GET_PARAM_EX_2"] = "getParamEx2"
-procedure_types[method_names["GET_PARAM_EX_2"]] = "GET_PARAM_EX_2"
-args_prototypes["GET_PARAM_EX_2"] = qlua_pb_types.getParamEx2.Request
-result_object_mappers[method_names["GET_PARAM_EX_2"]] = function (proc_result)
+proc_name = "GET_PARAM_EX_2"
+method_names[proc_name] = "getParamEx2"
+args_decoders[proc_name] = qlua_pb_types.getParamEx2.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getParamEx2.Result)
   result.param_ex = pb.defaults(qlua_pb_types.getParamEx2.ParamEx2)
@@ -614,10 +637,10 @@ result_object_mappers[method_names["GET_PARAM_EX_2"]] = function (proc_result)
 end
 
 -- getPortfolioInfo
-method_names["GET_PORTFOLIO_INFO"] = "getPortfolioInfo"
-procedure_types[method_names["GET_PORTFOLIO_INFO"]] = "GET_PORTFOLIO_INFO"
-args_prototypes["GET_PORTFOLIO_INFO"] = qlua_pb_types.getPortfolioInfo.Request
-result_object_mappers[method_names["GET_PORTFOLIO_INFO"]] = function (proc_result)
+proc_name = "GET_PORTFOLIO_INFO"
+method_names[proc_name] = "getPortfolioInfo"
+args_decoders[proc_name] = qlua_pb_types.getPortfolioInfo.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getPortfolioInfo.Result)
   result.portfolio_info = pb.defaults(qlua_pb_types.getPortfolioInfo.PortfolioInfo)
@@ -629,10 +652,10 @@ result_object_mappers[method_names["GET_PORTFOLIO_INFO"]] = function (proc_resul
 end
 
 -- getPortfolioInfoEx
-method_names["GET_PORTFOLIO_INFO_EX"] = "getPortfolioInfoEx"
-procedure_types[method_names["GET_PORTFOLIO_INFO_EX"]] = "GET_PORTFOLIO_INFO_EX"
-args_prototypes["GET_PORTFOLIO_INFO_EX"] = qlua_pb_types.getPortfolioInfoEx.Request
-result_object_mappers[method_names["GET_PORTFOLIO_INFO_EX"]] = function (proc_result)
+proc_name = "GET_PORTFOLIO_INFO_EX"
+method_names[proc_name] = "getPortfolioInfoEx"
+args_decoders[proc_name] = qlua_pb_types.getPortfolioInfoEx.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getPortfolioInfoEx.Result)
   result.portfolio_info_ex = pb.defaults(qlua_pb_types.getPortfolioInfoEx.PortfolioInfoEx)
@@ -707,10 +730,10 @@ result_object_mappers[method_names["GET_PORTFOLIO_INFO_EX"]] = function (proc_re
 end
 
 -- getBuySellInfo
-method_names["GET_BUY_SELL_INFO"] = "getBuySellInfo"
-procedure_types[method_names["GET_BUY_SELL_INFO"]] = "GET_BUY_SELL_INFO"
-args_prototypes["GET_BUY_SELL_INFO"] = qlua_pb_types.getBuySellInfo.Request
-result_object_mappers[method_names["GET_BUY_SELL_INFO"]] = function (proc_result)
+proc_name = "GET_BUY_SELL_INFO"
+method_names[proc_name] = "getBuySellInfo"
+args_decoders[proc_name] = qlua_pb_types.getBuySellInfo.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getBuySellInfo.Result)
   result.buy_sell_info = pb.defaults(qlua_pb_types.getBuySellInfo.BuySellInfo)
@@ -722,37 +745,37 @@ result_object_mappers[method_names["GET_BUY_SELL_INFO"]] = function (proc_result
 end
 
 -- getBuySellInfoEx
-method_names["GET_BUY_SELL_INFO_EX"] = "getBuySellInfoEx"
-procedure_types[method_names["GET_BUY_SELL_INFO_EX"]] = "GET_BUY_SELL_INFO_EX"
-args_prototypes["GET_BUY_SELL_INFO_EX"] = qlua_pb_types.getBuySellInfoEx.Request
-result_object_mappers[method_names["GET_BUY_SELL_INFO_EX"]] = function (proc_result)
+proc_name = "GET_BUY_SELL_INFO_EX"
+method_names[proc_name] = "getBuySellInfoEx"
+args_decoders[proc_name] = qlua_pb_types.getBuySellInfoEx.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getBuySellInfoEx.Result)
   result.buy_sell_info_ex = pb.defaults(qlua_pb_types.getBuySellInfoEx.BuySellInfoEx)
   result.buy_sell_info_ex.buy_sell_info = pb.defaults(qlua_pb_types.getBuySellInfoEx.BuySellInfo)
   
   local buy_sell_info = result.buy_sell_info_ex.buy_sell_info
-  buy_sell_info.is_margin_sec = proc_result.is_margin_sec
-  buy_sell_info.is_asset_sec = proc_result.is_asset_sec
-  buy_sell_info.balance = proc_result.balance
-  buy_sell_info.can_buy = proc_result.can_buy
-  buy_sell_info.can_sell = proc_result.can_sell
-  buy_sell_info.position_valuation = proc_result.position_valuation
-  buy_sell_info.value = proc_result.value
-  buy_sell_info.open_value = proc_result.open_value
-  buy_sell_info.lim_long = proc_result.lim_long
-  buy_sell_info.long_coef = proc_result.long_coef
-  buy_sell_info.lim_short = proc_result.lim_short
-  buy_sell_info.short_coef = proc_result.short_coef
-  buy_sell_info.value_coef = proc_result.value_coef
-  buy_sell_info.open_value_coef = proc_result.open_value_coef
-  buy_sell_info.share = proc_result.share
-  buy_sell_info.short_wa_price = proc_result.short_wa_price
-  buy_sell_info.long_wa_price = proc_result.long_wa_price
-  buy_sell_info.profit_loss = proc_result.profit_loss
-  buy_sell_info.spread_hc = proc_result.spread_hc
-  buy_sell_info.can_buy_own = proc_result.can_buy_own
-  buy_sell_info.can_sell_own = proc_result.can_sell_own
+  buy_sell_info.is_margin_sec = proc_result.buy_sell_info.is_margin_sec
+  buy_sell_info.is_asset_sec = proc_result.buy_sell_info.is_asset_sec
+  buy_sell_info.balance = proc_result.buy_sell_info.balance
+  buy_sell_info.can_buy = proc_result.buy_sell_info.can_buy
+  buy_sell_info.can_sell = proc_result.buy_sell_info.can_sell
+  buy_sell_info.position_valuation = proc_result.buy_sell_info.position_valuation
+  buy_sell_info.value = proc_result.buy_sell_info.value
+  buy_sell_info.open_value = proc_result.buy_sell_info.open_value
+  buy_sell_info.lim_long = proc_result.buy_sell_info.lim_long
+  buy_sell_info.long_coef = proc_result.buy_sell_info.long_coef
+  buy_sell_info.lim_short = proc_result.buy_sell_info.lim_short
+  buy_sell_info.short_coef = proc_result.buy_sell_info.short_coef
+  buy_sell_info.value_coef = proc_result.buy_sell_info.value_coef
+  buy_sell_info.open_value_coef = proc_result.buy_sell_info.open_value_coef
+  buy_sell_info.share = proc_result.buy_sell_info.share
+  buy_sell_info.short_wa_price = proc_result.buy_sell_info.short_wa_price
+  buy_sell_info.long_wa_price = proc_result.buy_sell_info.long_wa_price
+  buy_sell_info.profit_loss = proc_result.buy_sell_info.profit_loss
+  buy_sell_info.spread_hc = proc_result.buy_sell_info.spread_hc
+  buy_sell_info.can_buy_own = proc_result.buy_sell_info.can_buy_own
+  buy_sell_info.can_sell_own = proc_result.buy_sell_info.can_sell_own
   
   result.buy_sell_info_ex.limit_kind = proc_result.limit_kind
   result.buy_sell_info_ex.d_long = proc_result.d_long
@@ -767,10 +790,10 @@ result_object_mappers[method_names["GET_BUY_SELL_INFO_EX"]] = function (proc_res
 end
 
 -- AddColumn
-method_names["ADD_COLUMN"] = "AddColumn"
-procedure_types[method_names["ADD_COLUMN"]] = "ADD_COLUMN"
-args_prototypes["ADD_COLUMN"] = qlua_pb_types.AddColumn.Request
-result_object_mappers[method_names["ADD_COLUMN"]] = function (proc_result)
+proc_name = "ADD_COLUMN"
+method_names[proc_name] = "AddColumn"
+args_decoders[proc_name] = qlua_pb_types.AddColumn.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.AddColumn.Result)
   result.result = proc_result
@@ -779,10 +802,10 @@ result_object_mappers[method_names["ADD_COLUMN"]] = function (proc_result)
 end
 
 -- AllocTable
-method_names["ALLOC_TABLE"] = "AllocTable"
-procedure_types[method_names["ALLOC_TABLE"]] = "ALLOC_TABLE"
-args_prototypes["ALLOC_TABLE"] = qlua_pb_types.AllocTable.Request
-result_object_mappers[method_names["ALLOC_TABLE"]] = function (proc_result)
+proc_name = "ALLOC_TABLE"
+method_names[proc_name] = "AllocTable"
+args_decoders[proc_name] = qlua_pb_types.AllocTable.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.AllocTable.Result)
   result.t_id = proc_result
@@ -791,10 +814,10 @@ result_object_mappers[method_names["ALLOC_TABLE"]] = function (proc_result)
 end
 
 -- Clear
-method_names["CLEAR"] = "Clear"
-procedure_types[method_names["CLEAR"]] = "CLEAR"
-args_prototypes["CLEAR"] = qlua_pb_types.Clear.Request
-result_object_mappers[method_names["CLEAR"]] = function (proc_result)
+proc_name = "CLEAR"
+method_names[proc_name] = "Clear"
+args_decoders[proc_name] = qlua_pb_types.Clear.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.Clear.Result)
   result.result = proc_result
@@ -803,10 +826,10 @@ result_object_mappers[method_names["CLEAR"]] = function (proc_result)
 end
 
 -- CreateWindow
-method_names["CREATE_WINDOW"] = "CreateWindow"
-procedure_types[method_names["CREATE_WINDOW"]] = "CREATE_WINDOW"
-args_prototypes["CREATE_WINDOW"] = qlua_pb_types.CreateWindow.Request
-result_object_mappers[method_names["CREATE_WINDOW"]] = function (proc_result)
+proc_name = "CREATE_WINDOW"
+method_names[proc_name] = "CreateWindow"
+args_decoders[proc_name] = qlua_pb_types.CreateWindow.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.CreateWindow.Result)
   result.result = proc_result
@@ -815,10 +838,10 @@ result_object_mappers[method_names["CREATE_WINDOW"]] = function (proc_result)
 end
 
 -- DeleteRow
-method_names["DELETE_ROW"] = "DeleteRow"
-procedure_types[method_names["DELETE_ROW"]] = "DELETE_ROW"
-args_prototypes["DELETE_ROW"] = qlua_pb_types.DeleteRow.Request
-result_object_mappers[method_names["DELETE_ROW"]] = function (proc_result)
+proc_name = "DELETE_ROW"
+method_names[proc_name] = "DeleteRow"
+args_decoders[proc_name] = qlua_pb_types.DeleteRow.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.DeleteRow.Result)
   result.result = proc_result
@@ -827,10 +850,10 @@ result_object_mappers[method_names["DELETE_ROW"]] = function (proc_result)
 end
 
 -- DestroyTable
-method_names["DESTROY_TABLE"] = "DestroyTable"
-procedure_types[method_names["DESTROY_TABLE"]] = "DESTROY_TABLE"
-args_prototypes["DESTROY_TABLE"] = qlua_pb_types.DestroyTable.Request
-result_object_mappers[method_names["DESTROY_TABLE"]] = function (proc_result)
+proc_name = "DESTROY_TABLE"
+method_names[proc_name] = "DestroyTable"
+args_decoders[proc_name] = qlua_pb_types.DestroyTable.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.DestroyTable.Result)
   result.result = proc_result
@@ -839,10 +862,10 @@ result_object_mappers[method_names["DESTROY_TABLE"]] = function (proc_result)
 end
 
 -- InsertRow
-method_names["INSERT_ROW"] = "InsertRow"
-procedure_types[method_names["INSERT_ROW"]] = "INSERT_ROW"
-args_prototypes["INSERT_ROW"] = qlua_pb_types.InsertRow.Request
-result_object_mappers[method_names["INSERT_ROW"]] = function (proc_result)
+proc_name = "INSERT_ROW"
+method_names[proc_name] = "InsertRow"
+args_decoders[proc_name] = qlua_pb_types.InsertRow.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.InsertRow.Result)
   result.result = proc_result
@@ -851,22 +874,26 @@ result_object_mappers[method_names["INSERT_ROW"]] = function (proc_result)
 end
 
 -- IsWindowClosed
-method_names["IS_WINDOW_CLOSED"] = "IsWindowClosed"
-procedure_types[method_names["IS_WINDOW_CLOSED"]] = "IS_WINDOW_CLOSED"
-args_prototypes["IS_WINDOW_CLOSED"] = qlua_pb_types.IsWindowClosed.Request
-result_object_mappers[method_names["IS_WINDOW_CLOSED"]] = function (proc_result)
+proc_name = "IS_WINDOW_CLOSED"
+method_names[proc_name] = "IsWindowClosed"
+args_decoders[proc_name] = qlua_pb_types.IsWindowClosed.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.IsWindowClosed.Result)
-  result.result = proc_result
+  if proc_result == nil then
+    result.null_window_closed = true
+  else
+    result.value_window_closed = proc_result
+  end
   
   return qlua_pb_types.IsWindowClosed.Result, result
 end
 
 -- GetCell
-method_names["GET_CELL"] = "GetCell"
-procedure_types[method_names["GET_CELL"]] = "GET_CELL"
-args_prototypes["GET_CELL"] = qlua_pb_types.GetCell.Request
-result_object_mappers[method_names["GET_CELL"]] = function (proc_result)
+proc_name = "GET_CELL"
+method_names[proc_name] = "GetCell"
+args_decoders[proc_name] = qlua_pb_types.GetCell.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.GetCell.Result)
   if proc_result then
@@ -878,10 +905,10 @@ result_object_mappers[method_names["GET_CELL"]] = function (proc_result)
 end
 
 -- GetTableSize
-method_names["GET_TABLE_SIZE"] = "GetTableSize"
-procedure_types[method_names["GET_TABLE_SIZE"]] = "GET_TABLE_SIZE"
-args_prototypes["GET_TABLE_SIZE"] = qlua_pb_types.GetTableSize.Request
-result_object_mappers[method_names["GET_TABLE_SIZE"]] = function (proc_result)
+proc_name = "GET_TABLE_SIZE"
+method_names[proc_name] = "GetTableSize"
+args_decoders[proc_name] = qlua_pb_types.GetTableSize.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.GetTableSize.Result)
   if proc_result then
@@ -894,10 +921,10 @@ result_object_mappers[method_names["GET_TABLE_SIZE"]] = function (proc_result)
 end
 
 -- GetWindowCaption
-method_names["GET_WINDOW_CAPTION"] = "GetWindowCaption"
-procedure_types[method_names["GET_WINDOW_CAPTION"]] = "GET_WINDOW_CAPTION"
-args_prototypes["GET_WINDOW_CAPTION"] = qlua_pb_types.GetWindowCaption.Request
-result_object_mappers[method_names["GET_WINDOW_CAPTION"]] = function (proc_result)
+proc_name = "GET_WINDOW_CAPTION"
+method_names[proc_name] = "GetWindowCaption"
+args_decoders[proc_name] = qlua_pb_types.GetWindowCaption.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.GetWindowCaption.Result)
   if proc_result then
@@ -908,10 +935,10 @@ result_object_mappers[method_names["GET_WINDOW_CAPTION"]] = function (proc_resul
 end
 
 -- GetWindowRect
-method_names["GET_WINDOW_RECT"] = "GetWindowRect"
-procedure_types[method_names["GET_WINDOW_RECT"]] = "GET_WINDOW_RECT"
-args_prototypes["GET_WINDOW_RECT"] = qlua_pb_types.GetWindowRect.Request
-result_object_mappers[method_names["GET_WINDOW_RECT"]] = function (proc_result)
+proc_name = "GET_WINDOW_RECT"
+method_names[proc_name] = "GetWindowRect"
+args_decoders[proc_name] = qlua_pb_types.GetWindowRect.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.GetWindowRect.Result)
   if proc_result then
@@ -926,10 +953,23 @@ result_object_mappers[method_names["GET_WINDOW_RECT"]] = function (proc_result)
 end
 
 -- SetCell
-method_names["SET_CELL"] = "SetCell"
-procedure_types[method_names["SET_CELL"]] = "SET_CELL"
-args_prototypes["SET_CELL"] = qlua_pb_types.SetCell.Request
-result_object_mappers[method_names["SET_CELL"]] = function (proc_result)
+proc_name = "SET_CELL"
+method_names[proc_name] = "SetCell"
+args_decoders[proc_name] = function (encoded_args)
+  
+  local args = pb.decode(qlua_pb_types.SetCell.Request, encoded_args)
+  if args.value then
+    if args.value == "" then
+      args.value = nil
+    else
+      args.value = assert(tonumber(args.value), "Не удалось распарсить число из аргумента 'value'.")
+    end
+  end
+  
+  return args
+end
+
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.SetCell.Result)
   result.result = proc_result
@@ -938,10 +978,10 @@ result_object_mappers[method_names["SET_CELL"]] = function (proc_result)
 end
 
 -- SetWindowCaption
-method_names["SET_WINDOW_CAPTION"] = "SetWindowCaption"
-procedure_types[method_names["SET_WINDOW_CAPTION"]] = "SET_WINDOW_CAPTION"
-args_prototypes["SET_WINDOW_CAPTION"] = qlua_pb_types.SetWindowCaption.Request
-result_object_mappers[method_names["SET_WINDOW_CAPTION"]] = function (proc_result)
+proc_name = "SET_WINDOW_CAPTION"
+method_names[proc_name] = "SetWindowCaption"
+args_decoders[proc_name] = qlua_pb_types.SetWindowCaption.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.SetWindowCaption.Result)
   result.result = proc_result
@@ -950,10 +990,10 @@ result_object_mappers[method_names["SET_WINDOW_CAPTION"]] = function (proc_resul
 end
 
 -- SetWindowPos
-method_names["SET_WINDOW_POS"] = "SetWindowPos"
-procedure_types[method_names["SET_WINDOW_POS"]] = "SET_WINDOW_POS"
-args_prototypes["SET_WINDOW_POS"] = qlua_pb_types.SetWindowPos.Request
-result_object_mappers[method_names["SET_WINDOW_POS"]] = function (proc_result)
+proc_name = "SET_WINDOW_POS"
+method_names[proc_name] = "SetWindowPos"
+args_decoders[proc_name] = qlua_pb_types.SetWindowPos.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.SetWindowPos.Result)
   result.result = proc_result
@@ -962,10 +1002,10 @@ result_object_mappers[method_names["SET_WINDOW_POS"]] = function (proc_result)
 end
 
 -- SetTableNotificationCallback
-method_names["SET_TABLE_NOTIFICATION_CALLBACK"] = "SetTableNotificationCallback"
-procedure_types[method_names["SET_TABLE_NOTIFICATION_CALLBACK"]] = "SET_TABLE_NOTIFICATION_CALLBACK"
-args_prototypes["SET_TABLE_NOTIFICATION_CALLBACK"] = qlua_pb_types.SetTableNotificationCallback.Request
-result_object_mappers[method_names["SET_TABLE_NOTIFICATION_CALLBACK"]] = function (proc_result)
+proc_name = "SET_TABLE_NOTIFICATION_CALLBACK"
+method_names[proc_name] = "SetTableNotificationCallback"
+args_decoders[proc_name] = qlua_pb_types.SetTableNotificationCallback.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.SetTableNotificationCallback.Result)
   result.result = proc_result
@@ -974,10 +1014,10 @@ result_object_mappers[method_names["SET_TABLE_NOTIFICATION_CALLBACK"]] = functio
 end
 
 -- RGB
-method_names["RGB"] = "RGB"
-procedure_types[method_names["RGB"]] = "RGB"
-args_prototypes["RGB"] = qlua_pb_types.RGB.Request
-result_object_mappers[method_names["RGB"]] = function (proc_result)
+proc_name = "RGB"
+method_names[proc_name] = "RGB"
+args_decoders[proc_name] = qlua_pb_types.RGB.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.RGB.Result)
   result.result = proc_result
@@ -986,10 +1026,10 @@ result_object_mappers[method_names["RGB"]] = function (proc_result)
 end
 
 -- SetColor
-method_names["SET_COLOR"] = "SetColor"
-procedure_types[method_names["SET_COLOR"]] = "SET_COLOR"
-args_prototypes["SET_COLOR"] = qlua_pb_types.SetColor.Request
-result_object_mappers[method_names["SET_COLOR"]] = function (proc_result)
+proc_name = "SET_COLOR"
+method_names[proc_name] = "SetColor"
+args_decoders[proc_name] = qlua_pb_types.SetColor.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.SetColor.Result)
   result.result = proc_result
@@ -998,10 +1038,10 @@ result_object_mappers[method_names["SET_COLOR"]] = function (proc_result)
 end
 
 -- Highlight
-method_names["HIGHLIGHT"] = "Highlight"
-procedure_types[method_names["HIGHLIGHT"]] = "HIGHLIGHT"
-args_prototypes["HIGHLIGHT"] = qlua_pb_types.Highlight.Request
-result_object_mappers[method_names["HIGHLIGHT"]] = function (proc_result)
+proc_name = "HIGHLIGHT"
+method_names[proc_name] = "Highlight"
+args_decoders[proc_name] = qlua_pb_types.Highlight.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.Highlight.Result)
   result.result = proc_result
@@ -1010,10 +1050,10 @@ result_object_mappers[method_names["HIGHLIGHT"]] = function (proc_result)
 end
 
 -- SetSelectedRow
-method_names["SET_SELECTED_ROW"] = "SetSelectedRow"
-procedure_types[method_names["SET_SELECTED_ROW"]] = "SET_SELECTED_ROW"
-args_prototypes["SET_SELECTED_ROW"] = qlua_pb_types.SetSelectedRow.Request
-result_object_mappers[method_names["SET_SELECTED_ROW"]] = function (proc_result)
+proc_name = "SET_SELECTED_ROW"
+method_names[proc_name] = "SetSelectedRow"
+args_decoders[proc_name] = qlua_pb_types.SetSelectedRow.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.SetSelectedRow.Result)
   result.result = proc_result
@@ -1022,22 +1062,27 @@ result_object_mappers[method_names["SET_SELECTED_ROW"]] = function (proc_result)
 end
 
 -- AddLabel
-method_names["ADD_LABEL"] = "AddLabel"
-procedure_types[method_names["ADD_LABEL"]] = "ADD_LABEL"
-args_prototypes["ADD_LABEL"] = qlua_pb_types.AddLabel.Request
-result_object_mappers[method_names["ADD_LABEL"]] = function (proc_result)
+proc_name = "ADD_LABEL"
+method_names[proc_name] = "AddLabel"
+args_decoders[proc_name] = qlua_pb_types.AddLabel.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.AddLabel.Result)
-  result.label_id = proc_result
+  
+  if proc_result then
+    result.label_id = proc_result
+  else
+    result.null_result = true
+  end
   
   return qlua_pb_types.AddLabel.Result, result
 end
 
 -- DelLabel
-method_names["DEL_LABEL"] = "DelLabel"
-procedure_types[method_names["DEL_LABEL"]] = "DEL_LABEL"
-args_prototypes["DEL_LABEL"] = qlua_pb_types.DelLabel.Request
-result_object_mappers[method_names["DEL_LABEL"]] = function (proc_result)
+proc_name = "DEL_LABEL"
+method_names[proc_name] = "DelLabel"
+args_decoders[proc_name] = qlua_pb_types.DelLabel.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.DelLabel.Result)
   result.result = proc_result
@@ -1046,10 +1091,10 @@ result_object_mappers[method_names["DEL_LABEL"]] = function (proc_result)
 end
 
 -- DelAllLabels
-method_names["DEL_ALL_LABELS"] = "DelAllLabels"
-procedure_types[method_names["DEL_ALL_LABELS"]] = "DEL_ALL_LABELS"
-args_prototypes["DEL_ALL_LABELS"] = qlua_pb_types.DelAllLabels.Request
-result_object_mappers[method_names["DEL_ALL_LABELS"]] = function (proc_result)
+proc_name = "DEL_ALL_LABELS"
+method_names[proc_name] = "DelAllLabels"
+args_decoders[proc_name] = qlua_pb_types.DelAllLabels.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.DelAllLabels.Result)
   result.result = proc_result
@@ -1058,10 +1103,10 @@ result_object_mappers[method_names["DEL_ALL_LABELS"]] = function (proc_result)
 end
 
 -- GetLabelParams
-method_names["GET_LABEL_PARAMS"] = "GetLabelParams"
-procedure_types[method_names["GET_LABEL_PARAMS"]] = "GET_LABEL_PARAMS"
-args_prototypes["GET_LABEL_PARAMS"] = qlua_pb_types.GetLabelParams.Request
-result_object_mappers[method_names["GET_LABEL_PARAMS"]] = function (proc_result)
+proc_name = "GET_LABEL_PARAMS"
+method_names[proc_name] = "GetLabelParams"
+args_decoders[proc_name] = qlua_pb_types.GetLabelParams.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.GetLabelParams.Result)
   if proc_result then
@@ -1072,10 +1117,10 @@ result_object_mappers[method_names["GET_LABEL_PARAMS"]] = function (proc_result)
 end
 
 -- SetLabelParams
-method_names["SET_LABEL_PARAMS"] = "SetLabelParams"
-procedure_types[method_names["SET_LABEL_PARAMS"]] = "SET_LABEL_PARAMS"
-args_prototypes["SET_LABEL_PARAMS"] = qlua_pb_types.SetLabelParams.Request
-result_object_mappers[method_names["SET_LABEL_PARAMS"]] = function (proc_result)
+proc_name = "SET_LABEL_PARAMS"
+method_names[proc_name] = "SetLabelParams"
+args_decoders[proc_name] = qlua_pb_types.SetLabelParams.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.SetLabelParams.Result)
   result.result = proc_result
@@ -1084,10 +1129,10 @@ result_object_mappers[method_names["SET_LABEL_PARAMS"]] = function (proc_result)
 end
 
 -- Subscribe_Level_II_Quotes
-method_names["SUBSCRIBE_LEVEL_II_QUOTES"] = "Subscribe_Level_II_Quotes"
-procedure_types[method_names["SUBSCRIBE_LEVEL_II_QUOTES"]] = "SUBSCRIBE_LEVEL_II_QUOTES"
-args_prototypes["SUBSCRIBE_LEVEL_II_QUOTES"] = qlua_pb_types.Subscribe_Level_II_Quotes.Request
-result_object_mappers[method_names["SUBSCRIBE_LEVEL_II_QUOTES"]] = function (proc_result)
+proc_name = "SUBSCRIBE_LEVEL_II_QUOTES"
+method_names[proc_name] = "Subscribe_Level_II_Quotes"
+args_decoders[proc_name] = qlua_pb_types.Subscribe_Level_II_Quotes.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.Subscribe_Level_II_Quotes.Result)
   result.result = proc_result
@@ -1096,10 +1141,10 @@ result_object_mappers[method_names["SUBSCRIBE_LEVEL_II_QUOTES"]] = function (pro
 end
 
 -- Unsubscribe_Level_II_Quotes
-method_names["UNSUBSCRIBE_LEVEL_II_QUOTES"] = "Unsubscribe_Level_II_Quotes"
-procedure_types[method_names["UNSUBSCRIBE_LEVEL_II_QUOTES"]] = "UNSUBSCRIBE_LEVEL_II_QUOTES"
-args_prototypes["UNSUBSCRIBE_LEVEL_II_QUOTES"] = qlua_pb_types.Unsubscribe_Level_II_Quotes.Request
-result_object_mappers[method_names["UNSUBSCRIBE_LEVEL_II_QUOTES"]] = function (proc_result)
+proc_name = "UNSUBSCRIBE_LEVEL_II_QUOTES"
+method_names[proc_name] = "Unsubscribe_Level_II_Quotes"
+args_decoders[proc_name] = qlua_pb_types.Unsubscribe_Level_II_Quotes.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.Unsubscribe_Level_II_Quotes.Result)
   result.result = proc_result
@@ -1108,10 +1153,10 @@ result_object_mappers[method_names["UNSUBSCRIBE_LEVEL_II_QUOTES"]] = function (p
 end
 
 -- IsSubscribed_Level_II_Quotes
-method_names["IS_SUBSCRIBED_LEVEL_II_QUOTES"] = "IsSubscribed_Level_II_Quotes"
-procedure_types[method_names["IS_SUBSCRIBED_LEVEL_II_QUOTES"]] = "IS_SUBSCRIBED_LEVEL_II_QUOTES"
-args_prototypes["IS_SUBSCRIBED_LEVEL_II_QUOTES"] = qlua_pb_types.IsSubscribed_Level_II_Quotes.Request
-result_object_mappers[method_names["IS_SUBSCRIBED_LEVEL_II_QUOTES"]] = function (proc_result)
+proc_name = "IS_SUBSCRIBED_LEVEL_II_QUOTES"
+method_names[proc_name] = "IsSubscribed_Level_II_Quotes"
+args_decoders[proc_name] = qlua_pb_types.IsSubscribed_Level_II_Quotes.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.IsSubscribed_Level_II_Quotes.Result)
   result.result = proc_result
@@ -1120,10 +1165,10 @@ result_object_mappers[method_names["IS_SUBSCRIBED_LEVEL_II_QUOTES"]] = function 
 end
 
 -- ParamRequest
-method_names["PARAM_REQUEST"] = "ParamRequest"
-procedure_types[method_names["PARAM_REQUEST"]] = "PARAM_REQUEST"
-args_prototypes["PARAM_REQUEST"] = qlua_pb_types.ParamRequest.Request
-result_object_mappers[method_names["PARAM_REQUEST"]] = function (proc_result)
+proc_name = "PARAM_REQUEST"
+method_names[proc_name] = "ParamRequest"
+args_decoders[proc_name] = qlua_pb_types.ParamRequest.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.ParamRequest.Result)
   result.result = proc_result
@@ -1132,10 +1177,10 @@ result_object_mappers[method_names["PARAM_REQUEST"]] = function (proc_result)
 end
 
 -- CancelParamRequest
-method_names["CANCEL_PARAM_REQUEST"] = "CancelParamRequest"
-procedure_types[method_names["CANCEL_PARAM_REQUEST"]] = "CANCEL_PARAM_REQUEST"
-args_prototypes["CANCEL_PARAM_REQUEST"] = qlua_pb_types.CancelParamRequest.Request
-result_object_mappers[method_names["CANCEL_PARAM_REQUEST"]] = function (proc_result)
+proc_name = "CANCEL_PARAM_REQUEST"
+method_names[proc_name] = "CancelParamRequest"
+args_decoders[proc_name] = qlua_pb_types.CancelParamRequest.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.CancelParamRequest.Result)
   result.result = proc_result
@@ -1144,10 +1189,10 @@ result_object_mappers[method_names["CANCEL_PARAM_REQUEST"]] = function (proc_res
 end
 
 -- bit.tohex
-method_names["BIT_TOHEX"] = "bit.tohex"
-procedure_types[method_names["BIT_TOHEX"]] = "BIT_TOHEX"
-args_prototypes["BIT_TOHEX"] = qlua_pb_types.bit.tohex.Request
-result_object_mappers[method_names["BIT_TOHEX"]] = function (proc_result)
+proc_name = "BIT_TOHEX"
+method_names[proc_name] = "bit.tohex"
+args_decoders[proc_name] = qlua_pb_types.bit.tohex.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.bit.tohex.Result)
   result.result = proc_result
@@ -1156,10 +1201,10 @@ result_object_mappers[method_names["BIT_TOHEX"]] = function (proc_result)
 end
 
 -- bit.bnot
-method_names["BIT_BNOT"] = "bit.bnot"
-procedure_types[method_names["BIT_BNOT"]] = "BIT_BNOT"
-args_prototypes["BIT_BNOT"] = qlua_pb_types.bit.bnot.Request
-result_object_mappers[method_names["BIT_BNOT"]] = function (proc_result)
+proc_name = "BIT_BNOT"
+method_names[proc_name] = "bit.bnot"
+args_decoders[proc_name] = qlua_pb_types.bit.bnot.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.bit.bnot.Result)
   result.result = proc_result
@@ -1168,10 +1213,10 @@ result_object_mappers[method_names["BIT_BNOT"]] = function (proc_result)
 end
 
 -- bit.band
-method_names["BIT_BAND"] = "bit.band"
-procedure_types[method_names["BIT_BAND"]] = "BIT_BAND"
-args_prototypes["BIT_BAND"] = qlua_pb_types.bit.band.Request
-result_object_mappers[method_names["BIT_BAND"]] = function (proc_result)
+proc_name = "BIT_BAND"
+method_names[proc_name] = "bit.band"
+args_decoders[proc_name] = qlua_pb_types.bit.band.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.bit.band.Result)
   result.result = proc_result
@@ -1180,10 +1225,10 @@ result_object_mappers[method_names["BIT_BAND"]] = function (proc_result)
 end
 
 -- bit.bor
-method_names["BIT_BOR"] = "bit.bor"
-procedure_types[method_names["BIT_BOR"]] = "BIT_BOR"
-args_prototypes["BIT_BOR"] = qlua_pb_types.bit.bor.Request
-result_object_mappers[method_names["BIT_BOR"]] = function (proc_result)
+proc_name = "BIT_BOR"
+method_names[proc_name] = "bit.bor"
+args_decoders[proc_name] = qlua_pb_types.bit.bor.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.bit.bor.Result)
   result.result = proc_result
@@ -1192,10 +1237,10 @@ result_object_mappers[method_names["BIT_BOR"]] = function (proc_result)
 end
 
 -- bit.bxor
-method_names["BIT_BXOR"] = "bit.bxor"
-procedure_types[method_names["BIT_BXOR"]] = "BIT_BXOR"
-args_prototypes["BIT_BXOR"] = qlua_pb_types.bit.bxor.Request
-result_object_mappers[method_names["BIT_BXOR"]] = function (proc_result)
+proc_name = "BIT_BXOR"
+method_names[proc_name] = "bit.bxor"
+args_decoders[proc_name] = qlua_pb_types.bit.bxor.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.bit.bxor.Result)
   result.result = proc_result
@@ -1204,10 +1249,10 @@ result_object_mappers[method_names["BIT_BXOR"]] = function (proc_result)
 end
 
 -- bit.test
-method_names["BIT_TEST"] = "bit.test"
-procedure_types[method_names["BIT_TEST"]] = "BIT_TEST"
-args_prototypes["BIT_TEST"] = qlua_pb_types.bit.test.Request
-result_object_mappers[method_names["BIT_TEST"]] = function (proc_result)
+proc_name = "BIT_TEST"
+method_names[proc_name] = "bit.test"
+args_decoders[proc_name] = qlua_pb_types.bit.test.Request
+result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.bit.test.Result)
   result.result = proc_result
@@ -1215,22 +1260,54 @@ result_object_mappers[method_names["BIT_TEST"]] = function (proc_result)
   return qlua_pb_types.bit.test.Result, result
 end
 
+local inverse_table = function (t)
+
+  if not t return nil
+  assert (type(t) == "table")
+  
+  for k, v in pairs(t) do
+    result[v] = k
+  end
+  
+  return result
+end
+
 -----
 
-function module.get_method_name (pb_procedure_type)
-  return method_names[pb_procedure_type]
+local procedure_types = inverse_table(method_names)
+
+function module.decode_request (encoded_request)
+  
+  local decoded_request = pb.decode(qlua_pb_types.RPC.Request, encoded_request)
+  local method_name = assert(method_names[decoded_request.type], string.format("Для типа процедуры protobuf '%s' не найдено соответствующей QLua-функции.", decoded_request.type))
+  local encoded_args = decoded_request.args -- pb-serialized, may be nil
+  local decoded_args
+  if encoded_args then
+    decoded_args = assert(args_decoders[decoded_request.type], string.format("Для типа процедуры protobuf '%s' не найден protobuf-десериализатор аргументов.", decoded_request.type))(encoded_args)
+  end
+
+  return method_name, decoded_args
 end
 
-function module.get_protobuf_procedure_type (method_name)
-  return procedure_types[method_name]
-end
-
-function module.get_protobuf_args_prototype (pb_procedure_type)
-  return args_prototypes[pb_procedure_type]
-end
-
-function module.get_protobuf_result_object_mapper (method_name)
-  return result_object_mappers[method_name]
+function module.encode_response (response)
+  
+  local pb_response = pb.defaults(qlua_pb_types.RPC.Response)
+  
+  local err = response.error
+  if err then
+    pb_response.is_error = true
+    pb_response.result = err.message -- TODO: write a full error object
+  else
+    
+    pb_response.type = assert(procedure_types[response.method], string.format("Для QLua-функции '%s' не найден соответствующий тип процедуры protobuf.", response.method))
+    
+    local encoded_result = assert(result_encoders[response.type], string.format("Для типа процедуры protobuf '%s' не найден protobuf-сериализатор результата.", response.type))(response.result)
+    if encoded_result
+      pb_response.result = encoded_result
+    end
+  end
+  
+  return pb.encode(qlua_pb_types.RPC.Response, pb_response)
 end
 
 return module

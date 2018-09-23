@@ -13,7 +13,7 @@ message Request {
     int32 key = 2;
     int32 code = 3;
     string text = 4;
-    double value = 5;
+    string value = 5;
 }
 
 message Result {

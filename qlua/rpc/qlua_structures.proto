@@ -150,6 +150,22 @@ message Order {
     int32 capacity = 40; // NUMBER in QLUA
     int32 passive_only_order = 41; // NUMBER in QLUA
     int32 visible = 42; // NUMBER in QLUA
+    string awg_price = 43; // NUMBER in QLUA
+    string expiry_time = 44; // NUMBER in QLUA
+    string revision_number = 45; // NUMBER in QLUA
+    string price_currency = 46;
+    int32 ext_order_status = 47; // NUMBER in QLUA
+    string accepted_uid = 48; // NUMBER in QLUA
+    string filled_value = 49; // NUMBER in QLUA
+    string extref = 50;
+    string settle_currency = 51;
+    string on_behalf_of_uid = 52; // NUMBER in QLUA
+    int32 client_qualifier = 53; // NUMBER in QLUA
+    string client_short_code = 54; // NUMBER in QLUA
+    int32 investment_decision_maker_qualifier = 55; // NUMBER in QLUA
+    string investment_decision_maker_short_code = 56; // NUMBER in QLUA
+    int32 executing_trader_qualifier = 57; // NUMBER in QLUA
+    string executing_trader_short_code = 58; // NUMBER in QLUA
 }
 
 // Текущие позиции по клиентским счетам
@@ -321,7 +337,7 @@ message DepoLimit {
     uint32 locked_buy = 10; // NUMBER in QLUA
     string locked_buy_value = 11; // NUMBER in QLUA
     string locked_sell_value = 12; // NUMBER in QLUA
-    string awg_position_price = 13; // NUMBER in QLUA
+    string wa_position_price = 13; // NUMBER in QLUA
     int32 limit_kind = 14; // NUMBER in QLUA
 }
 

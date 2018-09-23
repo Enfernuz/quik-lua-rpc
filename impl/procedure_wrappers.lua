@@ -48,7 +48,7 @@ local module = {}
 
 -- TODO: test
 module["isConnected"] = function ()
-  return _G.isConnected()
+  return requireNonNil(_G.isConnected())
 end
 
 -- TODO: test
@@ -62,18 +62,8 @@ module["getInfoParam"] = function (args)
 end
 
 module["message"] = function (args)
-  
-  local proc_result = _G.message(utils.Utf8ToCp1251(args.message), args.icon_type)
-  
-  if proc_result == nil then
-    if args.icon_type == nil then 
-      error( string.format("QLua-функция message(%s) возвратила nil.", args.message) )
-    else
-      error( string.format("QLua-функция message(%s, %d) возвратила nil.", args.message, args.icon_type) )
-    end
-  end
-  
-  return proc_result
+  -- returns 1 or nil
+  return _G.message(utils.Utf8ToCp1251(args.message), args.icon_type)
 end
 
 -- TODO: test
@@ -124,6 +114,7 @@ module["getOrderByNumber"] = function (args)
   
   local order, indx = _G.getOrderByNumber(args.class_code, args.order_id)
   
+  -- post-processing: stringify non-string non-mandatory fields, assert the precence of mandatory fields
   if order then
     assert(order.order_num, "Таблица 'order' не содержит обязательного поля 'order_num'.")
     assert(order.flags, "Таблица 'order' не содержит обязательного поля 'flags'.")
@@ -166,14 +157,25 @@ module["getOrderByNumber"] = function (args)
     assert(order.capacity, "Таблица 'order' не содержит обязательного поля 'capacity'.")
     assert(order.passive_only_order, "Таблица 'order' не содержит обязательного поля 'passive_only_order'.")
     assert(order.visible, "Таблица 'order' не содержит обязательного поля 'visible'.")
-    
-    return {
-      order = order,
-      indx = indx
-    }
+    if order.awg_price then order.awg_price = tostring(order.awg_price) end
+    if order.expiry_time then order.expiry_time = tostring(order.expiry_time) end
+    if order.revision_number then order.revision_number = tostring(order.revision_number) end
+    assert(order.ext_order_status, "Таблица 'order' не содержит обязательного поля 'ext_order_status'.")
+    if order.accepted_uid then order.accepted_uid = tostring(order.accepted_uid) end
+    if order.filled_value then order.filled_value = tostring(order.filled_value) end
+    if order.on_behalf_of_uid then order.on_behalf_of_uid = tostring(order.on_behalf_of_uid) end
+    assert(order.client_qualifier, "Таблица 'order' не содержит обязательного поля 'client_qualifier'.")
+    if order.client_short_code then order.client_short_code = tostring(order.client_short_code) end
+    assert(order.investment_decision_maker_qualifier, "Таблица 'order' не содержит обязательного поля 'investment_decision_maker_qualifier'.")
+    if order.investment_decision_maker_short_code then order.investment_decision_maker_short_code = tostring(order.investment_decision_maker_short_code) end
+    assert(order.executing_trader_qualifier, "Таблица 'order' не содержит обязательного поля 'executing_trader_qualifier'.")
+    if order.executing_trader_short_code then order.executing_trader_short_code = tostring(order.executing_trader_short_code) end
   end
   
-  return nil
+  return {
+    order = order,
+    indx = indx
+  }
 end
 
 -- TODO: test
@@ -188,12 +190,14 @@ module["SearchItems"] = function (args)
   local fn_ctr, error_msg = loadstring("return "..args.fn_def)
   local result
   if fn_ctr == nil then 
-    error(string.format("Функция SearchItems: не удалось распарсить определение функции из переданной строки. Описание ошибки: [%s].", error_msg))
+    error(string.format("Не удалось распарсить определение функции из переданной строки. Описание ошибки: [%s].", error_msg))
   else
+    -- protobuf specific:
+    if args.null_end_index
     if not args.params or args.params == "" then
-      result = _G.SearchItems(args.table_name, args.start_index, args.end_index == 0 and (_G.getNumberOf(args.table_name) - 1) or args.end_index, fn_ctr()) -- returns nil in case of empty list found or error
+      result = _G.SearchItems(args.table_name, args.start_index, args.end_index and args.end_index or (_G.getNumberOf(args.table_name) - 1), fn_ctr()) -- returns nil in case of empty list found or error
     else 
-      result = _G.SearchItems(args.table_name, args.start_index, args.end_index == 0 and (_G.getNumberOf(args.table_name) - 1) or args.end_index, fn_ctr(), args.params) -- returns nil in case of empty list found or error
+      result = _G.SearchItems(args.table_name, args.start_index, args.end_index and args.end_index or (_G.getNumberOf(args.table_name) - 1), fn_ctr(), args.params) -- returns nil in case of empty list found or error
     end
   end
   
@@ -295,7 +299,7 @@ module["getDepoEx"] = function (args)
     assert(result.locked_buy, "Результирующая таблица не содержит обязательного поля 'locked_buy'.")
     result.locked_buy_value = tostring( assert(result.locked_buy_value, "Результирующая таблица не содержит обязательного поля 'locked_buy_value'.") )
     result.locked_sell_value = tostring( assert(result.locked_sell_value, "Результирующая таблица не содержит обязательного поля 'locked_sell_value'.") )
-    result.awg_position_price = tostring( assert(result.awg_position_price, "Результирующая таблица не содержит обязательного поля 'awg_position_price'.") )
+    result.wa_position_price = tostring( assert(result.wa_position_price, "Результирующая таблица не содержит обязательного поля 'awg_position_price'.") )
     assert(result.limit_kind, "Результирующая таблица не содержит обязательного поля 'limit_kind'.")
   end
     
@@ -574,7 +578,9 @@ end
 
 -- TODO: test
 module["sendTransaction"] = function (args) 
-  return _G.sendTransaction(args.transaction) -- returns an empty string (seems to be always)
+  -- if ok, returns an empty string
+  -- if not ok, returns an error message
+  return requireNonNil(_G.sendTransaction(args.transaction))
 end
 
 -- TODO: test
@@ -749,19 +755,43 @@ module["getBuySellInfoEx"] = function (args)
   
   -- returns {} in case of error
   local result = requireNonNil(_G.getBuySellInfoEx(args.firm_id, args.client_code, args.class_code, args.sec_code, price))
-
-  --post-processing of properties:
-  --params from BuySellInfo AS IS
-  if result.limit_kind then result.limit_kind = tostring(result.limit_kind) end
-  --result.d_long AS IS
-  --result.d_min_long AS IS
-  --result.d_short AS IS
-  --result.d_min_short AS IS
-  --result.client_type AS IS
-  --result.is_long_allowed AS IS
-  --result.is_short_allowed AS IS
   
-  return result
+  local buy_sell_info_ex = {
+    buy_sell_info = {}
+  }
+  buy_sell_info_ex.buy_sell_info.is_margin_sec = result.is_margin_sec
+  buy_sell_info_ex.buy_sell_info.is_asset_sec = result.is_asset_sec
+  buy_sell_info_ex.buy_sell_info.balance = result.balance
+  buy_sell_info_ex.buy_sell_info.can_buy = result.can_buy
+  buy_sell_info_ex.buy_sell_info.can_sell = result.can_sell
+  buy_sell_info_ex.buy_sell_info.position_valuation = result.position_valuation
+  buy_sell_info_ex.buy_sell_info.value = result.value
+  buy_sell_info_ex.buy_sell_info.open_value = result.open_value
+  buy_sell_info_ex.buy_sell_info.lim_long = result.lim_long
+  buy_sell_info_ex.buy_sell_info.long_coef = result.long_coef
+  buy_sell_info_ex.buy_sell_info.lim_short = result.lim_short
+  buy_sell_info_ex.buy_sell_info.short_coef = result.short_coef
+  buy_sell_info_ex.buy_sell_info.value_coef = result.value_coef
+  buy_sell_info_ex.buy_sell_info.open_value_coef = result.open_value_coef
+  buy_sell_info_ex.buy_sell_info.share = result.share
+  buy_sell_info_ex.buy_sell_info.short_wa_price = result.short_wa_price
+  buy_sell_info_ex.buy_sell_info.long_wa_price = result.long_wa_price
+  buy_sell_info_ex.buy_sell_info.profit_loss = result.profit_loss
+  buy_sell_info_ex.buy_sell_info.spread_hc = result.spread_hc
+  buy_sell_info_ex.buy_sell_info.can_buy_own = result.can_buy_own
+  buy_sell_info_ex.buy_sell_info.can_sell_own = result.can_sell_own
+  
+  if result.limit_kind then buy_sell_info_ex.limit_kind = tostring(result.limit_kind) end
+  buy_sell_info_ex.limit_kind = result.limit_kind
+  buy_sell_info_ex.d_long = result.d_long
+  buy_sell_info_ex.d_min_long = result.d_min_long
+  buy_sell_info_ex.d_short = result.d_short
+  buy_sell_info_ex.d_min_short = result.d_min_short
+  buy_sell_info_ex.client_type = result.client_type
+  buy_sell_info_ex.is_long_allowed = result.is_long_allowed
+  buy_sell_info_ex.is_short_allowed = result.is_short_allowed
+  
+  return buy_sell_info_ex
 end
 
 -- TODO: test
@@ -802,19 +832,14 @@ end
 
 -- TODO: test
 module["InsertRow"] = function (args) 
-  return _G.InsertRow(args.t_id, args.key) -- returns a number
+  -- returns a number
+  return requireNonNil(_G.InsertRow(args.t_id, args.key))
 end
 
 -- TODO: test
-module["IsWindowClosed"] = function (args) 
-  
-  local result = _G.IsWindowClosed(args.t_id) -- returns nil in case of error
-  
-  if result == nil then
-    error( string.format("QLua-функция IsWindowClosed(%s) возвратила nil.", args.t_id) )
-  end
-  
-  return result
+module["IsWindowClosed"] = function (args)
+  -- returns nil in case of error
+  return _G.IsWindowClosed(args.t_id)
 end
 
 -- TODO: test
@@ -870,15 +895,8 @@ end
 
 -- TODO: test
 module["SetCell"] = function (args) 
-  
-  local result
-  if args.value == 0 then
-    result = _G.SetCell(args.t_id, args.key, args.code, args.text) -- returns true or false
-  else
-    result = _G.SetCell(args.t_id, args.key, args.code, args.text, args.value) -- returns true or false
-  end
-  
-  return result
+  -- returns true or false
+  return requireNonNil(_G.SetCell(args.t_id, args.key, args.code, args.text, args.value))
 end
 
 -- TODO: test
@@ -906,7 +924,8 @@ end
 -- TODO: test
 module["RGB"] = function (args) 
   -- NB: на самом деле, библиотечная функция RGB должна называться BGR, ибо она выдаёт числа именно в этом формате. В SetColor, однако, тоже ожидается цвет в формате BGR, так что это не баг, а фича.
-  return _G.RGB(args.red, args.green, args.blue) -- returns a number
+  -- returns a number
+  return requireNonNil(_G.RGB(args.red, args.green, args.blue))
 end
 
 -- TODO: test
@@ -926,14 +945,8 @@ end
 
 -- TODO: test
 module["AddLabel"] = function (args) 
-
-  local result = _G.AddLabel(args.chart_tag, args.label_params) -- returns nil in case of error
-  
-  if result == nil then
-    error( string.format("QLua-функция AddLabel(%s, %s) возвратила nil.", args.chart_tag, utils.table.tostring(args.label_params)))
-  end
-
-  return result
+  -- returns nil in case of error
+  return _G.AddLabel(args.chart_tag, args.label_params)
 end
 
 -- TODO: test
@@ -979,8 +992,9 @@ module["Unsubscribe_Level_II_Quotes"] = function (args)
 end
 
 -- TODO: test
-module["IsSubscribed_Level_II_Quotes"] = function (args) 
-  return _G.IsSubscribed_Level_II_Quotes(args.class_code, args.sec_code) -- returns true or false
+module["IsSubscribed_Level_II_Quotes"] = function (args)
+  -- returns true or false
+  return requireNonNil(_G.IsSubscribed_Level_II_Quotes(args.class_code, args.sec_code))
 end
 
 -- TODO: test

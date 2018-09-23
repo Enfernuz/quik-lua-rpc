@@ -14,5 +14,7 @@ message Request {
 }
 
 message Result {
-    map<string, string> table_row = 1;
+
+    bool null_table_row = 1;
+    map<string, string> table_row = 2;
 }
