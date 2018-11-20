@@ -560,7 +560,7 @@ handlers[qlua.RPC.ProcedureType.SEND_TRANSACTION] = function(request_args)
   local res = sendTransaction(t) -- returns an empty string (seems to be always)
   
   local result = qlua.sendTransaction.Result()
-  result.result = res
+  result.result = utils.Cp1251ToUtf8(res)
   
   return result
 end
