@@ -108,6 +108,10 @@ function EventDataSerializer:new ()
   function EventDataSerializer:OnCleanUp ()
     return nil, nil
   end
+  
+  function EventDataSerializer:OnDataSourceUpdate (update_info)
+    return nil, nil
+  end
 
   setmetatable(public, self)
   self.__index = self
