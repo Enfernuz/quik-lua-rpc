@@ -46,13 +46,13 @@ function protobuf_context:init (context_path)
   self.is_initialized = true
 end
 
-local function pub_poll_out_callback()
+local function pub_poll_out_callback ()
   -- TODO: add reading from a message queue
   -- Polling out is not implemented at the moment: messages are being sent regardless of the POLLOUT event.
 end
 
-local function send_data(data, socket)
-  local ok, err = pcall(function()
+local function send_data (data, socket)
+  local ok, err = pcall(function ()
       local msg = zmq.msg_init_data(data)
       msg:send(socket)
       msg:close()
@@ -163,7 +163,7 @@ local function create_event_callbacks()
   
   return {
     
-    OnClose = function()
+    OnClose = function ()
       publish("OnClose")
       service.terminate()
     end,
@@ -259,11 +259,15 @@ local function create_event_callbacks()
     
     OnCleanUp = function ()
       publish("OnCleanUp")
+    end,
+    
+    OnDataSourceUpdate = function (update_info)
+      publish("OnDataSourceUpdate", update_info)
     end
   }
 end
 
-local function create_socket(endpoint)
+local function create_socket (endpoint)
   
   local socket
   local sockets
@@ -318,15 +322,15 @@ local function create_socket(endpoint)
   return socket
 end
 
-local function reg_endpoint(endpoint)
+local function reg_endpoint (endpoint)
   create_socket(endpoint)
 end
 
-local function check_if_initialized()
+local function check_if_initialized ()
   if not initialized then error("The service is not initialized.") end
 end
 
-function service.init()
+function service.init ()
   
   if initialized then return end
   
@@ -348,7 +352,7 @@ function service.init()
   initialized = true
 end
 
-function service.start()
+function service.start ()
   
   check_if_initialized()
   
@@ -372,7 +376,7 @@ function service.start()
   )
 end
 
-function service.stop()
+function service.stop ()
   
   check_if_initialized()
 
@@ -382,7 +386,7 @@ function service.stop()
   end
 end
 
-function service.terminate()
+function service.terminate ()
 
   check_if_initialized()
   
