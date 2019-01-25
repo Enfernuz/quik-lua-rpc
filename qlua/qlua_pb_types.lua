@@ -6,7 +6,8 @@ local proto = "RPC"
 local path = package .. proto .. "."
 module[proto] = {
   Request = path .. "Request",
-  Response = path .. "Response"
+  Response = path .. "Response",
+  Error = path .. "Error"
 }
 
 proto = "isConnected"
@@ -627,7 +628,9 @@ module.qlua_structures = {
   StopEventInfo = path .. "StopEventInfo",
   StopOrder = path .. "StopOrder",
   Trade = path .. "Trade",
-  Transaction = path .. "Transaction"
+  Transaction = path .. "Transaction",
+  DataSourceTime = path .. "DataSourceTime",
+  DataSourceUpdateInfo = path .. "DataSourceUpdateInfo"
 }
 
 return module
