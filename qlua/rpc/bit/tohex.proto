@@ -10,7 +10,11 @@ option java_package = "qlua.rpc.bit";
 message Request {
 
     int32 x = 1;
-    int32 n = 2; // 0 counts as "parameter not set"
+    oneof n {
+        bool null_n = 2;
+        int32 value_n = 3;
+    }
+    
 }
 
 message Result {
