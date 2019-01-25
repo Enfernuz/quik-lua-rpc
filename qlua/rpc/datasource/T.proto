@@ -4,6 +4,8 @@ syntax = "proto3";
 
 package qlua.rpc.datasource.T;
 
+import "qlua/rpc/qlua_structures.proto";
+
 option optimize_for = SPEED;
 option java_package = "qlua.rpc.datasource";
 
@@ -14,14 +16,5 @@ message Request {
 }
 
 message Result {
-
-    int32 year = 1;
-    int32 month = 2;
-    int32 day = 3;
-    int32 week_day = 4;
-    int32 hour = 5;
-    int32 min = 6;
-    int32 sec = 7;
-    int32 ms = 8;
-    int32 count = 9;
+    qlua.structs.DataSourceTime time = 1;
 }
