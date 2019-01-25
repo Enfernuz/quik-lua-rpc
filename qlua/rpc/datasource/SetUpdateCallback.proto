@@ -11,6 +11,13 @@ message Request {
 
     string datasource_uuid = 1; 
     string f_cb_def = 2; // NB: формат функции: "function (NUMBER index, TABLE datasource) function_body end"
+    bool watching_o = 3;
+    bool watching_h = 4;
+    bool watching_l = 5;
+    bool watching_c = 6;
+    bool watching_v = 7;
+    bool watching_t = 8;
+    bool watching_size = 9;
 }
 
 message Result {
