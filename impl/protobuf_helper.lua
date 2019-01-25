@@ -1,3 +1,5 @@
+-- FIXME: fix args decoders
+
 package.path = "../?.lua;" .. package.path
 
 local utils = require("utils.utils")
@@ -20,7 +22,7 @@ local proc_name
 proc_name = "IS_CONNECTED"
 method_names[proc_name] = "isConnected"
 args_decoders[proc_name] = nil
-result_encoders[proc_name] = function (proc_result)
+result_encoders[method_names[proc_name]] = function (proc_result)
   
   local result = pb.defaults(qlua_pb_types.isConnected.Result)
   result.is_connected = proc_result
@@ -31,7 +33,7 @@ end
 proc_name = "GET_SCRIPT_PATH"
 method_names[proc_name] = "getScriptPath"
 args_decoders[proc_name] = nil
-result_encoders[proc_name] = function (proc_result)
+result_encoders[method_names[proc_name]] = function (proc_result)
   
   local result = pb.defaults(qlua_pb_types.getScriptPath.Result)
   result.script_path = proc_result
@@ -42,7 +44,7 @@ end
 proc_name = "GET_INFO_PARAM"
 method_names[proc_name] = "getInfoParam"
 args_decoders[proc_name] = qlua_pb_types.getInfoParam.Request
-result_encoders[proc_name] = function (proc_result)
+result_encoders[method_names[proc_name]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getInfoParam.Result)
   result.info_param = proc_result
@@ -53,27 +55,37 @@ end
 -- message
 proc_name = "MESSAGE"
 method_names[proc_name] = "message"
-args_decoders[proc_name] = qlua_pb_types.message.Request
-result_encoders[proc_name] = function (proc_result)
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.message.Request, encoded_args)
+end
+result_encoders[method_names[proc_name]] = function (proc_result)
   
   local result = pb.defaults(qlua_pb_types.message.Result)
   if proc_result then
     result.value_result = proc_result
   else
     result.null_result = true
+    result.value_result = nil
   end
   
-  return qlua_pb_types.message.Result, result
+  return pb.encode(qlua_pb_types.message.Result, result)
 end
 
 -- sleep
 proc_name = "SLEEP"
 method_names[proc_name] = "sleep"
-args_decoders[proc_name] = qlua_pb_types.sleep.Request
-result_encoders[proc_name] = function (proc_result)
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.sleep.Request, encoded_args)
+end
+result_encoders[method_names[proc_name]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.sleep.Result)
-  result.result = proc_result
+  if proc_result then
+    result.value_result = proc_result
+  else
+    result.null_result = true
+    result.value_result = nil
+  end
   return qlua_pb_types.sleep.Result, result
 end
 
@@ -81,7 +93,7 @@ end
 proc_name = "GET_WORKING_FOLDER"
 method_names[proc_name] = "getWorkingFolder"
 args_decoders[proc_name] = nil
-result_encoders[proc_name] = function (proc_result)
+result_encoders[method_names[proc_name]] = function (proc_result)
   
   local result = pb.defaults(qlua_pb_types.getWorkingFolder.Result)
   result.working_folder = proc_result
@@ -92,13 +104,13 @@ end
 proc_name = "PRINT_DBG_STR"
 method_names[proc_name] = "PrintDbgStr"
 args_decoders[proc_name] = qlua_pb_types.PrintDbgStr.Request
-result_encoders[proc_name] = function () return nil end
+result_encoders[method_names[proc_name]] = function () return nil end
 
 -- os.sysdate
 proc_name = "OS_SYSDATE"
 method_names[proc_name] = "os.sysdate"
 args_decoders[proc_name] = nil
-result_encoders[proc_name] = function (proc_result)
+result_encoders[method_names[proc_name]] = function (proc_result)
   
   local result = pb.defaults(qlua_pb_types.os.sysdate.Result)
   result.result = pb.defaults(qlua_pb_types.qlua_structures.DateTimeEntry)
@@ -113,7 +125,7 @@ end
 proc_name = "GET_ITEM"
 method_names[proc_name] = "getItem"
 args_decoders[proc_name] = qlua_pb_types.getItem.Request
-result_encoders[proc_name] = function (proc_result)
+result_encoders[method_names[proc_name]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getItem.Result)
   if proc_result then
@@ -122,6 +134,7 @@ result_encoders[proc_name] = function (proc_result)
     end
   else
     result.null_table_row = true
+    result.value_table_row = nil
   end
 
   return result
@@ -131,7 +144,7 @@ end
 proc_name = "GET_ORDER_BY_NUMBER"
 method_names[proc_name] = "getOrderByNumber"
 args_decoders[proc_name] = qlua_pb_types.getOrderByNumber.Request
-result_encoders[proc_name] = function (proc_result)
+result_encoders[method_names[proc_name]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getOrderByNumber.Result)
   
@@ -146,6 +159,7 @@ result_encoders[proc_name] = function (proc_result)
     result.value_indx = proc_result.indx
   else
     result.null_indx = true
+    result.value_indx = nil
   end
 
   return qlua_pb_types.getOrderByNumber.Result, result
@@ -182,6 +196,8 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.SearchItems.Result)
   if proc_result then 
     result.items_indices = proc_result
+  else
+    result.null_items_indices = true
   end
   return pb.encode(qlua_pb_types.SearchItems.Result, result)
 end
@@ -369,24 +385,18 @@ result_encoders[proc_name] = function (proc_result)
   result.bid_count = proc_result.bid_count
   result.offer_count = proc_result.offer_count
   
-  local bids = proc_result.bid
-  if bids then
-    for _, v in ipairs(bids) do
-      local bid = pb.defaults(qlua_pb_types.getQuoteLevel2.QuoteEntry)
-      bid.price = v.price
-      bid.quantity = v.quantity
-      table.sinsert(result.bids, bid)
-    end
+  for _, v in ipairs(proc_result.bids) do
+    local bid = pb.defaults(qlua_pb_types.getQuoteLevel2.QuoteEntry)
+    bid.price = v.price
+    bid.quantity = v.quantity
+    table.sinsert(result.bids, bid)
   end
   
-  local offers = proc_result.offer
-  if offers then
-    for _, v in ipairs(offers) do
-      local offer = pb.defaults(qlua_pb_types.getQuoteLevel2.QuoteEntry)
-      offer.price = v.price
-      offer.quantity = v.quantity
-      table.sinsert(result.offers, offer)
-    end
+  for _, v in ipairs(proc_result.offers) do
+    local offer = pb.defaults(qlua_pb_types.getQuoteLevel2.QuoteEntry)
+    offer.price = v.price
+    offer.quantity = v.quantity
+    table.sinsert(result.offers, offer)
   end
   
   return qlua_pb_types.getQuoteLevel2.Result, result
@@ -442,7 +452,9 @@ end
 -- datasource.CreateDataSource
 proc_name = "CREATE_DATA_SOURCE"
 method_names[proc_name] = "datasource.CreateDataSource"
-args_decoders[proc_name] = qlua_pb_types.datasource.CreateDataSource.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.datasource.CreateDataSource.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.CreateDataSource.Result)
@@ -461,7 +473,9 @@ end
 -- datasource.SetUpdateCallback
 proc_name = "DS_SET_UPDATE_CALLBACK"
 method_names[proc_name] = "datasource.SetUpdateCallback"
-args_decoders[proc_name] = qlua_pb_types.datasource.SetUpdateCallback.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.datasource.SetUpdateCallback.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.SetUpdateCallback.Result)
@@ -473,7 +487,9 @@ end
 -- datasource.O
 proc_name = "DS_O"
 method_names[proc_name] = "datasource.O"
-args_decoders[proc_name] = qlua_pb_types.datasource.O.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.datasource.O.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.O.Result)
@@ -485,7 +501,9 @@ end
 -- datasource.H
 proc_name = "DS_H"
 method_names[proc_name] = "datasource.H"
-args_decoders[proc_name] = qlua_pb_types.datasource.H.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.datasource.H.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.H.Result)
@@ -497,7 +515,9 @@ end
 -- datasource.L
 proc_name = "DS_L"
 method_names[proc_name] = "datasource.L"
-args_decoders[proc_name] = qlua_pb_types.datasource.L.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.datasource.L.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.L.Result)
@@ -509,7 +529,9 @@ end
 -- datasource.C
 proc_name = "DS_C"
 method_names[proc_name] = "datasource.C"
-args_decoders[proc_name] = qlua_pb_types.datasource.C.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.datasource.C.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.C.Result)
@@ -521,7 +543,9 @@ end
 -- datasource.V
 proc_name = "DS_V"
 method_names[proc_name] = "datasource.V"
-args_decoders[proc_name] = qlua_pb_types.datasource.V.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.datasource.V.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.V.Result)
@@ -533,13 +557,16 @@ end
 -- datasource.T
 proc_name = "DS_T"
 method_names[proc_name] = "datasource.T"
-args_decoders[proc_name] = qlua_pb_types.datasource.T.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.datasource.T.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.T.Result)
   
+  -- TODO: test
   for k, v in pairs(proc_result) do
-    result[k] = v
+    result.time[k] = v
   end
   
   return qlua_pb_types.datasource.T.Result, result
@@ -548,7 +575,9 @@ end
 -- datasource.Size
 proc_name = "DS_SIZE"
 method_names[proc_name] = "datasource.Size"
-args_decoders[proc_name] = qlua_pb_types.datasource.Size.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.datasource.Size.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.Size.Result)
@@ -560,7 +589,9 @@ end
 -- datasource.Close
 proc_name = "DS_CLOSE"
 method_names[proc_name] = "datasource.Close"
-args_decoders[proc_name] = qlua_pb_types.datasource.Close.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.datasource.Close.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.Close.Result)
@@ -572,7 +603,9 @@ end
 -- datasource.Close
 proc_name = "DS_SET_EMPTY_CALLBACK"
 method_names[proc_name] = "datasource.SetEmptyCallback"
-args_decoders[proc_name] = qlua_pb_types.datasource.SetEmptyCallback.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.datasource.SetEmptyCallback.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.datasource.SetEmptyCallback.Result)
@@ -584,7 +617,9 @@ end
 -- sendTransaction
 proc_name = "SEND_TRANSACTION"
 method_names[proc_name] = "sendTransaction"
-args_decoders[proc_name] = qlua_pb_types.sendTransaction.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.sendTransaction.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.sendTransaction.Result)
@@ -662,69 +697,13 @@ result_encoders[proc_name] = function (proc_result)
   result.portfolio_info_ex.portfolio_info = pb.defaults(qlua_pb_types.getPortfolioInfo.PortfolioInfo)
   
   local portfolio_info = result.portfolio_info_ex.portfolio_info
-  portfolio_info.is_leverage = proc_result.is_leverage
-  portfolio_info.in_assets = proc_result.in_assets
-  portfolio_info.leverage = proc_result.leverage
-  portfolio_info.open_limit = proc_result.open_limit
-  portfolio_info.val_short = proc_result.val_short
-  portfolio_info.val_long = proc_result.val_long
-  portfolio_info.val_long_margin = proc_result.val_long_margin
-  portfolio_info.val_long_asset = proc_result.val_long_asset
-  portfolio_info.assets = proc_result.assets
-  portfolio_info.cur_leverage = proc_result.cur_leverage
-  portfolio_info.margin = proc_result.margin
-  portfolio_info.lim_all = proc_result.lim_all
-  portfolio_info.av_lim_all = proc_result.av_lim_all
-  portfolio_info.locked_buy = proc_result.locked_buy
-  portfolio_info.locked_buy_margin = proc_result.locked_buy_margin
-  portfolio_info.locked_buy_asset = proc_result.locked_buy_asset
-  portfolio_info.locked_sell = proc_result.locked_sell
-  portfolio_info.locked_value_coef = proc_result.locked_value_coef
-  portfolio_info.in_all_assets = proc_result.in_all_assets
-  portfolio_info.all_assets = proc_result.all_assets
-  portfolio_info.profit_loss = proc_result.profit_loss
-  portfolio_info.rate_change = proc_result.rate_change
-  portfolio_info.lim_buy = proc_result.lim_buy
-  portfolio_info.lim_sell = proc_result.lim_sell
-  portfolio_info.lim_non_margin = proc_result.lim_non_margin
-  portfolio_info.lim_buy_asset = proc_result.lim_buy_asset
-  portfolio_info.val_short_net = proc_result.val_short_net
-  portfolio_info.val_long_net = proc_result.val_long_net
-  portfolio_info.total_money_bal = proc_result.total_money_bal
-  portfolio_info.total_locked_money = proc_result.total_locked_money
-  portfolio_info.haircuts = proc_result.haircuts
-  portfolio_info.assets_without_hc = proc_result.assets_without_hc
-  portfolio_info.status_coef = proc_result.status_coef
-  portfolio_info.varmargin = proc_result.varmargin
-  portfolio_info.go_for_positions = proc_result.go_for_positions
-  portfolio_info.go_for_orders = proc_result.go_for_orders
-  portfolio_info.rate_futures = proc_result.rate_futures
-  portfolio_info.is_qual_client = proc_result.is_qual_client
-  portfolio_info.is_futures = proc_result.is_futures
-  portfolio_info.curr_tag = proc_result.curr_tag
+  for k, v in pairs(proc_result.portfolio_info) do
+    portfolio_info[k] = v
+  end
   
-  result.portfolio_info_ex.init_margin = proc_result.init_margin
-  result.portfolio_info_ex.min_margin = proc_result.min_margin
-  result.portfolio_info_ex.corrected_margin = proc_result.corrected_margin
-  result.portfolio_info_ex.client_type = proc_result.client_type
-  result.portfolio_info_ex.portfolio_value = proc_result.portfolio_value
-  result.portfolio_info_ex.start_limit_open_pos = proc_result.start_limit_open_pos
-  result.portfolio_info_ex.total_limit_open_pos = proc_result.total_limit_open_pos
-  result.portfolio_info_ex.limit_open_pos = proc_result.limit_open_pos
-  result.portfolio_info_ex.used_lim_open_pos = proc_result.used_lim_open_pos
-  result.portfolio_info_ex.acc_var_margin = proc_result.acc_var_margin
-  result.portfolio_info_ex.cl_var_margin = proc_result.cl_var_margin
-  result.portfolio_info_ex.opt_liquid_cost = proc_result.opt_liquid_cost
-  result.portfolio_info_ex.fut_asset = proc_result.fut_asset
-  result.portfolio_info_ex.fut_total_asset = proc_result.fut_total_asset
-  result.portfolio_info_ex.fut_debt = proc_result.fut_debt
-  result.portfolio_info_ex.fut_rate_asset = proc_result.fut_rate_asset
-  result.portfolio_info_ex.fut_rate_asset_open = proc_result.fut_rate_asset_open
-  result.portfolio_info_ex.fut_rate_go = proc_result.fut_rate_go
-  result.portfolio_info_ex.planed_rate_go = proc_result.planed_rate_go
-  result.portfolio_info_ex.cash_leverage = proc_result.cash_leverage
-  result.portfolio_info_ex.fut_position_type = proc_result.fut_position_type
-  result.portfolio_info_ex.fut_accured_int = proc_result.fut_accured_int
+  for k, v in pairs(proc_result.ex) do
+    result.portfolio_info_ex[k] = v
+  end
   
   return qlua_pb_types.getPortfolioInfoEx.Result, result
 end
@@ -882,6 +861,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.IsWindowClosed.Result)
   if proc_result == nil then
     result.null_window_closed = true
+    result.value_window_closed = nil
   else
     result.value_window_closed = proc_result
   end
@@ -968,7 +948,6 @@ args_decoders[proc_name] = function (encoded_args)
   
   return args
 end
-
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.SetCell.Result)
@@ -980,7 +959,9 @@ end
 -- SetWindowCaption
 proc_name = "SET_WINDOW_CAPTION"
 method_names[proc_name] = "SetWindowCaption"
-args_decoders[proc_name] = qlua_pb_types.SetWindowCaption.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.SetWindowCaption.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.SetWindowCaption.Result)
@@ -992,7 +973,9 @@ end
 -- SetWindowPos
 proc_name = "SET_WINDOW_POS"
 method_names[proc_name] = "SetWindowPos"
-args_decoders[proc_name] = qlua_pb_types.SetWindowPos.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.SetWindowPos.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.SetWindowPos.Result)
@@ -1004,7 +987,9 @@ end
 -- SetTableNotificationCallback
 proc_name = "SET_TABLE_NOTIFICATION_CALLBACK"
 method_names[proc_name] = "SetTableNotificationCallback"
-args_decoders[proc_name] = qlua_pb_types.SetTableNotificationCallback.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.SetTableNotificationCallback.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.SetTableNotificationCallback.Result)
@@ -1028,7 +1013,9 @@ end
 -- SetColor
 proc_name = "SET_COLOR"
 method_names[proc_name] = "SetColor"
-args_decoders[proc_name] = qlua_pb_types.SetColor.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.SetColor.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.SetColor.Result)
@@ -1052,7 +1039,9 @@ end
 -- SetSelectedRow
 proc_name = "SET_SELECTED_ROW"
 method_names[proc_name] = "SetSelectedRow"
-args_decoders[proc_name] = qlua_pb_types.SetSelectedRow.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.SetSelectedRow.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.SetSelectedRow.Result)
@@ -1073,6 +1062,7 @@ result_encoders[proc_name] = function (proc_result)
     result.label_id = proc_result
   else
     result.null_result = true
+    result.label_id = nil
   end
   
   return qlua_pb_types.AddLabel.Result, result
@@ -1119,7 +1109,9 @@ end
 -- SetLabelParams
 proc_name = "SET_LABEL_PARAMS"
 method_names[proc_name] = "SetLabelParams"
-args_decoders[proc_name] = qlua_pb_types.SetLabelParams.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.SetLabelParams.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.SetLabelParams.Result)
@@ -1131,7 +1123,9 @@ end
 -- Subscribe_Level_II_Quotes
 proc_name = "SUBSCRIBE_LEVEL_II_QUOTES"
 method_names[proc_name] = "Subscribe_Level_II_Quotes"
-args_decoders[proc_name] = qlua_pb_types.Subscribe_Level_II_Quotes.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.Subscribe_Level_II_Quotes.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.Subscribe_Level_II_Quotes.Result)
@@ -1143,7 +1137,9 @@ end
 -- Unsubscribe_Level_II_Quotes
 proc_name = "UNSUBSCRIBE_LEVEL_II_QUOTES"
 method_names[proc_name] = "Unsubscribe_Level_II_Quotes"
-args_decoders[proc_name] = qlua_pb_types.Unsubscribe_Level_II_Quotes.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.Unsubscribe_Level_II_Quotes.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.Unsubscribe_Level_II_Quotes.Result)
@@ -1155,7 +1151,9 @@ end
 -- IsSubscribed_Level_II_Quotes
 proc_name = "IS_SUBSCRIBED_LEVEL_II_QUOTES"
 method_names[proc_name] = "IsSubscribed_Level_II_Quotes"
-args_decoders[proc_name] = qlua_pb_types.IsSubscribed_Level_II_Quotes.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.IsSubscribed_Level_II_Quotes.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.IsSubscribed_Level_II_Quotes.Result)
@@ -1191,7 +1189,12 @@ end
 -- bit.tohex
 proc_name = "BIT_TOHEX"
 method_names[proc_name] = "bit.tohex"
-args_decoders[proc_name] = qlua_pb_types.bit.tohex.Request
+args_decoders[proc_name] = function (encoded_args)
+  local args = pb.decode(qlua_pb_types.bit.tohex.Request, encoded_args)
+  if not args.null_n then
+    args.n = args.value_n
+  end
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.bit.tohex.Result)
@@ -1203,7 +1206,9 @@ end
 -- bit.bnot
 proc_name = "BIT_BNOT"
 method_names[proc_name] = "bit.bnot"
-args_decoders[proc_name] = qlua_pb_types.bit.bnot.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.bit.bnot.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.bit.bnot.Result)
@@ -1215,7 +1220,9 @@ end
 -- bit.band
 proc_name = "BIT_BAND"
 method_names[proc_name] = "bit.band"
-args_decoders[proc_name] = qlua_pb_types.bit.band.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.bit.band.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.bit.band.Result)
@@ -1227,7 +1234,9 @@ end
 -- bit.bor
 proc_name = "BIT_BOR"
 method_names[proc_name] = "bit.bor"
-args_decoders[proc_name] = qlua_pb_types.bit.bor.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.bit.bor.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.bit.bor.Result)
@@ -1239,7 +1248,9 @@ end
 -- bit.bxor
 proc_name = "BIT_BXOR"
 method_names[proc_name] = "bit.bxor"
-args_decoders[proc_name] = qlua_pb_types.bit.bxor.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.bit.bxor.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.bit.bxor.Result)
@@ -1251,7 +1262,9 @@ end
 -- bit.test
 proc_name = "BIT_TEST"
 method_names[proc_name] = "bit.test"
-args_decoders[proc_name] = qlua_pb_types.bit.test.Request
+args_decoders[proc_name] = function (encoded_args)
+  return pb.decode(qlua_pb_types.bit.test.Request, encoded_args)
+end
 result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.bit.test.Result)
@@ -1262,9 +1275,13 @@ end
 
 local inverse_table = function (t)
 
-  if not t return nil
+  if not t then
+    return 
+  end
+  
   assert (type(t) == "table")
   
+  local result = {}
   for k, v in pairs(t) do
     result[v] = k
   end
@@ -1296,13 +1313,13 @@ function module.encode_response (response)
   local err = response.error
   if err then
     pb_response.is_error = true
-    pb_response.result = err.message -- TODO: write a full error object
+    local pb_err = pb.defaults(qlua_pb_types.RPC.Error)
+    pb_err.code = err.code
+    pb_err.message = err.message
+    pb_response.result = pb.encode(qlua_pb_types.RPC.Error, pb_err)
   else
-    
-    pb_response.type = assert(procedure_types[response.method], string.format("Для QLua-функции '%s' не найден соответствующий тип процедуры protobuf.", response.method))
-    
-    local encoded_result = assert(result_encoders[response.type], string.format("Для типа процедуры protobuf '%s' не найден protobuf-сериализатор результата.", response.type))(response.result)
-    if encoded_result
+    local encoded_result = assert(result_encoders[response.method], string.format("Для типа процедуры protobuf '%s' не найден protobuf-сериализатор результата.", response.method))(response.proc_result)
+    if encoded_result then
       pb_response.result = encoded_result
     end
   end
