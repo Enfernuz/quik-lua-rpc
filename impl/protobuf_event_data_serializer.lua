@@ -42,6 +42,15 @@ function ProtobufEventDataSerializer:OnStop (stop_event_data)
 end
 
 function ProtobufEventDataSerializer:OnFirm (firm)
+  
+  local status = firm.status
+  if status then
+    firm.value_status = status
+  else
+    firm.null_status = true
+    firm.value_status = nil
+  end
+  
   return event_value("ON_FIRM"), encode(qlua_pb_types.qlua_structures.Firm, firm)
 end
 
@@ -49,6 +58,14 @@ end
 function ProtobufEventDataSerializer:OnAllTrade (alltrade)
   
   alltrade.datetime = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, alltrade.datetime)
+  
+  local flags = alltrade.flags
+  if flags then
+    alltrade.value_flags = flags
+  else
+    alltrade.null_flags = true
+    alltrade.value_flags = nil
+  end
   
   return event_value("ON_ALL_TRADE"), encode(qlua_pb_types.qlua_structures.AllTrade, alltrade)
 end
@@ -178,6 +195,25 @@ end
 
 function ProtobufEventDataSerializer:OnCleanUp ()
   return event_value("ON_CLEAN_UP"), nil
+end
+
+function ProtobufEventDataSerializer:OnDataSourceUpdate (update_info)
+  
+  local pb_update_info = to_pb_obj(qlua_pb_types.qlua_structures.DataSourceUpdateInfo, update_info)
+  
+  if update_info.time then
+    pb_update_info.time = to_pb_obj(qlua_pb_types.qlua_structures.DataSourceTime, update_info.time)
+  end
+  
+  local ds_size = update_info.size
+  if ds_size then
+    pb_update_info.value_size = ds_size
+  else 
+    pb_update_info.null_size = true
+    pb_update_info.value_size = nil
+  end
+    
+  return event_value("ON_DATA_SOURCE_UPDATE"), pb.encode(qlua_pb_types.qlua_structures.DataSourceUpdateInfo, pb_update_info)
 end
 
 return ProtobufEventDataSerializer
