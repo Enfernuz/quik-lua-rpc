@@ -117,3 +117,9 @@ message Response {
     bool is_error = 2;
     bytes result = 3;
 }
+
+message Error {
+
+    int32 code = 1;
+    string message = 2;
+}
