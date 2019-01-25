@@ -58,7 +58,7 @@ end
 
 -- TODO: test
 module["getInfoParam"] = function (args)
-  return requireNonNil(_G.getInfoParam(args.param_name))
+  return utils.Cp1251ToUtf8(requireNonNil(_G.getInfoParam(args.param_name)))
 end
 
 module["message"] = function (args)
@@ -68,14 +68,8 @@ end
 
 -- TODO: test
 module["sleep"] = function (args) 
-  
-  local proc_result = _G.sleep(args.time)
-  
-  if proc_result == nil then
-    error( string.format("QLua-функция sleep(%d) возвратила nil.", args.time) )
-  end
-  
-  return proc_result
+  -- returns nil in case of error
+  return _G.sleep(args.time)
 end
 
 -- TODO: test
@@ -85,10 +79,7 @@ end
 
 -- TODO: test
 module["PrintDbgStr"] = function (args) 
-  
   _G.PrintDbgStr(args.s)
-  
-  return nil
 end
 
 -- TODO: test
@@ -101,12 +92,7 @@ module["getItem"] = function (args)
   
   -- returns nil in case of error
   local result = _G.getItem(args.table_name, args.index)
-  
-  if result then
-    return to_string_string_table(result)
-  else
-    return nil
-  end
+  return result and to_string_string_table(result) or nil
 end
 
 -- TODO: test
@@ -180,7 +166,8 @@ end
 
 -- TODO: test
 module["getNumberOf"] = function (args) 
-  return requireNonNil(_G.getNumberOf(args.table_name)) -- returns -1 in case of error
+  -- returns -1 in case of error
+  return requireNonNil(_G.getNumberOf(args.table_name))
 end
 
 -- TODO: test
@@ -192,8 +179,6 @@ module["SearchItems"] = function (args)
   if fn_ctr == nil then 
     error(string.format("Не удалось распарсить определение функции из переданной строки. Описание ошибки: [%s].", error_msg))
   else
-    -- protobuf specific:
-    if args.null_end_index
     if not args.params or args.params == "" then
       result = _G.SearchItems(args.table_name, args.start_index, args.end_index and args.end_index or (_G.getNumberOf(args.table_name) - 1), fn_ctr()) -- returns nil in case of empty list found or error
     else 
@@ -211,7 +196,13 @@ end
 
 -- TODO: test
 module["getClassInfo"] = function (args) 
-  return requireNonNil(_G.getClassInfo(args.class_code))
+  
+  local result = requireNonNil(_G.getClassInfo(args.class_code))
+  result.firmid = utils.Cp1251ToUtf8( assert(result.firmid, "Результирующая таблица не содержит обязательного поля 'firmid'.") )
+  result.name = result.name and utils.Cp1251ToUtf8(result.name) or nil
+  result.code = result.code and utils.Cp1251ToUtf8(result.code) or nil
+  
+  return result
 end
 
 -- TODO: test
@@ -239,7 +230,8 @@ end
 -- TODO: test
 module["getMoneyEx"] = function (args) 
   
-  local result = _G.getMoneyEx(args.firmid, args.client_code, args.tag, args.currcode, args.limit_kind) -- returns nil if no info found or in case of an error
+  -- returns nil if no info found or in case of an error
+  local result = _G.getMoneyEx(args.firmid, args.client_code, args.tag, args.currcode, args.limit_kind)
 
   if result then
     result.currcode = utils.Cp1251ToUtf8( assert(result.currcode, "Результирующая таблица не содержит обязательного поля 'currcode'.") )
@@ -375,16 +367,16 @@ module["getSecurityInfo"] = function (args)
   
   if result then
     assert(result.code, "Результирующая таблица не содержит обязательного поля 'code'.")
-    result.name = utils.Cp1251ToUtf8(result.name)
-    result.short_name = utils.Cp1251ToUtf8(result.short_name)
+    result.name = result.name and utils.Cp1251ToUtf8(result.name) or nil
+    result.short_name = result.short_name and utils.Cp1251ToUtf8(result.short_name) or nil
     result.class_code = utils.Cp1251ToUtf8( assert(result.class_code, "Функция getSecurityInfo: результирующая таблица не содержит обязательного поля 'class_code'.") )
-    result.class_name = utils.Cp1251ToUtf8(result.class_name)
+    result.class_name = result.class_name and utils.Cp1251ToUtf8(result.class_name) or nil
     if result.face_value then result.face_value = tostring(result.face_value) end
-    result.face_unit = utils.Cp1251ToUtf8(result.face_unit)
+    result.face_unit = result.face_unit and utils.Cp1251ToUtf8(result.face_unit) or nil
     if result.scale then result.scale = tostring(result.scale) end
     if result.mat_date then result.mat_date = tostring(result.mat_date) end
     if result.lot_size then result.lot_size = tostring(result.lot_size) end
-    result.isin_code = utils.Cp1251ToUtf8(result.isin_code)
+    result.isin_code = result.isin_code and utils.Cp1251ToUtf8(result.isin_code) or nil
     if result.min_price_step then result.min_price_step = tostring(result.min_price_step) end
   end
 
@@ -411,8 +403,24 @@ module["getQuoteLevel2"] = function (args)
   
   assert(result.bid_count, "Результирующая таблица не содержит обязательного поля 'bid_count'.")
   assert(result.offer_count, "Результирующая таблица не содержит обязательного поля 'offer_count'.")
-  if result.bid == "" then result.bid = nil end
-  if result.offer == "" then result.offer = nil end
+  
+  result.bids = {}
+  local bid = result.bid
+  if bid and bid ~= "" then
+    for _, v in ipairs(bid) do
+      table.sinsert(result.bids, {price = v.price, quantity = v.quantity})
+    end
+  end
+  result.bid = nil
+  
+  result.offers = {}
+  local offer = result.offer
+  if offer and offer ~= "" then
+    for _, v in ipairs(offer) do
+      table.sinsert(result.offers, {price = v.price, quantity = v.quantity})
+    end
+  end
+  result.offer = nil
   
   return result
 end
@@ -432,15 +440,15 @@ module["getCandlesByIndex"] = function (args)
   
   local t, n, l = _G.getCandlesByIndex(args.tag, args.line, args.first_candle, args.count) -- returns ({}, 0, "") if no info found or in case of error
   
-  if t == nil then 
+  if not t then 
     error("Целевая QLua-функция возвратила nil вместо значения 't'.")
   end
   
-  if i == nil then
+  if not i then
     error("Целевая QLua-функция возвратила nil вместо значения 'i'.")
   end
   
-  if l == nil then
+  if not l then
     error("Целевая QLua-функция возвратила nil вместо значения 'l'.")
   end
 
@@ -461,20 +469,22 @@ module["getCandlesByIndex"] = function (args)
 end
 
 -- TODO: test
-module["datasource.CreateDataSource"] = function (args) 
+module["datasource.CreateDataSource"] = function (args)
   
-  assert(args.interval, "Функция datasource.CreateDataSource: аргумент 'interval' не должен быть nil.")
-  local interval = assert(_G[args.interval], string.format("Функция datasource.CreateDataSource: QLua-интервал не найден для значения '%s'.", args.interval))
   local ds, error_desc
   if args.param == nil or args.param == "" then
-    ds, error_desc = _G.CreateDataSource(args.class_code, args.sec_code, interval)
+    ds, error_desc = _G.CreateDataSource(args.class_code, args.sec_code, args.interval)
   else 
-    ds, error_desc = _G.CreateDataSource(args.class_code, args.sec_code, interval, args.param)
+    ds, error_desc = _G.CreateDataSource(args.class_code, args.sec_code, args.interval, args.param)
   end
   
   local result
   if ds then
-    local datasource_uuid = assert(uuid(), "Функция datasource.CreateDataSource: не удалось сгенерировать UUID.")
+    local datasource_uuid = uuid()
+    if not datasource_uuid then
+      ds:Close()
+      error("Не удалось сгенерировать UUID для источника данных.")
+    end
     datasources[datasource_uuid] = ds
     result = {
       datasource_uuid = datasource_uuid,
@@ -493,87 +503,127 @@ end
 -- TODO: test
 module["datasource.SetUpdateCallback"] = function (args) 
   
-  local ds = get_datasource(args.datasource_uuid)
+  local ds_uuid = args.datasource_uuid
+  local ds = get_datasource(ds_uuid)
   
-  local f_cb_ctr, error_msg = loadstring("return "..args.f_cb_def)
-  if f_cb_ctr == nil then 
-    error( string.format("Функция datasource.SetUpdateCallback: не удалось распарсить определение функции из переданной строки. Описание ошибки: [%s].", error_msg) )
-  else
-    local f_cb = f_cb_ctr()
-    return ds:SetUpdateCallback(function(index) f_cb(index, ds) end)
+  local f_cb_def = args.f_cb_def
+  local f_cb
+  if f_cb_def and f_cb_def ~= '' then
+    local f_cb_ctr, error_msg = loadstring("return "..args.f_cb_def)
+    if f_cb_ctr == nil then 
+      error( string.format("Не удалось распарсить определение функции из переданной строки. Описание ошибки: [%s].", error_msg) )
+    else
+      f_cb = f_cb_ctr()
+    end
   end
+  
+  local actual_callback_code = "return function (index) "
+  
+  local watch_code = ""
+  if args.watching_O then
+    watch_code = "props.O = ds:O(index) "
+  end
+  
+  if args.watching_H then
+    watch_code = watch_code .. "props.H = ds:H(index) "
+  end
+  
+  if args.watching_L then
+    watch_code = watch_code .. "props.L = ds:L(index) "
+  end
+  
+  if args.watching_C then
+    watch_code = watch_code .. "props.C = ds:C(index) "
+  end
+  
+  if args.watching_V then
+    watch_code = watch_code .. "props.V = ds:V(index) "
+  end
+  
+  if args.watching_T then
+    watch_code = watch_code .. "props.T = ds:T(index) "
+  end
+  
+  if args.watching_Size then
+    watch_code = watch_code .. "props.Size = ds:Size(index) "
+  end
+  
+  if watch_code ~= "" then
+    watch_code = "local props = {uuid = " .. ds_uuid ..", index = index} " .. watch_code .. "_G.OnDataSourceUpdate(props) " 
+    actual_callback_code = actual_callback_code .. watch_code
+  end
+  
+  if f_cb then
+    actual_callback_code = actual_callback_code .. "f_cb(index, ds) "
+  end
+  
+  actual_callback_code = actual_callback_code .. "end"
+  
+  local actual_callback_ctr = loadstring(actual_callback_code)
+  return requireNonNil(ds:SetUpdateCallback(actual_callback_ctr()))
 end
 
 -- TODO: test
-module["datasource.O"] = function (args) 
+module["datasource.O"] = function (args)
  
   local ds = get_datasource(args.datasource_uuid)
-  
-  return tostring( ds:O(args.candle_index) )
+  return tostring( requireNonNil(ds:O(args.candle_index)) )
 end
 
 -- TODO: test
-module["datasource.H"] = function (args) 
+module["datasource.H"] = function (args)
  
   local ds = get_datasource(args.datasource_uuid)
-  
-  return tostring( ds:H(args.candle_index) )
+  return tostring( requireNonNil(ds:H(args.candle_index)) )
 end
 
 -- TODO: test
-module["datasource.L"] = function (args) 
+module["datasource.L"] = function (args)
  
   local ds = get_datasource(args.datasource_uuid)
-  
-  return tostring( ds:L(args.candle_index) )
+  return tostring( requireNonNil(ds:L(args.candle_index)) )
 end
 
 -- TODO: test
-module["datasource.C"] = function (args) 
- 
-  local ds = get_datasource(args.datasource_uuid)
+module["datasource.C"] = function (args)
   
-  return tostring( ds:C(args.candle_index) )
+  local ds = get_datasource(args.datasource_uuid)
+  return tostring( requireNonNil(ds:C(args.candle_index)) )
 end
 
 -- TODO: test
-module["datasource.V"] = function (args) 
+module["datasource.V"] = function (args)
  
   local ds = get_datasource(args.datasource_uuid)
-  
-  return tostring( ds:V(args.candle_index) )
+  return tostring( requireNonNil(ds:V(args.candle_index)) )
 end
 
 -- TODO: test
 module["datasource.T"] = function (args) 
   
   local ds = get_datasource(args.datasource_uuid)
-
-  return ds:T(args.candle_index)
+  return requireNonNil(ds:T(args.candle_index))
 end
 
 -- TODO: test
 module["datasource.Size"] = function (args) 
   
   local ds = get_datasource(args.datasource_uuid)
-
-  return ds:Size()
+  return requireNonNil(ds:Size())
 end
 
 -- TODO: test
 module["datasource.Close"] = function (args) 
   
   local ds = get_datasource(args.datasource_uuid)
-  
-  return ds:Close()
+  return requireNonNil(ds:Close())
 end
 
 -- TODO: test
-module["datasource.SetEmptyCallback"] = function (args) 
+module["datasource.SetEmptyCallback"] = function (args)
   
   local ds = get_datasource(args.datasource_uuid)
-
-  return ds:SetEmptyCallback()
+  return requireNonNil(ds:SetEmptyCallback())
 end
 
 -- TODO: test
@@ -588,7 +638,7 @@ module["CalcBuySell"] = function (args)
   
   local price = tonumber(args.price)
   if price == nil then
-    error( string.format("Функция CalcBuySell: не удалось преобразовать в число значение '%s' аргумента 'price'.", args.price) ) 
+    error( string.format("Не удалось преобразовать в число значение '%s' аргумента 'price'.", args.price) ) 
   end
   
   local qty, comission = _G.CalcBuySell(args.class_code, args.sec_code, args.client_code, args.account, price, args.is_buy, args.is_market) -- returns (0; 0) in case of error
@@ -707,14 +757,82 @@ module["getPortfolioInfoEx"] = function (args)
   --result.fut_position_type AS IS
   --result.fut_accured_int AS IS
   
-  return requireNonNil(_G.getPortfolioInfoEx(args.firm_id, args.client_code, args.limit_kind)) -- returns {} in case of error
+  local portfolio_info_ex = requireNonNil(_G.getPortfolioInfoEx(args.firm_id, args.client_code, args.limit_kind)) -- returns {} in case of error
+  
+  local result = {portfolio_info = {}, ex = {}}
+  
+  result.portfolio_info.is_leverage = portfolio_info_ex.is_leverage
+  result.portfolio_info.in_assets = portfolio_info_ex.in_assets
+  result.portfolio_info.leverage = portfolio_info_ex.leverage
+  result.portfolio_info.open_limit = portfolio_info_ex.open_limit
+  result.portfolio_info.val_short = portfolio_info_ex.val_short
+  result.portfolio_info.val_long = portfolio_info_ex.val_long
+  result.portfolio_info.val_long_margin = portfolio_info_ex.val_long_margin
+  result.portfolio_info.val_long_asset = portfolio_info_ex.val_long_asset
+  result.portfolio_info.assets = portfolio_info_ex.assets
+  result.portfolio_info.cur_leverage = portfolio_info_ex.cur_leverage
+  result.portfolio_info.margin = portfolio_info_ex.margin
+  result.portfolio_info.lim_all = portfolio_info_ex.lim_all
+  result.portfolio_info.av_lim_all = portfolio_info_ex.av_lim_all
+  result.portfolio_info.locked_buy = portfolio_info_ex.locked_buy
+  result.portfolio_info.locked_buy_margin = portfolio_info_ex.locked_buy_margin
+  result.portfolio_info.locked_buy_asset = portfolio_info_ex.locked_buy_asset
+  result.portfolio_info.locked_sell = portfolio_info_ex.locked_sell
+  result.portfolio_info.locked_value_coef = portfolio_info_ex.locked_value_coef
+  result.portfolio_info.in_all_assets = portfolio_info_ex.in_all_assets
+  result.portfolio_info.all_assets = portfolio_info_ex.all_assets
+  result.portfolio_info.profit_loss = portfolio_info_ex.profit_loss
+  result.portfolio_info.rate_change = portfolio_info_ex.rate_change
+  result.portfolio_info.lim_buy = portfolio_info_ex.lim_buy
+  result.portfolio_info.lim_sell = portfolio_info_ex.lim_sell
+  result.portfolio_info.lim_non_margin = portfolio_info_ex.lim_non_margin
+  result.portfolio_info.lim_buy_asset = portfolio_info_ex.lim_buy_asset
+  result.portfolio_info.val_short_net = portfolio_info_ex.val_short_net
+  result.portfolio_info.val_long_net = portfolio_info_ex.val_long_net
+  result.portfolio_info.total_money_bal = portfolio_info_ex.total_money_bal
+  result.portfolio_info.total_locked_money = portfolio_info_ex.total_locked_money
+  result.portfolio_info.haircuts = portfolio_info_ex.haircuts
+  result.portfolio_info.assets_without_hc = portfolio_info_ex.assets_without_hc
+  result.portfolio_info.status_coef = portfolio_info_ex.status_coef
+  result.portfolio_info.varmargin = portfolio_info_ex.varmargin
+  result.portfolio_info.go_for_positions = portfolio_info_ex.go_for_positions
+  result.portfolio_info.go_for_orders = portfolio_info_ex.go_for_orders
+  result.portfolio_info.rate_futures = portfolio_info_ex.rate_futures
+  result.portfolio_info.is_qual_client = portfolio_info_ex.is_qual_client
+  result.portfolio_info.is_futures = portfolio_info_ex.is_futures
+  result.portfolio_info.curr_tag = portfolio_info_ex.curr_tag
+  
+  result.ex.init_margin = portfolio_info_ex.init_margin
+  result.ex.min_margin = portfolio_info_ex.min_margin
+  result.ex.corrected_margin = portfolio_info_ex.corrected_margin
+  result.ex.client_type = portfolio_info_ex.client_type
+  result.ex.portfolio_value = portfolio_info_ex.portfolio_value
+  result.ex.start_limit_open_pos = portfolio_info_ex.start_limit_open_pos
+  result.ex.total_limit_open_pos = portfolio_info_ex.total_limit_open_pos
+  result.ex.limit_open_pos = portfolio_info_ex.limit_open_pos
+  result.ex.used_lim_open_pos = portfolio_info_ex.used_lim_open_pos
+  result.ex.acc_var_margin = portfolio_info_ex.acc_var_margin
+  result.ex.cl_var_margin = portfolio_info_ex.cl_var_margin
+  result.ex.opt_liquid_cost = portfolio_info_ex.opt_liquid_cost
+  result.ex.fut_asset = portfolio_info_ex.fut_asset
+  result.ex.fut_total_asset = portfolio_info_ex.fut_total_asset
+  result.ex.fut_debt = portfolio_info_ex.fut_debt
+  result.ex.fut_rate_asset = portfolio_info_ex.fut_rate_asset
+  result.ex.fut_rate_asset_open = portfolio_info_ex.fut_rate_asset_open
+  result.ex.fut_rate_go = portfolio_info_ex.fut_rate_go
+  result.ex.planed_rate_go = portfolio_info_ex.planed_rate_go
+  result.ex.cash_leverage = portfolio_info_ex.cash_leverage
+  result.ex.fut_position_type = portfolio_info_ex.fut_position_type
+  result.ex.fut_accured_int = portfolio_info_ex.fut_accured_int
+  
+  return result
 end
 
 -- TODO: test
 module["getBuySellInfo"] = function (args) 
 
   local price = tonumber(args.price)
-  if price == nil then 
+  if not price then 
     error( string.format("Не удалось преобразовать в число значение '%s' аргумента 'price'.", args.price) )
   end
   
@@ -749,7 +867,7 @@ end
 module["getBuySellInfoEx"] = function (args) 
   
   local price = tonumber(args.price)
-  if price == nil then 
+  if not price then 
     error( string.format("Не удалось преобразовать в число значение '%s' аргумента 'price'.", args.price) )
   end
   
@@ -850,7 +968,7 @@ module["GetCell"] = function (args)
   
   -- post-processing: stringification of decimal numbers
   if result and result.value then
-    result.value = tostring(result.value) end
+    result.value = tostring(result.value)
   end
   
   return result
@@ -872,8 +990,9 @@ module["GetTableSize"] = function (args)
 end
 
 -- TODO: test
-module["GetWindowCaption"] = function (args) 
-  return utils.Cp1251ToUtf8(_G.GetWindowCaption(args.t_id))
+module["GetWindowCaption"] = function (args)
+  local window_caption = _G.GetWindowCaption(args.t_id)
+  return window_caption and utils.Cp1251ToUtf8(window_caption)
 end
 
 -- TODO: test
@@ -901,12 +1020,14 @@ end
 
 -- TODO: test
 module["SetWindowCaption"] = function (args) 
-  return _G.SetWindowCaption(args.t_id, args.str) -- returns true or false
+  -- returns true or false
+  return requireNonNil(_G.SetWindowCaption(args.t_id, args.str))
 end
 
 -- TODO: test
 module["SetWindowPos"] = function (args) 
-  return _G.SetWindowPos(args.t_id, args.x, args.y, args.dx, args.dy) -- returns true or false
+  -- returns true or false
+  return requireNonNil(_G.SetWindowPos(args.t_id, args.x, args.y, args.dx, args.dy))
 end
 
 -- TODO: test
@@ -915,10 +1036,11 @@ module["SetTableNotificationCallback"] = function (args)
   local f_cb_ctr, error_msg = loadstring("return "..args.f_cb_def)
   
   if f_cb_ctr == nil then 
-    error( string.format("Функция SetTableNotificationCallback: не удалось распарсить определение функции из переданной строки. Описание ошибки: [%s].", error_msg) )
+    error( string.format("Не удалось распарсить определение функции обратного вызова из переданной строки. Описание ошибки: [%s].", error_msg) )
   end
   
-  return _G.SetTableNotificationCallback(args.t_id, f_cb_ctr()) -- returns 0 or 1
+  -- returns 0 or 1
+  return requireNonNil(_G.SetTableNotificationCallback(args.t_id, f_cb_ctr()))
 end
 
 -- TODO: test
@@ -930,7 +1052,8 @@ end
 
 -- TODO: test
 module["SetColor"] = function (args) 
-  return _G.SetColor(args.t_id, args.row, args.col, args.b_color, args.f_color, args.sel_b_color, args.sel_f_color) -- what does it return in case of error ?
+  -- What does it return in case of error? I hope not nil...
+  return requireNonNil(_G.SetColor(args.t_id, args.row, args.col, args.b_color, args.f_color, args.sel_b_color, args.sel_f_color))
 end
 
 -- TODO: test
@@ -940,7 +1063,8 @@ end
 
 -- TODO: test
 module["SetSelectedRow"] = function (args) 
-  return _G.SetSelectedRow(args.table_id, args.row) -- returns -1 in case of error
+  -- returns -1 in case of error
+  return requireNonNil(_G.SetSelectedRow(args.table_id, args.row))
 end
 
 -- TODO: test
@@ -977,18 +1101,21 @@ module["GetLabelParams"] = function (args)
 end
 
 -- TODO: test
-module["SetLabelParams"] = function (args) 
-  return _G.SetLabelParams(args.chart_tag, args.label_id, args.label_params) -- returns true or false
+module["SetLabelParams"] = function (args)
+  -- returns true or false
+  return requireNonNil(_G.SetLabelParams(args.chart_tag, args.label_id, args.label_params))
 end
 
 -- TODO: test
-module["Subscribe_Level_II_Quotes"] = function (args) 
-  return _G.Subscribe_Level_II_Quotes(args.class_code, args.sec_code) -- returns true or false
+module["Subscribe_Level_II_Quotes"] = function (args)
+  -- returns true or false
+  return requireNonNil(_G.Subscribe_Level_II_Quotes(args.class_code, args.sec_code))
 end
 
 -- TODO: test
-module["Unsubscribe_Level_II_Quotes"] = function (args) 
-  return _G.Unsubscribe_Level_II_Quotes(args.class_code, args.sec_code) -- returns true or false
+module["Unsubscribe_Level_II_Quotes"] = function (args)
+  -- returns true or false
+  return requireNonNil(_G.Unsubscribe_Level_II_Quotes(args.class_code, args.sec_code))
 end
 
 -- TODO: test
@@ -999,7 +1126,8 @@ end
 
 -- TODO: test
 module["ParamRequest"] = function (args) 
-  return _G.ParamRequest(args.class_code, args.sec_code, args.db_name) -- returns true or false
+  -- returns true or false
+  return requireNonNil(_G.ParamRequest(args.class_code, args.sec_code, args.db_name))
 end
 
 -- TODO: test
@@ -1009,59 +1137,33 @@ module["CancelParamRequest"] = function (args)
 end
 
 -- TODO: test
-module["bit.tohex"] = function (args) 
-  
-  local result
-  if args.n == 0 then
-    result = bit.tohex(args.x)
-  else
-    result = bit.tohex(args.x, args.n)
-  end
-  
-  return result
+module["bit.tohex"] = function (args)
+  return requireNonNil( bit.tohex(args.x, args.n or nil) )
 end
 
 -- TODO: test
 module["bit.bnot"] = function (args) 
-  return bit.bnot(args.x)
+  return requireNonNil( bit.bnot(args.x) )
 end
 
 -- TODO: test
 module["bit.band"] = function (args) 
-
-  local xs = {args.x1, args.x2}
-  for _, e in ipairs(args.xi) do
-    table.sinsert(xs, e)
-  end
-
-  return bit.band( unpack(xs) )
+  return requireNonNil( bit.band(args.x1, args.x2, args.xi and unpack(args.xi) or nil) )
 end
 
 -- TODO: test
 module["bit.bor"] = function (args) 
-
-  local xs = {args.x1, args.x2}
-  for _, e in ipairs(args.xi) do
-    table.sinsert(xs, e)
-  end
-  
-  return bit.bor( unpack(xs) )
+  return requireNonNil( bit.bor(args.x1, args.x2, args.xi and unpack(args.xi) or nil) )
 end
 
 -- TODO: test
 module["bit.bxor"] = function (args) 
-
-  local xs = {args.x1, args.x2}
-  for _, e in ipairs(args.xi) do
-    table.sinsert(xs, e)
-  end
-
-  return bit.bxor( unpack(xs) )
+  return requireNonNil( bit.bxor(args.x1, args.x2, args.xi and unpack(args.xi) or nil) )
 end
 
 -- TODO: test
 module["bit.test"] = function (args) 
-  return bit.test(args.x, args.n)
+  return requireNonNil( bit.test(args.x, args.n) )
 end
 
 -----
