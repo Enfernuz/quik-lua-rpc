@@ -4,16 +4,16 @@ local table = require('table')
 local os = require('os')
 local string = require('string')
 
-local pairs = assert(pairs, "pairs function is missing")
-local ipairs = assert(ipairs, "ipairs function is missing")
-local tostring = assert(tostring, "tostring function is missing")
-local error = assert(error, "error function is missing")
+local pairs = assert(pairs, "Функция 'pairs' не найдена.")
+local ipairs = assert(ipairs, "Функция 'ipairs' не найдена.")
+local tostring = assert(tostring, "Функция 'tostring' не найдена.")
+local error = assert(error, "Функция 'error' не найдена.")
 
 local module = {}
 module._VERSION = '2.1.0'
 
 -- TODO: consider to remove
-function module.create_table(pb_map)
+function module.create_table (pb_map)
   
   local t = {}
   for _, e in ipairs(pb_map) do
@@ -24,7 +24,7 @@ function module.create_table(pb_map)
 end
 
 -- TODO: consider to remove
-function module.put_to_string_string_pb_map(t, pb_map, pb_map_entry_ctr)
+function module.put_to_string_string_pb_map (t, pb_map, pb_map_entry_ctr)
   
   for k, v in pairs(t) do
     local entry = pb_map_entry_ctr()
@@ -39,16 +39,28 @@ function module.sleep(s)
   repeat until os.clock() > ntime
 end
 
-local qtable_parameter_types = {}
-qtable_parameter_types["QTABLE_INT_TYPE"] = _G.QTABLE_INT_TYPE
-qtable_parameter_types["QTABLE_DOUBLE_TYPE"] = _G.QTABLE_DOUBLE_TYPE
-qtable_parameter_types["QTABLE_INT64_TYPE"] = _G.QTABLE_INT64_TYPE
-qtable_parameter_types["QTABLE_CACHED_STRING_TYPE"] = _G.QTABLE_CACHED_STRING_TYPE
-qtable_parameter_types["QTABLE_TIME_TYPE"] = _G.QTABLE_TIME_TYPE
-qtable_parameter_types["QTABLE_DATE_TYPE"] = _G.QTABLE_DATE_TYPE
-qtable_parameter_types["QTABLE_STRING_TYPE"] = _G.QTABLE_STRING_TYPE
+local create_qtable_parameter_types = function ()
+  
+  local result = {}
+  
+  local function put_qtable_parameter_entry (qtable_par_type)
+    result[qtable_par_type] = assert(_G[qtable_par_type], string.format("Тип %s параметра QLua-таблицы не определён.", qtable_par_type))
+  end
+  
+  put_qtable_parameter_entry("QTABLE_INT_TYPE")
+  put_qtable_parameter_entry("QTABLE_DOUBLE_TYPE")
+  put_qtable_parameter_entry("QTABLE_INT64_TYPE")
+  put_qtable_parameter_entry("QTABLE_CACHED_STRING_TYPE")
+  put_qtable_parameter_entry("QTABLE_TIME_TYPE")
+  put_qtable_parameter_entry("QTABLE_DATE_TYPE")
+  put_qtable_parameter_entry("QTABLE_STRING_TYPE")
+  
+  return result
+end
 
-function module.to_qtable_parameter_type(pb_column_parameter_type)
+local qtable_parameter_types = create_qtable_parameter_types()
+
+function module.to_qtable_parameter_type (pb_column_parameter_type)
   
   local par_type = qtable_parameter_types[pb_column_parameter_type]
   if par_type == nil then error("Unknown column parameter type.") end
@@ -56,26 +68,38 @@ function module.to_qtable_parameter_type(pb_column_parameter_type)
   return par_type
 end
 
-local interval_types = {}
-interval_types["INTERVAL_TICK"] = _G.INTERVAL_TICK
-interval_types["INTERVAL_M1"] = _G.INTERVAL_M1
-interval_types["INTERVAL_M2"] = _G.INTERVAL_M2
-interval_types["INTERVAL_M3"] = _G.INTERVAL_M3
-interval_types["INTERVAL_M4"] = _G.INTERVAL_M4
-interval_types["INTERVAL_M5"] = _G.INTERVAL_M5
-interval_types["INTERVAL_M6"] = _G.INTERVAL_M6
-interval_types["INTERVAL_M10"] = _G.INTERVAL_M10
-interval_types["INTERVAL_M15"] = _G.INTERVAL_M15
-interval_types["INTERVAL_M20"] = _G.INTERVAL_M20
-interval_types["INTERVAL_M30"] = _G.INTERVAL_M30
-interval_types["INTERVAL_H1"] = _G.INTERVAL_H1
-interval_types["INTERVAL_H2"] = _G.INTERVAL_H2
-interval_types["INTERVAL_H4"] = _G.INTERVAL_H4
-interval_types["INTERVAL_D1"] = _G.INTERVAL_D1
-interval_types["INTERVAL_W1"] = _G.INTERVAL_W1
-interval_types["INTERVAL_MN1"] = _G.INTERVAL_MN1
+local create_interval_types_table = function ()
+  
+  local result = {}
+  
+  local function put_interval_entry (interval)
+    result[interval] = assert(_G[interval], string.format("QLua-интервал %s не определён.", interval))
+  end
+  
+  put_interval_entry("INTERVAL_TICK")
+  put_interval_entry("INTERVAL_M1")
+  put_interval_entry("INTERVAL_M2")
+  put_interval_entry("INTERVAL_M3")
+  put_interval_entry("INTERVAL_M4")
+  put_interval_entry("INTERVAL_M5")
+  put_interval_entry("INTERVAL_M6")
+  put_interval_entry("INTERVAL_M10")
+  put_interval_entry("INTERVAL_M15")
+  put_interval_entry("INTERVAL_M20")
+  put_interval_entry("INTERVAL_M30")
+  put_interval_entry("INTERVAL_H1")
+  put_interval_entry("INTERVAL_H2")
+  put_interval_entry("INTERVAL_H4")
+  put_interval_entry("INTERVAL_D1")
+  put_interval_entry("INTERVAL_W1")
+  put_interval_entry("INTERVAL_MN1")
+  
+  return result
+end
 
-function module.to_interval(pb_interval)
+local interval_types = create_interval_types_table()
+
+function module.to_interval (pb_interval)
 
   local interval = interval_types[pb_interval]
   if interval == nil then error("Unknown interval type.") end
