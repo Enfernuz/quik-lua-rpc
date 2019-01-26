@@ -297,6 +297,11 @@ result_encoders["SetWindowCaption"] = function (proc_result)
   return {result = proc_result}
 end
 
+-- SetWindowPos
+result_encoders["SetWindowPos"] = function (proc_result)
+  return {result = proc_result}
+end
+
 -----
 
 -- sleep
