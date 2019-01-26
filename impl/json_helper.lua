@@ -302,13 +302,17 @@ result_encoders["SetWindowPos"] = function (proc_result)
   return {result = proc_result}
 end
 
------
-
 -- sleep
 result_encoders["sleep"] = function (proc_result)
-  return proc_result and {result = proc_result} or {}
+  return {result = proc_result}
 end
 
+-- Subscribe_Level_II_Quotes
+result_encoders["Subscribe_Level_II_Quotes"] = function (proc_result)
+  return {result = proc_result}
+end
+
+-----
 
 -- FIXME: add the rest of the encoders
 
