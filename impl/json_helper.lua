@@ -292,6 +292,11 @@ result_encoders["SetTableNotificationCallback"] = function (proc_result)
   return {result = proc_result}
 end
 
+-- SetWindowCaption
+result_encoders["SetWindowCaption"] = function (proc_result)
+  return {result = proc_result}
+end
+
 -----
 
 -- sleep
