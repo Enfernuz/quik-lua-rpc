@@ -312,6 +312,16 @@ result_encoders["Subscribe_Level_II_Quotes"] = function (proc_result)
   return {result = proc_result}
 end
 
+-- Unsubscribe_Level_II_Quotes
+result_encoders["Unsubscribe_Level_II_Quotes"] = function (proc_result)
+  return {result = proc_result}
+end
+
+-- datasource.C
+result_encoders["datasource.C"] = function (proc_result)
+  return {value = proc_result}
+end
+
 -----
 
 -- FIXME: add the rest of the encoders
