@@ -402,6 +402,11 @@ result_encoders["bit.tohex"] = function (proc_result)
   return {result = proc_result}
 end
 
+-- os.sysdate
+result_encoders["os.sysdate"] = function (proc_result)
+  return proc_result
+end
+
 -----
 
 -- FIXME: add the rest of the encoders
