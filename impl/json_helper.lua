@@ -372,6 +372,11 @@ result_encoders["datasource.CreateDataSource"] = function (proc_result)
   return proc_result
 end
 
+-- bit.band
+result_encoders["bit.band"] = function (proc_result)
+  return {result = proc_result}
+end
+
 -----
 
 -- FIXME: add the rest of the encoders
