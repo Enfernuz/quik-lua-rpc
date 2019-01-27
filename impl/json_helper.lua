@@ -397,6 +397,11 @@ result_encoders["bit.test"] = function (proc_result)
   return {result = proc_result}
 end
 
+-- bit.tohex
+result_encoders["bit.tohex"] = function (proc_result)
+  return {result = proc_result}
+end
+
 -----
 
 -- FIXME: add the rest of the encoders
