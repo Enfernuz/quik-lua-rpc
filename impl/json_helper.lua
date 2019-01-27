@@ -327,6 +327,11 @@ result_encoders["datasource.H"] = function (proc_result)
   return {value = proc_result}
 end
 
+-- datasource.O
+result_encoders["datasource.O"] = function (proc_result)
+  return {value = proc_result}
+end
+
 -----
 
 -- FIXME: add the rest of the encoders
