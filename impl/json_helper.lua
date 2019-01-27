@@ -377,6 +377,11 @@ result_encoders["bit.band"] = function (proc_result)
   return {result = proc_result}
 end
 
+-- bit.bor
+result_encoders["bit.bor"] = function (proc_result)
+  return {result = proc_result}
+end
+
 -----
 
 -- FIXME: add the rest of the encoders
