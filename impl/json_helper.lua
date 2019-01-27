@@ -347,6 +347,11 @@ result_encoders["datasource.T"] = function (proc_result)
   return {time = proc_result}
 end
 
+-- datasource.Size
+result_encoders["datasource.Size"] = function (proc_result)
+  return {value = proc_result}
+end
+
 -----
 
 -- FIXME: add the rest of the encoders
