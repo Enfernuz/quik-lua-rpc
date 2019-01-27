@@ -362,6 +362,11 @@ result_encoders["datasource.SetEmptyCallback"] = function (proc_result)
   return {result = proc_result}
 end
 
+-- datasource.SetUpdateCallback
+result_encoders["datasource.SetUpdateCallback"] = function (proc_result)
+  return {result = proc_result}
+end
+
 -----
 
 -- FIXME: add the rest of the encoders
