@@ -392,6 +392,11 @@ result_encoders["bit.bnot"] = function (proc_result)
   return {result = proc_result}
 end
 
+-- bit.test
+result_encoders["bit.test"] = function (proc_result)
+  return {result = proc_result}
+end
+
 -----
 
 -- FIXME: add the rest of the encoders
