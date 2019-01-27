@@ -352,6 +352,11 @@ result_encoders["datasource.Size"] = function (proc_result)
   return {value = proc_result}
 end
 
+-- datasource.Close
+result_encoders["datasource.Close"] = function (proc_result)
+  return {result = proc_result}
+end
+
 -----
 
 -- FIXME: add the rest of the encoders
