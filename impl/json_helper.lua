@@ -234,12 +234,12 @@ end
 
 -- IsWindowClosed
 result_encoders["IsWindowClosed"] = function (proc_result)
-  return proc_result and {result = proc_result} or {}
+  return {result = proc_result}
 end
 
 -- message
 result_encoders["message"] = function (proc_result)
-  return proc_result and {result = proc_result} or {}
+  return {result = proc_result}
 end
 
 -- ParamRequest
