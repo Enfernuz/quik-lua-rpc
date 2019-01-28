@@ -51,6 +51,11 @@ result_encoders["DeleteRow"] = function (proc_result)
   return {result = proc_result}
 end
 
+-- DelLabel
+result_encoders["DelLabel"] = function (proc_result)
+  return {result = proc_result}
+end
+
 -- DestroyTable
 result_encoders["DestroyTable"] = function (proc_result)
   return {result = proc_result}
