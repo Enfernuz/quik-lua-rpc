@@ -21,6 +21,11 @@ result_encoders["AllocTable"] = function (proc_result)
   return {t_id = proc_result}
 end
 
+-- CalcBuySell
+result_encoders["CalcBuySell"] = function (proc_result)
+  return proc_result
+end
+
 -- Clear
 result_encoders["Clear"] = function (proc_result)
   return {result = proc_result}
@@ -406,10 +411,6 @@ end
 result_encoders["os.sysdate"] = function (proc_result)
   return proc_result
 end
-
------
-
--- FIXME: add the rest of the encoders
 
 -----
 
