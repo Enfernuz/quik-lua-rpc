@@ -26,6 +26,11 @@ result_encoders["CalcBuySell"] = function (proc_result)
   return proc_result
 end
 
+-- CancelParamRequest
+result_encoders["CancelParamRequest"] = function (proc_result)
+  return {result = proc_result}
+end
+
 -- Clear
 result_encoders["Clear"] = function (proc_result)
   return {result = proc_result}
