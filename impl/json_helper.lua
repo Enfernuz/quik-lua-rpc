@@ -268,7 +268,7 @@ result_encoders["PrintDbgStr"] = function ()
 end
 
 -- RGB
-result_encoders["PrintDbgStr"] = function (proc_result)
+result_encoders["RGB"] = function (proc_result)
   return {result = proc_result}
 end
 
