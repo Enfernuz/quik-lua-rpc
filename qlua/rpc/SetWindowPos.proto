@@ -7,7 +7,7 @@ package qlua.rpc.SetWindowPos;
 option optimize_for = SPEED;
 option java_package = "qlua.rpc";
 
-message Request {
+message Args {
 
     int32 t_id = 1;
     int32 x = 2;

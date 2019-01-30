@@ -13,7 +13,7 @@ message TableSize {
     int32 col = 2;
 }
 
-message Request {
+message Args {
     int32 t_id = 1;
 }
 

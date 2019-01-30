@@ -7,7 +7,7 @@ package qlua.rpc.sleep;
 option optimize_for = SPEED;
 option java_package = "qlua.rpc";
 
-message Request {
+message Args {
     int32 time = 1;
 }
 

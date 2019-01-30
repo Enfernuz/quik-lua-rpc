@@ -7,7 +7,7 @@ package qlua.rpc.datasource.SetUpdateCallback;
 option optimize_for = SPEED;
 option java_package = "qlua.rpc.datasource";
 
-message Request {
+message Args {
 
     string datasource_uuid = 1; 
     string f_cb_def = 2; // NB: формат функции: "function (NUMBER index, TABLE datasource) function_body end"

@@ -15,7 +15,7 @@ message WindowRect {
     int32 right = 4;
 }
 
-message Request {
+message Args {
     int32 t_id = 1;
 }
 

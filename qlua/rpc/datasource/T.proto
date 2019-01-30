@@ -9,7 +9,7 @@ import "qlua/rpc/qlua_structures.proto";
 option optimize_for = SPEED;
 option java_package = "qlua.rpc.datasource";
 
-message Request {
+message Args {
 
     string datasource_uuid = 1;
     int32 candle_index = 2;

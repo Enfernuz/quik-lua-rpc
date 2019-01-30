@@ -36,7 +36,7 @@ message PortfolioInfoEx {
     string fut_accured_int = 23;
 }
 
-message Request {
+message Args {
 
     string firm_id = 1;
     string client_code = 2;

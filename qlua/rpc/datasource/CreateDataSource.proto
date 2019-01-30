@@ -29,7 +29,7 @@ enum Interval {
     INTERVAL_MN1 = 17;
 }
 
-message Request {
+message Args {
 
     string class_code = 1;
     string sec_code = 2;

@@ -7,7 +7,7 @@ package qlua.rpc.bit.bnot;
 option optimize_for = SPEED;
 option java_package = "qlua.rpc.bit";
 
-message Request {
+message Args {
     int32 x = 1;
 }
 

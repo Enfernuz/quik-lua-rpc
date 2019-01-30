@@ -7,6 +7,6 @@ package qlua.rpc.PrintDbgStr;
 option optimize_for = SPEED;
 option java_package = "qlua.rpc";
 
-message Request {
+message Args {
     string s = 1;
 }

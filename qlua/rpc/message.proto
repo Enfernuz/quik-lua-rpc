@@ -15,7 +15,7 @@ enum IconType {
     ERROR = 3;
 }
 
-message Request {
+message Args {
     
     string message = 1;
     IconType icon_type = 2;

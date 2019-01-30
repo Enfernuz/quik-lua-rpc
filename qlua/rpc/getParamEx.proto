@@ -15,7 +15,7 @@ message ParamEx {
     string result = 4;
 }
 
-message Request {
+message Args {
 
     string class_code = 1;
     string sec_code = 2;

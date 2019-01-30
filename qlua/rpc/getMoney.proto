@@ -18,7 +18,7 @@ message Money {
     string money_limit_available = 7; // NUMBER in QLUA
 }
 
-message Request {
+message Args {
 
     string client_code = 1; // Код клиента
     string firmid = 2; // Фирма

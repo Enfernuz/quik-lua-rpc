@@ -32,7 +32,7 @@ message BuySellInfo {
     string can_sell_own = 21;
 }
 
-message Request {
+message Args {
 
     string firm_id = 1;
     string client_code = 2;

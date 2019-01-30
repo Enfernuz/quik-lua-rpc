@@ -51,7 +51,7 @@ message PortfolioInfo {
     string curr_tag = 40;
 }
 
-message Request {
+message Args {
 
     string firm_id = 1;
     string client_code = 2;
