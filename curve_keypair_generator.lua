@@ -5,11 +5,11 @@ local scriptPath = getScriptPath()
 local zmq = require("lzmq")
 local utils = require("utils.utils")
 
-local function localize(str)
+local function localize (str)
   return utils.Utf8ToCp1251(str)
 end
 
-function main()
+function main ()
   
   local pub, sec = zmq.curve_keypair()
   if pub == nil then

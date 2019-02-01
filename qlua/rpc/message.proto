@@ -15,12 +15,16 @@ enum IconType {
     ERROR = 3;
 }
 
-message Request {
+message Args {
     
     string message = 1;
     IconType icon_type = 2;
 }
     
 message Result {
-    int32 result = 1;
+
+    oneof message_result {
+        bool null_result = 1;
+        int32 value_result = 2;
+    }
 }

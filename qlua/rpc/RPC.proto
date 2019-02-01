@@ -18,7 +18,7 @@ enum ProcedureType {
     GET_WORKING_FOLDER = 6;
     PRINT_DBG_STR = 7;
     GET_ITEM = 8;
-    GET_ORDER_BY_NUMBER = 9; // NOT TESTED YET
+    GET_ORDER_BY_NUMBER = 9;
     GET_NUMBER_OF = 10;
     SEARCH_ITEMS = 11;
     GET_CLASSES_LIST = 12;
@@ -51,7 +51,7 @@ enum ProcedureType {
     DS_SET_EMPTY_CALLBACK = 37;
     
     SEND_TRANSACTION = 38;
-    CALC_BUY_SELL = 39; // NOT TESTED YET
+    CALC_BUY_SELL = 39;
     
     GET_PARAM_EX = 40;
     GET_PARAM_EX_2 = 41; // NB: использовать структуры запроса и ответа от GET_PARAM_EX
@@ -89,9 +89,9 @@ enum ProcedureType {
     GET_LABEL_PARAMS = 69;
     SET_LABEL_PARAMS = 70;
     
-    SUBSCRIBE_LEVEL_II_QUOTES = 71; // NOT IMPLEMENTED YET
-    UNSUBSCRIBE_LEVEL_II_QUOTES = 72; // NOT IMPLEMENTED YET
-    IS_SUBSCRIBED_LEVEL_II_QUOTES = 73; // NOT IMPLEMENTED YET
+    SUBSCRIBE_LEVEL_II_QUOTES = 71;
+    UNSUBSCRIBE_LEVEL_II_QUOTES = 72;
+    IS_SUBSCRIBED_LEVEL_II_QUOTES = 73;
     
     PARAM_REQUEST = 74;
     CANCEL_PARAM_REQUEST = 75;
@@ -101,6 +101,9 @@ enum ProcedureType {
     BIT_BAND = 78;
     BIT_BOR = 79;
     BIT_BXOR = 80;
+    BIT_TEST = 81;
+    
+    OS_SYSDATE = 82;
 }
 
 message Request {
@@ -111,7 +114,12 @@ message Request {
 
 message Response {
 
-    ProcedureType type = 1;
     bool is_error = 2;
     bytes result = 3;
+}
+
+message Error {
+
+    int32 code = 1;
+    string message = 2;
 }

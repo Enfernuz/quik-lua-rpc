@@ -22,7 +22,7 @@ message BuySellInfoEx {
     string is_short_allowed = 9;
 }
 
-message Request {
+message Args {
 
     string firm_id = 1;
     string client_code = 2;

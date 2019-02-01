@@ -1,61 +1,19 @@
 package.path = "../?.lua;" .. package.path
 
-local qlua = require("qlua.api")
-
-local qlua_types = require("qlua.rpc.qlua_types_pb")
-local qlua_structs = require("qlua.rpc.qlua_structures_pb")
-
 local table = require('table')
 local os = require('os')
 local string = require('string')
 
-local pairs = assert(pairs, "pairs function is missing")
-local ipairs = assert(ipairs, "ipairs function is missing")
-local tostring = assert(tostring, "tostring function is missing")
-local error = assert(error, "error function is missing")
+local pairs = assert(pairs, "Функция 'pairs' не найдена.")
+local ipairs = assert(ipairs, "Функция 'ipairs' не найдена.")
+local tostring = assert(tostring, "Функция 'tostring' не найдена.")
+local error = assert(error, "Функция 'error' не найдена.")
 
 local module = {}
 module._VERSION = '2.1.0'
 
-function module.value_or_empty_string(val)
-  return (val == nil and "" or module.Cp1251ToUtf8(val))
-end
-
-function module.value_to_string_or_empty_string(val)
-  return (val == nil and "" or tostring(val))
-end
-
-function module.copy_pb_struct(dst, src)
-  
-  for k, v in pairs(src) do
-    dst[k] = v
-  end
-end
-
-function module.insert_table(dst, src)
-  
-  for k, v in pairs(src) do
-      local table_entry = qlua_types.TableEntry() 
-      table_entry.k = tostring(k)
-      table_entry.v = tostring(v)
-      table.sinsert(dst, table_entry)
-  end
-end
-
-function module.copy_datetime(dst, src)
- 
-  dst.mcs = src.mcs
-  dst.ms = src.ms
-  dst.sec = src.sec
-  dst.min = src.min
-  dst.hour = src.hour
-  dst.day = src.day
-  dst.week_day = src.week_day
-  dst.month = src.month
-  dst.year = src.year
-end
-
-function module.create_table(pb_map)
+-- TODO: consider to remove
+function module.create_table (pb_map)
   
   local t = {}
   for _, e in ipairs(pb_map) do
@@ -65,7 +23,8 @@ function module.create_table(pb_map)
   return t
 end
 
-function module.put_to_string_string_pb_map(t, pb_map, pb_map_entry_ctr)
+-- TODO: consider to remove
+function module.put_to_string_string_pb_map (t, pb_map, pb_map_entry_ctr)
   
   for k, v in pairs(t) do
     local entry = pb_map_entry_ctr()
@@ -80,16 +39,28 @@ function module.sleep(s)
   repeat until os.clock() > ntime
 end
 
-local qtable_parameter_types = {}
-qtable_parameter_types[qlua.AddColumn.ColumnParameterType.QTABLE_INT_TYPE] = QTABLE_INT_TYPE
-qtable_parameter_types[qlua.AddColumn.ColumnParameterType.QTABLE_DOUBLE_TYPE] = QTABLE_DOUBLE_TYPE
-qtable_parameter_types[qlua.AddColumn.ColumnParameterType.QTABLE_INT64_TYPE] = QTABLE_INT64_TYPE
-qtable_parameter_types[qlua.AddColumn.ColumnParameterType.QTABLE_CACHED_STRING_TYPE] = QTABLE_CACHED_STRING_TYPE
-qtable_parameter_types[qlua.AddColumn.ColumnParameterType.QTABLE_TIME_TYPE] = QTABLE_TIME_TYPE
-qtable_parameter_types[qlua.AddColumn.ColumnParameterType.QTABLE_DATE_TYPE] = QTABLE_DATE_TYPE
-qtable_parameter_types[qlua.AddColumn.ColumnParameterType.QTABLE_STRING_TYPE] = QTABLE_STRING_TYPE
+local create_qtable_parameter_types = function ()
+  
+  local result = {}
+  
+  local function put_qtable_parameter_entry (qtable_par_type)
+    result[qtable_par_type] = assert(_G[qtable_par_type], string.format("Тип %s параметра QLua-таблицы не определён.", qtable_par_type))
+  end
+  
+  put_qtable_parameter_entry("QTABLE_INT_TYPE")
+  put_qtable_parameter_entry("QTABLE_DOUBLE_TYPE")
+  put_qtable_parameter_entry("QTABLE_INT64_TYPE")
+  put_qtable_parameter_entry("QTABLE_CACHED_STRING_TYPE")
+  put_qtable_parameter_entry("QTABLE_TIME_TYPE")
+  put_qtable_parameter_entry("QTABLE_DATE_TYPE")
+  put_qtable_parameter_entry("QTABLE_STRING_TYPE")
+  
+  return result
+end
 
-function module.to_qtable_parameter_type(pb_column_parameter_type)
+local qtable_parameter_types = create_qtable_parameter_types()
+
+function module.to_qtable_parameter_type (pb_column_parameter_type)
   
   local par_type = qtable_parameter_types[pb_column_parameter_type]
   if par_type == nil then error("Unknown column parameter type.") end
@@ -97,26 +68,38 @@ function module.to_qtable_parameter_type(pb_column_parameter_type)
   return par_type
 end
 
-local interval_types = {}
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_TICK] = INTERVAL_TICK
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M1] = INTERVAL_M1
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M2] = INTERVAL_M2
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M3] = INTERVAL_M3
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M4] = INTERVAL_M4
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M5] = INTERVAL_M5
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M6] = INTERVAL_M6
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M10] = INTERVAL_M10
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M15] = INTERVAL_M15
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M20] = INTERVAL_M20
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_M30] = INTERVAL_M30
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_H1] = INTERVAL_H1
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_H2] = INTERVAL_H2
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_H4] = INTERVAL_H4
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_D1] = INTERVAL_D1
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_W1] = INTERVAL_W1
-interval_types[qlua.datasource.CreateDataSource.Interval.INTERVAL_MN1] = INTERVAL_MN1
+local create_interval_types_table = function ()
+  
+  local result = {}
+  
+  local function put_interval_entry (interval)
+    result[interval] = assert(_G[interval], string.format("QLua-интервал %s не определён.", interval))
+  end
+  
+  put_interval_entry("INTERVAL_TICK")
+  put_interval_entry("INTERVAL_M1")
+  put_interval_entry("INTERVAL_M2")
+  put_interval_entry("INTERVAL_M3")
+  put_interval_entry("INTERVAL_M4")
+  put_interval_entry("INTERVAL_M5")
+  put_interval_entry("INTERVAL_M6")
+  put_interval_entry("INTERVAL_M10")
+  put_interval_entry("INTERVAL_M15")
+  put_interval_entry("INTERVAL_M20")
+  put_interval_entry("INTERVAL_M30")
+  put_interval_entry("INTERVAL_H1")
+  put_interval_entry("INTERVAL_H2")
+  put_interval_entry("INTERVAL_H4")
+  put_interval_entry("INTERVAL_D1")
+  put_interval_entry("INTERVAL_W1")
+  put_interval_entry("INTERVAL_MN1")
+  
+  return result
+end
 
-function module.to_interval(pb_interval)
+local interval_types = create_interval_types_table()
+
+function module.to_interval (pb_interval)
 
   local interval = interval_types[pb_interval]
   if interval == nil then error("Unknown interval type.") end

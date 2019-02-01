@@ -7,12 +7,14 @@ package qlua.rpc.getItem;
 option optimize_for = SPEED;
 option java_package = "qlua.rpc";
 
-message Request {
+message Args {
 
     string table_name = 1;
     int32 index = 2;
 }
 
 message Result {
-    map<string, string> table_row = 1;
+
+    bool null_table_row = 1;
+    map<string, string> table_row = 2;
 }

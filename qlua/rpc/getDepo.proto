@@ -19,7 +19,7 @@ message Depo {
     string depo_open_limit = 8;
 }
 
-message Request {
+message Args {
 
     string client_code = 1; // Код клиента
     string firmid = 2; // Фирма

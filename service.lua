@@ -7,16 +7,16 @@ local string = string
 local zmq = require("lzmq")
 local zmq_poller = require("lzmq.poller")
 local zap = require("auth.zap")
-local qlua = require("qlua.api")
-local qlua_events = require("qlua.rpc.qlua_events_pb")
 local config_parser = require("utils.config_parser")
-local request_handler = require("impl.request-handler")
-local event_handler = require("impl.event-handler")
+local event_data_converter = require("impl.event_data_converter")
+local procedure_wrappers = require("impl.procedure_wrappers")
 local utils = require("utils.utils")
+local json = require("utils.json")
 local uuid = require("utils.uuid")
 
 local service = {}
-service._VERSION = '1.0.0'
+service._VERSION = "1.0.0"
+service.QUIK_VERSION = "7.16.1.36"
 service.event_callbacks = {}
 
 local zmq_ctx = nil
@@ -26,177 +26,254 @@ local poller = nil
 local is_running = false
 local initialized = false
 
-local function pub_poll_out_callback()
+local request_response_serde = {
+  -- initialized on demand
+  json = nil,
+  protobuf = nil
+}
+
+local publishers = {
+  json = nil,
+  protobuf = nil
+}
+
+local protobuf_context = {
+  is_initialized = false
+}
+
+function protobuf_context:init (context_path)
+  require("qlua.qlua_pb_init")(context_path)
+  self.is_initialized = true
 end
 
-local function send_response(response, socket)
-  local ok, err = pcall(function()
-      local msg = zmq.msg_init_data( response:SerializeToString() )
+local function pub_poll_out_callback ()
+  -- TODO: add reading from a message queue
+  -- Polling out is not implemented at the moment: messages are being sent regardless of the POLLOUT event.
+end
+
+local function send_data (data, socket)
+  local ok, err = pcall(function ()
+      local msg = zmq.msg_init_data(data)
       msg:send(socket)
+      msg:close()
   end)
   -- if not ok then (log the error somehow, maybe to a file...) end
 end
 
-local function create_rpc_poll_in_callback(socket)
+local function gen_error_obj (code, msg)
   
-  return function()
-  
-    local ok, err = pcall(function()
-      local msg_request = zmq.msg_init()
-      local recv = msg_request:recv(socket)
-      if not (recv == nil or recv == -1) then
-        local request = qlua.RPC.Request()
-        request:ParseFromString( recv:data() )
-        send_response(request_handler:handle(request), socket)
-      end
-    end)
-    
-    if not ok then
-      local response = qlua.RPC.Response()
-      -- TODO: set the response type to ERROR or something like that
-      response.is_error = true
-      response.result = utils.Cp1251ToUtf8( string.format("Ошибка при обработке входящего запроса: '%s'.", err) )
-      send_response(response, socket)
-    end
+  local err = {code = code}
+  if msg then 
+    err.message = msg
   end
+  
+  return err
 end
 
-local function publish(event_type, event_data)
+local function create_rpc_poll_in_callback (socket, serde_protocol)
+  
+  local sd_proto = string.lower(serde_protocol)
+  local handler
+  if "json" == sd_proto then
+    -- TODO: remove this message
+    message("DEBUG: JSON message protocol detected")
+    if not request_response_serde.json then
+      request_response_serde.json = require("impl.json_request_response_serde"):new()
+    end
+    handler = request_response_serde.json
+  elseif "protobuf" == sd_proto then -- TODO: make explicit check on protobuf
+    -- TODO: remove this message
+    message("DEBUG: PROTOBUF message protocol detected")
+    if not request_response_serde.protobuf then
+      if not protobuf_context.is_initialized then
+        protobuf_context:init(scriptPath)
+      end
+      request_response_serde.protobuf = require("impl.protobuf_request_response_serde"):new()
+    end
+    handler = request_response_serde.protobuf
+  else
+    error( string.format("Неподдерживаемый протокол сериализации/десериализации: %s. Поддерживаемые протоколы: json, protobuf.", serde_protocol) )
+  end
+  
+  local callback = function ()
+    
+    local ok, res = pcall(function()
+        local recv = zmq.msg_init():recv(socket)
+        local result
+        if recv and recv ~= -1 then
+          
+          -- request deserialization
+          local method, args = handler:deserialize_request( recv:data() )
+          recv:close()
+
+          local response = {
+            method = method
+          }
+          local proc_wrapper = procedure_wrappers[method]
+          if not proc_wrapper then
+            response.error = gen_error_obj(404, string.format("QLua-функция с именем '%s' не найдена.", method))
+          else
+            -- procedure call
+            local ok, proc_result = pcall(function() return proc_wrapper(args) end)
+            if ok then
+              response.proc_result = proc_result
+            else
+              response.error = gen_error_obj(1, res) -- the err code 1 is for errors inside the QLua functions' wrappers
+            end
+          end
+          
+          result = response
+        end
+          
+        return result
+    end)
+  
+    local response
+    if ok then
+      if res then response = res end
+    else
+      response = {}
+      response.error = gen_error_obj(500, string.format("Ошибка при обработке входящего запроса: '%s'.", res))
+    end
+    
+    if response then
+      -- response serialization
+      local serialized_response = handler:serialize_response(response)
+      -- response sending
+      send_data(serialized_response, socket)
+    end
+  end
+
+  return callback
+end
+
+local function publish (event_type, event_data)
 
   if not is_running then return end
   
-  local pub_data = event_handler:handle(event_type, event_data)
+  local converted_event_data = event_data_converter.convert(event_type, event_data)
   
-  for _i, pub_socket in ipairs(pub_sockets) do
-    
-    local ok, err
-    if pub_data == nil then
-      ok, err = pcall(function() pub_socket:send(event_type) end) -- send the subscription key
-      -- if not ok then (log error somehow...) end
-    else
-      ok, err = pcall(function() pub_socket:send_more(event_type) end) -- send the subscription key
-      if ok then
-        local msg = zmq.msg_init_data( pub_data:SerializeToString() )
-        ok, err = pcall(function() msg:send(pub_socket) end)
-        -- if not ok then (log error somehow...) end
-      else
-        -- (log error somehow...)
-      end
-    end
-    
+  for _, publisher in pairs(publishers) do
+    publisher:publish(event_type, converted_event_data)
   end
 end
 
+-- TODO: make the publishing depending on the serde protocol being used
 local function create_event_callbacks()
   
   return {
     
-    OnClose = function()
-      publish(qlua_events.EventType.ON_CLOSE)
+    OnClose = function ()
+      publish("OnClose")
       service.terminate()
     end,
     
-    OnStop = function(signal)
+    OnStop = function (signal)
+      publish("OnStop", {signal = signal})
       service.terminate()
     end,
     
-    OnFirm = function(firm)
-      publish(qlua_events.EventType.ON_FIRM, firm)
+    OnFirm = function (firm)
+      publish("OnFirm", firm)
     end,
     
-    OnAllTrade = function(alltrade)
-      publish(qlua_events.EventType.ON_ALL_TRADE, alltrade)
+    OnAllTrade = function (alltrade)
+      publish("OnAllTrade", alltrade)
     end,
     
-    OnTrade = function(trade)
-      publish(qlua_events.EventType.ON_TRADE, trade)
+    OnTrade = function (trade)
+      publish("OnTrade", trade)
     end,
     
-    OnOrder = function(order)
-      publish(qlua_events.EventType.ON_ORDER, order)
+    OnOrder = function (order)
+      publish("OnOrder", order)
     end,
     
-    OnAccountBalance = function(acc_bal)
-      publish(qlua_events.EventType.ON_ACCOUNT_BALANCE, acc_bal)
+    OnAccountBalance = function (acc_bal)
+      publish("OnAccountBalance", acc_bal)
     end, 
     
-    OnFuturesLimitChange = function(fut_limit)
-      publish(qlua_events.EventType.ON_FUTURES_LIMIT_CHANGE, fut_limit)
+    OnFuturesLimitChange = function (fut_limit)
+      publish("OnFuturesLimitChange", fut_limit)
     end, 
     
-    OnFuturesLimitDelete = function(lim_del)
-      publish(qlua_events.EventType.ON_FUTURES_LIMIT_DELETE, lim_del)
+    OnFuturesLimitDelete = function (lim_del)
+      publish("OnFuturesLimitDelete", lim_del)
     end,
     
-    OnFuturesClientHolding = function(fut_pos)
-      publish(qlua_events.EventType.ON_FUTURES_CLIENT_HOLDING, fut_pos)
+    OnFuturesClientHolding = function (fut_pos)
+      publish("OnFuturesClientHolding", fut_pos)
     end, 
     
-    OnMoneyLimit = function(mlimit)
-      publish(qlua_events.EventType.ON_MONEY_LIMIT, mlimit)
+    OnMoneyLimit = function (mlimit)
+      publish("OnMoneyLimit", mlimit)
     end, 
     
-    OnMoneyLimitDelete = function(mlimit_del)
-      publish(qlua_events.EventType.ON_MONEY_LIMIT_DELETE, mlimit_del)
+    OnMoneyLimitDelete = function (mlimit_del)
+      publish("OnMoneyLimitDelete", mlimit_del)
     end, 
     
-    OnDepoLimit = function(dlimit)
-      publish(qlua_events.EventType.ON_DEPO_LIMIT, dlimit)
+    OnDepoLimit = function (dlimit)
+      publish("OnDepoLimit", dlimit)
     end,
     
-    OnDepoLimitDelete = function(dlimit_del)
-      publish(qlua_events.EventType.ON_DEPO_LIMIT_DELETE, dlimit_del)
+    OnDepoLimitDelete = function (dlimit_del)
+      publish("OnDepoLimitDelete", dlimit_del)
     end, 
     
-    OnAccountPosition = function(acc_pos)
-      publish(qlua_events.EventType.ON_ACCOUNT_POSITION, acc_pos)
+    OnAccountPosition = function (acc_pos)
+      publish("OnAccountPosition", acc_pos)
     end, 
     
-    OnNegDeal = function(neg_deal)
-      publish(qlua_events.EventType.ON_NEG_DEAL, neg_deal)
+    OnNegDeal = function (neg_deal)
+      publish("OnNegDeal", neg_deal)
     end, 
     
-    OnNegTrade = function(neg_trade)
-      publish(qlua_events.EventType.ON_NEG_TRADE, neg_trade)
+    OnNegTrade = function (neg_trade)
+      publish("OnNegTrade", neg_trade)
     end,
     
-    OnStopOrder = function(stop_order)
-      publish(qlua_events.EventType.ON_STOP_ORDER, stop_order)
+    OnStopOrder = function (stop_order)
+      publish("OnStopOrder", stop_order)
     end, 
     
-    OnTransReply = function(trans_reply)
-      publish(qlua_events.EventType.ON_TRANS_REPLY, trans_reply)
+    OnTransReply = function (trans_reply)
+      publish("OnTransReply", trans_reply)
     end, 
     
-    OnParam = function(class_code, sec_code)
-      publish(qlua_events.EventType.ON_PARAM, {class_code = class_code, sec_code = sec_code})
+    OnParam = function (class_code, sec_code)
+      publish("OnParam", {class_code = class_code, sec_code = sec_code})
     end,
     
-    OnQuote = function(class_code, sec_code)
-      publish(qlua_events.EventType.ON_QUOTE, {class_code = class_code, sec_code = sec_code})
+    OnQuote = function (class_code, sec_code)
+      publish("OnQuote", {class_code = class_code, sec_code = sec_code})
     end, 
     
-    OnDisconnected = function()
-      publish(qlua_events.EventType.ON_DISCONNECTED)
+    OnDisconnected = function ()
+      publish("OnDisconnected")
     end, 
     
-    OnConnected = function(flag)
-      publish(qlua_events.EventType.ON_CONNECTED, flag)
+    OnConnected = function (flag)
+      publish("OnConnected", {flag = flag})
     end,
     
-    OnCleanUp = function()
-      publish(qlua_events.EventType.ON_CLEAN_UP)
+    OnCleanUp = function ()
+      publish("OnCleanUp")
+    end,
+    
+    OnDataSourceUpdate = function (update_info)
+      publish("OnDataSourceUpdate", update_info)
     end
   }
 end
 
-local function create_socket(endpoint)
+local function create_socket (endpoint)
   
   local socket
   local sockets
   if endpoint.type == "RPC" then
     socket = zmq_ctx:socket(zmq.REP)
-    poller:add(socket, zmq.POLLIN, create_rpc_poll_in_callback(socket))
+    poller:add(socket, zmq.POLLIN, create_rpc_poll_in_callback(socket, endpoint.serde_protocol))
     sockets = rpc_sockets
   elseif endpoint.type == "PUB" then
     socket = zmq_ctx:socket(zmq.PUB)
@@ -214,6 +291,22 @@ local function create_socket(endpoint)
   socket:bind( string.format("tcp://%s:%d", endpoint.address.host, endpoint.address.port) )
   if endpoint.type == "PUB" then
     
+    local serde_protocol = string.lower(endpoint.serde_protocol)
+    local publisher
+    if "protobuf" == serde_protocol then
+      if not publishers.protobuf then
+        publishers.protobuf = require("impl.protobuf_event_publisher"):new()
+      end
+      publisher = publishers.protobuf
+    elseif "json" == serde_protocol then
+      if not publishers.json then
+        publishers.json = require("impl.json_event_publisher"):new()
+      end
+      publisher = publishers.json
+    end
+    
+    publisher:add_pub_socket(socket)
+    
     -- Как координировать PUB и SUB правильно (сложно): http://zguide.zeromq.org/lua:all#Node-Coordination
     -- Как не совсем правильно (просто): использовать sleep
     utils.sleep(0.25) -- in seconds
@@ -229,15 +322,15 @@ local function create_socket(endpoint)
   return socket
 end
 
-local function reg_endpoint(endpoint)
+local function reg_endpoint (endpoint)
   create_socket(endpoint)
 end
 
-local function check_if_initialized()
+local function check_if_initialized ()
   if not initialized then error("The service is not initialized.") end
 end
 
-function service.init()
+function service.init ()
   
   if initialized then return end
   
@@ -259,7 +352,7 @@ function service.init()
   initialized = true
 end
 
-function service.start()
+function service.start ()
   
   check_if_initialized()
   
@@ -271,24 +364,29 @@ function service.start()
   
   -- Does nothing useful at the moment, because the polling has not yet been started at the time it executes.
   -- Issue #13.
-  publish(qlua_events.EventType.PUBLISHER_ONLINE) 
+  publish("PublisherOnline")
     
-  poller:start()
+  xpcall(
+    function() 
+      return poller:start() 
+    end,
+    function()
+      message("Ошибка в poller:start. Стек вызовов:\n"..debug.traceback())
+    end
+  )
 end
 
-function service.stop()
+function service.stop ()
   
   check_if_initialized()
-  
-  publish(qlua_events.EventType.PUBLISHER_OFFLINE)
-  
+
   if is_running then
     poller:stop()
     is_running = false
   end
 end
 
-function service.terminate()
+function service.terminate ()
 
   check_if_initialized()
   

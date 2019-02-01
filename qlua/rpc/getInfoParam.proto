@@ -7,8 +7,9 @@ package qlua.rpc.getInfoParam;
 option optimize_for = SPEED;
 option java_package = "qlua.rpc";
 
-message Request {
+message Args {
 
+    // FIXME: make as enum 
     // Хотел сделать enum-ом, чтобы меньше слать по wire, но в используемой Lua-реализации
     // protobuf'a нет адекватного способа вернуть строковое имя enum'а, поэтому говнокод, который
     // надо будет для этого написать, скорее всего нивелирует какой-либо перфомансный 

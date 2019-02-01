@@ -9,14 +9,17 @@ import "qlua/rpc/qlua_structures.proto";
 option optimize_for = SPEED;
 option java_package = "qlua.rpc";
 
-message Request {
+message Args {
 
     string class_code = 1;
-    uint32 order_id = 2;
+    int64 order_id = 2;
 }
 
 message Result {
 
     qlua.structs.Order order = 1;
-    int32 indx = 2;
+    oneof indx {
+      bool null_indx = 2;
+      int32 value_indx = 3;
+    }
 }

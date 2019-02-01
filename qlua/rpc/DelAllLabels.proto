@@ -7,7 +7,7 @@ package qlua.rpc.DelAllLabels;
 option optimize_for = SPEED;
 option java_package = "qlua.rpc";
 
-message Request {
+message Args {
     string chart_tag = 1;
 }
 

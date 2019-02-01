@@ -7,13 +7,13 @@ package qlua.rpc.SetCell;
 option optimize_for = SPEED;
 option java_package = "qlua.rpc";
 
-message Request {
+message Args {
 
     int32 t_id = 1;
     int32 key = 2;
     int32 code = 3;
     string text = 4;
-    double value = 5;
+    string value = 5;
 }
 
 message Result {

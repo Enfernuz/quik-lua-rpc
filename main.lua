@@ -33,12 +33,18 @@ OnTransReply = service.event_callbacks.OnTransReply
 OnParam = service.event_callbacks.OnParam
 OnQuote = service.event_callbacks.OnQuote
 
-OnInit = function(script_path)
+OnDataSourceUpdate = service.event_callbacks.OnDataSourceUpdate
+
+OnInit = function (script_path)
   
 end
 
 -----
 
-function main()
-  service.start()
+function main ()
+  
+  local ok, err = pcall(service.start)
+  if not ok then
+    message("Ошибка в функции main: "..tostring(err))
+  end
 end

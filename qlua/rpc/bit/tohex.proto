@@ -7,10 +7,14 @@ package qlua.rpc.bit.tohex;
 option optimize_for = SPEED;
 option java_package = "qlua.rpc.bit";
 
-message Request {
+message Args {
 
     int32 x = 1;
-    int32 n = 2; // 0 counts as "parameter not set"
+    oneof n {
+        bool null_n = 2;
+        int32 value_n = 3;
+    }
+    
 }
 
 message Result {

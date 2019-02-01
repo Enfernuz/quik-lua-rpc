@@ -29,7 +29,7 @@ enum Interval {
     INTERVAL_MN1 = 17;
 }
 
-message Request {
+message Args {
 
     string class_code = 1;
     string sec_code = 2;
@@ -39,7 +39,10 @@ message Request {
 
 message Result {
 
-    string datasource_uuid = 1; 
-    bool is_error = 2;
-    string error_desc = 3;
+    oneof result {
+        string datasource_uuid = 1;
+        string error_desc = 2;
+    }
+    bool is_error = 3;
+    
 }

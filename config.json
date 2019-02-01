@@ -2,6 +2,7 @@
   "endpoints": [
     {
       "type": "RPC", 
+      "serde_protocol": "protobuf",
       "active": true, 
       "address": {
         "host": "127.0.0.1",
@@ -26,6 +27,7 @@
   
     {
       "type": "PUB", 
+      "serde_protocol": "protobuf",
       "active": true, 
       "address": {
         "host": "127.0.0.1",
