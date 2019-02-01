@@ -16,10 +16,10 @@ before_install:
   - luarocks install luacov-coveralls
   - luarocks install busted
 
-#script:
+script:
 #  - busted --coverage test/*.lua
 
-#after_success:
+after_success:
 #  - luacov-coveralls --exclude test --exclude ./install --verbose
 
 notifications:
