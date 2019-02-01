@@ -1,4 +1,9 @@
 # quik-lua-rpc
+
+[![Build Status](https://travis-ci.com/Enfernuz/quik-lua-rpc.svg?branch=master)](https://travis-ci.com/Enfernuz/quik-lua-rpc)
+[![Coverage Status](https://coveralls.io/repos/github/Enfernuz/quik-lua-rpc/badge.svg?branch=master)](https://coveralls.io/github/Enfernuz/quik-lua-rpc?branch=master)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 RPC-сервис для вызова процедур из QLUA -- Lua-библиотеки торгового терминала QUIK (ARQA Technologies).
 
 Содержание
@@ -117,9 +122,9 @@ RPC-сервис для вызова процедур из QLUA -- Lua-библ�
 ### Схемы сообщений
 Схемы сообщений расположены внутри директории `qlua/rpc` в виде файлов .proto (Protocol Buffers).
 
-### Примеры
+### API-клиенты
 
-Пример клиента на Java: https://github.com/Enfernuz/quik-lua-rpc-java-client
+* Java: https://github.com/Enfernuz/quik-lua-rpc-java-client
 
 ### Разработчикам
 
@@ -134,3 +139,7 @@ A: Для Lua пока не запилили генерацию стабов gRP
 Q: **А что насчёт Thrift? Там вроде есть поддержка Lua.**
 
 A: Если мне память не изменяет, там в зависимостях библиотеки, для которых исходники только под UNIX (например, `luabpack`).
+
+Q: **JSON будет?**
+
+A: ["Мы работаем над этим."](https://github.com/Enfernuz/quik-lua-rpc/tree/feature/json-rpc)
