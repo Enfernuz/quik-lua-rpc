@@ -15,7 +15,7 @@ local json = require("utils.json")
 local uuid = require("utils.uuid")
 
 local service = {}
-service._VERSION = "1.0.0"
+service._VERSION = "v2.0-alpha"
 service.QUIK_VERSION = "7.16.1.36"
 service.event_callbacks = {}
 
