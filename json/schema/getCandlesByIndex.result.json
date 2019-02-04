@@ -1,0 +1,94 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getCandlesByIndex.result.json",
+    "title": "Результат процедуры getCandlesByIndex",
+    "description": "Схема объекта результата удалённого вызова процедуры getCandlesByIndex",
+    "type": "object",
+    "properties": {
+        "t": {
+            "description": "Параметр t",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "open": {
+                        "description": "Параметр open",
+                        "type": "string"
+                    },
+                    "close": {
+                        "description": "Параметр close",
+                        "type": "string"
+                    },
+                    "high": {
+                        "description": "Параметр high",
+                        "type": "string"
+                    },
+                    "low": {
+                        "description": "Параметр low",
+                        "type": "string"
+                    },
+                    "volume": {
+                        "description": "Параметр volume",
+                        "type": "string"
+                    },
+                    "datetime": {
+                        "description": "Параметр datetime",
+                        "type": "object",
+                        "properties": {
+                            "mcs": {
+                                "description": "Параметр mcs",
+                                "type": "number"
+                            },
+                            "ms": {
+                                "description": "Параметр ms",
+                                "type": "number"
+                            },
+                            "sec": {
+                                "description": "Параметр sec",
+                                "type": "number"
+                            },
+                            "min": {
+                                "description": "Параметр min",
+                                "type": "number"
+                            },
+                            "hour": {
+                                "description": "Параметр hour",
+                                "type": "number"
+                            },
+                            "day": {
+                                "description": "Параметр day",
+                                "type": "number"
+                            },
+                            "week_day": {
+                                "description": "Параметр week_day",
+                                "type": "number"
+                            },
+                            "month": {
+                                "description": "Параметр month",
+                                "type": "number"
+                            },
+                            "year": {
+                                "description": "Параметр year",
+                                "type": "number"
+                            }
+                        }
+                    },
+                    "does_exist": {
+                        "description": "Параметр does_exist",
+                        "type": "number"
+                    }
+                },
+                "required": ["open", "close", "high", "low", "volume"]
+            }
+        },
+        "n": {
+            "description": "Параметр n",
+            "type": "number"
+        },
+        "l": {
+            "description": "Параметр l",
+            "type": "string"
+        }
+    },
+    "required": ["t", "n", "l"]
+}
