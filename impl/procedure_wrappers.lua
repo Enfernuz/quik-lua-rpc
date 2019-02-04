@@ -444,8 +444,8 @@ module["getCandlesByIndex"] = function (args)
     error("Целевая QLua-функция возвратила nil вместо значения 't'.")
   end
   
-  if not i then
-    error("Целевая QLua-функция возвратила nil вместо значения 'i'.")
+  if not n then
+    error("Целевая QLua-функция возвратила nil вместо значения 'n'.")
   end
   
   if not l then
