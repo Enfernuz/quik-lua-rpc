@@ -11,7 +11,10 @@
         },
         "label_params": {
             "description": "Параметр label_params",
-            "type": "object"
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            }
         }
     },
     "required": ["chart_tag", "label_params"]
