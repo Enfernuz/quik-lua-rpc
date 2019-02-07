@@ -146,9 +146,12 @@ module["getOrderByNumber"] = function (args)
     if order.awg_price then order.awg_price = tostring(order.awg_price) end
     if order.expiry_time then order.expiry_time = tostring(order.expiry_time) end
     if order.revision_number then order.revision_number = tostring(order.revision_number) end
+    order.price_currency = utils.Cp1251ToUtf8(order.price_currency)
     assert(order.ext_order_status, "Таблица 'order' не содержит обязательного поля 'ext_order_status'.")
     if order.accepted_uid then order.accepted_uid = tostring(order.accepted_uid) end
     if order.filled_value then order.filled_value = tostring(order.filled_value) end
+    order.extref = utils.Cp1251ToUtf8(order.extref)
+    order.settle_currency = utils.Cp1251ToUtf8(order.settle_currency)
     if order.on_behalf_of_uid then order.on_behalf_of_uid = tostring(order.on_behalf_of_uid) end
     assert(order.client_qualifier, "Таблица 'order' не содержит обязательного поля 'client_qualifier'.")
     if order.client_short_code then order.client_short_code = tostring(order.client_short_code) end
@@ -247,6 +250,9 @@ module["getMoneyEx"] = function (args)
     if result.locked_margin_value then result.locked_margin_value = tostring(result.locked_margin_value) end
     if result.leverage then result.leverage = tostring(result.leverage) end
     assert(result.limit_kind, "Результирующая таблица не содержит обязательного поля 'limit_kind'.")
+    if result.wa_position_price then result.wa_position_price = tostring(result.wa_position_price) end
+    if result.orders_collateral then result.orders_collateral = tostring(result.orders_collateral) end
+    if result.positions_collateral then result.positions_collateral = tostring(result.positions_collateral) end
   end
 
   return result
