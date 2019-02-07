@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getLinesCount.result.json",
+    "title": "Результат процедуры getLinesCount",
+    "description": "Схема объекта результата удалённого вызова процедуры getLinesCount",
+    "type": "object",
+    "properties": {
+        "lines_count": {
+            "description": "Результат",
+            "type": "number"
+        }
+    },
+    "required": ["lines_count"]
+}
