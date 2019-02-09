@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getCandlesByIndex.result.json",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getCandlesByIndex.result.scheme.json",
     "title": "Результат процедуры getCandlesByIndex",
     "description": "Схема объекта результата удалённого вызова процедуры getCandlesByIndex",
     "type": "object",
@@ -33,45 +33,7 @@
                     },
                     "datetime": {
                         "description": "Параметр datetime",
-                        "type": "object",
-                        "properties": {
-                            "mcs": {
-                                "description": "Параметр mcs",
-                                "type": "number"
-                            },
-                            "ms": {
-                                "description": "Параметр ms",
-                                "type": "number"
-                            },
-                            "sec": {
-                                "description": "Параметр sec",
-                                "type": "number"
-                            },
-                            "min": {
-                                "description": "Параметр min",
-                                "type": "number"
-                            },
-                            "hour": {
-                                "description": "Параметр hour",
-                                "type": "number"
-                            },
-                            "day": {
-                                "description": "Параметр day",
-                                "type": "number"
-                            },
-                            "week_day": {
-                                "description": "Параметр week_day",
-                                "type": "number"
-                            },
-                            "month": {
-                                "description": "Параметр month",
-                                "type": "number"
-                            },
-                            "year": {
-                                "description": "Параметр year",
-                                "type": "number"
-                            }
-                        }
+                        "$ref": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/QluaStructures.scheme.json#/definitions/DateTimeEntry"
                     },
                     "does_exist": {
                         "description": "Параметр does_exist",
@@ -90,5 +52,6 @@
             "type": "string"
         }
     },
+    "additionalProperties": false,
     "required": ["t", "n", "l"]
 }
