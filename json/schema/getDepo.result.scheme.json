@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getDepo.result.json",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getDepo.result.scheme.json",
     "title": "Результат процедуры getDepo",
     "description": "Схема объекта результата удалённого вызова процедуры getDepo",
     "type": "object",
@@ -44,5 +44,6 @@
             }
         }
     },
+    "additionalProperties": false,
     "required": ["depo"]
 }
