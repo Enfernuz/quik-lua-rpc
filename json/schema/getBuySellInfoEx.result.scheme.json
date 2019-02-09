@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getBuySellInfoEx.result.json",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getBuySellInfoEx.result.scheme.json",
     "title": "Результат процедуры getBuySellInfoEx",
     "description": "Схема объекта результата удалённого вызова процедуры getBuySellInfoEx",
     "type": "object",
@@ -132,8 +132,10 @@
                     "type": "string"
                 }
             },
+            "additionalProperties": false,
             "required": ["buy_sell_info"]
         }
     },
+    "additionalProperties": false,
     "required": ["buy_sell_info_ex"]
 }
