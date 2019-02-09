@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getOrderByNumber.args.json",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getOrderByNumber.args.scheme.json",
     "title": "Аргументы процедуры getOrderByNumber",
     "description": "Схема объекта аргументов к удалённому вызову процедуры getOrderByNumber",
     "type": "object",
@@ -14,5 +14,6 @@
             "type": "number"
         }
     },
+    "additionalProperties": false,
     "required": ["class_code", "order_id"]
 }
