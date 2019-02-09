@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getCandlesByIndex.args.json",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getCandlesByIndex.args.scheme.json",
     "title": "Аргументы процедуры getCandlesByIndex",
     "description": "Схема объекта аргументов к удалённому вызову процедуры getCandlesByIndex",
     "type": "object",
@@ -22,5 +22,6 @@
             "type": "number"
         }
     },
+    "additionalProperties": false,
     "required": ["tag", "line", "first_candle", "count"]
 }
