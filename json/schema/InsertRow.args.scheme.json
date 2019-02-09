@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/InsertRow.args.scheme.json",
+    "title": "Аргументы процедуры InsertRow",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры InsertRow",
+    "type": "object",
+    "properties": {
+        "t_id": {
+            "description": "Параметр t_id",
+            "type": "number"
+        },
+        "key": {
+            "description": "Параметр key",
+            "type": "number"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["t_id", "key"]
+}
