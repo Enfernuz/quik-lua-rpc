@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/ParamRequest.result.scheme.json",
+    "title": "Результат процедуры ParamRequest",
+    "description": "Схема объекта результата удалённого вызова процедуры ParamRequest",
+    "type": "object",
+    "properties": {
+        "result": {
+            "description": "Результат",
+            "type": "boolean"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["result"]
+}
