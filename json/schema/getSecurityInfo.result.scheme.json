@@ -1,0 +1,69 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getSecurityInfo.result.scheme.json",
+    "title": "Результат процедуры getSecurityInfo",
+    "description": "Схема объекта результата удалённого вызова процедуры getSecurityInfo",
+    "type": "object",
+    "definitions": {
+        "Security": {
+            "description": "Информация по инструменту",
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "Параметр code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Параметр name",
+                    "type": "string"
+                },
+                "short_name": {
+                    "description": "Параметр short_name",
+                    "type": "string"
+                },
+                "class_code": {
+                    "description": "Параметр class_code",
+                    "type": "string"
+                },
+                "class_name": {
+                    "description": "Параметр class_name",
+                    "type": "string"
+                },
+                "face_value": {
+                    "description": "Параметр face_value",
+                    "type": "string"
+                },
+                "face_unit": {
+                    "description": "Параметр face_unit",
+                    "type": "string"
+                },
+                "scale": {
+                    "description": "Параметр scale",
+                    "type": "string"
+                },
+                "mat_date": {
+                    "description": "Параметр mat_date",
+                    "type": "string"
+                },
+                "lot_size": {
+                    "description": "Параметр lot_size",
+                    "type": "string"
+                },
+                "isin_code": {
+                    "description": "Параметр isin_code",
+                    "type": "string"
+                },
+                "min_price_step": {
+                    "description": "Параметр min_price_step",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "properties": {
+        "security_info": {
+            "$ref": "#/definitions/Security"
+        }
+    },
+    "additionalProperties": false
+}
