@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/CalcBuySell.args.json",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/CalcBuySell.args.scheme.json",
     "title": "Аргументы процедуры CalcBuySell",
     "description": "Схема объекта аргументов к удалённому вызову процедуры CalcBuySell",
     "type": "object",
@@ -35,5 +35,6 @@
             "type": "boolean"
         }
     },
+    "additionalProperties": false,
     "required": ["class_code", "sec_code", "client_code", "account", "price", "is_buy", "is_market"]
 }
