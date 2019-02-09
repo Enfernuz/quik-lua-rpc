@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getFuturesHolding.result.json",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getFuturesHolding.result.scheme.json",
     "title": "Результат процедуры getFuturesHolding",
     "description": "Схема объекта результата удалённого вызова процедуры getFuturesHolding",
     "type": "object",
@@ -92,5 +92,6 @@
             },
             "required": ["firmid", "trdaccid", "sec_code", "type", "openbuys", "opensells", "session_status"]
         }
-    }
+    },
+    "additionalProperties": false
 }
