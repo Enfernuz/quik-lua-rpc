@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getBuySellInfoEx.args.json",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getBuySellInfoEx.args.scheme.json",
     "title": "Аргументы процедуры getBuySellInfoEx",
     "description": "Схема объекта аргументов к удалённому вызову процедуры getBuySellInfoEx",
     "type": "object",
@@ -27,5 +27,6 @@
             "pattern": "^([0-9]*[.])?[0-9]+$|^[\\d.]+(?:e-?\\d+)?$"
         }
     },
+    "additionalProperties": false,
     "required": ["firm_id", "client_code", "class_code", "sec_code", "price"]
 }
