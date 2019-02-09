@@ -1,54 +1,8 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getOrderByNumber.result.json",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getOrderByNumber.result.scheme.json",
     "title": "Результат процедуры getOrderByNumber",
     "description": "Схема объекта результата удалённого вызова процедуры getOrderByNumber",
-
-    "definitions": {
-        "datetime": {
-            "type": "object",
-            "properties": {
-                "mcs": {
-                    "description": "Параметр mcs",
-                    "type": "number"
-                },
-                "ms": {
-                    "description": "Параметр ms",
-                    "type": "number"
-                },
-                "sec": {
-                    "description": "Параметр sec",
-                    "type": "number"
-                },
-                "min": {
-                    "description": "Параметр min",
-                    "type": "number"
-                },
-                "hour": {
-                    "description": "Параметр hour",
-                    "type": "number"
-                },
-                "day": {
-                    "description": "Параметр day",
-                    "type": "number"
-                },
-                "week_day": {
-                    "description": "Параметр week_day",
-                    "type": "number"
-                },
-                "month": {
-                    "description": "Параметр month",
-                    "type": "number"
-                },
-                "year": {
-                    "description": "Параметр year",
-                    "type": "number"
-                }
-            },
-            "required": ["mcs", "ms", "sec", "min", "hour", "day", "week_day", "month", "year"]
-        }
-    },
-
     "type": "object",
     "properties": {
         "order": {
@@ -152,10 +106,10 @@
                     "type": "string"
                 },
                 "datetime": {
-                    "$ref": "#/definitions/datetime"
+                    "$ref": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/QluaStructures.scheme.json#/definitions/DateTimeEntry"
                 },
                 "withdraw_datetime": {
-                    "$ref": "#/definitions/datetime"
+                    "$ref": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/QluaStructures.scheme.json#/definitions/DateTimeEntry"
                 },
                 "bank_acc_id": {
                     "description": "Параметр bank_acc_id",
@@ -314,5 +268,5 @@
             "type": "number"
         }
     },
-    "required": []
+    "additionalProperties": false
 }
