@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getDepo.args.json",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getDepo.args.scheme.json",
     "title": "Аргументы процедуры getDepo",
     "description": "Схема объекта аргументов к удалённому вызову процедуры getDepo",
     "type": "object",
@@ -22,5 +22,6 @@
             "type": "string"
         }
     },
+    "additionalProperties": false,
     "required": ["client_code", "firmid", "sec_code", "trdaccid"]
 }
