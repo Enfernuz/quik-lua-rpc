@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getSecurityInfo.args.scheme.json",
+    "title": "Аргументы процедуры getSecurityInfo",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры getSecurityInfo",
+    "type": "object",
+    "properties": {
+        "class_code": {
+            "description": "Параметр class_code",
+            "type": "string"
+        },
+        "sec_code": {
+            "description": "Параметр sec_code",
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["class_code", "sec_code"]
+}
