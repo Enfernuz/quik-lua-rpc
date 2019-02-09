@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/RGB.args.scheme.json",
+    "title": "Аргументы процедуры RGB",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры RGB",
+    "type": "object",
+    "definitions": {
+        "ColorComponent": {
+            "description": "Компонент цвета",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255
+        }
+    },
+    "properties": {
+        "red": {
+            "description": "Параметр red",
+            "$ref": "#/definitions/ColorComponent"
+        },
+        "green": {
+            "description": "Параметр green",
+            "$ref": "#/definitions/ColorComponent"
+        },
+        "blue": {
+            "description": "Параметр blue",
+            "$ref": "#/definitions/ColorComponent"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["red", "green", "blue"]
+}
