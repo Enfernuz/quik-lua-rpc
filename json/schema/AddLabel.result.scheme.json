@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/AddLabel.result.json",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/AddLabel.result.scheme.json",
     "title": "Результат процедуры AddLabel",
     "description": "Схема объекта результата удалённого вызова процедуры AddLabel",
     "type": "object",
@@ -9,5 +9,6 @@
             "description": "Параметр label_id",
             "type": "number"
         }
-    }
+    },
+    "additionalProperties": false
 }
