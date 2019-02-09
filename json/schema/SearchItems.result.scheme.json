@@ -1,0 +1,17 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/SearchItems.result.scheme.json",
+    "title": "Результат процедуры SearchItems",
+    "description": "Схема объекта результата удалённого вызова процедуры SearchItems",
+    "type": "object",
+    "properties": {
+        "items_indices": {
+            "description": "Результат",
+            "type": "array",
+            "items": {
+                "type": "integer"
+            }
+        }
+    },
+    "additionalProperties": false
+}
