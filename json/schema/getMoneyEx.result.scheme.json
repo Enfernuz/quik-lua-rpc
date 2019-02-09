@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getMoneyEx.result.json",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getMoneyEx.result.scheme.json",
     "title": "Результат процедуры getMoneyEx",
     "description": "Схема объекта результата удалённого вызова процедуры getMoneyEx",
     "type": "object",
@@ -77,5 +77,5 @@
             "required": ["currcode", "tag", "firmid", "client_code", "limit_kind"]
         }
     },
-    "required": []
+    "additionalProperties": false
 }
