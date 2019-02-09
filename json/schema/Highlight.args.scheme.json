@@ -1,0 +1,35 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/Highlight.args.scheme.json",
+    "title": "Аргументы процедуры Highlight",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры Highlight",
+    "type": "object",
+    "properties": {
+        "t_id": {
+            "description": "Параметр t_id",
+            "type": "number"
+        },
+        "row": {
+            "description": "Параметр row",
+            "type": "number"
+        },
+        "col": {
+            "description": "Параметр col",
+            "type": "number"
+        },
+        "b_color": {
+            "description": "Параметр b_color",
+            "type": "number"
+        },
+        "f_color": {
+            "description": "Параметр f_color",
+            "type": "number"
+        },
+        "timeout": {
+            "description": "Параметр timeout",
+            "type": "number"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["t_id", "row", "col", "b_color", "f_color", "timeout"]
+}
