@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/CalcBuySell.result.json",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/CalcBuySell.result.scheme.json",
     "title": "Результат процедуры CalcBuySell",
     "description": "Схема объекта результата удалённого вызова процедуры CalcBuySell",
     "type": "object",
@@ -11,9 +11,9 @@
         },
         "comission": {
             "description": "Параметр comission",
-            "type": "string",
-            "pattern": "^([0-9]*[.])?[0-9]+$|^-?[\\d.]+(?:e-?\\d+)?$"
+            "type": "string"
         }
     },
+    "additionalProperties": false,
     "required": ["qty", "comission"]
 }
