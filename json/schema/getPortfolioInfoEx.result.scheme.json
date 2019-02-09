@@ -1,12 +1,12 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getPortfolioInfoEx.result.json",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getPortfolioInfoEx.result.scheme.json",
     "title": "Результат процедуры getPortfolioInfoEx",
     "description": "Схема объекта результата удалённого вызова процедуры getPortfolioInfoEx",
     "type": "object",
     "properties": {
         "portfolio_info": {
-            "$ref": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getPortfolioInfo.result.json#/definitions/PortfolioInfo"
+            "$ref": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getPortfolioInfo.result.scheme.json#/definitions/PortfolioInfo"
         },
         "init_margin": {
             "description": "Параметр init_margin",
@@ -97,5 +97,6 @@
             "type": "string"
         }
     },
+    "additionalProperties": false,
     "required": ["portfolio_info"]
 }
