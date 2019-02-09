@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/DelLabel.result.json",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/DelLabel.result.scheme.json",
     "title": "Результат процедуры DelLabel",
     "description": "Схема объекта результата удалённого вызова процедуры DelLabel",
     "type": "object",
@@ -10,5 +10,6 @@
             "type": "boolean"
         }
     },
+    "additionalProperties": false,
     "required": ["result"]
 }
