@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getQuoteLevel2.result.json",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getQuoteLevel2.result.scheme.json",
     "title": "Результат процедуры getQuoteLevel2",
     "description": "Схема объекта результата удалённого вызова процедуры getQuoteLevel2",
     "type": "object",
@@ -44,5 +44,6 @@
             }
         }
     },
+    "additionalProperties": false,
     "required": ["bid_count", "offer_count", "bids", "offers"]
 }
