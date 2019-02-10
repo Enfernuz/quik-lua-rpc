@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/SetCell.result.scheme.json",
+    "title": "Результат процедуры SetCell",
+    "description": "Схема объекта результата удалённого вызова процедуры SetCell",
+    "type": "object",
+    "properties": {
+        "result": {
+            "description": "Результат",
+            "type": "boolean"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["result"]
+}
