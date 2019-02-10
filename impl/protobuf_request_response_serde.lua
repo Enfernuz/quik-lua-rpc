@@ -232,11 +232,7 @@ args_decoders[proc_name] = function (encoded_args)
   
   local args = pb.decode(qlua_pb_types.SearchItems.Args, encoded_args)
   
-  if args.null_end_index then
-    args.end_index = nil
-  else
-    args.end_index = args.value_end_index
-  end
+  args.end_index = args.null_end_index and nil or args.value_end_index
   
   return args
 end
@@ -1049,17 +1045,7 @@ end
 proc_name = "SET_CELL"
 method_names[proc_name] = "SetCell"
 args_decoders[proc_name] = function (encoded_args)
-  
-  local args = pb.decode(qlua_pb_types.SetCell.Args, encoded_args)
-  if args.value then
-    if args.value == "" then
-      args.value = nil
-    else
-      args.value = assert(tonumber(args.value), "Не удалось распарсить число из аргумента 'value'.")
-    end
-  end
-  
-  return args
+  return pb.decode(qlua_pb_types.SetCell.Args, encoded_args)
 end
 result_encoders[proc_name] = function (proc_result)
 
@@ -1129,7 +1115,17 @@ end
 proc_name = "SET_COLOR"
 method_names[proc_name] = "SetColor"
 args_decoders[proc_name] = function (encoded_args)
-  return pb.decode(qlua_pb_types.SetColor.Args, encoded_args)
+  
+  local args = pb.decode(qlua_pb_types.SetColor.Args, encoded_args)
+  
+  args.row = args.null_row and nil or args.value_row
+  args.col = args.null_col and nil or args.value_col
+  args.b_color = args.null_b_color and nil or args.value_b_color
+  args.f_color = args.null_f_color and nil or args.value_f_color
+  args.sel_b_color = args.null_sel_b_color and nil or args.value_sel_b_color
+  args.sel_f_color = args.null_sel_f_color and nil or args.value_sel_f_color
+  
+  return args
 end
 result_encoders[proc_name] = function (proc_result)
 
@@ -1143,7 +1139,15 @@ end
 proc_name = "HIGHLIGHT"
 method_names[proc_name] = "Highlight"
 args_decoders[proc_name] = function (encoded_args)
-  return pb.decode(qlua_pb_types.Highlight.Args, encoded_args)
+  
+  local args = pb.decode(qlua_pb_types.Highlight.Args, encoded_args)
+  
+  args.row = args.null_row and nil or args.value_row
+  args.col = args.null_col and nil or args.value_col
+  args.b_color = args.null_b_color and nil or args.value_b_color
+  args.f_color = args.null_f_color and nil or args.value_f_color
+  
+  return args
 end
 result_encoders[proc_name] = function (proc_result)
 

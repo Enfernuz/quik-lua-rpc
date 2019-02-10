@@ -10,12 +10,30 @@ option java_package = "qlua.rpc";
 message Args {
 
     int32 t_id = 1;
-    int32 row = 2;
-    int32 col = 3;
-    int32 b_color = 4;
-    int32 f_color = 5;
-    int32 sel_b_color = 6;
-    int32 sel_f_color = 7;
+    oneof row {
+        bool null_row = 2;
+        uint32 value_row = 3;
+    }
+    oneof col {
+        bool null_col = 4;
+        uint32 value_col = 5;
+    }
+    oneof b_color {
+        bool null_b_color = 6;
+        int32 value_b_color = 7;
+    }
+    oneof f_color {
+        bool null_f_color = 8;
+        int32 value_f_color = 9;
+    }
+    oneof sel_b_color {
+        bool null_sel_b_color = 10;
+        int32 value_sel_b_color = 11;
+    }
+    oneof sel_f_color {
+        bool null_sel_f_color = 12;
+        int32 value_sel_f_color = 13;
+    }
 }
 
 message Result {

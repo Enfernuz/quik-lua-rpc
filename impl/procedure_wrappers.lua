@@ -1020,6 +1020,15 @@ end
 
 -- TODO: test
 module["SetCell"] = function (args) 
+  
+  if args.value then
+    if args.value == "" then
+      args.value = nil
+    else
+      args.value = assert(tonumber(args.value), "Не удалось распарсить число из аргумента 'value'.")
+    end
+  end
+  
   -- returns true or false
   return requireNonNil(_G.SetCell(args.t_id, args.key, args.code, args.text, args.value))
 end
@@ -1058,13 +1067,35 @@ end
 
 -- TODO: test
 module["SetColor"] = function (args) 
+  
   -- What does it return in case of error? I hope not nil...
-  return requireNonNil(_G.SetColor(args.t_id, args.row, args.col, args.b_color, args.f_color, args.sel_b_color, args.sel_f_color))
+  return requireNonNil(
+    _G.SetColor(
+        args.t_id, 
+        args.row and args.row or _G.QTABLE_NO_INDEX, 
+        args.col and args.col or _G.QTABLE_NO_INDEX, 
+        args.b_color and args.b_color or _G.QTABLE_DEFAULT_COLOR, 
+        args.f_color and args.f_color or _G.QTABLE_DEFAULT_COLOR, 
+        args.sel_b_color and args.sel_b_color or _G.QTABLE_DEFAULT_COLOR, 
+        args.sel_f_color and args.sel_f_color or _G.QTABLE_DEFAULT_COLOR
+      )
+    )
 end
 
 -- TODO: test
 module["Highlight"] = function (args) 
-  return requireNonNil(_G.Highlight(args.t_id, args.row, args.col, args.b_color, args.f_color, args.timeout)) -- what does it return in case of error ?
+  
+  -- What does it return in case of error?
+  return requireNonNil(
+    _G.Highlight(
+        args.t_id, 
+        args.row and args.row or _G.QTABLE_NO_INDEX, 
+        args.col and args.col or _G.QTABLE_NO_INDEX, 
+        args.b_color and args.b_color or _G.QTABLE_DEFAULT_COLOR, 
+        args.f_color and args.f_color or _G.QTABLE_DEFAULT_COLOR, 
+        args.timeout
+      )
+    )
 end
 
 -- TODO: test
