@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/sendTransaction.result.scheme.json",
+    "title": "Результат процедуры sendTransaction",
+    "description": "Схема объекта результата удалённого вызова процедуры sendTransaction",
+    "type": "object",
+    "properties": {
+        "result": {
+            "description": "Результат",
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["result"]
+}
