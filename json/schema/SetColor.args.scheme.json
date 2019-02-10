@@ -1,0 +1,50 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/SetColor.args.scheme.json",
+    "title": "Аргументы процедуры SetColor",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры SetColor",
+    "type": "object",
+    "definitions": {
+        "MatrixIndex": {
+            "description": "Индекс элемента матрицы",
+            "type": "integer",
+            "minimum": 0
+        },
+        "Color": {
+            "description": "Цвет в формате RGB",
+            "type": "integer"
+        }
+    },
+    "properties": {
+        "t_id": {
+            "description": "Параметр t_id",
+            "type": "number"
+        },
+        "row": {
+            "description": "Параметр row",
+            "$ref": "#/definitions/MatrixIndex"
+        },
+        "col": {
+            "description": "Параметр col",
+            "$ref": "#/definitions/MatrixIndex"
+        },
+        "b_color": {
+            "description": "Параметр b_color",
+            "$ref": "#/definitions/Color"
+        },
+        "f_color": {
+            "description": "Параметр f_color",
+            "$ref": "#/definitions/Color"
+        },
+        "sel_b_color": {
+            "description": "Параметр sel_b_color",
+            "$ref": "#/definitions/Color"
+        },
+        "sel_f_color": {
+            "description": "Параметр sel_f_color",
+            "$ref": "#/definitions/Color"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["t_id"]
+}
