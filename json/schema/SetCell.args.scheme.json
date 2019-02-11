@@ -30,7 +30,7 @@
         },
         "value": {
             "description": "Параметр value",
-            "type": "number"
+            "type": ["number", "null"]
         }
     },
     "additionalProperties": false,
