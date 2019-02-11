@@ -10,7 +10,7 @@
             "type": "string"
         },
         "icon_type": {
-            "type": "integer",
+            "type": ["integer", "null"],
             "minimum": 1,
             "maximum": 3
         }
