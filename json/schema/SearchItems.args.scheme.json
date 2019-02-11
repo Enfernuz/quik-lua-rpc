@@ -9,6 +9,11 @@
             "description": "Индекс элемента",
             "type": "integer",
             "minimum": 0
+        },
+        "NullableElementIndex": {
+            "description": "Индекс элемента",
+            "type": ["integer", "null"],
+            "minimum": 0
         }
     },
     "properties": {
@@ -22,7 +27,7 @@
         },
         "end_index": {
             "description": "Параметр end_index",
-            "$ref": "#/definitions/ElementIndex"
+            "$ref": "#/definitions/NullableElementIndex"
         },
         "fn_def": {
             "description": "Параметр fn_def",
@@ -30,7 +35,7 @@
         },
         "params": {
             "description": "Параметр params",
-            "type": "string"
+            "type": ["string", "null"]
         }
     },
     "additionalProperties": false,
