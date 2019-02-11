@@ -4,6 +4,17 @@
     "title": "Аргументы процедуры Highlight",
     "description": "Схема объекта аргументов к удалённому вызову процедуры Highlight",
     "type": "object",
+    "definitions": {
+        "MatrixIndex": {
+            "description": "Индекс элемента матрицы",
+            "type": ["integer", "null"],
+            "minimum": 0
+        },
+        "Color": {
+            "description": "Цвет в формате RGB",
+            "type": ["integer", "null"]
+        }
+    },
     "properties": {
         "t_id": {
             "description": "Параметр t_id",
@@ -11,19 +22,19 @@
         },
         "row": {
             "description": "Параметр row",
-            "type": "number"
+            "$ref": "#/definitions/MatrixIndex"
         },
         "col": {
             "description": "Параметр col",
-            "type": "number"
+            "$ref": "#/definitions/MatrixIndex"
         },
         "b_color": {
             "description": "Параметр b_color",
-            "type": "number"
+            "$ref": "#/definitions/Color"
         },
         "f_color": {
             "description": "Параметр f_color",
-            "type": "number"
+            "$ref": "#/definitions/Color"
         },
         "timeout": {
             "description": "Параметр timeout",
@@ -31,5 +42,5 @@
         }
     },
     "additionalProperties": false,
-    "required": ["t_id", "row", "col", "b_color", "f_color", "timeout"]
+    "required": ["t_id", "timeout"]
 }
