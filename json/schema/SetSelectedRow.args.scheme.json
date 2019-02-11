@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/SetSelectedRow.args.scheme.json",
+    "title": "Аргументы процедуры SetSelectedRow",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры SetSelectedRow",
+    "type": "object",
+    "properties": {
+        "table_id": {
+            "description": "Параметр table_id",
+            "type": "number"
+        },
+        "row": {
+            "description": "Параметр row",
+            "type": ["integer", "null"],
+            "minimum": 0
+        }
+    },
+    "additionalProperties": false,
+    "required": ["table_id"]
+}
