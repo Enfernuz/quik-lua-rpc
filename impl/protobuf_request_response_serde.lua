@@ -1161,7 +1161,11 @@ end
 proc_name = "SET_SELECTED_ROW"
 method_names[proc_name] = "SetSelectedRow"
 args_decoders[proc_name] = function (encoded_args)
-  return pb.decode(qlua_pb_types.SetSelectedRow.Args, encoded_args)
+  
+  local args = pb.decode(qlua_pb_types.SetSelectedRow.Args, encoded_args)
+  args.row = args.null_row and nil or args.value_row
+  
+  return args
 end
 result_encoders[proc_name] = function (proc_result)
 

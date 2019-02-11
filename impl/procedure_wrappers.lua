@@ -1101,7 +1101,7 @@ end
 -- TODO: test
 module["SetSelectedRow"] = function (args) 
   -- returns -1 in case of error
-  return requireNonNil(_G.SetSelectedRow(args.table_id, args.row))
+  return requireNonNil(_G.SetSelectedRow(args.table_id, args.row and args.row or -1))
 end
 
 -- TODO: test

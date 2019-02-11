@@ -10,7 +10,11 @@ option java_package = "qlua.rpc";
 message Args {
 
     int32 table_id = 1;
-    uint32 row = 2;
+    oneof row {
+      bool null_row = 2;
+      uint32 value_row = 3;
+    }
+    
 }
 
 message Result {
