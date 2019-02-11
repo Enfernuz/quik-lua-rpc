@@ -5,14 +5,14 @@
     "description": "Схема объекта аргументов к удалённому вызову процедуры SetColor",
     "type": "object",
     "definitions": {
-        "MatrixIndex": {
+        "NullableMatrixIndex": {
             "description": "Индекс элемента матрицы",
-            "type": "integer",
+            "type": ["integer", "null"],
             "minimum": 0
         },
-        "Color": {
+        "NullableColor": {
             "description": "Цвет в формате RGB",
-            "type": "integer"
+            "type": ["integer", "null"]
         }
     },
     "properties": {
@@ -22,27 +22,27 @@
         },
         "row": {
             "description": "Параметр row",
-            "$ref": "#/definitions/MatrixIndex"
+            "$ref": "#/definitions/NullableMatrixIndex"
         },
         "col": {
             "description": "Параметр col",
-            "$ref": "#/definitions/MatrixIndex"
+            "$ref": "#/definitions/NullableMatrixIndex"
         },
         "b_color": {
             "description": "Параметр b_color",
-            "$ref": "#/definitions/Color"
+            "$ref": "#/definitions/NullableColor"
         },
         "f_color": {
             "description": "Параметр f_color",
-            "$ref": "#/definitions/Color"
+            "$ref": "#/definitions/NullableColor"
         },
         "sel_b_color": {
             "description": "Параметр sel_b_color",
-            "$ref": "#/definitions/Color"
+            "$ref": "#/definitions/NullableColor"
         },
         "sel_f_color": {
             "description": "Параметр sel_f_color",
-            "$ref": "#/definitions/Color"
+            "$ref": "#/definitions/NullableColor"
         }
     },
     "additionalProperties": false,
