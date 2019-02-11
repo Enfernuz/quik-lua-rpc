@@ -1,0 +1,26 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/SetLabelParams.args.scheme.json",
+    "title": "Аргументы процедуры SetLabelParams",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры SetLabelParams",
+    "type": "object",
+    "properties": {
+        "chart_tag": {
+            "description": "Параметр chart_tag",
+            "type": "string"
+        },
+        "label_id": {
+            "description": "Параметр label_id",
+            "type": "number"
+        },
+        "label_params": {
+            "description": "Параметр label_params",
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": ["chart_tag", "label_id", "label_params"]
+}
