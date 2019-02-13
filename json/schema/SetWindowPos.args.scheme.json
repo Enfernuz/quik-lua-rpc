@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/SetWindowPos.args.scheme.json",
+    "title": "Аргументы процедуры SetWindowPos",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры SetWindowPos",
+    "type": "object",
+    "properties": {
+        "t_id": {
+            "description": "Параметр t_id",
+            "type": "number"
+        },
+        "x": {
+            "description": "Параметр x",
+            "type": "integer"
+        },
+        "y": {
+            "description": "Параметр y",
+            "type": "integer"
+        },
+        "dx": {
+            "description": "Параметр dx",
+            "type": "integer"
+        },
+        "dy": {
+            "description": "Параметр dy",
+            "type": "integer"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["t_id", "x", "y", "dx", "dy"]
+}
