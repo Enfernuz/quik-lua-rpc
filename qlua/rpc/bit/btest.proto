@@ -9,8 +9,8 @@ option java_package = "qlua.rpc.bit";
 
 message Args {
 
-    int32 x = 1;
-    int32 n = 2;
+    sint64 x = 1;
+    sint64 n = 2;
 }
 
 message Result {
