@@ -16,8 +16,8 @@ message Klass {
     string firmid = 1;
     string name = 2;
     string code = 3;
-    uint32 npars = 4; // NUMBER in QLUA
-    uint32 nsecs = 5; // NUMBER in QLUA
+    int32 npars = 4; // NUMBER in QLUA
+    int32 nsecs = 5; // NUMBER in QLUA
 }
 
 // Фирмы
@@ -26,8 +26,8 @@ message Firm {
     string firmid = 1;
     string firm_name = 2;
     oneof status {
-      bool null_status = 3;
-      int32 value_status = 4; // NUMBER in QLUA
+        bool null_status = 3;
+        int32 value_status = 4; // NUMBER in QLUA
     };
     string exchange = 5;
 }
@@ -38,10 +38,10 @@ message AllTrade {
     int64 trade_num = 1; // NUMBER in QLUA
     oneof flags {
         bool null_flags = 2;
-        uint32 value_flags = 3; // NUMBER in QLUA
+        int32 value_flags = 3; // NUMBER in QLUA
     };
     string price = 4; // NUMBER in QLUA
-    uint32 qty = 5; // NUMBER in QLUA
+    int32 qty = 5; // NUMBER in QLUA
     string value = 6; // NUMBER in QLUA
     string accruedint = 7; // NUMBER in QLUA
     string yield = 8; // NUMBER in QLUA
@@ -62,21 +62,21 @@ message AllTrade {
 // Сделки
 message Trade {
 
-    uint64 trade_num = 1; // NUMBER in QLUA
-    uint64 order_num = 2; // NUMBER in QLUA
+    int64 trade_num = 1; // NUMBER in QLUA
+    int64 order_num = 2; // NUMBER in QLUA
     string brokerref = 3;
     string userid = 4;
     string firmid = 5;
     string canceled_uid = 6; // NUMBER in QLUA
     string account = 7;
     string price = 8; // NUMBER in QLUA
-    uint32 qty = 9; // NUMBER in QLUA
+    int32 qty = 9; // NUMBER in QLUA
     string value = 10; // NUMBER in QLUA
     string accruedint = 11; // NUMBER in QLUA
     string yield = 12; // NUMBER in QLUA
     string settlecode = 13;
     string cpfirmid = 14;
-    uint32 flags = 15; // NUMBER in QLUA
+    int32 flags = 15; // NUMBER in QLUA
     string price2 = 16; // NUMBER in QLUA
     string reporate = 17; // NUMBER in QLUA
     string client_code = 18;
@@ -137,14 +137,14 @@ message Trade {
 // Заявки
 message Order {
 
-    uint64 order_num = 1; // NUMBER in QLUA
-    uint32 flags = 2; // NUMBER in QLUA
+    int64 order_num = 1; // NUMBER in QLUA
+    int32 flags = 2; // NUMBER in QLUA
     string brokerref = 3;
     string userid = 4;
     string firmid = 5;
     string account = 6;
     string price = 7; // NUMBER in QLUA
-    uint32 qty = 8; // NUMBER in QLUA
+    int32 qty = 8; // NUMBER in QLUA
     string balance = 9; // NUMBER in QLUA
     string value = 10; // NUMBER in QLUA
     string accruedint = 11; // NUMBER in QLUA
@@ -172,7 +172,7 @@ message Order {
     string start_discount = 33; // NUMBER in QLUA
     string reject_reason = 34;
     string ext_order_flags = 35; // NUMBER in QLUA; not documented as non-nilable, so it should be string
-    uint32 min_qty = 36; // NUMBER in QLUA
+    int32 min_qty = 36; // NUMBER in QLUA
     int32 exec_type = 37; // NUMBER in QLUA
     int32 side_qualifier = 38; // NUMBER in QLUA
     int32 acnt_type = 39; // NUMBER in QLUA
@@ -222,7 +222,7 @@ message AccountBalance {
 // Стоп-заявки
 message StopOrder {
 
-    uint64 order_num = 1; // NUMBER in QLUA
+    int64 order_num = 1; // NUMBER in QLUA
     string ordertime = 2; // NUMBER in QLUA
     int32 flags = 3; // NUMBER in QLUA
     string brokerref = 4;
@@ -231,7 +231,7 @@ message StopOrder {
     int32 condition = 7; // NUMBER in QLUA
     string condition_price = 8; // NUMBER in QLUA
     string price = 9; // NUMBER in QLUA
-    uint32 qty = 10; // NUMBER in QLUA
+    int32 qty = 10; // NUMBER in QLUA
     string linkedorder = 11; // NUMBER in QLUA
     string expiry = 12; // NUMBER in QLUA
     string trans_id = 13; // NUMBER in QLUA
@@ -246,7 +246,7 @@ message StopOrder {
     string spread = 22; // NUMBER in QLUA
     string balance = 23; // NUMBER in QLUA
     string uid = 24; // NUMBER in QLUA
-    uint32 filled_qty = 25; // NUMBER in QLUA
+    int32 filled_qty = 25; // NUMBER in QLUA
     string withdraw_time = 26; // NUMBER in QLUA
     string condition_price2 = 27; // NUMBER in QLUA
     string active_from_time = 28; // NUMBER in QLUA
@@ -295,8 +295,8 @@ message FuturesClientHolding {
     string todaybuy = 8; // NUMBER in QLUA
     string todaysell = 9; // NUMBER in QLUA
     string totalnet = 10; // NUMBER in QLUA
-    uint32 openbuys = 11; // NUMBER in QLUA
-    uint32 opensells = 12; // NUMBER in QLUA
+    int32 openbuys = 11; // NUMBER in QLUA
+    int32 opensells = 12; // NUMBER in QLUA
     string cbplused = 13; // NUMBER in QLUA
     string cbplplanned = 14; // NUMBER in QLUA
     string varmargin = 15; // NUMBER in QLUA
@@ -363,11 +363,11 @@ message DepoLimit {
     string firmid = 3;
     string client_code = 4;
     int32 openbal = 5; // NUMBER in QLUA
-    uint32 openlimit = 6; // NUMBER in QLUA
+    int32 openlimit = 6; // NUMBER in QLUA
     int32 currentbal = 7; // NUMBER in QLUA
-    uint32 currentlimit = 8; // NUMBER in QLUA
-    uint32 locked_sell = 9; // NUMBER in QLUA
-    uint32 locked_buy = 10; // NUMBER in QLUA
+    int32 currentlimit = 8; // NUMBER in QLUA
+    int32 locked_sell = 9; // NUMBER in QLUA
+    int32 locked_buy = 10; // NUMBER in QLUA
     string locked_buy_value = 11; // NUMBER in QLUA
     string locked_sell_value = 12; // NUMBER in QLUA
     string wa_position_price = 13; // NUMBER in QLUA
@@ -400,7 +400,7 @@ message AccountPosition {
 // Заявки на внебиржевые сделки
 message NegDeal {
 
-    uint64 neg_deal_num = 1; // NUMBER in QLUA
+    int64 neg_deal_num = 1; // NUMBER in QLUA
     string neg_deal_time = 2; // NUMBER in QLUA
     int32 flags = 3; // NUMBER in QLUA
     string brokerref = 4;
@@ -466,7 +466,7 @@ message NegDeal {
 // Сделки для исполнения
 message NegTrade {
 
-    uint64 trade_num = 1; // NUMBER in QLUA
+    int64 trade_num = 1; // NUMBER in QLUA
     string trade_date = 2; // NUMBER in QLUA
     string settle_date = 3; // NUMBER in QLUA
     int32 flags = 4; // NUMBER in QLUA
@@ -476,7 +476,7 @@ message NegTrade {
     string cpfirmid = 8;
     string cpaccount = 9;
     string price = 10; // NUMBER in QLUA
-    uint32 qty = 11; // NUMBER in QLUA
+    int32 qty = 11; // NUMBER in QLUA
     string value = 12; // NUMBER in QLUA
     string settlecode = 13;
     string report_num = 14; // NUMBER in QLUA
@@ -576,7 +576,7 @@ message DateTimeEntry {
 // Транзакции
 message Transaction {
 
-    uint64 trans_id = 1; // NUMBER in QLUA
+    int64 trans_id = 1; // NUMBER in QLUA
     int32 status = 2; // NUMBER in QLUA
     string result_msg = 3;
     DateTimeEntry date_time = 4; // TABLE in QLUA
@@ -648,4 +648,3 @@ message DataSourceUpdateInfo {
         int32 value_size = 10;
     }
 }
-
