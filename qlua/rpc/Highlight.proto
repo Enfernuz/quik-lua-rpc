@@ -26,7 +26,7 @@ message Args {
         bool null_f_color = 8;
         int32 value_f_color = 9;
     }
-    uint32 timeout = 10;
+    uint64 timeout = 10;
 }
 
 message Result {
