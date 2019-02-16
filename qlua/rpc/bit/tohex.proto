@@ -9,10 +9,10 @@ option java_package = "qlua.rpc.bit";
 
 message Args {
 
-    int32 x = 1;
+    sint64 x = 1;
     oneof n {
         bool null_n = 2;
-        int32 value_n = 3;
+        uint32 value_n = 3;
     }
     
 }
