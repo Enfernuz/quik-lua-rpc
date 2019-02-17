@@ -23,8 +23,7 @@
         },
         "price": {
             "description": "Параметр price",
-            "type": "string",
-            "pattern": "^([0-9]*[.])?[0-9]+$|^[\\d.]+(?:e-?\\d+)?$"
+            "$ref": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/QluaStructures.scheme.json#/definitions/NumberAsString"
         }
     },
     "additionalProperties": false,
