@@ -23,7 +23,7 @@
         },
         "limit_kind": {
             "description": "Параметр limit_kind",
-            "type": "number"
+            "type": "integer"
         }
     },
     "additionalProperties": false,
