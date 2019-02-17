@@ -61,6 +61,48 @@
             "description": "Индекс элемента",
             "type": "integer",
             "minimum": 0
+        },
+        "DatasourceTime": {
+            "description": "Время источника данных",
+            "type": "object",
+            "properties": {
+                "year": {
+                    "description": "Параметр year",
+                    "type": "number"
+                },
+                "month": {
+                    "description": "Параметр month",
+                    "type": "number"
+                },
+                "day": {
+                    "description": "Параметр day",
+                    "type": "number"
+                },
+                "week_day": {
+                    "description": "Параметр week_day",
+                    "type": "number"
+                },
+                "hour": {
+                    "description": "Параметр hour",
+                    "type": "number"
+                },
+                "min": {
+                    "description": "Параметр min",
+                    "type": "number"
+                },
+                "sec": {
+                    "description": "Параметр sec",
+                    "type": "number"
+                },
+                "ms": {
+                    "description": "Параметр ms",
+                    "type": "number"
+                },
+                "count": {
+                    "description": "Параметр count",
+                    "type": "number"
+                }
+            }
         }
     }
 }
