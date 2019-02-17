@@ -15,7 +15,7 @@
         },
         "limit_type": {
             "description": "Параметр limit_type",
-            "type": "number"
+            "type": "integer"
         },
         "currcode": {
             "description": "Параметр currcode",
