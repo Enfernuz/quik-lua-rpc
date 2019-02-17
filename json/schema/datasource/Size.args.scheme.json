@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/datasource/Size.args.scheme.json",
+    "title": "Аргументы процедуры datasource.Size",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры datasource.Size",
+    "type": "object",
+    "properties": {
+        "datasource_uuid": {
+            "description": "Параметр datasource_uuid",
+            "$ref": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/QluaStructures.scheme.json#/definitions/DatasourceUUID"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["datasource_uuid"]
+}
