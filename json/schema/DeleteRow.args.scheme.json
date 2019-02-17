@@ -11,7 +11,7 @@
         },
         "key": {
             "description": "Параметр key",
-            "type": "number"
+            "type": "integer"
         }
     },
     "additionalProperties": false,
