@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/datasource/Close.result.scheme.json",
+    "title": "Результат процедуры datasource.Close",
+    "description": "Схема объекта результата удалённого вызова процедуры datasource.Close",
+    "type": "object",
+    "properties": {
+        "result": {
+            "description": "Результат",
+            "type": "boolean"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["result"]
+}
