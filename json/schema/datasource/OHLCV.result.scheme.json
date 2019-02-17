@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/datasource/OHLCV.result.scheme.json",
+    "title": "Результат процедур datasource.O, H, L, C, V",
+    "description": "Схема объекта результата удалённого вызова процедур datasource.O, H, L, C, V",
+    "type": "object",
+    "properties": {
+        "value": {
+            "description": "Результат",
+            "$ref": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/QluaStructures.scheme.json#/definitions/NumberAsString"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["value"]
+}
