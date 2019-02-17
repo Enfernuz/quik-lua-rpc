@@ -11,7 +11,7 @@
         },
         "index": {
             "description": "Параметр index",
-            "type": "number"
+            "$ref": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/QluaStructures.scheme.json#/definitions/Index"
         }
     },
     "additionalProperties": false,
