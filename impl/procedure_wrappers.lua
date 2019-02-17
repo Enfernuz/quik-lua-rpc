@@ -479,9 +479,9 @@ module["datasource.CreateDataSource"] = function (args)
   
   local ds, error_desc
   if args.param == nil or args.param == "" then
-    ds, error_desc = _G.CreateDataSource(args.class_code, args.sec_code, args.interval)
+    ds, error_desc = _G.CreateDataSource(args.class_code, args.sec_code, utils.to_interval(args.interval))
   else 
-    ds, error_desc = _G.CreateDataSource(args.class_code, args.sec_code, args.interval, args.param)
+    ds, error_desc = _G.CreateDataSource(args.class_code, args.sec_code, utils.to_interval(args.interval), args.param)
   end
   
   local result
