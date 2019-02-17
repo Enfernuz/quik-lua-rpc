@@ -11,11 +11,11 @@
         },
         "key": {
             "description": "Параметр key",
-            "type": "number"
+            "type": "integer"
         },
         "code": {
             "description": "Параметр code",
-            "type": "number"
+            "type": "integer"
         }
     },
     "additionalProperties": false,
