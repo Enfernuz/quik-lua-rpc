@@ -23,7 +23,7 @@
                 },
                 "type": {
                     "description": "Параметр type",
-                    "type": "number"
+                    "type": "integer"
                 },
                 "startbuy": {
                     "description": "Параметр startbuy",
