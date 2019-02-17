@@ -19,7 +19,7 @@
         },
         "type": {
             "description": "Параметр type",
-            "type": "number"
+            "type": "integer"
         }
     },
     "additionalProperties": false,
