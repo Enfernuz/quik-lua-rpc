@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/datasource/Size.result.scheme.json",
+    "title": "Результат процедуры datasource.Size",
+    "description": "Схема объекта результата удалённого вызова процедуры datasource.Size",
+    "type": "object",
+    "properties": {
+        "value": {
+            "description": "Результат",
+            "type": "integer"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["value"]
+}
