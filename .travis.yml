@@ -17,10 +17,10 @@ before_install:
   - luarocks install busted
 
 script:
-  - busted --coverage test/*.lua
+  - busted --coverage test/json/*.test.lua 
 
 after_success:
-  - luacov-coveralls --exclude test --exclude ./install --verbose
+  - luacov-coveralls -e install -e test --verbose
 
 notifications:
   email:
