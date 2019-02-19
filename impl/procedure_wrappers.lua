@@ -92,7 +92,7 @@ module["getItem"] = function (args)
   
   -- returns nil in case of error
   local result = _G.getItem(args.table_name, args.index)
-  if type(result) ~= 'table' then
+  if result and type(result) ~= 'table' then
     result = {singular_result = tostring(result)}
   end
   return result and to_string_string_table(result) or nil
