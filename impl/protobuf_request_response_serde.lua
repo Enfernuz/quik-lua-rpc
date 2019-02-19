@@ -4,6 +4,8 @@ local RequestResponseSerde = require("impl.request_response_serde")
 
 local utils = require("utils.utils")
 local pb = require("pb")
+pb.option("use_default_values")
+
 local qlua_pb_types = require("qlua.qlua_pb_types")
 
 local ProtobufRequestResponseSerde = {}
@@ -65,7 +67,7 @@ result_encoders[method_names[proc_name]] = function (proc_result)
   
   local result = pb.defaults(qlua_pb_types.isConnected.Result)
   result.is_connected = proc_result
-  return qlua_pb_types.isConnected.Result, result
+  return pb.encode(qlua_pb_types.isConnected.Result, result)
 end
 
 -- getScriptPath
@@ -76,7 +78,7 @@ result_encoders[method_names[proc_name]] = function (proc_result)
   
   local result = pb.defaults(qlua_pb_types.getScriptPath.Result)
   result.script_path = proc_result
-  return qlua_pb_types.getScriptPath.Result, result
+  return pb.encode(qlua_pb_types.getScriptPath.Result, result)
 end
 
 -- getInfoParam
@@ -90,7 +92,7 @@ result_encoders[method_names[proc_name]] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.getInfoParam.Result)
   result.info_param = proc_result
   
-  return qlua_pb_types.getInfoParam.Result, result
+  return pb.encode(qlua_pb_types.getInfoParam.Result, result)
 end
 
 -- message
@@ -127,7 +129,7 @@ result_encoders[method_names[proc_name]] = function (proc_result)
     result.null_result = true
     result.value_result = nil
   end
-  return qlua_pb_types.sleep.Result, result
+  return pb.encode(qlua_pb_types.sleep.Result, result)
 end
 
 -- getWorkingFolder
@@ -138,7 +140,7 @@ result_encoders[method_names[proc_name]] = function (proc_result)
   
   local result = pb.defaults(qlua_pb_types.getWorkingFolder.Result)
   result.working_folder = proc_result
-  return qlua_pb_types.getWorkingFolder.Result, result
+  return pb.encode(qlua_pb_types.getWorkingFolder.Result, result)
 end
 
 -- PrintDbgStr
@@ -161,7 +163,7 @@ result_encoders[method_names[proc_name]] = function (proc_result)
     result.result[k] = v
   end
   
-  return qlua_pb_types.os.sysdate.Result, result
+  return pb.encode(qlua_pb_types.os.sysdate.Result, result)
 end
 
 -- getItem
@@ -174,15 +176,15 @@ result_encoders[method_names[proc_name]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getItem.Result)
   if proc_result then
+    result.table_row = {}
     for k, v in pairs(proc_result) do
-      result.value_table_row[k] = v
+      result.table_row[tostring(k)] = tostring(v)
     end
   else
     result.null_table_row = true
-    result.value_table_row = nil
   end
 
-  return result
+  return pb.encode(qlua_pb_types.getItem.Result, result)
 end
 
 -- getOrderByNumber
@@ -209,7 +211,7 @@ result_encoders[method_names[proc_name]] = function (proc_result)
     result.value_indx = nil
   end
 
-  return qlua_pb_types.getOrderByNumber.Result, result
+  return pb.encode(qlua_pb_types.getOrderByNumber.Result, result)
 end
 
 -- getNumberOf
@@ -222,7 +224,7 @@ result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getNumberOf.Result)
   result.result = proc_result
-  return qlua_pb_types.getNumberOf.Result, result
+  return pb.encode(qlua_pb_types.getNumberOf.Result, result)
 end
 
 -- SearchItems
@@ -258,7 +260,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.getClassesList.Result)
   result.classes_list = proc_result
   
-  return qlua_pb_types.getClassesList.Result, result
+  return pb.encode(qlua_pb_types.getClassesList.Result, result)
 end
 
 -- getClassInfo
@@ -277,7 +279,7 @@ result_encoders[proc_name] = function (proc_result)
     end
   end
     
-  return qlua_pb_types.getClassInfo.Result, result
+  return pb.encode(qlua_pb_types.getClassInfo.Result, result)
 end
 
 -- getClassSecurities
@@ -291,7 +293,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.getClassSecurities.Result)
   result.class_securities = proc_result
   
-  return qlua_pb_types.getClassSecurities.Result, result
+  return pb.encode(qlua_pb_types.getClassSecurities.Result, result)
 end
 
 -- getMoney
@@ -308,7 +310,7 @@ result_encoders[proc_name] = function (proc_result)
     result.money[k] = v
   end
   
-  return qlua_pb_types.getMoney.Result, result
+  return pb.encode(qlua_pb_types.getMoney.Result, result)
 end
 
 -- getMoneyEx
@@ -327,7 +329,7 @@ result_encoders[proc_name] = function (proc_result)
     end
   end
 
-  return qlua_pb_types.getMoneyEx.Result, result
+  return pb.encode(qlua_pb_types.getMoneyEx.Result, result)
 end
 
 -- getDepo
@@ -344,7 +346,7 @@ result_encoders[proc_name] = function (proc_result)
     result.depo[k] = v
   end
   
-  return qlua_pb_types.getDepo.Result, result
+  return pb.encode(qlua_pb_types.getDepo.Result, result)
 end
 
 -- getDepoEx
@@ -364,7 +366,7 @@ result_encoders[proc_name] = function (proc_result)
     end
   end
   
-  return qlua_pb_types.getDepoEx.Result, result
+  return pb.encode(qlua_pb_types.getDepoEx.Result, result)
 end
 
 -- getFuturesLimit
@@ -383,7 +385,7 @@ result_encoders[proc_name] = function (proc_result)
     end
   end
   
-  return qlua_pb_types.getFuturesLimit.Result, result
+  return pb.encode(qlua_pb_types.getFuturesLimit.Result, result)
 end
 
 -- getFuturesHolding
@@ -402,7 +404,7 @@ result_encoders[proc_name] = function (proc_result)
     end
   end
   
-  return qlua_pb_types.getFuturesHolding.Result, result
+  return pb.encode(qlua_pb_types.getFuturesHolding.Result, result)
 end
 
 -- getSecurityInfo
@@ -421,7 +423,7 @@ result_encoders[proc_name] = function (proc_result)
     end
   end
   
-  return qlua_pb_types.getSecurityInfo.Result, result
+  return pb.encode(qlua_pb_types.getSecurityInfo.Result, result)
 end
 
 -- getTradeDate
@@ -436,7 +438,7 @@ result_encoders[proc_name] = function (proc_result)
     result.trade_date[k] = v
   end
   
-  return qlua_pb_types.getTradeDate.Result, result
+  return pb.encode(qlua_pb_types.getTradeDate.Result, result)
 end
 
 -- getQuoteLevel2
@@ -466,7 +468,7 @@ result_encoders[proc_name] = function (proc_result)
     table.sinsert(result.offers, offer)
   end
   
-  return qlua_pb_types.getQuoteLevel2.Result, result
+  return pb.encode(qlua_pb_types.getQuoteLevel2.Result, result)
 end
 
 -- getLinesCount
@@ -479,7 +481,7 @@ result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getLinesCount.Result)
   result.lines_count = proc_result
-  return qlua_pb_types.getLinesCount.Result, result
+  return pb.encode(qlua_pb_types.getLinesCount.Result, result)
 end
 
 -- getNumCandles
@@ -492,7 +494,7 @@ result_encoders[proc_name] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getNumCandles.Result)
   result.num_candles = proc_result
-  return qlua_pb_types.getNumCandles.Result, result
+  return pb.encode(qlua_pb_types.getNumCandles.Result, result)
 end
 
 -- getCandlesByIndex
@@ -519,7 +521,7 @@ result_encoders[proc_name] = function (proc_result)
   result.n = proc_result.n
   result.l = proc_result.l
   
-  return qlua_pb_types.getCandlesByIndex.Result, result
+  return pb.encode(qlua_pb_types.getCandlesByIndex.Result, result)
 end
 
 -- datasource.CreateDataSource
@@ -540,7 +542,7 @@ result_encoders[proc_name] = function (proc_result)
     result.datasource_uuid = proc_result.datasource_uuid
   end
 
-  return qlua_pb_types.datasource.CreateDataSource.Result, result
+  return pb.encode(qlua_pb_types.datasource.CreateDataSource.Result, result)
 end
 
 -- datasource.SetUpdateCallback
@@ -554,7 +556,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.datasource.SetUpdateCallback.Result)
   result.result = proc_result
   
-  return qlua_pb_types.datasource.SetUpdateCallback.Result, result
+  return pb.encode(qlua_pb_types.datasource.SetUpdateCallback.Result, result)
 end
 
 -- datasource.O
@@ -568,7 +570,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.datasource.O.Result)
   result.value = proc_result
   
-  return qlua_pb_types.datasource.O.Result, result
+  return pb.encode(qlua_pb_types.datasource.O.Result, result)
 end
 
 -- datasource.H
@@ -582,7 +584,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.datasource.H.Result)
   result.value = proc_result
   
-  return qlua_pb_types.datasource.H.Result, result
+  return pb.encode(qlua_pb_types.datasource.H.Result, result)
 end
 
 -- datasource.L
@@ -596,7 +598,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.datasource.L.Result)
   result.value = proc_result
   
-  return qlua_pb_types.datasource.L.Result, result
+  return pb.encode(qlua_pb_types.datasource.L.Result, result)
 end
 
 -- datasource.C
@@ -610,7 +612,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.datasource.C.Result)
   result.value = proc_result
   
-  return qlua_pb_types.datasource.C.Result, result
+  return pb.encode(qlua_pb_types.datasource.C.Result, result)
 end
 
 -- datasource.V
@@ -624,7 +626,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.datasource.V.Result)
   result.value = proc_result
   
-  return qlua_pb_types.datasource.V.Result, result
+  return pb.encode(qlua_pb_types.datasource.V.Result, result)
 end
 
 -- datasource.T
@@ -642,7 +644,7 @@ result_encoders[proc_name] = function (proc_result)
     result.time[k] = v
   end
   
-  return qlua_pb_types.datasource.T.Result, result
+  return pb.encode(qlua_pb_types.datasource.T.Result, result)
 end
 
 -- datasource.Size
@@ -656,7 +658,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.datasource.Size.Result)
   result.value = proc_result
   
-  return qlua_pb_types.datasource.Size.Result, result
+  return pb.encode(qlua_pb_types.datasource.Size.Result, result)
 end
 
 -- datasource.Close
@@ -670,7 +672,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.datasource.Close.Result)
   result.result = proc_result
   
-  return qlua_pb_types.datasource.Close.Result, result
+  return pb.encode(qlua_pb_types.datasource.Close.Result, result)
 end
 
 -- datasource.Close
@@ -684,7 +686,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.datasource.SetEmptyCallback.Result)
   result.result = proc_result
   
-  return qlua_pb_types.datasource.SetEmptyCallback.Result, result
+  return pb.encode(qlua_pb_types.datasource.SetEmptyCallback.Result, result)
 end
 
 -- sendTransaction
@@ -698,7 +700,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.sendTransaction.Result)
   result.result = proc_result
   
-  return qlua_pb_types.sendTransaction.Result, result
+  return pb.encode(qlua_pb_types.sendTransaction.Result, result)
 end
 
 -- CalcBuySell
@@ -713,7 +715,7 @@ result_encoders[proc_name] = function (proc_result)
   result.qty = proc_result.qty
   result.comission = proc_result.comission
   
-  return qlua_pb_types.CalcBuySell.Result, result
+  return pb.encode(qlua_pb_types.CalcBuySell.Result, result)
 end
 
 -- getParamEx
@@ -730,7 +732,7 @@ result_encoders[proc_name] = function (proc_result)
     result.param_ex[k] = v
   end
   
-  return qlua_pb_types.getParamEx.Result, result
+  return pb.encode(qlua_pb_types.getParamEx.Result, result)
 end
 
 -- getParamEx2
@@ -747,7 +749,7 @@ result_encoders[proc_name] = function (proc_result)
     result.param_ex[k] = v
   end
   
-  return qlua_pb_types.getParamEx2.Result, result
+  return pb.encode(qlua_pb_types.getParamEx2.Result, result)
 end
 
 -- getPortfolioInfo
@@ -764,7 +766,7 @@ result_encoders[proc_name] = function (proc_result)
     result.portfolio_info[k] = v
   end
   
-  return qlua_pb_types.getPortfolioInfo.Result, result
+  return pb.encode(qlua_pb_types.getPortfolioInfo.Result, result)
 end
 
 -- getPortfolioInfoEx
@@ -788,7 +790,7 @@ result_encoders[proc_name] = function (proc_result)
     result.portfolio_info_ex[k] = v
   end
   
-  return qlua_pb_types.getPortfolioInfoEx.Result, result
+  return pb.encode(qlua_pb_types.getPortfolioInfoEx.Result, result)
 end
 
 -- getBuySellInfo
@@ -805,7 +807,7 @@ result_encoders[proc_name] = function (proc_result)
     result.buy_sell_info[k] = v
   end
   
-  return qlua_pb_types.getBuySellInfo.Result, result
+  return pb.encode(qlua_pb_types.getBuySellInfo.Result, result)
 end
 
 -- getBuySellInfoEx
@@ -852,7 +854,7 @@ result_encoders[proc_name] = function (proc_result)
   result.buy_sell_info_ex.is_long_allowed = proc_result.is_long_allowed
   result.buy_sell_info_ex.is_short_allowed = proc_result.is_short_allowed
 
-  return qlua_pb_types.getBuySellInfoEx.Result, result
+  return pb.encode(qlua_pb_types.getBuySellInfoEx.Result, result)
 end
 
 -- AddColumn
@@ -866,7 +868,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.AddColumn.Result)
   result.result = proc_result
   
-  return qlua_pb_types.AddColumn.Result, result
+  return pb.encode(qlua_pb_types.AddColumn.Result, result)
 end
 
 -- AllocTable
@@ -878,7 +880,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.AllocTable.Result)
   result.t_id = proc_result
   
-  return qlua_pb_types.AllocTable.Result, result
+  return pb.encode(qlua_pb_types.AllocTable.Result, result)
 end
 
 -- Clear
@@ -892,7 +894,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.Clear.Result)
   result.result = proc_result
   
-  return qlua_pb_types.Clear.Result, result
+  return pb.encode(qlua_pb_types.Clear.Result, result)
 end
 
 -- CreateWindow
@@ -906,7 +908,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.CreateWindow.Result)
   result.result = proc_result
   
-  return qlua_pb_types.CreateWindow.Result, result
+  return pb.encode(qlua_pb_types.CreateWindow.Result, result)
 end
 
 -- DeleteRow
@@ -920,7 +922,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.DeleteRow.Result)
   result.result = proc_result
   
-  return qlua_pb_types.DeleteRow.Result, result
+  return pb.encode(qlua_pb_types.DeleteRow.Result, result)
 end
 
 -- DestroyTable
@@ -934,7 +936,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.DestroyTable.Result)
   result.result = proc_result
   
-  return qlua_pb_types.DestroyTable.Result, result
+  return pb.encode(qlua_pb_types.DestroyTable.Result, result)
 end
 
 -- InsertRow
@@ -948,7 +950,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.InsertRow.Result)
   result.result = proc_result
   
-  return qlua_pb_types.InsertRow.Result, result
+  return pb.encode(qlua_pb_types.InsertRow.Result, result)
 end
 
 -- IsWindowClosed
@@ -967,7 +969,7 @@ result_encoders[proc_name] = function (proc_result)
     result.value_window_closed = proc_result
   end
   
-  return qlua_pb_types.IsWindowClosed.Result, result
+  return pb.encode(qlua_pb_types.IsWindowClosed.Result, result)
 end
 
 -- GetCell
@@ -984,7 +986,7 @@ result_encoders[proc_name] = function (proc_result)
     result.value = proc_result.value
   end
   
-  return qlua_pb_types.GetCell.Result, result
+  return pb.encode(qlua_pb_types.GetCell.Result, result)
 end
 
 -- GetTableSize
@@ -1002,7 +1004,7 @@ result_encoders[proc_name] = function (proc_result)
     result.table_size.col = proc_result.col
   end
   
-  return qlua_pb_types.GetTableSize.Result, result
+  return pb.encode(qlua_pb_types.GetTableSize.Result, result)
 end
 
 -- GetWindowCaption
@@ -1018,7 +1020,7 @@ result_encoders[proc_name] = function (proc_result)
     result.caption = proc_result
   end
   
-  return qlua_pb_types.GetWindowCaption.Result, result
+  return pb.encode(qlua_pb_types.GetWindowCaption.Result, result)
 end
 
 -- GetWindowRect
@@ -1038,7 +1040,7 @@ result_encoders[proc_name] = function (proc_result)
     result.window_rect.right = proc_result.right
   end
   
-  return qlua_pb_types.GetWindowRect.Result, result
+  return pb.encode(qlua_pb_types.GetWindowRect.Result, result)
 end
 
 -- SetCell
@@ -1052,7 +1054,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.SetCell.Result)
   result.result = proc_result
   
-  return qlua_pb_types.SetCell.Result, result
+  return pb.encode(qlua_pb_types.SetCell.Result, result)
 end
 
 -- SetWindowCaption
@@ -1066,7 +1068,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.SetWindowCaption.Result)
   result.result = proc_result
   
-  return qlua_pb_types.SetWindowCaption.Result, result
+  return pb.encode(qlua_pb_types.SetWindowCaption.Result, result)
 end
 
 -- SetWindowPos
@@ -1080,7 +1082,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.SetWindowPos.Result)
   result.result = proc_result
   
-  return qlua_pb_types.SetWindowPos.Result, result
+  return pb.encode(qlua_pb_types.SetWindowPos.Result, result)
 end
 
 -- SetTableNotificationCallback
@@ -1094,7 +1096,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.SetTableNotificationCallback.Result)
   result.result = proc_result
   
-  return qlua_pb_types.SetTableNotificationCallback.Result, result
+  return pb.encode(qlua_pb_types.SetTableNotificationCallback.Result, result)
 end
 
 -- RGB
@@ -1108,7 +1110,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.RGB.Result)
   result.result = proc_result
   
-  return qlua_pb_types.RGB.Result, result
+  return pb.encode(qlua_pb_types.RGB.Result, result)
 end
 
 -- SetColor
@@ -1132,7 +1134,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.SetColor.Result)
   result.result = proc_result
   
-  return qlua_pb_types.SetColor.Result, result
+  return pb.encode(qlua_pb_types.SetColor.Result, result)
 end
 
 -- Highlight
@@ -1154,7 +1156,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.Highlight.Result)
   result.result = proc_result
   
-  return qlua_pb_types.Highlight.Result, result
+  return pb.encode(qlua_pb_types.Highlight.Result, result)
 end
 
 -- SetSelectedRow
@@ -1172,7 +1174,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.SetSelectedRow.Result)
   result.result = proc_result
   
-  return qlua_pb_types.SetSelectedRow.Result, result
+  return pb.encode(qlua_pb_types.SetSelectedRow.Result, result)
 end
 
 -- AddLabel
@@ -1192,7 +1194,7 @@ result_encoders[proc_name] = function (proc_result)
     result.label_id = nil
   end
   
-  return qlua_pb_types.AddLabel.Result, result
+  return pb.encode(qlua_pb_types.AddLabel.Result, result)
 end
 
 -- DelLabel
@@ -1206,7 +1208,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.DelLabel.Result)
   result.result = proc_result
   
-  return qlua_pb_types.DelLabel.Result, result
+  return pb.encode(qlua_pb_types.DelLabel.Result, result)
 end
 
 -- DelAllLabels
@@ -1220,7 +1222,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.DelAllLabels.Result)
   result.result = proc_result
   
-  return qlua_pb_types.DelAllLabels.Result, result
+  return pb.encode(qlua_pb_types.DelAllLabels.Result, result)
 end
 
 -- GetLabelParams
@@ -1236,7 +1238,7 @@ result_encoders[proc_name] = function (proc_result)
     result.label_params = proc_result
   end
   
-  return qlua_pb_types.GetLabelParams.Result, result
+  return pb.encode(qlua_pb_types.GetLabelParams.Result, result)
 end
 
 -- SetLabelParams
@@ -1250,7 +1252,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.SetLabelParams.Result)
   result.result = proc_result
   
-  return qlua_pb_types.SetLabelParams.Result, result
+  return pb.encode(qlua_pb_types.SetLabelParams.Result, result)
 end
 
 -- Subscribe_Level_II_Quotes
@@ -1264,7 +1266,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.Subscribe_Level_II_Quotes.Result)
   result.result = proc_result
   
-  return qlua_pb_types.Subscribe_Level_II_Quotes.Result, result
+  return pb.encode(qlua_pb_types.Subscribe_Level_II_Quotes.Result, result)
 end
 
 -- Unsubscribe_Level_II_Quotes
@@ -1278,7 +1280,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.Unsubscribe_Level_II_Quotes.Result)
   result.result = proc_result
   
-  return qlua_pb_types.Unsubscribe_Level_II_Quotes.Result, result
+  return pb.encode(qlua_pb_types.Unsubscribe_Level_II_Quotes.Result, result)
 end
 
 -- IsSubscribed_Level_II_Quotes
@@ -1292,7 +1294,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.IsSubscribed_Level_II_Quotes.Result)
   result.result = proc_result
   
-  return qlua_pb_types.IsSubscribed_Level_II_Quotes.Result, result
+  return pb.encode(qlua_pb_types.IsSubscribed_Level_II_Quotes.Result, result)
 end
 
 -- ParamRequest
@@ -1306,7 +1308,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.ParamRequest.Result)
   result.result = proc_result
   
-  return qlua_pb_types.ParamRequest.Result, result
+  return pb.encode(qlua_pb_types.ParamRequest.Result, result)
 end
 
 -- CancelParamRequest
@@ -1320,7 +1322,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.CancelParamRequest.Result)
   result.result = proc_result
   
-  return qlua_pb_types.CancelParamRequest.Result, result
+  return pb.encode(qlua_pb_types.CancelParamRequest.Result, result)
 end
 
 -- bit.tohex
@@ -1337,7 +1339,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.bit.tohex.Result)
   result.result = proc_result
   
-  return qlua_pb_types.bit.tohex.Result, result
+  return pb.encode(qlua_pb_types.bit.tohex.Result, result)
 end
 
 -- bit.bnot
@@ -1351,7 +1353,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.bit.bnot.Result)
   result.result = proc_result
   
-  return qlua_pb_types.bit.bnot.Result, result
+  return pb.encode(qlua_pb_types.bit.bnot.Result, result)
 end
 
 -- bit.band
@@ -1365,7 +1367,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.bit.band.Result)
   result.result = proc_result
   
-  return qlua_pb_types.bit.band.Result, result
+  return pb.encode(qlua_pb_types.bit.band.Result, result)
 end
 
 -- bit.bor
@@ -1379,7 +1381,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.bit.bor.Result)
   result.result = proc_result
   
-  return qlua_pb_types.bit.bor.Result, result
+  return pb.encode(qlua_pb_types.bit.bor.Result, result)
 end
 
 -- bit.bxor
@@ -1393,7 +1395,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.bit.bxor.Result)
   result.result = proc_result
   
-  return qlua_pb_types.bit.bxor.Result, result
+  return pb.encode(qlua_pb_types.bit.bxor.Result, result)
 end
 
 -- bit.test
@@ -1407,7 +1409,7 @@ result_encoders[proc_name] = function (proc_result)
   local result = pb.defaults(qlua_pb_types.bit.test.Result)
   result.result = proc_result
   
-  return qlua_pb_types.bit.test.Result, result
+  return pb.encode(qlua_pb_types.bit.test.Result, result)
 end
 
 return ProtobufRequestResponseSerde
