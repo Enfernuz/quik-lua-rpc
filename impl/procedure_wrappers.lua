@@ -674,25 +674,31 @@ end
 -- TODO: test
 module["getParamEx"] = function (args) 
   
-  --no post-processing ?
+  local result = requireNonNil(_G.getParamEx(args.class_code, args.sec_code, args.param_name)) -- always returns a table
+  
+  --post-processing:
   --result.param_type AS IS
   --result.param_value AS IS
-  --result.param_image AS IS
+  --result.param_image from CP1251 to UTF8
   --result.result AS IS
-    
-  return requireNonNil(_G.getParamEx(args.class_code, args.sec_code, args.param_name)) -- always returns a table
+  result.param_image = utils.Cp1251ToUtf8(result.param_image)
+  
+  return result
 end
 
 -- TODO: test
 module["getParamEx2"] = function (args) 
   
-  --no post-processing ?
+  local result = requireNonNil(_G.getParamEx2(args.class_code, args.sec_code, args.param_name)) -- always returns a table
+  
+  --post-processing:
   --result.param_type AS IS
   --result.param_value AS IS
-  --result.param_image AS IS
+  --result.param_image from CP1251 to UTF8
   --result.result AS IS
-
-  return requireNonNil(_G.getParamEx2(args.class_code, args.sec_code, args.param_name)) -- always returns a table
+  result.param_image = utils.Cp1251ToUtf8(result.param_image)
+  
+  return result
 end
 
 -- TODO: test
