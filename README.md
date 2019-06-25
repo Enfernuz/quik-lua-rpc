@@ -20,6 +20,7 @@ RPC-сервис для вызова процедур из QLUA -- Lua-библ�
   * [Примеры](#Примеры)
   * [Разработчикам](#Разработчикам)
   * [FAQ](#faq)
+  * [English version](#English-version)
 
 Зачем?
 --------
@@ -188,3 +189,7 @@ A: Для Lua пока не запилили генерацию стабов gRP
 Q: **А что насчёт Thrift? Там вроде есть поддержка Lua.**
 
 A: Если мне память не изменяет, там в зависимостях библиотеки, для которых исходники только под UNIX (например, `luabpack`).
+
+English version
+--------
+If you deliberately want to have the English version of this README or just want some answers, feel free to reach me via GitHub or email. I'm planning to do some English translation, but the laziness is unbearable... Go on, kick my ass a little :)
