@@ -466,17 +466,20 @@ module["getCandlesByIndex"] = function (args)
     error("Целевая QLua-функция возвратила nil вместо значения 'l'.")
   end
 
-  for i, candle in ipairs(t) do
+  local processedCandles = {}
+  for i, candle in pairs(t) do
+
+      table.sinsert(processedCandles, candle)
       -- post-processing: stringification of decimal numbers
-      candle.open = tostring(assert(candle.open, string.format("Свеча с индексом %d не содержит обязательного поля 'open'.", i)))
-      candle.close = tostring(assert(candle.close, string.format("Свеча с индексом %d не содержит обязательного поля 'close'.", i)))
-      candle.high = tostring(assert(candle.high, string.format("Свеча с индексом %d не содержит обязательного поля 'high'.", i)))
-      candle.low = tostring(assert(candle.low, string.format("Свеча с индексом %d не содержит обязательного поля 'low'.", i)))
-      candle.volume = tostring(assert(candle.volume, string.format("Свеча с индексом %d не содержит обязательного поля 'volume'.", i)))
+      candle.open = tostring(assert(candle.open, string.format("Свеча с индексом %s не содержит обязательного поля 'open'.", i)))
+      candle.close = tostring(assert(candle.close, string.format("Свеча с индексом %s не содержит обязательного поля 'close'.", i)))
+      candle.high = tostring(assert(candle.high, string.format("Свеча с индексом %s не содержит обязательного поля 'high'.", i)))
+      candle.low = tostring(assert(candle.low, string.format("Свеча с индексом %s не содержит обязательного поля 'low'.", i)))
+      candle.volume = tostring(assert(candle.volume, string.format("Свеча с индексом %s не содержит обязательного поля 'volume'.", i)))
   end
   
   return {
-    t = t,
+    t = processedCandles,
     n = n,
     l = l
   }
