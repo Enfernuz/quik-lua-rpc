@@ -49,6 +49,11 @@ local function encode_table(val, stack)
   if stack[val] then error("circular reference") end
 
   stack[val] = true
+  
+  if val == _G.EMPTY_TABLE then
+    stack[val] = nil
+    return "{}"
+  end
 
   if val[1] ~= nil or next(val) == nil then
     -- Treat as array -- check keys are valid and it is not sparse

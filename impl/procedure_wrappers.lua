@@ -6,6 +6,7 @@ local pcall = assert(pcall, "Функция 'pcall' не найдена.")
 local pairs = assert(pairs, "Функция 'pairs' не найдена.")
 local ipairs = assert(ipairs, "Функция 'ipairs' не найдена.")
 local tostring = assert(tostring, "Функция 'tostring' не найдена.")
+local tonumber = assert(tostring, "Функция 'tonumber' не найдена.")
 local loadstring = assert(loadstring, "Функция 'loadstring' не найдена.")
 local table = assert(table, "Таблица 'table' не найдена.")
 local bit = assert(bit, "Таблица 'bit' не найдена.")
@@ -1122,7 +1123,23 @@ module["SetSelectedRow"] = function (args)
 end
 
 -- TODO: test
-module["AddLabel"] = function (args) 
+module["AddLabel"] = function (args)
+  
+  local label_params = args.label_params
+  
+  -- TODO: this does not cover all future additional parameters...
+  if not label_params.TEXT then label_params.TEXT = "" end
+  if not label_params.IMAGE_PATH then label_params.IMAGE_PATH = "" end
+  if label_params.YVALUE then label_params.YVALUE = tonumber(label_params.YVALUE) end
+  if label_params.DATE then label_params.DATE = tonumber(label_params.DATE) end
+  if label_params.TIME then label_params.TIME = tonumber(label_params.TIME) end
+  if label_params.R then label_params.R = tonumber(label_params.R) end
+  if label_params.G then label_params.G = tonumber(label_params.G) end
+  if label_params.B then label_params.B = tonumber(label_params.B) end
+  if label_params.TRANSPARENCY then label_params.TRANSPARENCY = tonumber(label_params.TRANSPARENCY) end
+  if label_params.TRANSPARENT_BACKGROUND then label_params.TRANSPARENT_BACKGROUND = tonumber(label_params.TRANSPARENT_BACKGROUND) end
+  if label_params.FONT_HEIGHT then label_params.FONT_HEIGHT = tonumber(label_params.FONT_HEIGHT) end
+
   -- returns nil in case of error
   return _G.AddLabel(args.chart_tag, args.label_params)
 end

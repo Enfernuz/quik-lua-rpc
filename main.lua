@@ -1,5 +1,7 @@
 package.path = getScriptPath() .. '/?.lua;' .. package.path
 
+_G.EMPTY_TABLE = {}
+
 -----
 
 local service = require("service")

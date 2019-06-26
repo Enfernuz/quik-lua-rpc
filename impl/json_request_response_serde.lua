@@ -25,7 +25,7 @@ function JsonRequestResponseSerde:serialize_response (deserialized_response)
   if err then
     json_response.error = {code = err.code, message = err.message}
   else
-    json_response.result = assert(result_encoders[deserialized_response.method], string.format("Для JSON-метода '%s' не найден JSON-сериализатор результата.", deserialized_response.method))(deserialized_response.proc_result)
+    json_response.result = deserialized_response.proc_result and assert(result_encoders[deserialized_response.method], string.format("Для JSON-метода '%s' не найден JSON-сериализатор результата.", deserialized_response.method))(deserialized_response.proc_result) or _G.EMPTY_TABLE
   end
   
   return json.encode(json_response)
@@ -226,12 +226,12 @@ end
 
 -- getSecurityInfo
 result_encoders["getSecurityInfo"] = function (proc_result)
-  return proc_result and {security_info = proc_result} or {}
+  return {security_info = proc_result}
 end
 
 -- GetTableSize
 result_encoders["GetTableSize"] = function (proc_result)
-  return proc_result and {table_size = proc_result} or {}
+  return {table_size = proc_result}
 end
 
 -- getTradeDate
@@ -241,12 +241,12 @@ end
 
 -- GetWindowCaption
 result_encoders["GetWindowCaption"] = function (proc_result)
-  return proc_result and {caption = proc_result} or {}
+  return {caption = proc_result}
 end
 
 -- GetWindowRect
 result_encoders["GetWindowRect"] = function (proc_result)
-  return proc_result and {window_rect = proc_result} or {}
+  return {window_rect = proc_result}
 end
 
 -- getWorkingFolder
