@@ -15,7 +15,7 @@ converters["OnStop"] = identity
 
 converters["OnFirm"] = function (firm)
   return {
-    firmid = utils.Cp1251ToUtf8(assert(alltrade.firmid, "Таблица 'firm' не содержит обязательного поля 'firmid'.")),
+    firmid = utils.Cp1251ToUtf8(assert(firm.firmid, "Таблица 'firm' не содержит обязательного поля 'firmid'.")),
     firm_name = (firm.firm_name and utils.Cp1251ToUtf8(firm.firm_name)), 
     status = firm.status, 
     exchange = (firm.exchange and utils.Cp1251ToUtf8(firm.exchange))
