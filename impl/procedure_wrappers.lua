@@ -482,7 +482,7 @@ module["getCandlesByIndex"] = function (args)
   return {
     t = processedCandles,
     n = n,
-    l = l
+    l = utils.Cp1251ToUtf8(l)
   }
 end
 
