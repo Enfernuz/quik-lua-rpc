@@ -346,3 +346,9 @@ python people-sub-client.py
 ```
 Translated. 
 Original version: https://cinema4dr12.tistory.com/884
+
+Применительно к quik-lua-rpc шаги:
+Создается protobuf class из proto файла
+```sh
+protoc -I=. --python_out=. ./CreateDataSource.proto 
+```
