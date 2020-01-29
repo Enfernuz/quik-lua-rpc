@@ -352,3 +352,27 @@ Original version: https://cinema4dr12.tistory.com/884
 ```sh
 protoc -I=. --python_out=. ./CreateDataSource.proto 
 ```
+В клиенте client_protobuf_python для quik-lua-rpc импортируем созданный класс
+```sh
+import sys
+sys.path.insert(0,'C:\\Users\\путь до директории с созданным CreateDataSource_pb2')
+или
+sys.path.append('C:\\Users\\путь до директории с созданным CreateDataSource_pb2')
+import zmq
+import CreateDataSource_pb2
+
+ctx = zmq.Context.instance()
+client = ctx.socket(zmq.REQ)
+client.connect('tcp://127.0.0.1:5560')
+
+message = CreateDataSource_pb2.Request()
+message.class_code = 'QJSIM'
+message.sec_code = 'SBER'
+message.interval = CreateDataSource_pb2.INTERVAL_M1
+
+request = RPC_pb2.Request()
+request.type = RPC_pb2.CREATE_DATA_SOURCE
+request.args = message.SerializeToString()
+print("Request ", request)
+print(request.SerializeToString())
+```
