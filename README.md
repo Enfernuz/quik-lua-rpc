@@ -195,83 +195,70 @@ English version
 --------
 If you deliberately want to have the English version of this README or just want some answers, feel free to reach me via GitHub or email. I'm planning to do some English translation, but the laziness is unbearable... Go on, kick my ass a little :)
 
-### Protocol Buffer + ZeroMQ + Python
-### Как реализовать механизм структуры данных сериализации Google Protocol Buffer (protobuf) и высокопроизводительную библиотеку асинхронного распределенного обмена сообщениями ZeroMQ на Python.
-### Для получения подробной информации о каждом из них, пожалуйста, обратитесь к их соответствующим веб-сайтам:
-Google Protocol Buffer : https://developers.google.com/protocol-buffers/
-ZeroMQ : http://zeromq.org
-Python : http://python.org
-Среда разработки для этого руководства выглядит следующим образом:
-OS : Microsoft Windows 7 Professional 64 bit
-IDE : Microsoft Visual Studio 2015 Community
-Python : version 2.7.11
-Protobuf-Python : version 3.0.0 beta 2 (protobuf-python-3.0.0-beta-2)
+# Protocol Buffer + ZeroMQ + Python
+# Как реализовать механизм структуры данных сериализации Google Protocol Buffer (protobuf) и высокопроизводительную библиотеку асинхронного распределенного обмена сообщениями ZeroMQ на Python.
 
-Создание решения буфера протокола
-Загрузите исходный код буфера протокола со страницы разработчика Google:
+Для получения подробной информации о каждом из них, пожалуйста, обратитесь к их соответствующим веб-сайтам:
+ - Google Protocol Buffer : https://developers.google.com/protocol-buffers/ 
+ - ZeroMQ : http://zeromq.org 
+ - Python : http://python.org 
+ Среда разработки для этого руководства выглядит следующим образом: 
+- OS : Microsoft Windows 7 Professional 64 bit 
+- IDE : Microsoft Visual Studio 2015 Community 
+- Python : version 2.7.11 
+- Protobuf-Python : version 3.0.0 beta 2 (protobuf-python-3.0.0-beta-2)
+
+# Создание решения буфера протокола
+Загрузите 
+- готовый буфер протокола protoc-3.11.2-win64.zip
 https://github.com/google/protobuf/releases
+или
+- исходный код буфера протокола protobuf-all-3.11.2.zip
+ со страницы разработчика Google: https://github.com/google/protobuf/releases
 
-Теперь создайте Visual Studio Solution с помощью инструмента CMake GUI. Если вы разархивируете загруженный файл, вы увидите папку cmake. Используйте этот путь в качестве пути исходного кода и сгенерируйте правильный путь для двоичной сборки.
-* Обратите внимание, что путь указан следующим образом:
-Где находится исходный код: {YOUR_PROTOBUF_PATH} / cmake
-Где собрать двоичные файлы (путь сборки): ANY_PATH_YOU_WANT
-Нажмите кнопку «Настроить» и выберите генератор Visual Studio 14 2015 (выберите правильную версию для вашей версии Visual Studio).
-Когда появится следующий экран, нажмите кнопку [Configure] еще раз.
-Нажмите кнопку «Создать», чтобы завершить создание решения Visual Studio.
-Буфер протокола сборки
-Теперь откройте решение Visual Studio, созданное вами для сборки. (Вы можете просто создать проект protoc.)
-В VS 2015 откройте файл решения "protobuf.sln" в только что созданном пути к двоичным файлам.
-При сборке с режимом сборки, установленным на Release, исполняемые файлы создаются по пути {Build_path} / Release. В частности, убедитесь, что файл protoc.exe был создан.
-
-Создание файла .proto
-Файл .proto - это файл, который определяет структуру ваших данных. Определите данные в следующей структуре и назовите файл people.proto.
-// [START declaration]
-syntax = "proto3";
-package tutorial;
-// [END declaration]
-// [START messages]
-message Person {
-  string name = 1;
-  string email = 2;
-  int32 id = 3;
-}
-// People
-message People {
-  Person person = 1;
-}
-// [END messages]
-
-Создать модуль Python из файла .proto
-Запустите файл protoc.exe для создания модуля Python. Опции команды следующие:
-> protoc -I=$SRC_DIR --python_out=$DST_DIR $SRC_DIR/people.proto
-$ SRC_DIR - это исходный каталог,
-$ DST_DIR обозначает каталог назначения.
-Если это текущий путь, введите «.» Например, если proto.exe и people.proto существуют в текущем пути, запустите командную строку в текущем пути и введите:
-> protoc -I=. --python_out=. ./people.proto
+Создать модуль Python из файла .proto Запустите файл protoc.exe из protoc-3.11.2-win64.zip для создания модуля Python. 
+Опции команды следующие:
+```sh
+protoc -I=$SRC_DIR --python_out=$DST_DIR $SRC_DIR/people.proto 
+```
+$ SRC_DIR - это исходный каталог, 
+$ DST_DIR обозначает каталог назначения. 
+Если это текущий путь, введите «.» 
+Например, если proto.exe и people.proto существуют в текущем пути, запустите командную строку в текущем пути и введите: 
+```sh
+protoc -I=. --python_out=. ./people.proto 
+```
 Если он работает нормально, файл people_pb2.py создается по указанному пути.
 
-Установить модуль Python ZeroMQ
-Модуль ZeroMQ для Python - это pyzmq. Установите через pip, менеджер пакетов Python:
-> pip install pyzmq
-Или посетите следующий веб-сайт, чтобы загрузить и установить его самостоятельно: https://pypi.python.org/pypi/pyzmq
-Для справки я скачал и установил «pyzmq-15.3.0 + fix-cp27-cp27m-win_amd64.whl (md5)» непосредственно в 64-битной среде Windows.
-> pip install {PYTHON_ZEROMQ_PATH}/pyzmq-15.3.0+fix-cp27-cp27m-win_amd64.whl (md5)
+# Установить модуль Python ZeroMQ 
+Модуль ZeroMQ для Python - это pyzmq. 
+Установите через pip, менеджер пакетов Python:
+```sh
+pip install pyzmq 
+```
+Или посетите следующий веб-сайт, чтобы загрузить и установить его самостоятельно: https://pypi.python.org/pypi/pyzmq 
+Для справки я скачал и установил «pyzmq-15.3.0 + fix-cp27-cp27m-win_amd64.whl (md5)» непосредственно в 64-битной среде Windows. 
+```sh
+pip install {PYTHON_ZEROMQ_PATH}/pyzmq-15.3.0+fix-cp27-cp27m-win_amd64.whl (md5)
+```
 Рекомендуется загрузить и установить соответствующую версию для вашей среды сборки.
 
-Установите Python Protobuf Module
+#Установите Python Protobuf Module 
 Модуль protobuf Python также можно легко установить с помощью pip:
-> pip install protobuf
-Если нет, загрузите и установите модуль непосредственно по следующей ссылке:
-https://pypi.python.org/pypi/protobuf
-Для справки, на момент написания этой статьи последняя версия модуля protobuf Python была 3.0.0.
-Доступно для загрузки через https://pypi.python.org/pypi/protobuf/3.0.0.
-Чтобы установить загруженный файл, введите в командной строке следующее:
-> pip install {DOWNLOAD_PATH}/protobuf-3.0.0.tar.gz
-Написание кода Python
-Код Python, который вам нужно написать, состоит из двух частей: один для издателя и один для подписчика. Вы можете узнать больше о модели издателя-подписчика ZeroMQ здесь. Издатель - отправитель сообщения, подписчик - получатель сообщения. Начните с написания кода издателя.
-CODE: people-pub-server.py
+```sh
+pip install protobuf 
+```
+Если нет, загрузите и установите модуль непосредственно по следующей ссылке: https://pypi.python.org/pypi/protobuf Для справки, на момент написания этой статьи последняя версия модуля protobuf Python была 3.0.0. Доступно для загрузки через https://pypi.python.org/pypi/protobuf/3.0.0. Чтобы установить загруженный файл, введите в командной строке следующее: 
+```sh
+pip install {DOWNLOAD_PATH}/protobuf-3.0.0.tar.gz 
+```
+
+#Написание кода Python 
+
+Код Python, который вам нужно написать, состоит из двух частей: один для издателя и один для подписчика. Вы можете узнать больше о модели издателя-подписчика ZeroMQ здесь. Издатель - отправитель сообщения, подписчик - получатель сообщения. Начните с написания кода издателя. 
+CODE: people-pub-server.py 
+```sh
 #! /usr/bin/env python
- 
 import zmq
 import random
 import time
@@ -305,10 +292,12 @@ while True:
     socket.send_string("%s" % (people.SerializeToString()))
     print("Name: %s , Email: %s , ID: %d" % (people.person.name, people.person.email, people.person.id))
     time.sleep(1)
-Я пропущу детали кода. Однако обратите внимание, что опция zmq установлена как Publisher (zmq.PUB), когда сокет связан в строке 17, а сообщение о людях передается в виде строки в строке 33.
+```
+Обратите внимание, что опция zmq установлена как Publisher (zmq.PUB), когда сокет связан в строке 17, а сообщение о людях передается в виде строки в строке 33.
 
-Теперь напишите код подписчика следующим образом:
-CODE: people-sub-client.py
+Теперь напишите код подписчика следующим образом: 
+CODE: people-sub-client.py 
+```sh
 #! /usr/bin/env python
 import sys
 import zmq
@@ -348,10 +337,12 @@ while True:
     string = socket.recv()
     people.ParseFromString(string)
     print("%s" % people.person)
-В подписчике для опции zmq установлено значение Subscriber (zmq.SUB) при привязке к сокету, как показано в строке 18. В строке 37 мы получаем сообщение от Pubslicher, а в линейном 38 мы конвертируем сообщение в строку.
-Результат выполнения
-python people-pub-server.py
-Когда вы запускаете Publisher, он генерирует сообщение Person каждую секунду. В частности, идентификаторы были сгенерированы случайными числами
-Затем запустите подписчик, чтобы увидеть:
-> python people-sub-client.py
-Translated. Original version: https://cinema4dr12.tistory.com/884
+```
+В подписчике для опции zmq установлено значение Subscriber (zmq.SUB) при привязке к сокету, как показано в строке 18. В строке 37 мы получаем сообщение от Pubslicher, а в линейном 38 мы конвертируем сообщение в строку. 
+Результат выполнения python people-pub-server.py Когда вы запускаете Publisher, он генерирует сообщение Person каждую секунду. 
+В частности, идентификаторы были сгенерированы случайными числами Затем запустите подписчик, чтобы увидеть результат:
+```sh
+python people-sub-client.py 
+```
+Translated. 
+Original version: https://cinema4dr12.tistory.com/884
