@@ -1,6 +1,9 @@
 # Protocol Buffer + ZeroMQ + Python
 # Как реализовать механизм структуры данных сериализации Google Protocol Buffer (protobuf) и высокопроизводительную библиотеку асинхронного распределенного обмена сообщениями ZeroMQ на Python.
 
+Translated. 
+Original version: https://cinema4dr12.tistory.com/884
+
 Для получения подробной информации о каждом из них, пожалуйста, обратитесь к их соответствующим веб-сайтам:
  - Google Protocol Buffer : https://developers.google.com/protocol-buffers/ 
  - ZeroMQ : http://zeromq.org 
@@ -147,8 +150,6 @@ while True:
 ```sh
 python people-sub-client.py 
 ```
-Translated. 
-Original version: https://cinema4dr12.tistory.com/884
 
 Применительно к quik-lua-rpc шаги:
 Создается protobuf class из proto файла
