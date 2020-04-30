@@ -33,11 +33,19 @@ local function requireNonNil (x)
   return x 
 end
 
+local function filter_time_to_string (t)
+  if (type(t) == "table") and (t.year ~= nil) and (t.month ~= nil) and (t.day ~= nil) and (t.week_day ~= nil) and (t.hour ~= nil) and (t.min ~= nil) and (t.sec ~= nil) and (t.ms ~= nil) and (t.mcs ~= nil) then
+    return string.format("quik_time(year=%s,month=%s,day=%s,week_day=%s,hour=%s,min=%s,sec=%s,ms=%s,mcs=%s)", t.year, t.month, t.day, t.week_day, t.hour, t.min, t.sec, t.ms, t.mcs)
+  else
+    return t
+  end
+end
+
 local function to_string_string_table (t)
   
   local result = {}
   for k, v in pairs(t) do
-    result[utils.Cp1251ToUtf8(tostring(k))] = utils.Cp1251ToUtf8(tostring(v))
+    result[utils.Cp1251ToUtf8(tostring(k))] = utils.Cp1251ToUtf8(tostring(filter_time_to_string(v)))
   end
   
   return result
