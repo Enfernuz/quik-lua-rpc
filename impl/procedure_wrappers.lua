@@ -37,7 +37,13 @@ local function to_string_string_table (t)
   
   local result = {}
   for k, v in pairs(t) do
-    result[utils.Cp1251ToUtf8(tostring(k))] = utils.Cp1251ToUtf8(tostring(v))
+    local value
+    if type(v) == 'table' then
+      value = to_string_string_table(v)
+    else
+      value = utils.Cp1251ToUtf8(tostring(v))
+    end
+    result[utils.Cp1251ToUtf8(tostring(k))] = value
   end
   
   return result
