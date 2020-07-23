@@ -1,0 +1,8 @@
+version: "3"
+services:
+  quik-lua-rpc:
+    build: .
+    image: quik-lua-rpc:latest
+    container_name: quik-lua-rpc
+    volumes:
+      - "./built:/mnt/built:rw"
