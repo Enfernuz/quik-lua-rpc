@@ -178,6 +178,7 @@ RPC-сервис для вызова процедур из QLUA -- Lua-библ�
   * к версии сервиса v2.0: https://github.com/Enfernuz/quik-lua-rpc-java-client
 * Python:
   * к версии сервиса v1.0: https://github.com/euvgub/mmvddss
+  * к версии сервиса v2.0: https://gitlab.com/abrosimov.a.a/qlua
   
 ### Примеры и гайды
 
