@@ -23,7 +23,7 @@ function ProtobufRequestResponseSerde:deserialize_request (pb_request)
   local method_name = assert(method_names[decoded_request.type], string.format("Для типа процедуры protobuf '%s' не найдено соответствующей QLua-функции.", decoded_request.type))
   local encoded_args = decoded_request.args -- pb-serialized, may be nil
   local decoded_args
-  if encoded_args then
+  if encoded_args ~= "" and encoded_args then
     decoded_args = assert(args_decoders[decoded_request.type], string.format("Для типа процедуры protobuf '%s' не найден protobuf-десериализатор аргументов.", decoded_request.type))(encoded_args)
   end
 
