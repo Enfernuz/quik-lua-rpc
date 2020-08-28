@@ -736,7 +736,7 @@ result_encoders[proc_name] = function (proc_result)
 end
 
 -- getParamEx2
-proc_name = "GET_PARAM_EX_2"
+proc_name = "GET_PARAM_EX2"
 method_names[proc_name] = "getParamEx2"
 args_decoders[proc_name] = function (encoded_args)
   return pb.decode(qlua_pb_types.getParamEx2.Args, encoded_args)

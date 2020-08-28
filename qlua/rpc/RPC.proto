@@ -54,7 +54,8 @@ enum ProcedureType {
     CALC_BUY_SELL = 39;
     
     GET_PARAM_EX = 40;
-    GET_PARAM_EX_2 = 41; // NB: использовать структуры запроса и ответа от GET_PARAM_EX
+    GET_PARAM_EX2 = 41; // NB: использовать структуры запроса и ответа от GET_PARAM_EX
+    GET_PARAM_EX_2 = 41; // NB: Оставлено для обратной совместимости.
     
     GET_PORTFOLIO_INFO = 42;
     GET_PORTFOLIO_INFO_EX = 43;
