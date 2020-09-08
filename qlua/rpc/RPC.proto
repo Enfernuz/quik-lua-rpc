@@ -8,6 +8,7 @@ option optimize_for = SPEED;
 option java_package = "qlua.rpc";
 
 enum ProcedureType {
+    option allow_alias = true;
 
     PROCEDURE_TYPE_UNKNOWN = 0;
     IS_CONNECTED = 1;
