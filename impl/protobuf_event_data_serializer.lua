@@ -86,7 +86,7 @@ end
 function ProtobufEventDataSerializer:OnOrder (order)
   
   order.datetime = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, order.datetime)
-  
+  order.uid = tostring(order.uid)
   if order.withdraw_datetime then
     order.withdraw_datetime = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, order.withdraw_datetime)
   end
