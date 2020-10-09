@@ -277,7 +277,7 @@ local function create_socket (endpoint)
     sockets = rpc_sockets
   elseif endpoint.type == "PUB" then
     socket = zmq_ctx:socket(zmq.PUB)
-    poller:add(socket, zmq.POLLOUT, pub_poll_out_callback)
+    poller:add(socket, zmq.POLLIN, pub_poll_out_callback)
     sockets = pub_sockets
   else
     error( string.format("Указан неподдерживаемый тип '%s' для точки подключения. Поддерживаемые типы: RPC и PUB.", endpoint.type) )
