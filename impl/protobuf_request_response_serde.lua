@@ -450,23 +450,10 @@ end
 result_encoders[method_names[proc_name]] = function (proc_result)
 
   local result = pb.defaults(qlua_pb_types.getQuoteLevel2.Result)
-
   result.bid_count = proc_result.bid_count
   result.offer_count = proc_result.offer_count
-
-  for _, v in ipairs(proc_result.bids) do
-    local bid = pb.defaults(qlua_pb_types.getQuoteLevel2.QuoteEntry)
-    bid.price = v.price
-    bid.quantity = v.quantity
-    table.sinsert(result.bids, bid)
-  end
-
-  for _, v in ipairs(proc_result.offers) do
-    local offer = pb.defaults(qlua_pb_types.getQuoteLevel2.QuoteEntry)
-    offer.price = v.price
-    offer.quantity = v.quantity
-    table.sinsert(result.offers, offer)
-  end
+  result.bids = proc_result.bids
+  result.offers = proc_result.offers
 
   return pb.encode(qlua_pb_types.getQuoteLevel2.Result, result)
 end
