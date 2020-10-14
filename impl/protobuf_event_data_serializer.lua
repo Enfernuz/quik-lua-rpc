@@ -58,6 +58,7 @@ end
 function ProtobufEventDataSerializer:OnAllTrade (alltrade)
   
   alltrade.datetime = to_pb_obj(qlua_pb_types.qlua_structures.DateTimeEntry, alltrade.datetime)
+  alltrade.uid = tostring(uid)
   
   local flags = alltrade.flags
   if flags then
