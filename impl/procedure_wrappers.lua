@@ -716,7 +716,7 @@ end
 module["getPortfolioInfo"] = function (args) 
 
   --no post-processing ?
-  --result.is_leverage AS IS
+  --result.is_leverage from CP1251 to UTF8
   --result.in_assets AS IS
   --result.leverage AS IS
   --result.open_limit AS IS
@@ -757,14 +757,57 @@ module["getPortfolioInfo"] = function (args)
   --result.is_futures AS IS
   --result.curr_tag AS IS
 
-  return requireNonNil(_G.getPortfolioInfo(args.firm_id, args.client_code)) -- returns {} in case of error
+  local result = requireNonNil(_G.getPortfolioInfo(args.firm_id, args.client_code)) -- returns {} in case of error
+
+  result.is_leverage = utils.Cp1251ToUtf8(result.is_leverage)
+  result.in_assets = result.in_assets
+  result.leverage = result.leverage
+  result.open_limit = result.open_limit
+  result.val_short = result.val_short
+  result.val_long = result.val_long
+  result.val_long_margin = result.val_long_margin
+  result.val_long_asset = result.val_long_asset
+  result.assets = result.assets
+  result.cur_leverage = result.cur_leverage
+  result.margin = result.margin
+  result.lim_all = result.lim_all
+  result.av_lim_all = result.av_lim_all
+  result.locked_buy = result.locked_buy
+  result.locked_buy_margin = result.locked_buy_margin
+  result.locked_buy_asset = result.locked_buy_asset
+  result.locked_sell = result.locked_sell
+  result.locked_value_coef = result.locked_value_coef
+  result.in_all_assets = result.in_all_assets
+  result.all_assets = result.all_assets
+  result.profit_loss = result.profit_loss
+  result.rate_change = result.rate_change
+  result.lim_buy = result.lim_buy
+  result.lim_sell = result.lim_sell
+  result.lim_non_margin = result.lim_non_margin
+  result.lim_buy_asset = result.lim_buy_asset
+  result.val_short_net = result.val_short_net
+  result.val_long_net = result.val_long_net
+  result.total_money_bal = result.total_money_bal
+  result.total_locked_money = result.total_locked_money
+  result.haircuts = result.haircuts
+  result.assets_without_hc = result.assets_without_hc
+  result.status_coef = result.status_coef
+  result.varmargin = result.varmargin
+  result.go_for_positions = result.go_for_positions
+  result.go_for_orders = result.go_for_orders
+  result.rate_futures = result.rate_futures
+  result.is_qual_client = result.is_qual_client
+  result.is_futures = result.is_futures
+  result.curr_tag = result.curr_tag
+
+  return result
 end
 
 -- TODO: test
 module["getPortfolioInfoEx"] = function (args) 
 
   --no post-processing ?
-  --params from PortfolioInfo AS IS
+  --params from PortfolioInfo AS IS (except is_leverage)
   --result.init_margin AS IS
   --result.min_margin AS IS
   --result.corrected_margin AS IS
@@ -792,7 +835,7 @@ module["getPortfolioInfoEx"] = function (args)
   
   local result = {portfolio_info = {}, ex = {}}
   
-  result.portfolio_info.is_leverage = portfolio_info_ex.is_leverage
+  result.portfolio_info.is_leverage = utils.Cp1251ToUtf8(portfolio_info_ex.is_leverage)
   result.portfolio_info.in_assets = portfolio_info_ex.in_assets
   result.portfolio_info.leverage = portfolio_info_ex.leverage
   result.portfolio_info.open_limit = portfolio_info_ex.open_limit
