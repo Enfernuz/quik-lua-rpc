@@ -98,7 +98,12 @@ local function encode_number(val)
   if val ~= val or val <= -math.huge or val >= math.huge then
     error("unexpected number value '" .. tostring(val) .. "'")
   end
-  return string.format("%.14g", val)
+  -- Correctly serialize 19-digit order numbers, instead strings like this 1.9250430826724e+018 
+  if val > 2000000000000000 then
+    return string.format("%u", val)
+  else
+      return string.format("%.14g", val)
+  end
 end
 
 
