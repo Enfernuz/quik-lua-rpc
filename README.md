@@ -48,7 +48,7 @@ DLL-файлы из `qlua_redist/...` были взяты от QUIK 9.2.3.15. С
 
 1. Установите Docker и Docker-compose для вашей операционной системы.
 2. Клонируйте этот репозиторий.
-3. Хорошая идея - заменить библиотеки в каталоге `quik_redist` на версии из вашего Quik (результаты антивирусной проверки 26.07.2020: [lua53.dll](https://www.virustotal.com/gui/file/febb5cc35dc2b514160cb4dbb81490c346d284a00807f3366dd89d6af0812989/detection), [qlua.dll](https://www.virustotal.com/gui/file/0c3cff03f3a3873f98ca752322462a0869b4569a732055270133fda368480e6e/details)).
+3. Хорошая идея - заменить библиотеки в каталоге `quik_redist` на версии из вашего Quik (результаты антивирусной проверки 03.12.2021: [lua53.dll](https://www.virustotal.com/gui/file/febb5cc35dc2b514160cb4dbb81490c346d284a00807f3366dd89d6af0812989/detection), [qlua.dll](https://www.virustotal.com/gui/file/0c3cff03f3a3873f98ca752322462a0869b4569a732055270133fda368480e6e/details)).
 4. Откройте консоль в каталоге репозитория.
 5. Соберите образ Docker. `docker-compose build --force-rm`
 6. Создайте установочный архив. `docker-compose run quik-lua-rpc`
