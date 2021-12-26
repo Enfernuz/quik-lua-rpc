@@ -1,0 +1,33 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getTradeDate.result.scheme.json",
+    "title": "Результат процедуры getTradeDate",
+    "description": "Схема объекта результата удалённого вызова процедуры getTradeDate",
+    "type": "object",
+    "properties": {
+        "trade_date": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "description": "Параметр date",
+                    "type": "string"
+                },
+                "year": {
+                    "description": "Параметр year",
+                    "type": "number"
+                },
+                "month": {
+                    "description": "Параметр month",
+                    "type": "number"
+                },
+                "day": {
+                    "description": "Параметр day",
+                    "type": "number"
+                }
+            },
+            "required": ["date", "year", "month", "day"]
+        }
+    },
+    "additionalProperties": false,
+    "required": ["trade_date"]
+}

@@ -1,0 +1,31 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.getMoney;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Money {
+    
+    string money_open_limit = 1; // NUMBER in QLUA
+    string money_limit_locked_nonmarginal_value = 2; // NUMBER in QLUA
+    string money_limit_locked = 3; // NUMBER in QLUA
+    string money_open_balance = 4; // NUMBER in QLUA
+    string money_current_limit = 5; // NUMBER in QLUA
+    string money_current_balance = 6; // NUMBER in QLUA
+    string money_limit_available = 7; // NUMBER in QLUA
+}
+
+message Args {
+
+    string client_code = 1; // Код клиента
+    string firmid = 2; // Фирма
+    string tag = 3; // Группа
+    string currcode = 4; // Валюта
+}
+
+message Result {
+    Money money = 1;
+}

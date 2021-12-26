@@ -1,0 +1,20 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.RGB;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+// NB: на самом деле, библиотечная функция RGB должна называться BGR, ибо она выдаёт числа именно в этом формате. В SetColor, однако, тоже ожидается цвет в формате BGR, так что это не баг, а фича.
+message Args {
+
+    int32 red = 1;
+    int32 green = 2;
+    int32 blue = 3;
+}
+
+message Result {
+    int32 result = 1;
+}

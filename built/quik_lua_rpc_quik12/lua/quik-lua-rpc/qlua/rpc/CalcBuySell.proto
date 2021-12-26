@@ -1,0 +1,25 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.CalcBuySell;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Args {
+
+    string class_code = 1;
+    string sec_code = 2;
+    string client_code = 3;
+    string account = 4;
+    string price = 5;
+    bool is_buy = 6;
+    bool is_market = 7;
+}
+
+message Result {
+
+    int32 qty = 1;
+    string comission = 2;
+}

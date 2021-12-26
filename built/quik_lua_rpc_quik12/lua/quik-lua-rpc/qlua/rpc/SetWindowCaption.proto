@@ -1,0 +1,18 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.SetWindowCaption;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Args {
+
+    int32 t_id = 1;
+    string str = 2;
+}
+
+message Result {
+    bool result = 1;
+}

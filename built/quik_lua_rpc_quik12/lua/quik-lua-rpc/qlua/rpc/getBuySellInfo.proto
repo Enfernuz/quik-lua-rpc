@@ -1,0 +1,46 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.getBuySellInfo;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message BuySellInfo {
+    
+    string is_margin_sec = 1;
+    string is_asset_sec = 2;
+    string balance = 3;
+    string can_buy = 4;
+    string can_sell = 5;
+    string position_valuation = 6;
+    string value = 7;
+    string open_value = 8;
+    string lim_long = 9;
+    string long_coef = 10;
+    string lim_short = 11;
+    string short_coef = 12;
+    string value_coef = 13;
+    string open_value_coef = 14;
+    string share = 15;
+    string short_wa_price = 16;
+    string long_wa_price = 17;
+    string profit_loss = 18;
+    string spread_hc = 19;
+    string can_buy_own = 20;
+    string can_sell_own = 21;
+}
+
+message Args {
+
+    string firm_id = 1;
+    string client_code = 2;
+    string class_code = 3;
+    string sec_code = 4;
+    string price = 5;
+}
+
+message Result {
+    BuySellInfo buy_sell_info = 1;
+}

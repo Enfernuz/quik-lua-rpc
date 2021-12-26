@@ -1,0 +1,28 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/datasource/CreateDataSource.args.scheme.json",
+    "title": "Аргументы процедуры datasource.CreateDataSource",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры datasource.CreateDataSource",
+    "type": "object",
+    "properties": {
+        "class_code": {
+            "description": "Параметр class_code",
+            "type": "string"
+        },
+        "sec_code": {
+            "description": "Параметр sec_code",
+            "type": "string"
+        },
+        "interval": {
+            "description": "Параметр interval",
+            "type": "string",
+            "pattern": "INTERVAL_TICK|INTERVAL_M1|INTERVAL_M2|INTERVAL_M3|INTERVAL_M4|INTERVAL_M5|INTERVAL_M6|INTERVAL_M10|INTERVAL_M15|INTERVAL_M20|INTERVAL_M30|INTERVAL_H1|INTERVAL_H2|INTERVAL_H4|INTERVAL_D1|INTERVAL_W1|INTERVAL_MN1"
+        },
+        "param": {
+            "description": "Параметр param",
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["class_code", "sec_code", "interval"]
+}

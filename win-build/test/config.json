@@ -1,0 +1,24 @@
+{
+  "endpoints": [
+    {
+      "type": "RPC",
+      "serde_protocol": "protobuf",
+      "active": true,
+      "address": {"host": "127.0.0.1", "port": 5560},
+      "auth": {
+        "mechanism": "PLAIN",
+        "plain": {"users": [{"username": "test_user", "password": "test_password"}]}
+      }
+    },
+    {
+      "type": "PUB",
+      "serde_protocol": "protobuf",
+      "active": true,
+      "address": {"host": "127.0.0.1", "port": 5561},
+      "auth": {
+        "mechanism": "PLAIN",
+        "plain": {"users": [{"username": "admin", "password": "letmein"}]}
+      }
+    }
+  ]
+}

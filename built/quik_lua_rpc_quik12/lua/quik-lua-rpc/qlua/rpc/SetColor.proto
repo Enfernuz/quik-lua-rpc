@@ -1,0 +1,41 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.SetColor;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Args {
+
+    int32 t_id = 1;
+    oneof row {
+        bool null_row = 2;
+        uint32 value_row = 3;
+    }
+    oneof col {
+        bool null_col = 4;
+        uint32 value_col = 5;
+    }
+    oneof b_color {
+        bool null_b_color = 6;
+        int32 value_b_color = 7;
+    }
+    oneof f_color {
+        bool null_f_color = 8;
+        int32 value_f_color = 9;
+    }
+    oneof sel_b_color {
+        bool null_sel_b_color = 10;
+        int32 value_sel_b_color = 11;
+    }
+    oneof sel_f_color {
+        bool null_sel_f_color = 12;
+        int32 value_sel_f_color = 13;
+    }
+}
+
+message Result {
+    bool result = 1;
+}

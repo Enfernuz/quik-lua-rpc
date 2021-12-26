@@ -1,0 +1,23 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/CancelParamRequest.args.scheme.json",
+    "title": "Аргументы процедуры CancelParamRequest",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры CancelParamRequest",
+    "type": "object",
+    "properties": {
+        "class_code": {
+            "description": "Параметр class_code",
+            "type": "string"
+        },
+        "sec_code": {
+            "description": "Параметр sec_code",
+            "type": "string"
+        },
+        "db_name": {
+            "description": "Параметр db_name",
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["class_code", "sec_code", "db_name"]
+}

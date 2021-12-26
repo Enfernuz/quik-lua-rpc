@@ -1,0 +1,47 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/datasource/SetUpdateCallback.args.scheme.json",
+    "title": "Аргументы процедуры datasource.SetUpdateCallback",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры datasource.SetUpdateCallback",
+    "type": "object",
+    "properties": {
+        "datasource_uuid": {
+            "description": "Параметр datasource_uuid",
+            "$ref": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/QluaStructures.scheme.json#/definitions/DatasourceUUID"
+        },
+        "f_cb_def": {
+            "description": "Параметр f_cb_def",
+            "type": "string"
+        },
+        "watching_O": {
+            "description": "Параметр watching_O",
+            "type": "boolean"
+        },
+        "watching_H": {
+            "description": "Параметр watching_H",
+            "type": "boolean"
+        },
+        "watching_L": {
+            "description": "Параметр watching_L",
+            "type": "boolean"
+        },
+        "watching_C": {
+            "description": "Параметр watching_C",
+            "type": "boolean"
+        },
+        "watching_V": {
+            "description": "Параметр watching_V",
+            "type": "boolean"
+        },
+        "watching_T": {
+            "description": "Параметр watching_T",
+            "type": "boolean"
+        },
+        "watching_Size": {
+            "description": "Параметр watching_Size",
+            "type": "boolean"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["datasource_uuid", "f_cb_def"]
+}

@@ -1,0 +1,21 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.SetCell;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Args {
+
+    int32 t_id = 1;
+    int32 key = 2;
+    int32 code = 3;
+    string text = 4;
+    string value = 5;
+}
+
+message Result {
+    bool result = 1;
+}

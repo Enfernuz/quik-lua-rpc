@@ -1,0 +1,127 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.RPC;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+enum ProcedureType {
+    option allow_alias = true;
+
+    PROCEDURE_TYPE_UNKNOWN = 0;
+    IS_CONNECTED = 1;
+    GET_SCRIPT_PATH = 2;
+    GET_INFO_PARAM = 3;
+    MESSAGE = 4;
+    SLEEP = 5;
+    GET_WORKING_FOLDER = 6;
+    PRINT_DBG_STR = 7;
+    GET_ITEM = 8;
+    GET_ORDER_BY_NUMBER = 9;
+    GET_NUMBER_OF = 10;
+    SEARCH_ITEMS = 11;
+    GET_CLASSES_LIST = 12;
+    GET_CLASS_INFO = 13;
+    GET_CLASS_SECURITIES = 14;
+    GET_MONEY = 15;
+    GET_MONEY_EX = 16;
+    GET_DEPO = 17;
+    GET_DEPO_EX = 18;
+    GET_FUTURES_LIMIT = 19;
+    GET_FUTURES_HOLDING = 20;
+    GET_SECURITY_INFO = 21;
+    GET_TRADE_DATE = 22;
+    GET_QUOTE_LEVEL2 = 23;
+    
+    GET_LINES_COUNT = 24;
+    GET_NUM_CANDLES = 25;
+    GET_CANDLES_BY_INDEX = 26;
+    
+    CREATE_DATA_SOURCE = 27;
+    DS_SET_UPDATE_CALLBACK = 28;
+    DS_O = 29;
+    DS_H = 30;
+    DS_L = 31;
+    DS_C = 32;
+    DS_V = 33;
+    DS_T = 34;
+    DS_SIZE = 35;
+    DS_CLOSE = 36;
+    DS_SET_EMPTY_CALLBACK = 37;
+    
+    SEND_TRANSACTION = 38;
+    CALC_BUY_SELL = 39;
+    
+    GET_PARAM_EX = 40;
+    GET_PARAM_EX2 = 41; // NB: использовать структуры запроса и ответа от GET_PARAM_EX
+    GET_PARAM_EX_2 = 41; // NB: Оставлено для обратной совместимости.
+    
+    GET_PORTFOLIO_INFO = 42;
+    GET_PORTFOLIO_INFO_EX = 43;
+    
+    GET_BUY_SELL_INFO = 44;
+    GET_BUY_SELL_INFO_EX = 45; // NB: использовать структуры запроса и ответа от GET_BUY_SELL_INFO
+    
+    ADD_COLUMN = 46; // нужно бы ещё потестить, т.к. после добавления одного столбца другие добавляются, но визуально не отображаются
+    ALLOC_TABLE = 47;
+    CLEAR = 48;
+    CREATE_WINDOW = 49;
+    DELETE_ROW = 50;
+    DESTROY_TABLE = 51;
+    INSERT_ROW = 52; // NB: использовать после создания окна для таблицы (процедура CREATE_WINDOW)
+    IS_WINDOW_CLOSED = 53;
+    GET_CELL = 54;
+    GET_TABLE_SIZE = 55;
+    GET_WINDOW_CAPTION = 56;
+    GET_WINDOW_RECT = 57;
+    SET_CELL = 58;
+    SET_WINDOW_CAPTION = 59;
+    SET_WINDOW_POS = 60;
+    SET_TABLE_NOTIFICATION_CALLBACK = 61;
+    RGB = 62; // NB: на самом деле, библиотечная функция RGB должна называться BGR, ибо она выдаёт числа именно в этом формате. В SetColor, однако, тоже ожидается цвет в формате BGR, так что это не баг, а фича.
+    SET_COLOR = 63;
+    HIGHLIGHT = 64;
+    SET_SELECTED_ROW = 65;
+
+    ADD_LABEL = 66;
+    DEL_LABEL = 67;
+    DEL_ALL_LABELS = 68;
+    GET_LABEL_PARAMS = 69;
+    SET_LABEL_PARAMS = 70;
+    
+    SUBSCRIBE_LEVEL_II_QUOTES = 71;
+    UNSUBSCRIBE_LEVEL_II_QUOTES = 72;
+    IS_SUBSCRIBED_LEVEL_II_QUOTES = 73;
+    
+    PARAM_REQUEST = 74;
+    CANCEL_PARAM_REQUEST = 75;
+    
+    BIT_TOHEX = 76;
+    BIT_BNOT = 77;
+    BIT_BAND = 78;
+    BIT_BOR = 79;
+    BIT_BXOR = 80;
+    BIT_TEST = 81;
+    
+    OS_SYSDATE = 82;
+}
+
+message Request {
+    
+    ProcedureType type = 1;
+    bytes args = 2; // the protoc-lua-plugin gives out a corrupted .lua file if we're using google.protobuf.Any
+}
+
+message Response {
+
+    bool is_error = 2;
+    bytes result = 3;
+}
+
+message Error {
+
+    int32 code = 1;
+    string message = 2;
+}

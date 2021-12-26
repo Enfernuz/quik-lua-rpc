@@ -38,3 +38,8 @@ luac.out
 *.x86_64
 *.hex
 
+
+# win-build fetches sources here
+win-build/work/
+/.idea/
+/.gigaide/

@@ -1,0 +1,28 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getCandlesByIndex.args.scheme.json",
+    "title": "Аргументы процедуры getCandlesByIndex",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры getCandlesByIndex",
+    "type": "object",
+    "properties": {
+        "tag": {
+            "description": "Параметр tag",
+            "type": "string"
+        },
+        "line": {
+            "description": "Параметр line",
+            "$ref": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/QluaStructures.scheme.json#/definitions/Index"
+        },
+        "first_candle": {
+            "description": "Параметр first_candle",
+            "$ref": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/QluaStructures.scheme.json#/definitions/Index"
+        },
+        "count": {
+            "description": "Параметр count",
+            "type": "integer",
+            "minimum": 0
+        }
+    },
+    "additionalProperties": false,
+    "required": ["tag", "line", "first_candle", "count"]
+}

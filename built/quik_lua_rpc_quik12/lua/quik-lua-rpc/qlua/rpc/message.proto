@@ -1,0 +1,30 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.message;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+enum IconType {
+
+    UNDEFINED = 0;
+    INFO = 1;
+    WARNING = 2;
+    ERROR = 3;
+}
+
+message Args {
+    
+    string message = 1;
+    IconType icon_type = 2;
+}
+    
+message Result {
+
+    oneof message_result {
+        bool null_result = 1;
+        int32 value_result = 2;
+    }
+}

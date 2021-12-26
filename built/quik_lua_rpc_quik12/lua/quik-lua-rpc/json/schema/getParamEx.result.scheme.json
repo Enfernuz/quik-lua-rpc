@@ -1,0 +1,33 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getParamEx.result.scheme.json",
+    "title": "Результат процедуры getParamEx",
+    "description": "Схема объекта результата удалённого вызова процедуры getParamEx",
+    "type": "object",
+    "properties": {
+        "param_ex": {
+            "description": "Результат",
+            "type": "object",
+            "properties": {
+                "param_type": {
+                    "description": "Параметр param_type",
+                    "type": "string"
+                },
+                "param_value": {
+                    "description": "Параметр param_value",
+                    "type": "string"
+                },
+                "param_image": {
+                    "description": "Параметр param_image",
+                    "type": "string"
+                },
+                "result": {
+                    "description": "Параметр result",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": ["param_ex"]
+}

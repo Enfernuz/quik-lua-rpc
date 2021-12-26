@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getBuySellInfo.args.scheme.json",
+    "title": "Аргументы процедуры getBuySellInfo",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры getBuySellInfo",
+    "type": "object",
+    "properties": {
+        "firm_id": {
+            "description": "Параметр firm_id",
+            "type": "string"
+        },
+        "client_code": {
+            "description": "Параметр client_code",
+            "type": "string"
+        },
+        "class_code": {
+            "description": "Параметр class_code",
+            "type": "string"
+        },
+        "sec_code": {
+            "description": "Параметр sec_code",
+            "type": "string"
+        },
+        "price": {
+            "description": "Параметр price",
+            "$ref": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/QluaStructures.scheme.json#/definitions/NumberAsString"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["firm_id", "client_code", "class_code", "sec_code", "price"]
+}

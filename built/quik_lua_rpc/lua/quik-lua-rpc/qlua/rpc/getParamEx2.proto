@@ -1,0 +1,27 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.getParamEx2;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message ParamEx2 {
+    
+    string param_type = 1;
+    string param_value = 2;
+    string param_image = 3;
+    string result = 4;
+}
+
+message Args {
+
+    string class_code = 1;
+    string sec_code = 2;
+    string param_name = 3; // возможные значения для этого параметра можно найти тут: https://quikluacsharp.ru/quik-qlua/poluchenie-dannyh-iz-tablits-quik-v-qlua-lua/
+}
+
+message Result {
+    ParamEx2 param_ex = 1;
+}

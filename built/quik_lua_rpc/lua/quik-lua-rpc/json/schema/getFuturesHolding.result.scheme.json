@@ -1,0 +1,97 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getFuturesHolding.result.scheme.json",
+    "title": "Результат процедуры getFuturesHolding",
+    "description": "Схема объекта результата удалённого вызова процедуры getFuturesHolding",
+    "type": "object",
+    "properties": {
+        "futures_holding": {
+            "description": "Результат",
+            "type": "object",
+            "properties": {
+                "firmid": {
+                    "description": "Параметр firmid",
+                    "type": "string"
+                },
+                "trdaccid": {
+                    "description": "Параметр trdaccid",
+                    "type": "string"
+                },
+                "sec_code": {
+                    "description": "Параметр sec_code",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "Параметр type",
+                    "type": "integer"
+                },
+                "startbuy": {
+                    "description": "Параметр startbuy",
+                    "type": "string"
+                },
+                "startsell": {
+                    "description": "Параметр startsell",
+                    "type": "string"
+                },
+                "startnet": {
+                    "description": "Параметр startnet",
+                    "type": "string"
+                },
+                "todaybuy": {
+                    "description": "Параметр todaybuy",
+                    "type": "string"
+                },
+                "todaysell": {
+                    "description": "Параметр todaysell",
+                    "type": "string"
+                },
+                "totalnet": {
+                    "description": "Параметр totalnet",
+                    "type": "string"
+                },
+                "openbuys": {
+                    "description": "Параметр openbuys",
+                    "type": "number"
+                },
+                "opensells": {
+                    "description": "Параметр opensells",
+                    "type": "number"
+                },
+                "cbplused": {
+                    "description": "Параметр cbplused",
+                    "type": "string"
+                },
+                "cbplplanned": {
+                    "description": "Параметр cbplplanned",
+                    "type": "string"
+                },
+                "varmargin": {
+                    "description": "Параметр varmargin",
+                    "type": "string"
+                },
+                "avrposnprice": {
+                    "description": "Параметр avrposnprice",
+                    "type": "string"
+                },
+                "positionvalue": {
+                    "description": "Параметр positionvalue",
+                    "type": "string"
+                },
+                "real_varmargin": {
+                    "description": "Параметр real_varmargin",
+                    "type": "string"
+                },
+                "total_varmargin": {
+                    "description": "Параметр total_varmargin",
+                    "type": "string"
+                },
+                "session_status": {
+                    "description": "Параметр session_status",
+                    "type": "number"
+                }
+            },
+            "required": ["firmid", "trdaccid", "sec_code", "type", "openbuys", "opensells", "session_status"]
+        }
+    },
+    "additionalProperties": false
+}

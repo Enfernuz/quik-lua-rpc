@@ -1,0 +1,36 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.getBuySellInfoEx;
+
+import "qlua/rpc/getBuySellInfo.proto";
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message BuySellInfoEx {
+    
+    qlua.rpc.getBuySellInfo.BuySellInfo buy_sell_info = 1;
+    string limit_kind = 2; // NUMBER in QLUA
+    string d_long = 3;
+    string d_min_long = 4;
+    string d_short = 5;
+    string d_min_short = 6;
+    string client_type = 7;
+    string is_long_allowed = 8;
+    string is_short_allowed = 9;
+}
+
+message Args {
+
+    string firm_id = 1;
+    string client_code = 2;
+    string class_code = 3;
+    string sec_code = 4;
+    string price = 5;
+}
+
+message Result {
+    BuySellInfoEx buy_sell_info_ex = 1;
+}

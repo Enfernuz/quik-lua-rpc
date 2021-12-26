@@ -1,0 +1,25 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.getOrderByNumber;
+
+import "qlua/rpc/qlua_structures.proto";
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Args {
+
+    string class_code = 1;
+    int64 order_id = 2;
+}
+
+message Result {
+
+    qlua.structs.Order order = 1;
+    oneof indx {
+      bool null_indx = 2;
+      int32 value_indx = 3;
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/message.result.scheme.json",
+    "title": "Результат процедуры message",
+    "description": "Схема объекта результата удалённого вызова процедуры message",
+    "type": "object",
+    "properties": {
+        "result": {
+            "description": "Результат",
+            "type": "number"
+        }
+    },
+    "additionalProperties": false
+}

@@ -1,0 +1,27 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getFuturesLimit.args.scheme.json",
+    "title": "Аргументы процедуры getFuturesLimit",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры getFuturesLimit",
+    "type": "object",
+    "properties": {
+        "firmid": {
+            "description": "Параметр firmid",
+            "type": "string"
+        },
+        "trdaccid": {
+            "description": "Параметр trdaccid",
+            "type": "string"
+        },
+        "limit_type": {
+            "description": "Параметр limit_type",
+            "type": "integer"
+        },
+        "currcode": {
+            "description": "Параметр currcode",
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["firmid", "trdaccid", "limit_type", "currcode"]
+}

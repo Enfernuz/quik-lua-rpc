@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getMoneyEx.args.scheme.json",
+    "title": "Аргументы процедуры getMoneyEx",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры getMoneyEx",
+    "type": "object",
+    "properties": {
+        "firmid": {
+            "description": "Параметр firmid",
+            "type": "string"
+        },
+        "client_code": {
+            "description": "Параметр client_code",
+            "type": "string"
+        },
+        "tag": {
+            "description": "Параметр tag",
+            "type": "string"
+        },
+        "currcode": {
+            "description": "Параметр currcode",
+            "type": "string"
+        },
+        "limit_kind": {
+            "description": "Параметр limit_kind",
+            "type": "integer"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["firmid", "client_code", "tag", "currcode", "limit_kind"]
+}

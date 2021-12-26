@@ -1,0 +1,20 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.sleep;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Args {
+    uint64 time = 1;
+}
+
+message Result {
+
+    oneof result {
+        bool null_result = 1;
+        int32 value_result = 2;
+    }
+}

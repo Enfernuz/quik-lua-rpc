@@ -1,0 +1,57 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getCandlesByIndex.result.scheme.json",
+    "title": "Результат процедуры getCandlesByIndex",
+    "description": "Схема объекта результата удалённого вызова процедуры getCandlesByIndex",
+    "type": "object",
+    "properties": {
+        "t": {
+            "description": "Параметр t",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "open": {
+                        "description": "Параметр open",
+                        "type": "string"
+                    },
+                    "close": {
+                        "description": "Параметр close",
+                        "type": "string"
+                    },
+                    "high": {
+                        "description": "Параметр high",
+                        "type": "string"
+                    },
+                    "low": {
+                        "description": "Параметр low",
+                        "type": "string"
+                    },
+                    "volume": {
+                        "description": "Параметр volume",
+                        "type": "string"
+                    },
+                    "datetime": {
+                        "description": "Параметр datetime",
+                        "$ref": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/QluaStructures.scheme.json#/definitions/DateTimeEntry"
+                    },
+                    "does_exist": {
+                        "description": "Параметр does_exist",
+                        "type": "number"
+                    }
+                },
+                "required": ["open", "close", "high", "low", "volume"]
+            }
+        },
+        "n": {
+            "description": "Параметр n",
+            "type": "number"
+        },
+        "l": {
+            "description": "Параметр l",
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["t", "n", "l"]
+}

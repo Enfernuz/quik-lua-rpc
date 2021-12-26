@@ -1,0 +1,81 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getMoneyEx.result.scheme.json",
+    "title": "Результат процедуры getMoneyEx",
+    "description": "Схема объекта результата удалённого вызова процедуры getMoneyEx",
+    "type": "object",
+    "properties": {
+        "money_ex": {
+            "description": "Результат",
+            "type": "object",
+            "properties": {
+                "currcode": {
+                    "description": "Параметр currcode",
+                    "type": "string"
+                },
+                "tag": {
+                    "description": "Параметр tag",
+                    "type": "string"
+                },
+                "firmid": {
+                    "description": "Параметр firmid",
+                    "type": "string"
+                },
+                "client_code": {
+                    "description": "Параметр client_code",
+                    "type": "string"
+                },
+                "openbal": {
+                    "description": "Параметр openbal",
+                    "type": "string"
+                },
+                "openlimit": {
+                    "description": "Параметр openlimit",
+                    "type": "string"
+                },
+                "currentbal": {
+                    "description": "Параметр currentbal",
+                    "type": "string"
+                },
+                "currentlimit": {
+                    "description": "Параметр currentlimit",
+                    "type": "string"
+                },
+                "locked": {
+                    "description": "Параметр locked",
+                    "type": "string"
+                },
+                "locked_value_coef": {
+                    "description": "Параметр locked_value_coef",
+                    "type": "string"
+                },
+                "locked_margin_value": {
+                    "description": "Параметр locked_margin_value",
+                    "type": "string"
+                },
+                "leverage": {
+                    "description": "Параметр leverage",
+                    "type": "string"
+                },
+                "limit_kind": {
+                    "description": "Параметр limit_kind",
+                    "type": "number"
+                },
+                "wa_position_price": {
+                    "description": "Параметр wa_position_price",
+                    "type": "string"
+                },
+                "orders_collateral": {
+                    "description": "Параметр orders_collateral",
+                    "type": "string"
+                },
+                "positions_collateral": {
+                    "description": "Параметр positions_collateral",
+                    "type": "string"
+                }
+            },
+            "required": ["currcode", "tag", "firmid", "client_code", "limit_kind"]
+        }
+    },
+    "additionalProperties": false
+}

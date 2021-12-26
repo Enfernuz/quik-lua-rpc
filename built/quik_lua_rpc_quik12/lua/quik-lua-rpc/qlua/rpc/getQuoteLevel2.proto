@@ -1,0 +1,28 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.getQuoteLevel2;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message QuoteEntry {
+    
+    string price = 1;
+    string quantity = 2;
+}
+
+message Args {
+
+    string class_code = 1;
+    string sec_code = 2;
+}
+
+message Result {
+
+    string bid_count = 1;
+    string offer_count = 2;
+    repeated QuoteEntry bids = 3;
+    repeated QuoteEntry offers = 4;
+}

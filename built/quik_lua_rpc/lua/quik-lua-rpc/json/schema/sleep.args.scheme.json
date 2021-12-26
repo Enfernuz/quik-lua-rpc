@@ -1,0 +1,16 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/sleep.args.scheme.json",
+    "title": "Аргументы процедуры sleep",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры sleep",
+    "type": "object",
+    "properties": {
+        "time": {
+            "description": "Параметр time",
+            "type": "integer",
+            "minimum": 0
+        }
+    },
+    "additionalProperties": false,
+    "required": ["time"]
+}

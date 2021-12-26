@@ -1,0 +1,39 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.AddColumn;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+enum ColumnParameterType {
+
+    UNDEFINED = 0;
+    QTABLE_INT_TYPE = 1;
+    QTABLE_DOUBLE_TYPE = 2;
+    QTABLE_INT64_TYPE = 3;
+    QTABLE_CACHED_STRING_TYPE = 4;
+    QTABLE_TIME_TYPE = 5;
+    QTABLE_DATE_TYPE = 6;
+    QTABLE_STRING_TYPE = 7;
+}
+
+// Важно! Это не указано в документации к Quik:
+// добавлять столбцы нужно перед вызовом CreateWindow для указанной таблице. Иначе потом
+// вызовы AddColumn будут возвращать ответ, что столбец добавлен, но визуально ничего не изменится.
+// Я даже пробовал скрывать таблицу и создавать новое окно для неё, но всё равно добавленные 
+// между делом столбцы не отобразились.
+message Args {
+
+    int32 t_id = 1;
+    int32 icode = 2;
+    string name = 3;
+    bool is_default = 4;
+    ColumnParameterType par_type = 5;
+    int32 width = 6;
+}
+
+message Result {
+    int32 result = 1;
+}

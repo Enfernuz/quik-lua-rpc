@@ -1,0 +1,22 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.getFuturesLimit;
+
+import "qlua/rpc/qlua_structures.proto";
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Args {
+
+    string firmid = 1;
+    string trdaccid = 2;
+    int32 limit_type = 3;
+    string currcode = 4;
+}
+
+message Result {
+    qlua.structs.FuturesLimit futures_limit = 1;
+}

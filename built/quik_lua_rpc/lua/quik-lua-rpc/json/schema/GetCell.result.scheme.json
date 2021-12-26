@@ -1,0 +1,18 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/GetCell.result.scheme.json",
+    "title": "Результат процедуры GetCell",
+    "description": "Схема объекта результата удалённого вызова процедуры GetCell",
+    "type": "object",
+    "properties": {
+        "image": {
+            "description": "Параметр image",
+            "type": "string"
+        },
+        "value": {
+            "description": "Параметр value",
+            "type": "string"
+        }
+    },
+    "additionalProperties": false
+}

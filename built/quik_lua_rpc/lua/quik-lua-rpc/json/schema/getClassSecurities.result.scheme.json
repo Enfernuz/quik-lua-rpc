@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getClassSecurities.result.scheme.json",
+    "title": "Результат процедуры getClassSecurities",
+    "description": "Схема объекта результата удалённого вызова процедуры getClassSecurities",
+    "type": "object",
+    "properties": {
+        "class_securities": {
+            "description": "Результат",
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["class_securities"]
+}

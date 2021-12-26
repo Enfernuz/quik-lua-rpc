@@ -1,0 +1,18 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.bit.test;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc.bit";
+
+message Args {
+
+    sint64 x = 1;
+    sint64 n = 2;
+}
+
+message Result {
+    bool result = 1;
+}

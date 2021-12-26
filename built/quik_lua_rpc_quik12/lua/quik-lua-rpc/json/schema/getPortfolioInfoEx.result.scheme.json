@@ -1,0 +1,102 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getPortfolioInfoEx.result.scheme.json",
+    "title": "Результат процедуры getPortfolioInfoEx",
+    "description": "Схема объекта результата удалённого вызова процедуры getPortfolioInfoEx",
+    "type": "object",
+    "properties": {
+        "portfolio_info": {
+            "$ref": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getPortfolioInfo.result.scheme.json#/definitions/PortfolioInfo"
+        },
+        "init_margin": {
+            "description": "Параметр init_margin",
+            "type": "string"
+        },
+        "min_margin": {
+            "description": "Параметр min_margin",
+            "type": "string"
+        },
+        "corrected_margin": {
+            "description": "Параметр corrected_margin",
+            "type": "string"
+        },
+        "client_type": {
+            "description": "Параметр client_type",
+            "type": "string"
+        },
+        "portfolio_value": {
+            "description": "Параметр portfolio_value",
+            "type": "string"
+        },
+        "start_limit_open_pos": {
+            "description": "Параметр start_limit_open_pos",
+            "type": "string"
+        },
+        "total_limit_open_pos": {
+            "description": "Параметр total_limit_open_pos",
+            "type": "string"
+        },
+        "limit_open_pos": {
+            "description": "Параметр limit_open_pos",
+            "type": "string"
+        },
+        "used_lim_open_pos": {
+            "description": "Параметр used_lim_open_pos",
+            "type": "string"
+        },
+        "acc_var_margin": {
+            "description": "Параметр acc_var_margin",
+            "type": "string"
+        },
+        "cl_var_margin": {
+            "description": "Параметр cl_var_margin",
+            "type": "string"
+        },
+        "opt_liquid_cost": {
+            "description": "Параметр opt_liquid_cost",
+            "type": "string"
+        },
+        "fut_asset": {
+            "description": "Параметр fut_asset",
+            "type": "string"
+        },
+        "fut_total_asset": {
+            "description": "Параметр fut_total_asset",
+            "type": "string"
+        },
+        "fut_debt": {
+            "description": "Параметр fut_debt",
+            "type": "string"
+        },
+        "fut_rate_asset": {
+            "description": "Параметр fut_rate_asset",
+            "type": "string"
+        },
+        "fut_rate_asset_open": {
+            "description": "Параметр fut_rate_asset_open",
+            "type": "string"
+        },
+        "fut_rate_go": {
+            "description": "Параметр fut_rate_go",
+            "type": "string"
+        },
+        "planed_rate_go": {
+            "description": "Параметр planed_rate_go",
+            "type": "string"
+        },
+        "cash_leverage": {
+            "description": "Параметр cash_leverage",
+            "type": "string"
+        },
+        "fut_position_type": {
+            "description": "Параметр fut_position_type",
+            "type": "string"
+        },
+        "fut_accured_int": {
+            "description": "Параметр fut_accured_int",
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["portfolio_info"]
+}

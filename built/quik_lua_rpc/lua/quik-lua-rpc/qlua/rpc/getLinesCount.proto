@@ -1,0 +1,16 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.getLinesCount;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Args {
+    string tag = 1;
+}
+
+message Result {
+    int32 lines_count = 1;
+}

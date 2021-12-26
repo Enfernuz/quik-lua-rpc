@@ -1,0 +1,18 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.SetTableNotificationCallback;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Args {
+
+    int32 t_id = 1;
+    string f_cb_def = 2; // формат функции (см. документацию по QLua): FUNCTION (NUMBER t_id, NUMBER msg, NUMBER par1, NUMBER par2)
+}
+
+message Result {
+    int32 result = 1;
+}

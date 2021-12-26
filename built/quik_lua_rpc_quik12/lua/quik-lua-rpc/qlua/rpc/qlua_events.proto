@@ -1,0 +1,36 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.events;
+
+enum EventType {
+
+    EVENT_TYPE_UNKNOWN = 0;
+    PUBLISHER_ONLINE = 1; // no data attached
+    ON_STOP = 2;
+    ON_CLOSE = 3; // no data attached
+    ON_CONNECTED = 4;
+    ON_DISCONNECTED = 5; // no data attached
+    ON_FIRM = 6; 
+    ON_ALL_TRADE = 7; 
+    ON_TRADE = 8; 
+    ON_ORDER = 9;
+    ON_ACCOUNT_BALANCE = 10;
+    ON_FUTURES_LIMIT_CHANGE = 11;
+    ON_FUTURES_LIMIT_DELETE = 12;
+    ON_FUTURES_CLIENT_HOLDING = 13;
+    ON_MONEY_LIMIT = 14;
+    ON_MONEY_LIMIT_DELETE = 15;
+    ON_DEPO_LIMIT = 16;
+    ON_DEPO_LIMIT_DELETE = 17;
+    ON_ACCOUNT_POSITION = 18;
+    ON_NEG_DEAL = 19;
+    ON_NEG_TRADE = 20;
+    ON_STOP_ORDER = 21;
+    ON_TRANS_REPLY = 22;
+    ON_PARAM = 23;
+    ON_QUOTE = 24;
+    ON_CLEAN_UP = 25; // no data attached
+    ON_DATA_SOURCE_UPDATE = 26;
+}

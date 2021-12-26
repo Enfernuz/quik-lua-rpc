@@ -1,0 +1,18 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.datasource.C;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc.datasource";
+
+message Args {
+
+    string datasource_uuid = 1;
+    int32 candle_index = 2;
+}
+
+message Result {
+    string value = 1; // use of string instead of double for a safe money representation
+}

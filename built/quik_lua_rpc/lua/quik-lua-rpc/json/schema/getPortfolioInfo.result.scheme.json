@@ -1,0 +1,182 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getPortfolioInfo.result.scheme.json",
+    "title": "Результат процедуры getPortfolioInfo",
+    "description": "Схема объекта результата удалённого вызова процедуры getPortfolioInfo",
+    "type": "object",
+    "definitions": {
+        "PortfolioInfo": {
+            "description": "Клиентский портфель",
+            "type": "object",
+            "properties": {
+                "is_leverage": {
+                    "description": "Параметр is_leverage",
+                    "type": "string"
+                },
+                "in_assets": {
+                    "description": "Параметр in_assets",
+                    "type": "string"
+                },
+                "leverage": {
+                    "description": "Параметр leverage",
+                    "type": "string"
+                },
+                "open_limit": {
+                    "description": "Параметр open_limit",
+                    "type": "string"
+                },
+                "val_short": {
+                    "description": "Параметр val_short",
+                    "type": "string"
+                },
+                "val_long": {
+                    "description": "Параметр val_long",
+                    "type": "string"
+                },
+                "val_long_margin": {
+                    "description": "Параметр val_long_margin",
+                    "type": "string"
+                },
+                "val_long_asset": {
+                    "description": "Параметр val_long_asset",
+                    "type": "string"
+                },
+                "assets": {
+                    "description": "Параметр assets",
+                    "type": "string"
+                },
+                "cur_leverage": {
+                    "description": "Параметр cur_leverage",
+                    "type": "string"
+                },
+                "margin": {
+                    "description": "Параметр margin",
+                    "type": "string"
+                },
+                "lim_all": {
+                    "description": "Параметр lim_all",
+                    "type": "string"
+                },
+                "av_lim_all": {
+                    "description": "Параметр av_lim_all",
+                    "type": "string"
+                },
+                "locked_buy": {
+                    "description": "Параметр locked_buy",
+                    "type": "string"
+                },
+                "locked_buy_margin": {
+                    "description": "Параметр locked_buy_margin",
+                    "type": "string"
+                },
+                "locked_buy_asset": {
+                    "description": "Параметр locked_buy_asset",
+                    "type": "string"
+                },
+                "locked_sell": {
+                    "description": "Параметр locked_sell",
+                    "type": "string"
+                },
+                "locked_value_coef": {
+                    "description": "Параметр locked_value_coef",
+                    "type": "string"
+                },
+                "in_all_assets": {
+                    "description": "Параметр in_all_assets",
+                    "type": "string"
+                },
+                "all_assets": {
+                    "description": "Параметр all_assets",
+                    "type": "string"
+                },
+                "profit_loss": {
+                    "description": "Параметр profit_loss",
+                    "type": "string"
+                },
+                "rate_change": {
+                    "description": "Параметр rate_change",
+                    "type": "string"
+                },
+                "lim_buy": {
+                    "description": "Параметр lim_buy",
+                    "type": "string"
+                },
+                "lim_sell": {
+                    "description": "Параметр lim_sell",
+                    "type": "string"
+                },
+                "lim_non_margin": {
+                    "description": "Параметр lim_non_margin",
+                    "type": "string"
+                },
+                "lim_buy_asset": {
+                    "description": "Параметр lim_buy_asset",
+                    "type": "string"
+                },
+                "val_short_net": {
+                    "description": "Параметр val_short_net",
+                    "type": "string"
+                },
+                "val_long_net": {
+                    "description": "Параметр val_long_net",
+                    "type": "string"
+                },
+                "total_money_bal ": {
+                    "description": "Параметр total_money_bal ",
+                    "type": "string"
+                },
+                "total_locked_money": {
+                    "description": "Параметр total_locked_money",
+                    "type": "string"
+                },
+                "haircuts": {
+                    "description": "Параметр haircuts",
+                    "type": "string"
+                },
+                "assets_without_hc": {
+                    "description": "Параметр assets_without_hc",
+                    "type": "string"
+                },
+                "status_coef": {
+                    "description": "Параметр status_coef",
+                    "type": "string"
+                },
+                "varmargin": {
+                    "description": "Параметр varmargin",
+                    "type": "string"
+                },
+                "go_for_positions": {
+                    "description": "Параметр go_for_positions",
+                    "type": "string"
+                },
+                "go_for_orders": {
+                    "description": "Параметр go_for_orders",
+                    "type": "string"
+                },
+                "rate_futures": {
+                    "description": "Параметр rate_futures",
+                    "type": "string"
+                },
+                "is_qual_client": {
+                    "description": "Параметр is_qual_client",
+                    "type": "string"
+                },
+                "is_futures": {
+                    "description": "Параметр is_futures",
+                    "type": "string"
+                },
+                "curr_tag": {
+                    "description": "Параметр curr_tag",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "properties": {
+        "portfolio_info": {
+            "$ref": "#/definitions/PortfolioInfo"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["portfolio_info"]
+}

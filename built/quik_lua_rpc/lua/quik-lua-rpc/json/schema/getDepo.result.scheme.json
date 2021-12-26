@@ -1,0 +1,49 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getDepo.result.scheme.json",
+    "title": "Результат процедуры getDepo",
+    "description": "Схема объекта результата удалённого вызова процедуры getDepo",
+    "type": "object",
+    "properties": {
+        "depo": {
+            "description": "Результат",
+            "type": "object",
+            "properties": {
+                "depo_limit_locked_buy_value": {
+                    "description": "Параметр depo_limit_locked_buy_value",
+                    "type": "string"
+                },
+                "depo_current_balance": {
+                    "description": "Параметр depo_current_balance",
+                    "type": "string"
+                },
+                "depo_limit_locked_buy": {
+                    "description": "Параметр depo_limit_locked_buy",
+                    "type": "string"
+                },
+                "depo_limit_locked": {
+                    "description": "Параметр depo_limit_locked",
+                    "type": "string"
+                },
+                "depo_limit_available": {
+                    "description": "Параметр depo_limit_available",
+                    "type": "string"
+                },
+                "depo_current_limit": {
+                    "description": "Параметр depo_current_limit",
+                    "type": "string"
+                },
+                "depo_open_balance": {
+                    "description": "Параметр depo_open_balance",
+                    "type": "string"
+                },
+                "depo_open_limit": {
+                    "description": "Параметр depo_open_limit",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": ["depo"]
+}
