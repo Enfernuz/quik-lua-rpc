@@ -1,0 +1,11 @@
+{
+  "editor.formatOnSave": false,
+  "Lua.diagnostics.disable": [
+    "undefined-field",
+    "trailing-space",
+    "unbalanced-assignments",
+    "need-check-nil",
+    "undefined-global",
+    "different-requires"
+  ]
+}
