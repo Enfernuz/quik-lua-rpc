@@ -70,8 +70,8 @@ lzmq_dll = env.SharedLibrary(f'{lzmq_path}/src/liblzmq.dll',
 inst_dir = 'built'
 inst_path = '{}/{}'.format(os.getcwd(), inst_dir)
 mingw_libs = [
-    '/usr/lib/gcc/x86_64-w64-mingw32/8.3-win32/libgcc_s_seh-1.dll',
-    '/usr/lib/gcc/x86_64-w64-mingw32/8.3-win32/libstdc++-6.dll',
+    '/usr/lib/gcc/x86_64-w64-mingw32/10-win32/libgcc_s_seh-1.dll',
+    '/usr/lib/gcc/x86_64-w64-mingw32/10-win32/libstdc++-6.dll',
 ]
 
 env.Install(inst_path,

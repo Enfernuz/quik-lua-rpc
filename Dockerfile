@@ -110,7 +110,7 @@ RUN cd $HOME && \
 
 ## Сборка libsodium.
 ENV SODIUM_URL https://github.com/jedisct1/libsodium.git
-ENV SODIUM_VER 1.0.16
+ENV SODIUM_VER stable
 ENV SODIUM_REPO $HOME/libsodium
 ENV SODIUM_PREFIX built-libsodium
 
