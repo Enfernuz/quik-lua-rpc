@@ -36,11 +36,11 @@ qlr_libs = ['auth',
 
 # QUIK REDIST
 quik_libs_path = env_vars['QUIK_PREFIX']
-quik_libs = ['qlua.dll', 'lua53.dll']
+quik_libs = ['qlua.dll', 'lua54.dll']
 
 # LUA
 lua_path = env_vars['LUA_REPO']
-lua_obj = env.SharedObject(env.Glob(f'{lua_path}/*.c'))
+lua_obj = env.SharedObject(env.Glob(f'{lua_path}/onelua.c'))
 lua_dll = env.SharedLibrary(f'{lua_path}/lua', lua_obj)
 
 # LUA-PROTOBUF

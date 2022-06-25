@@ -1,5 +1,4 @@
 FROM debian:stable
-MAINTAINER Anton Abrosimov <anton@abrosimov.online>
 
 ##
 ## ===== Настройка окружения =====
@@ -77,10 +76,11 @@ ENV CC x86_64-w64-mingw32-gcc
 ENV CFLAGS -DDLL_EXPORT -DFD_SETSIZE=16384 -DZMQ_USE_SELECT -Os -fomit-frame-pointer -m64 -fPIC
 ENV CXX x86_64-w64-mingw32-g++
 ENV CXXFLAGS -Os -fomit-frame-pointer -m64 -fPIC
+ENV MAKEFLAGS -j3
 
 ## Загрузка исходников lua.
 ENV LUA_URL https://github.com/lua/lua.git
-ENV LUA_VER 5.3.5
+ENV LUA_VER 5.4.1
 ENV LUA_REPO $HOME/lua
 
 RUN cd $HOME && \
@@ -90,7 +90,7 @@ RUN cd $HOME && \
 
 ## Загрузка исходников lua-protobuf.
 ENV LUA_PROTOBUF_URL https://github.com/starwing/lua-protobuf
-ENV LUA_PROTOBUF_VER 0.3.2
+ENV LUA_PROTOBUF_VER 0.3.4
 ENV LUA_PROTOBUF_REPO $HOME/lua-protobuf
 
 RUN cd $HOME && \
