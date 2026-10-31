@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/bit/band.result.scheme.json",
+    "title": "Результат процедуры bit.band",
+    "description": "Схема объекта результата удалённого вызова процедуры bit.band",
+    "type": "object",
+    "properties": {
+        "result": {
+            "description": "Результат",
+            "type": "number"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["result"]
+}

@@ -1,0 +1,22 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.bit.tohex;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc.bit";
+
+message Args {
+
+    sint64 x = 1;
+    oneof n {
+        bool null_n = 2;
+        uint32 value_n = 3;
+    }
+    
+}
+
+message Result {
+    string result = 1;
+}

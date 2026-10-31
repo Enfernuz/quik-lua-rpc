@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/RGB.result.scheme.json",
+    "title": "Результат процедуры RGB",
+    "description": "Схема объекта результата удалённого вызова процедуры RGB",
+    "type": "object",
+    "properties": {
+        "result": {
+            "description": "Результат",
+            "type": "integer"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["result"]
+}

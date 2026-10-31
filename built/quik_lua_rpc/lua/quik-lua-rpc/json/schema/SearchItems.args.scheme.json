@@ -1,0 +1,43 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/SearchItems.args.scheme.json",
+    "title": "Аргументы процедуры SearchItems",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры SearchItems",
+    "type": "object",
+    "definitions": {
+        "ElementIndex": {
+            "description": "Индекс элемента",
+            "type": "integer",
+            "minimum": 0
+        },
+        "NullableElementIndex": {
+            "description": "Индекс элемента",
+            "type": ["integer", "null"],
+            "minimum": 0
+        }
+    },
+    "properties": {
+        "table_name": {
+            "description": "Параметр table_name",
+            "type": "string"
+        },
+        "start_index": {
+            "description": "Параметр start_index",
+            "$ref": "#/definitions/ElementIndex"
+        },
+        "end_index": {
+            "description": "Параметр end_index",
+            "$ref": "#/definitions/NullableElementIndex"
+        },
+        "fn_def": {
+            "description": "Параметр fn_def",
+            "type": "string"
+        },
+        "params": {
+            "description": "Параметр params",
+            "type": ["string", "null"]
+        }
+    },
+    "additionalProperties": false,
+    "required": ["table_name", "start_index", "fn_def"]
+}

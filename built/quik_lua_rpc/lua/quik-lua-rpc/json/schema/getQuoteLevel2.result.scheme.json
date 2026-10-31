@@ -1,0 +1,49 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getQuoteLevel2.result.scheme.json",
+    "title": "Результат процедуры getQuoteLevel2",
+    "description": "Схема объекта результата удалённого вызова процедуры getQuoteLevel2",
+    "type": "object",
+    "definitions": {
+        "QuoteEntry": {
+            "description": "Котировка",
+            "type": "object",
+            "properties": {
+                "price": {
+                    "description": "Параметр price",
+                    "type": "string"
+                },
+                "quantity": {
+                    "description": "Параметр quantity",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "properties": {
+        "bid_count": {
+            "description": "Параметр bid_count",
+            "type": "string"
+        },
+        "offer_count": {
+            "description": "Параметр offer_count",
+            "type": "string"
+        },
+        "bids": {
+            "description": "Параметр bid",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/QuoteEntry"
+            }
+        },
+        "offers": {
+            "description": "Параметр offer",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/QuoteEntry"
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": ["bid_count", "offer_count", "bids", "offers"]
+}

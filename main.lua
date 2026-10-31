@@ -8,8 +8,10 @@ local service = require("service")
 
 service.init()
 
-OnClose = service.event_callbacks.OnClose or service.terminate
-OnStop = service.event_callbacks.OnStop or service.terminate
+-- OnClose/OnStop run in QUIK's main thread: they only ask main() to finish.
+-- main() then shuts the service down in the script thread.
+OnClose = service.event_callbacks.OnClose or service.stop
+OnStop = service.event_callbacks.OnStop or service.stop
 OnCleanUp = service.event_callbacks.OnCleanUp
 
 OnConnected = service.event_callbacks.OnConnected
@@ -48,5 +50,10 @@ function main ()
   local ok, err = pcall(service.start)
   if not ok then
     message("Ошибка в функции main: "..tostring(err))
+  end
+
+  ok, err = pcall(service.terminate)
+  if not ok then
+    message("Ошибка при остановке сервиса: "..tostring(err))
   end
 end

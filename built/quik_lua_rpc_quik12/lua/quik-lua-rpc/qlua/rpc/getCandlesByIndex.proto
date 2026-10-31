@@ -1,0 +1,25 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.getCandlesByIndex;
+
+import "qlua/rpc/qlua_structures.proto";
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Args {
+
+    string tag = 1;
+    int32 line = 2;
+    int32 first_candle = 3;
+    int32 count = 4;
+}
+
+message Result {
+
+    repeated qlua.structs.CandleEntry t = 1;
+    int32 n = 2;
+    string l = 3;
+}

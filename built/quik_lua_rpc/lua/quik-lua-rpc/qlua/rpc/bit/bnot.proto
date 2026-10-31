@@ -1,0 +1,16 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.bit.bnot;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc.bit";
+
+message Args {
+    sint64 x = 1;
+}
+
+message Result {
+    sint64 result = 1;
+}

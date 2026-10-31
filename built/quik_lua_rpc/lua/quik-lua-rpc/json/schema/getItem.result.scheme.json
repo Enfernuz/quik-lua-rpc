@@ -1,0 +1,17 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getItem.result.scheme.json",
+    "title": "Результат процедуры getItem",
+    "description": "Схема объекта результата удалённого вызова процедуры getItem",
+    "type": "object",
+    "properties": {
+        "table_row": {
+            "description": "Параметр table_row",
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            }
+        }
+    },
+    "additionalProperties": false
+}

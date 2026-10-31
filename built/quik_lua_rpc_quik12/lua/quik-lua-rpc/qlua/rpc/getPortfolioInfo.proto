@@ -1,0 +1,62 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.getPortfolioInfo;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message PortfolioInfo {
+    
+    string is_leverage = 1;
+    string in_assets = 2;
+    string leverage = 3;
+    string open_limit = 4;
+    string val_short = 5;
+    string val_long = 6;
+    string val_long_margin = 7;
+    string val_long_asset = 8;
+    string assets = 9;
+    string cur_leverage = 10;
+    string margin = 11;
+    string lim_all = 12;
+    string av_lim_all = 13;
+    string locked_buy = 14;
+    string locked_buy_margin = 15;
+    string locked_buy_asset = 16;
+    string locked_sell = 17;
+    string locked_value_coef = 18;
+    string in_all_assets = 19;
+    string all_assets = 20;
+    string profit_loss = 21;
+    string rate_change = 22;
+    string lim_buy = 23;
+    string lim_sell = 24;
+    string lim_non_margin = 25;
+    string lim_buy_asset = 26;
+    string val_short_net = 27;
+    string val_long_net = 28;
+    string total_money_bal = 29;
+    string total_locked_money = 30;
+    string haircuts = 31;
+    string assets_without_hc = 32;
+    string status_coef = 33;
+    string varmargin = 34;
+    string go_for_positions = 35;
+    string go_for_orders = 36;
+    string rate_futures = 37;
+    string is_qual_client = 38;
+    string is_futures = 39;
+    string curr_tag = 40;
+}
+
+message Args {
+
+    string firm_id = 1;
+    string client_code = 2;
+}
+
+message Result {
+    PortfolioInfo portfolio_info = 1;
+}

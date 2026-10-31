@@ -1,0 +1,18 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.InsertRow;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Args {
+
+    int32 t_id = 1;
+    int32 key = 2;
+}
+
+message Result {
+    int32 result = 1;
+}

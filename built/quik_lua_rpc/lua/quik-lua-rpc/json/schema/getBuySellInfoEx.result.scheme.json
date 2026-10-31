@@ -1,0 +1,141 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getBuySellInfoEx.result.scheme.json",
+    "title": "Результат процедуры getBuySellInfoEx",
+    "description": "Схема объекта результата удалённого вызова процедуры getBuySellInfoEx",
+    "type": "object",
+    "properties": {
+        "buy_sell_info_ex": {
+            "description": "Результат",
+            "type": "object",
+            "properties": {
+                "buy_sell_info": {
+                    "description": "Параметр buy_sell_info",
+                    "type": "object",
+                    "properties": {
+                        "is_margin_sec": {
+                            "description": "Параметр is_margin_sec",
+                            "type": "string"
+                        },
+                        "is_asset_sec": {
+                            "description": "Параметр is_asset_sec",
+                            "type": "string"
+                        },
+                        "balance": {
+                            "description": "Параметр balance",
+                            "type": "string"
+                        },
+                        "can_buy": {
+                            "description": "Параметр can_buy",
+                            "type": "string"
+                        },
+                        "can_sell": {
+                            "description": "Параметр can_sell",
+                            "type": "string"
+                        },
+                        "position_valuation": {
+                            "description": "Параметр position_valuation",
+                            "type": "string"
+                        },
+                        "value": {
+                            "description": "Параметр value",
+                            "type": "string"
+                        },
+                        "open_value": {
+                            "description": "Параметр open_value",
+                            "type": "string"
+                        },
+                        "lim_long": {
+                            "description": "Параметр lim_long",
+                            "type": "string"
+                        },
+                        "long_coef": {
+                            "description": "Параметр long_coef",
+                            "type": "string"
+                        },
+                        "lim_short": {
+                            "description": "Параметр lim_short",
+                            "type": "string"
+                        },
+                        "short_coef": {
+                            "description": "Параметр short_coef",
+                            "type": "string"
+                        },
+                        "value_coef": {
+                            "description": "Параметр value_coef",
+                            "type": "string"
+                        },
+                        "open_value_coef": {
+                            "description": "Параметр open_value_coef",
+                            "type": "string"
+                        },
+                        "share": {
+                            "description": "Параметр share",
+                            "type": "string"
+                        },
+                        "short_wa_price": {
+                            "description": "Параметр short_wa_price",
+                            "type": "string"
+                        },
+                        "long_wa_price": {
+                            "description": "Параметр long_wa_price",
+                            "type": "string"
+                        },
+                        "profit_loss": {
+                            "description": "Параметр profit_loss",
+                            "type": "string"
+                        },
+                        "spread_hc": {
+                            "description": "Параметр spread_hc",
+                            "type": "string"
+                        },
+                        "can_buy_own": {
+                            "description": "Параметр can_buy_own",
+                            "type": "string"
+                        },
+                        "can_sell_own": {
+                            "description": "Параметр can_sell_own",
+                            "type": "string"
+                        }
+                    }
+                },
+                "limit_kind": {
+                    "description": "Параметр limit_kind",
+                    "type": "string"
+                },
+                "d_long": {
+                    "description": "Параметр d_long",
+                    "type": "string"
+                },
+                "d_min_long": {
+                    "description": "Параметр d_min_long",
+                    "type": "string"
+                },
+                "d_short": {
+                    "description": "Параметр d_short",
+                    "type": "string"
+                },
+                "d_min_short": {
+                    "description": "Параметр d_min_short",
+                    "type": "string"
+                },
+                "client_type": {
+                    "description": "Параметр client_type",
+                    "type": "string"
+                },
+                "is_long_allowed": {
+                    "description": "Параметр is_long_allowed",
+                    "type": "string"
+                },
+                "is_short_allowed": {
+                    "description": "Параметр is_short_allowed",
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false,
+            "required": ["buy_sell_info"]
+        }
+    },
+    "additionalProperties": false,
+    "required": ["buy_sell_info_ex"]
+}

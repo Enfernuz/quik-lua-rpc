@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/DelAllLabels.args.scheme.json",
+    "title": "Аргументы процедуры DelAllLabels",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры DelAllLabels",
+    "type": "object",
+    "properties": {
+        "chart_tag": {
+            "description": "Параметр chart_tag",
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["chart_tag"]
+}

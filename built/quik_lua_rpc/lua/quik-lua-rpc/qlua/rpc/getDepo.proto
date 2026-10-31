@@ -1,0 +1,32 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.getDepo;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Depo {
+        
+    string depo_limit_locked_buy_value = 1;
+    string depo_current_balance = 2;
+    string depo_limit_locked_buy = 3;
+    string depo_limit_locked = 4;
+    string depo_limit_available = 5;
+    string depo_current_limit = 6;
+    string depo_open_balance = 7;
+    string depo_open_limit = 8;
+}
+
+message Args {
+
+    string client_code = 1; // Код клиента
+    string firmid = 2; // Фирма
+    string sec_code = 3; // Код бумаги
+    string trdaccid = 4; // Счет депо
+}
+
+message Result {
+    Depo depo = 1;
+}

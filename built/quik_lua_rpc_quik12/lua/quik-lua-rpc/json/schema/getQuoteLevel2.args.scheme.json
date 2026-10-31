@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getQuoteLevel2.args.scheme.json",
+    "title": "Аргументы процедуры getQuoteLevel2",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры getQuoteLevel2",
+    "type": "object",
+    "properties": {
+        "class_code": {
+            "description": "Параметр class_code",
+            "type": "string"
+        },
+        "sec_code": {
+            "description": "Параметр sec_code",
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["class_code", "sec_code"]
+}

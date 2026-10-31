@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getScriptPath.result.scheme.json",
+    "title": "Результат процедуры getScriptPath",
+    "description": "Схема объекта результата удалённого вызова процедуры getScriptPath",
+    "type": "object",
+    "properties": {
+        "script_path": {
+            "description": "Результат",
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["script_path"]
+}

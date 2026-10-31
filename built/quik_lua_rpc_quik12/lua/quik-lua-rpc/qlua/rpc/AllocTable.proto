@@ -1,0 +1,12 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.AllocTable;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Result {
+    int32 t_id = 1;
+}

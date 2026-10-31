@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getPortfolioInfo.args.scheme.json",
+    "title": "Аргументы процедуры getPortfolioInfo",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры getPortfolioInfo",
+    "type": "object",
+    "properties": {
+        "firm_id": {
+            "description": "Параметр firm_id",
+            "type": "string"
+        },
+        "client_code": {
+            "description": "Параметр client_code",
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["firm_id", "client_code"]
+}

@@ -1,0 +1,11 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.types;
+
+message TableEntry {
+
+    string k = 1;
+    string v = 2;
+}

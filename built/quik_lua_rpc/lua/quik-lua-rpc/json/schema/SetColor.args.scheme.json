@@ -1,0 +1,50 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/SetColor.args.scheme.json",
+    "title": "Аргументы процедуры SetColor",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры SetColor",
+    "type": "object",
+    "definitions": {
+        "NullableMatrixIndex": {
+            "description": "Индекс элемента матрицы",
+            "type": ["integer", "null"],
+            "minimum": 0
+        },
+        "NullableColor": {
+            "description": "Цвет в формате RGB",
+            "type": ["integer", "null"]
+        }
+    },
+    "properties": {
+        "t_id": {
+            "description": "Параметр t_id",
+            "type": "number"
+        },
+        "row": {
+            "description": "Параметр row",
+            "$ref": "#/definitions/NullableMatrixIndex"
+        },
+        "col": {
+            "description": "Параметр col",
+            "$ref": "#/definitions/NullableMatrixIndex"
+        },
+        "b_color": {
+            "description": "Параметр b_color",
+            "$ref": "#/definitions/NullableColor"
+        },
+        "f_color": {
+            "description": "Параметр f_color",
+            "$ref": "#/definitions/NullableColor"
+        },
+        "sel_b_color": {
+            "description": "Параметр sel_b_color",
+            "$ref": "#/definitions/NullableColor"
+        },
+        "sel_f_color": {
+            "description": "Параметр sel_f_color",
+            "$ref": "#/definitions/NullableColor"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["t_id"]
+}

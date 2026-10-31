@@ -1,0 +1,25 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.datasource.SetUpdateCallback;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc.datasource";
+
+message Args {
+
+    string datasource_uuid = 1; 
+    string f_cb_def = 2; // NB: формат функции: "function (NUMBER index, TABLE datasource) function_body end"
+    bool watching_O = 3;
+    bool watching_H = 4;
+    bool watching_L = 5;
+    bool watching_C = 6;
+    bool watching_V = 7;
+    bool watching_T = 8;
+    bool watching_Size = 9;
+}
+
+message Result {
+    bool result = 1;
+}

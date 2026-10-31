@@ -1,0 +1,23 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.getMoneyEx;
+
+import "qlua/rpc/qlua_structures.proto";
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Args {
+
+    string firmid = 1; // Фирма
+    string client_code = 2; // Код клиента
+    string tag = 3; // Группа
+    string currcode = 4; // Валюта
+    int32 limit_kind = 5; // Вид лимита (Как задать лимит "Tx"? Ответ: видимо, никак -- это недоработка в API qlua)
+}
+
+message Result {
+    qlua.structs.MoneyLimit money_ex = 1;
+}

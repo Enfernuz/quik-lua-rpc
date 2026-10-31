@@ -1,0 +1,272 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getOrderByNumber.result.scheme.json",
+    "title": "Результат процедуры getOrderByNumber",
+    "description": "Схема объекта результата удалённого вызова процедуры getOrderByNumber",
+    "type": "object",
+    "properties": {
+        "order": {
+            "description": "Параметр order",
+            "type": "object",
+            "properties": {
+                "order_num": {
+                    "description": "Параметр order_num",
+                    "type": "number"
+                },
+                "flags": {
+                    "description": "Параметр flags",
+                    "type": "number"
+                },
+                "brokerref": {
+                    "description": "Параметр brokerref",
+                    "type": "string"
+                },
+                "userid": {
+                    "description": "Параметр userid",
+                    "type": "string"
+                },
+                "firmid": {
+                    "description": "Параметр firmid",
+                    "type": "string"
+                },
+                "account": {
+                    "description": "Параметр account",
+                    "type": "string"
+                },
+                "price": {
+                    "description": "Параметр price",
+                    "type": "string"
+                },
+                "qty": {
+                    "description": "Параметр qty",
+                    "type": "number"
+                },
+                "balance": {
+                    "description": "Параметр balance",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "Параметр value",
+                    "type": "string"
+                },
+                "accruedint": {
+                    "description": "Параметр accruedint",
+                    "type": "string"
+                },
+                "yield": {
+                    "description": "Параметр yield",
+                    "type": "string"
+                },
+                "trans_id": {
+                    "description": "Параметр trans_id",
+                    "type": "string"
+                },
+                "client_code": {
+                    "description": "Параметр client_code",
+                    "type": "string"
+                },
+                "price2": {
+                    "description": "Параметр price2",
+                    "type": "string"
+                },
+                "settlecode": {
+                    "description": "Параметр settlecode",
+                    "type": "string"
+                },
+                "uid": {
+                    "description": "Параметр uid",
+                    "type": "string"
+                },
+                "canceled_uid": {
+                    "description": "Параметр canceled_uid",
+                    "type": "string"
+                },
+                "exchange_code": {
+                    "description": "Параметр exchange_code",
+                    "type": "string"
+                },
+                "activation_time": {
+                    "description": "Параметр activation_time",
+                    "type": "string"
+                },
+                "linkedorder": {
+                    "description": "Параметр linkedorder",
+                    "type": "string"
+                },
+                "expiry": {
+                    "description": "Параметр expiry",
+                    "type": "string"
+                },
+                "sec_code": {
+                    "description": "Параметр sec_code",
+                    "type": "string"
+                },
+                "class_code": {
+                    "description": "Параметр class_code",
+                    "type": "string"
+                },
+                "datetime": {
+                    "$ref": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/QluaStructures.scheme.json#/definitions/DateTimeEntry"
+                },
+                "withdraw_datetime": {
+                    "$ref": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/QluaStructures.scheme.json#/definitions/DateTimeEntry"
+                },
+                "bank_acc_id": {
+                    "description": "Параметр bank_acc_id",
+                    "type": "string"
+                },
+                "value_entry_type": {
+                    "description": "Параметр value_entry_type",
+                    "type": "number"
+                },
+                "repoterm": {
+                    "description": "Параметр repoterm",
+                    "type": "string"
+                },
+                "repovalue": {
+                    "description": "Параметр repovalue",
+                    "type": "string"
+                },
+                "repo2value": {
+                    "description": "Параметр repo2value",
+                    "type": "string"
+                },
+                "repo_value_balance": {
+                    "description": "Параметр repo_value_balance",
+                    "type": "string"
+                },
+                "start_discount": {
+                    "description": "Параметр start_discount",
+                    "type": "string"
+                },
+                "reject_reason": {
+                    "description": "Параметр reject_reason",
+                    "type": "string"
+                },
+                "ext_order_flags": {
+                    "description": "Параметр ext_order_flags",
+                    "type": "string"
+                },
+                "min_qty": {
+                    "description": "Параметр min_qty",
+                    "type": "number"
+                },
+                "exec_type": {
+                    "description": "Параметр exec_type",
+                    "type": "number"
+                },
+                "side_qualifier": {
+                    "description": "Параметр side_qualifier",
+                    "type": "number"
+                },
+                "acnt_type": {
+                    "description": "Параметр acnt_type",
+                    "type": "number"
+                },
+                "capacity": {
+                    "description": "Параметр capacity",
+                    "type": "number"
+                },
+                "passive_only_order": {
+                    "description": "Параметр passive_only_order",
+                    "type": "number"
+                },
+                "visible": {
+                    "description": "Параметр visible",
+                    "type": "number"
+                },
+                "awg_price": {
+                    "description": "Параметр awg_price",
+                    "type": "string"
+                },
+                "expiry_time": {
+                    "description": "Параметр expiry_time",
+                    "type": "string"
+                },
+                "revision_number": {
+                    "description": "Параметр revision_number",
+                    "type": "string"
+                },
+                "price_currency": {
+                    "description": "Параметр price_currency",
+                    "type": "string"
+                },
+                "ext_order_status": {
+                    "description": "Параметр ext_order_status",
+                    "type": "number"
+                },
+                "accepted_uid": {
+                    "description": "Параметр accepted_uid",
+                    "type": "string"
+                },
+                "filled_value": {
+                    "description": "Параметр filled_value",
+                    "type": "string"
+                },
+                "extref": {
+                    "description": "Параметр filled_value",
+                    "type": "string"
+                },
+                "settle_currency": {
+                    "description": "Параметр settle_currency",
+                    "type": "string"
+                },
+                "on_behalf_of_uid": {
+                    "description": "Параметр on_behalf_of_uid",
+                    "type": "string"
+                },
+                "client_qualifier": {
+                    "description": "Параметр client_qualifier",
+                    "type": "number"
+                },
+                "client_short_code": {
+                    "description": "Параметр client_short_code",
+                    "type": "string"
+                },
+                "investment_decision_maker_qualifier": {
+                    "description": "Параметр investment_decision_maker_qualifier",
+                    "type": "number"
+                },
+                "investment_decision_maker_short_code": {
+                    "description": "Параметр investment_decision_maker_short_code",
+                    "type": "string"
+                },
+                "executing_trader_qualifier": {
+                    "description": "Параметр executing_trader_qualifier",
+                    "type": "number"
+                },
+                "executing_trader_short_code": {
+                    "description": "Параметр executing_trader_short_code",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "order_num",
+                "flags",
+                "price",
+                "qty",
+                "value",
+                "sec_code",
+                "class_code",
+                "datetime",
+                "value_entry_type",
+                "min_qty",
+                "exec_type",
+                "side_qualifier",
+                "acnt_type",
+                "capacity",
+                "passive_only_order",
+                "visible",
+                "ext_order_status",
+                "client_qualifier",
+                "investment_decision_maker_qualifier",
+                "executing_trader_qualifier"
+            ]
+        },
+        "indx": {
+            "description": "Параметр indx",
+            "type": "number"
+        }
+    },
+    "additionalProperties": false
+}

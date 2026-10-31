@@ -15,8 +15,8 @@ local json = require("utils.json")
 local uuid = require("utils.uuid")
 
 local service = {}
-service._VERSION = "v2.0-alpha"
-service.QUIK_VERSION = "7.16.1.36"
+service._VERSION = "v2.0-alpha-quik12"
+service.QUIK_VERSION = "12.8.0.6"
 service.event_callbacks = {}
 
 local zmq_ctx = nil
@@ -25,6 +25,19 @@ local pub_sockets = {}
 local poller = nil
 local is_running = false
 local initialized = false
+
+-- Threading model (see THREADING.md):
+-- QUIK runs main() in the script thread and the On* callbacks in its own main thread.
+-- ZeroMQ sockets must never be used from two threads, so every ZeroMQ call happens in
+-- the script thread. Callbacks only put events on a queue; the script thread polls in
+-- short slices and sends queued events between polls.
+local EVENT_FLUSH_MS = 50       -- longest an event waits in the queue
+local MAX_QUEUED_EVENTS = 10000 -- events beyond this are dropped until the queue drains
+
+-- Single producer (QUIK main thread) / single consumer (script thread) queue.
+-- Only the producer writes `last`, only the consumer writes `first`.
+local event_queue = {first = 1, last = 0}
+local dropped_events = 0
 
 local request_response_serde = {
   -- initialized on demand
@@ -44,11 +57,6 @@ local protobuf_context = {
 function protobuf_context:init (context_path)
   require("qlua.qlua_pb_init")(context_path)
   self.is_initialized = true
-end
-
-local function pub_poll_out_callback ()
-  -- TODO: add reading from a message queue
-  -- Polling out is not implemented at the moment: messages are being sent regardless of the POLLOUT event.
 end
 
 local function send_data (data, socket)
@@ -147,14 +155,44 @@ local function create_rpc_poll_in_callback (socket, serde_protocol)
   return callback
 end
 
+-- Sends an event to the PUB sockets. Script thread only.
+local function send_event (event_type, event_data)
+  for _, publisher in pairs(publishers) do
+    publisher:publish(event_type, event_data)
+  end
+end
+
+-- Called from QUIK callbacks (QUIK main thread): converts the event data while QUIK's
+-- objects are valid and queues it for the script thread. Never touches ZeroMQ.
 local function publish (event_type, event_data)
 
   if not is_running then return end
-  
+  if next(publishers) == nil then return end
+
+  local queue = event_queue
+  if queue.last - queue.first + 1 >= MAX_QUEUED_EVENTS then
+    dropped_events = dropped_events + 1
+    return
+  end
+
   local converted_event_data = event_data_converter.convert(event_type, event_data)
-  
-  for _, publisher in pairs(publishers) do
-    publisher:publish(event_type, converted_event_data)
+
+  local last = queue.last + 1
+  queue[last] = {event_type, converted_event_data}
+  queue.last = last
+end
+
+-- Sends everything queued so far. Script thread only.
+local function flush_events ()
+  local queue = event_queue
+  while queue.first <= queue.last do
+    local i = queue.first
+    local event = queue[i]
+    queue[i] = nil
+    queue.first = i + 1
+    if event then
+      send_event(event[1], event[2])
+    end
   end
 end
 
@@ -165,12 +203,12 @@ local function create_event_callbacks()
     
     OnClose = function ()
       publish("OnClose")
-      service.terminate()
+      service.stop()
     end,
     
     OnStop = function (signal)
       publish("OnStop", {signal = signal})
-      service.terminate()
+      service.stop()
     end,
     
     OnFirm = function (firm)
@@ -276,8 +314,9 @@ local function create_socket (endpoint)
     poller:add(socket, zmq.POLLIN, create_rpc_poll_in_callback(socket, endpoint.serde_protocol))
     sockets = rpc_sockets
   elseif endpoint.type == "PUB" then
+    -- Not added to the poller: a PUB socket never receives, and polling it in the script
+    -- thread while QUIK's main thread sends on it corrupted libzmq's memory.
     socket = zmq_ctx:socket(zmq.PUB)
-    poller:add(socket, zmq.POLLIN, pub_poll_out_callback)
     sockets = pub_sockets
   else
     error( string.format("Указан неподдерживаемый тип '%s' для точки подключения. Поддерживаемые типы: RPC и PUB.", endpoint.type) )
@@ -362,36 +401,46 @@ function service.start ()
     is_running = true
   end
   
-  -- Does nothing useful at the moment, because the polling has not yet been started at the time it executes.
-  -- Issue #13.
-  publish("PublisherOnline")
-    
+  if next(publishers) ~= nil then
+    send_event("PublisherOnline", event_data_converter.convert("PublisherOnline"))
+  end
+
   xpcall(
-    function() 
-      return poller:start() 
-    end,
     function()
-      message("Ошибка в poller:start. Стек вызовов:\n"..debug.traceback())
+      while is_running do
+        local count, err = poller:poll(EVENT_FLUSH_MS)
+        if not count then
+          error(err)
+        end
+        flush_events()
+      end
+    end,
+    function(err)
+      message("Ошибка в цикле опроса сокетов: "..tostring(err).."\nСтек вызовов:\n"..debug.traceback())
     end
   )
 end
 
+-- Safe to call from any thread: it only asks the polling loop in main() to finish.
 function service.stop ()
-  
+
   check_if_initialized()
 
-  if is_running then
-    poller:stop()
-    is_running = false
-  end
+  is_running = false
 end
 
+-- Closes sockets and the ZeroMQ context. Call it from the script thread (main()),
+-- after service.start() has returned.
 function service.terminate ()
 
-  check_if_initialized()
-  
-  if is_running then 
-    service.stop()
+  if not initialized then return end
+
+  is_running = false
+
+  -- send what the callbacks queued last (OnStop, OnClose)
+  pcall(flush_events)
+  if dropped_events > 0 then
+    message(string.format("quik-lua-rpc: %d событий не отправлено из-за переполнения очереди.", dropped_events))
   end
 
   poller = nil

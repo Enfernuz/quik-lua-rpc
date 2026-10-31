@@ -1,0 +1,45 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getMoney.result.scheme.json",
+    "title": "Результат процедуры getMoney",
+    "description": "Схема объекта результата удалённого вызова процедуры getMoney",
+    "type": "object",
+    "properties": {
+        "money": {
+            "description": "Результат",
+            "type": "object",
+            "properties": {
+                "money_open_limit": {
+                    "description": "Параметр money_open_limit",
+                    "type": "string"
+                },
+                "money_limit_locked_nonmarginal_value": {
+                    "description": "Параметр money_limit_locked_nonmarginal_value",
+                    "type": "string"
+                },
+                "money_limit_locked": {
+                    "description": "Параметр money_limit_locked",
+                    "type": "string"
+                },
+                "money_open_balance": {
+                    "description": "Параметр money_open_balance",
+                    "type": "string"
+                },
+                "money_current_limit": {
+                    "description": "Параметр money_current_limit",
+                    "type": "string"
+                },
+                "money_current_balance": {
+                    "description": "Параметр money_current_balance",
+                    "type": "string"
+                },
+                "money_limit_available": {
+                    "description": "Параметр money_limit_available",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": ["money"]
+}

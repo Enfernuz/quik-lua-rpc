@@ -1,0 +1,22 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.SetSelectedRow;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Args {
+
+    int32 table_id = 1;
+    oneof row {
+      bool null_row = 2;
+      uint32 value_row = 3;
+    }
+    
+}
+
+message Result {
+    int32 result = 1;
+}

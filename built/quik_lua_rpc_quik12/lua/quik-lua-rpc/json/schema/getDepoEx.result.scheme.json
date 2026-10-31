@@ -1,0 +1,89 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getDepoEx.result.scheme.json",
+    "title": "Результат процедуры getDepoEx",
+    "description": "Схема объекта результата удалённого вызова процедуры getDepoEx",
+    "type": "object",
+    "properties": {
+        "depo_ex": {
+            "description": "Результат",
+            "type": "object",
+            "properties": {
+                "sec_code": {
+                    "description": "Параметр sec_code",
+                    "type": "string"
+                },
+                "trdaccid": {
+                    "description": "Параметр trdaccid",
+                    "type": "string"
+                },
+                "firmid": {
+                    "description": "Параметр firmid",
+                    "type": "string"
+                },
+                "client_code": {
+                    "description": "Параметр client_code",
+                    "type": "string"
+                },
+                "openbal": {
+                    "description": "Параметр openbal",
+                    "type": "number"
+                },
+                "openlimit": {
+                    "description": "Параметр openlimit",
+                    "type": "number"
+                },
+                "currentbal": {
+                    "description": "Параметр currentbal",
+                    "type": "number"
+                },
+                "currentlimit": {
+                    "description": "Параметр currentlimit",
+                    "type": "number"
+                },
+                "locked_sell": {
+                    "description": "Параметр locked_sell",
+                    "type": "number"
+                },
+                "locked_buy": {
+                    "description": "Параметр locked_buy",
+                    "type": "number"
+                },
+                "locked_buy_value": {
+                    "description": "Параметр locked_buy_value",
+                    "type": "string"
+                },
+                "locked_sell_value": {
+                    "description": "Параметр locked_sell_value",
+                    "type": "string"
+                },
+                "wa_position_price": {
+                    "description": "Параметр wa_position_price",
+                    "type": "string"
+                },
+                "limit_kind": {
+                    "description": "Параметр limit_kind",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "sec_code",
+                "trdaccid",
+                "firmid",
+                "client_code",
+                "openbal",
+                "openlimit",
+                "currentbal",
+                "currentlimit",
+                "locked_sell",
+                "locked_buy",
+                "locked_buy_value",
+                "locked_sell_value",
+                "wa_position_price",
+                "limit_kind"
+            ]
+        }
+    },
+    "additionalProperties": false,
+    "required": ["depo_ex"]
+}

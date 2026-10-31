@@ -1,0 +1,20 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.getTradeDate;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message TradeDate {
+    
+    string date = 1;
+    uint32 year = 2;
+    uint32 month = 3;
+    uint32 day = 4;
+}
+
+message Result {
+    TradeDate trade_date = 1;
+}

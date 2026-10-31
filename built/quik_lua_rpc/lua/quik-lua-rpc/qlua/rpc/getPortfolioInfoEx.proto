@@ -1,0 +1,48 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.getPortfolioInfoEx;
+
+import "qlua/rpc/getPortfolioInfo.proto";
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message PortfolioInfoEx {
+    
+    qlua.rpc.getPortfolioInfo.PortfolioInfo portfolio_info = 1;
+    string init_margin = 2;
+    string min_margin = 3;
+    string corrected_margin = 4;
+    string client_type = 5;
+    string portfolio_value = 6;
+    string start_limit_open_pos = 7;
+    string total_limit_open_pos = 8;
+    string limit_open_pos = 9;
+    string used_lim_open_pos = 10;
+    string acc_var_margin = 11;
+    string cl_var_margin = 12;
+    string opt_liquid_cost = 13;
+    string fut_asset = 14;
+    string fut_total_asset = 15;
+    string fut_debt = 16;
+    string fut_rate_asset = 17;
+    string fut_rate_asset_open = 18;
+    string fut_rate_go = 19;
+    string planed_rate_go = 20;
+    string cash_leverage = 21;
+    string fut_position_type = 22;
+    string fut_accured_int = 23;
+}
+
+message Args {
+
+    string firm_id = 1;
+    string client_code = 2;
+    int32 limit_kind = 3;
+}
+
+message Result {
+    PortfolioInfoEx portfolio_info_ex = 1;
+}

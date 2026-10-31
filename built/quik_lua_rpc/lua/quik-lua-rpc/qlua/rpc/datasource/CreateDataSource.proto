@@ -1,0 +1,48 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.datasource.CreateDataSource;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc.datasource";
+
+enum Interval {
+
+    UNDEFINED = 0;
+    INTERVAL_TICK = 1;
+    INTERVAL_M1 = 2;
+    INTERVAL_M2 = 3;
+    INTERVAL_M3 = 4;
+    INTERVAL_M4 = 5;
+    INTERVAL_M5 = 6;
+    INTERVAL_M6 = 7;
+    INTERVAL_M10 = 8;
+    INTERVAL_M15 = 9;
+    INTERVAL_M20 = 10;
+    INTERVAL_M30 = 11;
+    INTERVAL_H1 = 12;
+    INTERVAL_H2 = 13;
+    INTERVAL_H4 = 14;
+    INTERVAL_D1 = 15;
+    INTERVAL_W1 = 16;
+    INTERVAL_MN1 = 17;
+}
+
+message Args {
+
+    string class_code = 1;
+    string sec_code = 2;
+    Interval interval = 3;
+    string param = 4;
+}
+
+message Result {
+
+    oneof result {
+        string datasource_uuid = 1;
+        string error_desc = 2;
+    }
+    bool is_error = 3;
+    
+}

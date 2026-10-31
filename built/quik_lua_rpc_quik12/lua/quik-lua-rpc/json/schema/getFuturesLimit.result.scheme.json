@@ -1,0 +1,85 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/getFuturesLimit.result.scheme.json",
+    "title": "Результат процедуры getFuturesLimit",
+    "description": "Схема объекта результата удалённого вызова процедуры getFuturesLimit",
+    "type": "object",
+    "properties": {
+        "futures_limit": {
+            "description": "Результат",
+            "type": "object",
+            "properties": {
+                "firmid": {
+                    "description": "Параметр firmid",
+                    "type": "string"
+                },
+                "trdaccid": {
+                    "description": "Параметр trdaccid",
+                    "type": "string"
+                },
+                "limit_type": {
+                    "description": "Параметр limit_type",
+                    "type": "number"
+                },
+                "liquidity_coef": {
+                    "description": "Параметр liquidity_coef",
+                    "type": "string"
+                },
+                "cbp_prev_limit": {
+                    "description": "Параметр cbp_prev_limit",
+                    "type": "string"
+                },
+                "cbplimit": {
+                    "description": "Параметр cbplimit",
+                    "type": "string"
+                },
+                "cbplused": {
+                    "description": "Параметр cbplused",
+                    "type": "string"
+                },
+                "cbplplanned": {
+                    "description": "Параметр cbplplanned",
+                    "type": "string"
+                },
+                "varmargin": {
+                    "description": "Параметр varmargin",
+                    "type": "string"
+                },
+                "accruedint": {
+                    "description": "Параметр accruedint",
+                    "type": "string"
+                },
+                "cbplused_for_orders": {
+                    "description": "Параметр cbplused_for_orders",
+                    "type": "string"
+                },
+                "cbplused_for_positions": {
+                    "description": "Параметр cbplused_for_positions",
+                    "type": "string"
+                },
+                "options_premium": {
+                    "description": "Параметр options_premium",
+                    "type": "string"
+                },
+                "ts_comission": {
+                    "description": "Параметр ts_comission",
+                    "type": "string"
+                },
+                "kgo": {
+                    "description": "Параметр kgo",
+                    "type": "string"
+                },
+                "currcode": {
+                    "description": "Параметр currcode",
+                    "type": "string"
+                },
+                "real_varmargin": {
+                    "description": "Параметр real_varmargin",
+                    "type": "string"
+                }
+            },
+            "required": ["firmid", "trdaccid", "limit_type", "currcode"]
+        }
+    },
+    "additionalProperties": false
+}

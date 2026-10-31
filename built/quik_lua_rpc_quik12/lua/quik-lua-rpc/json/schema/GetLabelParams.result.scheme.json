@@ -1,0 +1,17 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/GetLabelParams.result.scheme.json",
+    "title": "Результат процедуры GetLabelParams",
+    "description": "Схема объекта результата удалённого вызова процедуры GetLabelParams",
+    "type": "object",
+    "properties": {
+        "label_params": {
+            "description": "Результат",
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            }
+        }
+    },
+    "additionalProperties": false
+}

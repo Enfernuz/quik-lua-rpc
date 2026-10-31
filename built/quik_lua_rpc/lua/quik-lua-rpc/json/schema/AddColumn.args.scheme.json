@@ -1,0 +1,43 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/AddColumn.args.scheme.json",
+    "title": "Аргументы процедуры AddColumn",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры AddColumn",
+    "type": "object",
+    "properties": {
+        "t_id": {
+            "description": "Параметр t_id",
+            "type": "number"
+        },
+        "iCode": {
+            "description": "Параметр iCode",
+            "type": "number"
+        },
+        "name": {
+            "description": "Параметр name",
+            "type": "string"
+        },
+        "is_default": {
+            "description": "Параметр is_default",
+            "type": "boolean"
+        },
+        "par_type": {
+            "description": "Параметр par_type",
+            "type": "string",
+            "pattern": "QTABLE_INT_TYPE|QTABLE_DOUBLE_TYPE|QTABLE_INT64_TYPE|QTABLE_CACHED_STRING_TYPE|QTABLE_TIME_TYPE|QTABLE_DATE_TYPE|QTABLE_STRING_TYPE"
+        },
+        "width": {
+            "description": "Параметр width",
+            "type": "number"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "t_id",
+        "iCode",
+        "name",
+        "is_default",
+        "par_type",
+        "width"
+    ]
+}

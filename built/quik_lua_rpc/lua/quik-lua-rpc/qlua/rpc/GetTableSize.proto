@@ -1,0 +1,22 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.GetTableSize;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message TableSize {
+
+    int32 rows = 1;
+    int32 col = 2;
+}
+
+message Args {
+    int32 t_id = 1;
+}
+
+message Result {
+    TableSize table_size = 1;
+}

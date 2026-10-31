@@ -1,0 +1,38 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/SetCell.args.scheme.json",
+    "title": "Аргументы процедуры SetCell",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры SetCell",
+    "type": "object",
+    "definitions": {
+        "MatrixIndex": {
+            "description": "Индекс элемента матрицы",
+            "type": "integer",
+            "minimum": 0
+        }
+    },
+    "properties": {
+        "t_id": {
+            "description": "Параметр t_id",
+            "type": "number"
+        },
+        "key": {
+            "description": "Параметр key",
+            "$ref": "#/definitions/MatrixIndex"
+        },
+        "code": {
+            "description": "Параметр code",
+            "$ref": "#/definitions/MatrixIndex"
+        },
+        "text": {
+            "description": "Параметр text",
+            "type": "string"
+        },
+        "value": {
+            "description": "Параметр value",
+            "type": ["number", "null"]
+        }
+    },
+    "additionalProperties": false,
+    "required": ["t_id", "key", "code", "text"]
+}

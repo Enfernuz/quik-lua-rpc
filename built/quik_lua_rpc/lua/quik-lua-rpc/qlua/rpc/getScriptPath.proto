@@ -1,0 +1,12 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.getScriptPath;
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc";
+
+message Result {
+    string script_path = 1;
+}

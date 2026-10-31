@@ -1,0 +1,18 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/sendTransaction.args.scheme.json",
+    "title": "Аргументы процедуры sendTransaction",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры sendTransaction",
+    "type": "object",
+    "properties": {
+        "transaction": {
+            "description": "Параметр transaction",
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": ["transaction"]
+}

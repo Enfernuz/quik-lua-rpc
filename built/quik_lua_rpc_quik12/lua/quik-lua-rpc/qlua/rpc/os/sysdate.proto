@@ -1,0 +1,14 @@
+// version: 1.0
+
+syntax = "proto3";
+
+package qlua.rpc.os.sysdate;
+
+import "qlua/rpc/qlua_structures.proto";
+
+option optimize_for = SPEED;
+option java_package = "qlua.rpc.os";
+
+message Result {
+    qlua.structs.DateTimeEntry result = 1;
+}

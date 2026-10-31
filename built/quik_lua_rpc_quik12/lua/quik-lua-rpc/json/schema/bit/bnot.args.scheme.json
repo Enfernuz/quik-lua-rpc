@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/Enfernuz/quik-lua-rpc/json/schema/bit/bnot.args.scheme.json",
+    "title": "Аргументы процедуры bit.bnot",
+    "description": "Схема объекта аргументов к удалённому вызову процедуры bit.bnot",
+    "type": "object",
+    "properties": {
+        "x": {
+            "description": "Параметр x",
+            "type": "number"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["x1", "x2"]
+}
